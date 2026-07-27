@@ -4,6 +4,11 @@
 03_dist/
 qa/
 
+# Backup dos masters 18k, tirado em 27/07 antes de reprocessar a biblioteca em
+# 60k. Existe para comparar/voltar sem re-rodar o pipeline; apagar quando o
+# 60k estiver aprovado.
+02_master_18k/
+
 # Insumo das imagens. Fora do git de proposito: e o material de origem
 # comercial da biblioteca e o repo e publico.
 #   00_input/sheets/     -> IRREPRODUZIVEL (gerar de novo nao devolve o mesmo

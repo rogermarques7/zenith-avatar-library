@@ -121,9 +121,11 @@ Duas rotas viáveis:
 
 O output cru da Meshy é inviável para celular — a produção mediu **130k a 232k triângulos** conforme o volume *e a definição* do corpo (não os ~211k fixos que se supunha; a decimação usa a contagem real). O topo da faixa é o `b07_d3`, um fisiculturista: massa alta somada a relevo abdominal profundo. Decimar 232k → 18k (razão 0,077) **não** custou definição visível.
 
-- Alvo pós-decimação: **~18k triângulos**
-- GLB otimizado com Draco: ~1–3 MB por avatar
+- Alvo pós-decimação: **60k triângulos** (era 18k até 27/07 — ver abaixo)
+- GLB otimizado com Draco: **~183 KB por avatar** medido em 60k
 - Turntable WebP: ~300–600 KB por avatar
+
+**Por que 18k não serviu mais.** O alvo de 18k foi calibrado com o avatar roxo saturado, que escondia o custo da decimação. Quando o corpo virou titânio com specular, a faceta apareceu e o relevo muscular — o foco do app — ficou borrado. Reprocessar em 60k resolveu; o peso final (183 KB) mostrou que o orçamento nunca foi o gargalo. Lição: **não calibrar densidade de malha com um material que esconde geometria.**
 
 32 avatares × GLB = 30–90 MB → **não empacotar no app**. Hospedar em CDN, baixar sob demanda apenas os 2 que o usuário precisa (atual + meta), com cache local. Em turntable o total é pequeno o suficiente para considerar embutir.
 
@@ -138,9 +140,13 @@ Regras obrigatórias no `process.py`:
 - **Altura idêntica** para todos (a diferença entre arquétipos é largura e volume, nunca altura)
 - Pés em `Y = 0`, centralizado em X e Z
 - Mesmo eixo de rotação e mesma orientação frontal
-- **Material roxo Zenith aplicado no pipeline**, idêntico em todos — não usar a textura da Meshy
+- **Material Zenith aplicado no pipeline**, idêntico em todos — não usar a textura da Meshy
 
 > Gerar **sem textura** custa 20 créditos em vez de 30, reduz o tamanho do arquivo e garante cor matematicamente idêntica em toda a biblioteca.
+
+**Revisto em 27/07/2026 — o corpo não é mais roxo.** O roxo saturado achatava o relevo muscular, que é o foco do app. O material virou titânio cinza (`#6D737B`, metallic 0.50, roughness 0.35) e a identidade Zenith passou a ser **luz**: rim roxo + azul frio, em `03_dist/env/zenith_env.hdr`.
+
+Isso divide a entrega em duas metades, e a segunda **não cabe no GLB**: glTF não transporta iluminação de forma portável, então o model-viewer ilumina por IBL (`environment-image`). O app precisa carregar o HDR junto da biblioteca. Em compensação, ajustar a luz de todos os avatares é trocar um arquivo de 325 KB. Ver `scripts/zenith_material.py` (material) e `scripts/make_env.py` (luz); `scripts/restyle.py` reaplica em lote sem re-decimar nem tocar em `02_master/`.
 
 A altura real do usuário é resolvida no app por **escala uniforme**, não por asset separado.
 

@@ -33,6 +33,9 @@ import argparse
 import subprocess
 from datetime import datetime, timezone
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import zenith_material as _zm                                       # noqa: E402
+
 # ==========================================================================
 # CONSTANTES  (ajustar aqui, nunca no meio do codigo)
 # ==========================================================================
@@ -41,11 +44,14 @@ CANONICAL_HEIGHT_M = 1.75          # altura final identica para TODOS os avatare
 TARGET_TRIS        = 18000         # alvo de triangulos pos-decimacao
 TRIS_TOLERANCE     = 0.15          # +/- 15% em torno do alvo
 
-# Cores da marca. O avatar tem DOIS materiais: corpo roxo + short quase preto.
-# A textura do Meshy nunca e usada; a cor e aplicada aqui (glTF baseColorFactor
-# e linear, entao o hex sRGB e convertido em hex_to_linear_rgba).
-ZENITH_PURPLE_HEX  = "#8346C6"     # corpo - cor de marca do app
-ZENITH_SHORTS_HEX  = "#0D0D12"     # short - quase preto
+# O MATERIAL NAO MORA MAIS AQUI. Ele vive em scripts/zenith_material.py, que
+# tambem alimenta o restyle.py - se cada script tivesse sua constante, um
+# avatar novo sairia com cor diferente dos que ja existem e ninguem veria ate
+# o app. Ler aquele arquivo antes de mexer em cor.
+#
+# 27/07/2026: o corpo deixou de ser roxo (#8346C6) e passou a ser titanio
+# cinza. A identidade Zenith virou LUZ (rim roxo + azul frio) e mora fora do
+# GLB, em 03_dist/env/zenith_env.hdr - ver scripts/make_env.py.
 
 # Segmentacao do short por projecao da imagem frontal de referencia.
 SHORTS_LUMA_MAX    = 90            # limiar de luminancia (0-255) na imagem: < => short
@@ -60,14 +66,14 @@ SHORTS_Z_MAX       = 0.65
 
 MERGE_DISTANCE_M   = 0.0001        # merge by distance (soldar vertices coincidentes)
 NONMANIFOLD_WELD_M = 0.0005        # solda residual so nos vertices non-manifold (pincas de dedos)
-MATERIAL_NAME      = "Zenith_Purple"    # slot 0 - corpo
-SHORTS_MATERIAL_NAME = "Zenith_Shorts"  # slot 1 - short
+MATERIAL_NAME        = _zm.MATERIAL_NAME          # slot 0 - corpo
+SHORTS_MATERIAL_NAME = _zm.SHORTS_MATERIAL_NAME   # slot 1 - short
 
 # Short: TEMPORARIAMENTE DESLIGADO (23/07). A segmentacao por projecao frontal
 # deixa a borda serrilhada e nao ha regra universal que sirva para todos os
 # corpos (a barriga pendente dos obesos quebra qualquer heuristica). Decisao:
-# o corpo sai TODO ROXO agora; o short sera feito por avatar, a mao no Blender,
-# ao final da producao (quando os 32 masters existirem). Religar = True.
+# o corpo sai com material unico agora; o short sera feito por avatar, a mao no
+# Blender, ao final da producao. Religar = True.
 SHORTS_ENABLED     = False
 
 # Tolerancias de validacao (metros; 1 unidade Blender == 1 metro)
@@ -326,29 +332,8 @@ def worker_main():
                 devs.append(d)
         return (sum(devs) / len(devs)), max(devs), len(devs)
 
-    def hex_to_linear_rgba(h):
-        # baseColorFactor do glTF e linear; o hex do app e sRGB -> converter.
-        h = h.lstrip("#")
-        srgb = [int(h[i:i + 2], 16) / 255.0 for i in (0, 2, 4)]
-        lin = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in srgb]
-        return (lin[0], lin[1], lin[2], 1.0)
-
-    def make_material(name, hex_color):
-        m = bpy.data.materials.new(name=name)
-        m.use_nodes = True
-        bsdf = m.node_tree.nodes.get("Principled BSDF")
-        if bsdf:
-            bsdf.inputs["Base Color"].default_value = hex_to_linear_rgba(hex_color)
-            if "Metallic" in bsdf.inputs:
-                bsdf.inputs["Metallic"].default_value = 0.0
-            # Roughness intermediaria: brilho suave o suficiente para a luz
-            # REVELAR o relevo muscular (gomos, serratil). Fosco demais (0.9)
-            # apaga a musculatura junto com as facetas; brilhante demais realca
-            # cada faceta. O que faz a faceta sumir sem apagar o musculo e a
-            # RESOLUCAO (triangulo menor), nao o material.
-            if "Roughness" in bsdf.inputs:
-                bsdf.inputs["Roughness"].default_value = 0.5
-        return m
+    # Material: zenith_material.py e a fonte unica (compartilhada com o
+    # restyle.py). Os valores e o porque deles estao documentados la.
 
     def assign_materials(obj, ref_path):
         """Atribui DOIS materiais (corpo roxo + short preto) segmentando o short
@@ -360,7 +345,7 @@ def worker_main():
         fracao de triangulos atribuida ao short."""
         me = obj.data
         me.materials.clear()
-        purple = make_material(MATERIAL_NAME, ZENITH_PURPLE_HEX)
+        body = _zm.make_body_material(bpy)
 
         import numpy as np
 
@@ -443,8 +428,8 @@ def worker_main():
         bm.free()
 
         # --- criar e atribuir os dois materiais ---
-        me.materials.append(purple)                       # slot 0 - corpo
-        me.materials.append(make_material(SHORTS_MATERIAL_NAME, ZENITH_SHORTS_HEX))  # slot 1
+        me.materials.append(body)                         # slot 0 - corpo
+        me.materials.append(_zm.make_shorts_material(bpy))            # slot 1
         idx = np.where(np.array(face_short, dtype=bool), 1, 0).astype(np.int32)
         me.polygons.foreach_set("material_index", idx)
         me.update()
@@ -596,7 +581,7 @@ def worker_main():
         else:
             me = obj.data
             me.materials.clear()
-            me.materials.append(make_material(MATERIAL_NAME, ZENITH_PURPLE_HEX))
+            me.materials.append(_zm.make_body_material(bpy))
             for p in me.polygons:
                 p.material_index = 0
             me.update()

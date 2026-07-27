@@ -1,9 +1,148 @@
 # state.md — Zenith Avatar Library
 
-Última atualização: **27/07/2026 (fim da sessão)**
-Fase atual: **preenchimento de lacunas com GERADOR TROCADO (Gemini).** **36 masculinos.** Restam 2 vãos `high`: **d3 27,4→34,6 (7,2)** e **d1 27,8→34,0 (6,2)**.
+Última atualização: **27/07/2026 (sessão 3)**
+Fase atual: **REFINAMENTO VISUAL CONCLUÍDO — 39 avatares em 60k, material titânio, ambiente Zenith.** Próxima frente: **o short**, que agora aparece.
 
-## ⚡ ABRIR AQUI NA SESSÃO NOVA (27/07, fim do dia)
+## ⚡ ABRIR AQUI — o que mudou na sessão 3
+
+| item | antes | agora |
+|---|---|---|
+| corpo | roxo `#8346C6`, metallic 0, rough 0.5 | titânio `#6D737B`, metallic 0.50, rough 0.35 |
+| luz | nenhuma (IBL padrão do model-viewer) | `03_dist/env/zenith_env.hdr` (322 KB) |
+| malha | 18k triângulos, ~64 KB | **60k triângulos, ~183 KB** |
+| `test/compare/` | 6 GLBs roxos de LOD | apagado, junto com o seletor de resolução |
+| masters 18k | — | preservados em `02_master_18k/` (fora do git) |
+
+**39/39 PASS no reprocessamento em 60k**, todas as 8 validações, `tris_out` entre 59.990 e 60.000.
+
+**🔑 Por que 18k caiu.** O alvo de 18k tinha sido calibrado **com o avatar roxo**, que escondia o custo da decimação. Assim que o corpo virou titânio com specular, a faceta apareceu e o relevo muscular ficou borrado. O peso final (183 KB com Draco, contra 1–3 MB de orçamento) mostrou que a restrição nunca foi o tamanho. **Lição: não calibrar densidade de malha com um material que esconde geometria.**
+
+**Índice refeito sobre os masters de 60k** (`metrics.py --all` + `build_index.py`). As medidas mudaram pouquíssimo — delta médio de IMC **0,047**, máximo **0,20**, todos positivos (a decimação encolhia levemente o volume). Efeito colateral: o vão d3 que estava em 4,9 virou **5,0** e voltou para a lista `high`. São **2 vãos `high`** agora (d1 27,8→33,3 e d3 27,4→32,4), e o segundo é artefato de arredondamento, não regressão.
+
+**🟠 O TESTADOR MOSTRAVA 30 DE 39 — pego pelo Rogério, e era bug de verdade.** Os botões eram gerados por laços da grade nominal (`b01`…`b12`), que nunca produzem os IDs com sufixo de inserção. Sumiam **exatamente os 9 avatares de inserção** (`b05h/i/j/k/m_d1`, `b05h_d2`, `b06h/i/j_d3`) — os mais caros da produção, os que fecharam vãos de cobertura. Os assets sempre existiram; era só a interface.
+
+Consertado na raiz: o testador agora **lê o `library.json`** e monta a lista dali, ordenada por `measured_bmi` (que é o que o `ARCHETYPES.md` §4 exige para o teste de continuidade — ordenar por nome embaralha a escada de corpos). A lista `AVAILABLE`, mantida à mão, foi eliminada: ela já tinha apodrecido, com o comentário dizendo "36 masters" enquanto listava 39. **Lição: duplicar o índice na interface sempre apodrece; ler a fonte custa um `fetch`.**
+
+**🟠 O TESTADOR SIMULAVA A REGRA DE CLASSIFICACAO ERRADA — corrigido.** Ele montava o id colando faixa nominal + definição (`"zen_m_" + b07 + "_d2"`) e usava a tabela de 12 faixas de IMC. Isso é a lógica **anterior ao schema 3**, revogada em 26/07 quando o `metrics.py` mostrou que o corpo não corresponde à faixa que o nome promete.
+
+O caso que mostra o tamanho do erro: **120 kg / 1,75 m / 35% de gordura**.
+
+| | avatar escolhido | IMC medido do corpo |
+|---|---|---|
+| regra antiga (nominal) | `zen_m_b12_d1` | **147,7** |
+| regra do schema 3 | `zen_m_b06_d1` | **38,9** |
+
+O usuário tem IMC 39,2. A regra antiga entregava um corpo de IMC 147. E os 9 avatares de inserção eram **inalcançáveis**: nenhuma combinação de sliders gera um id com sufixo.
+
+Agora vale a regra do índice: definição pelo % de gordura, e dentro dela o de menor `|measured_bmi − IMC_alvo|`. **A correção de altura passou a existir** (`IMC_alvo = IMC × 1,75/altura`) — ela não estava implementada, e sem ela o testador dava um resultado que o app não daria. Conferido contra o spec em Python, 7/7 casos idênticos. Varrendo os sliders, **38 dos 39** avatares são alcançáveis; o único que nunca ganha é o `b12_d1` (IMC 147,7), cujo vizinho está em 107,3 — precisaria de IMC alvo > 127, fora do alcance dos sliders. Correto, não é bug.
+
+**⚠️ O SHORT AGORA APARECE.** Em 60k a bainha e o cós do short da malha da Meshy viram vincos visíveis (linhas horizontais nas coxas e na cintura). Em 18k a decimação apagava isso. Não é defeito novo — é a pendência do short (`SHORTS_ENABLED=False`) ficando visível. É a próxima frente.
+
+## 🟣→⬜ O AVATAR DEIXOU DE SER ROXO (27/07, sessão 3)
+
+**Feito e verificado: os 39 `03_dist/glb/` estão com o material novo.** Conferido no byte (JSON do GLB): `Zenith_Body`, base `#6D737B`, metallic 0.50, roughness 0.35, nos 39.
+
+O roxo saturado achatava o relevo muscular, que é o foco do app. **A identidade Zenith virou LUZ, não cor de corpo:**
+
+| metade | onde vive | conteúdo |
+|---|---|---|
+| material | `scripts/zenith_material.py` (fonte única) | titânio `#6D737B` · metallic 0.50 · roughness 0.35 |
+| iluminação | `scripts/make_env.py` → `03_dist/env/zenith_env.hdr` (322 KB) | key fria estreita · kicker traseiro · 2 rims roxos laterais · fill azul |
+
+**🔑 A luz fora do GLB já se pagou.** O Rogério reprovou a 1ª versão: *"a cor ficou mais pra prateado"*. Ele estava certo — a key era quase branca (`#E4EAF6`) e forte (42), e com metallic 0.50 isso estoura o specular em branco puro: o corpo lê como **aço polido**, não titânio. Em PBR a cor do corpo não vem só do `baseColor`; metade vem do que ele reflete. Esfriar a key para `#93B4EC` e baixar para 24 devolveu o titânio **sem tocar em um GLB sequer** — trocou-se um arquivo de 322 KB.
+
+**⚠️ Metade do visual mora FORA do GLB e o app precisa saber disso.** glTF não transporta iluminação de forma portável — o model-viewer (e o `model_viewer_plus`, que é o mesmo componente numa WebView) ilumina por IBL, via `environment-image`. Sem carregar o HDR, o avatar aparece cinza e sem identidade. O lado bom: reajustar a luz da biblioteca inteira **troca um arquivo de 325 KB**, não re-processa 39 avatares.
+
+**`scripts/restyle.py` é o caminho para mexer em cor daqui pra frente.** Ele lê `02_master/`, troca só o material e regrava `03_dist/glb/` — **sem re-decimar e sem tocar em master** (a decimação Collapse não é determinística: re-rodar o `process.py` mudaria a topologia que passou no QA, além de violar a regra 7). `--preview {id}` renderiza 4 vistas com o ambiente em `qa/look/{id}/`.
+
+### As três coisas que essa sessão aprendeu errando
+
+1. **Anel uniforme não é rim, é luz ambiente.** A 1ª versão do HDR era invariante em azimute "por robustez". Saiu chapada: luz igual de todos os lados = contraste zero. Simetria total é o oposto de direcionalidade.
+2. **A convenção de azimute foi MEDIDA, não deduzida — e o palpite errou por 180°.** A key caiu atrás do avatar e os dois rims roxos na frente dele. O sintoma ("roxo e chapado de frente, bonito de costas") foi diagnosticado como desequilíbrio por várias iterações. A sonda está descrita no cabeçalho do `make_env.py`: esfera difusa com vermelho em az 0, verde em az 90, azul em az 180.
+3. **Metallic alto AJUDA — minha previsão estava errada.** Eu argumentei que metallic ≥ 0.5 apagaria o corpo no fundo escuro. Uma varredura 3×3 de roughness × metallic mostrou o contrário: é o **specular** que desenha o músculo, e o difuso é que achata. O argumento pressupunha ambiente escuro, e o ambiente Zenith tem fontes brilhantes.
+
+**Bug latente corrigido de quebra:** `make_material` procurava o nó por nome (`"Principled BSDF"`), mas o Blender desta máquina está **em português** e o nó se chama `"BSDF - Pré-fundamentado"`. Dentro de um `if bsdf:`, isso exportaria o material com valores PADRÃO, sem erro. Só não quebrou porque `read_factory_settings()` reseta o idioma antes. Agora a busca é por `bl_idname` e levanta exceção se não achar.
+
+**Verificação no navegador é parte do fluxo agora.** O preview do Blender não é o runtime: o `.claude/launch.json` sobe um `http.server` na 8765 e o resultado é conferido no model-viewer de verdade. Foi lá que apareceu o roxo excessivo nas costas — que o Blender não mostrava — e que motivou o kicker traseiro.
+
+**Pendências desta frente:** o `--preview` do `restyle.py` usa view transform `Standard` para aproximar o tonemap do model-viewer; não é idêntico, o navegador dá mais roxo. **Decidir 18k/40k/60k é o próximo passo**, e o Rogério pediu para **remover os controles do testador** depois disso. O short (`SHORTS_ENABLED=False`) continua parado e é a próxima frente depois do LOD — a expectativa dele é que seja um a um.
+
+## ⚡ ABRIR AQUI NA SESSÃO NOVA — o que fazer agora
+
+**A onda masculina acabou. Não gerar mais folha nem baixar mais GLB sem motivo novo.** O que sobra não é produção, é infraestrutura:
+
+1. **Ambiente de testes** (o pedido do Rogério ao encerrar esta sessão). Hoje existe só o `test/avatar_tester.html`, que lê `03_dist/glb/` por caminho relativo e **precisa de http (localhost), nunca `file://`** — e só abrir quando ele pedir ([[testador-so-localhost-sob-pedido]]).
+2. **Folha de contato de QA ordenada por `measured_bmi`** — nunca foi montada. É o item mais importante do checklist humano (`ARCHETYPES.md` §8, teste da continuidade) e **tem de ser ordenada pela medida, não pelo nome do arquivo** (`ARCHETYPES.md` §4).
+3. **Commit pendente** (não feito porque não foi pedido — perguntar antes): `scripts/intake.py` novo, mais `CLAUDE.md`, `docs/CHARACTER_BIBLE.md`, `state.md`, `library.json`, `logs/process.log`, `metrics/library_metrics.json` e `test/avatar_tester.html` modificados. **Os GLBs não entram no git de propósito** (`.gitignore` cobre `01_raw/`, `02_master/`, `03_dist/`, `qa/`, `00_input/`) — a linha antiga deste bloco dizendo "os avatares estão untracked" estava enganando: é intencional.
+3b. **⚠️ RISCO REAL DE PERDA: `00_input/sheets/` está fora do git e é IRREPRODUZÍVEL.** São as 39 folhas-mãe da biblioteca; regerar não devolve o mesmo personagem. O próprio `.gitignore` avisa que precisa de backup externo, e esse backup **não existe**. Tratar como prioridade antes de qualquer refatoração de pastas.
+4. Pendências antigas que seguem paradas: `render.py` (turntable) não existe e talvez não precise; short desligado (`SHORTS_ENABLED=False`); grade feminina PENDENTE (precisa ser reescrita de 6 para 12 faixas antes de qualquer geração).
+
+### Números finais da onda masculina
+
+| | |
+|---|---|
+| Avatares | **39** (15 nominais d1 + 12 d2 + 10 d3 + inserções) |
+| Todos | 9/9 validações, 18k tri, medidos, no `library.json` schema 3 e no tester |
+| Eixo de IMC coberto | d1 16,1→147,6 · d2 19,7→111,8 · d3 19,9→53,8 |
+| Vãos `high` | **1** (d1 27,8→33,3) |
+| Vãos `low` | 8, todos em IMC 38+ — quase sem população, não valem geração |
+
+## 🔴🔴 O VÃO d1 27,8→33,3 NÃO FECHA — 3 tentativas, e a 3ª saiu pelo outro lado
+
+**`zen_m_b05m_d1` PROCESSADO. 39 avatares.** Cru 120.974 tri, decimação 0,1488, 18.000 tri, 9/9. Medido: **IMC 26,9 · 82,4 kg · cint/alt 0,537 · cintura 94,0 · peito 100,8 · bíceps 30,4**. Var. altura da folha **0,21% — a melhor de toda a produção**. QA em `qa/inspect/zen_m_b05m_d1/`. No tester.
+
+**Mirado em ~30, caiu em 26,9 — ABAIXO da borda inferior do vão (27,8).** O vão seguiu intacto em 5,5.
+
+**As três tentativas, e o que cada uma prova:**
+
+| folha | par de âncoras (topo) | descritor | pouso |
+|---|---|---|---:|
+| `b05j_d1` | `b05h`+`b05` (27,8) | obesidade | **34,0** |
+| `b05k_d1` | `b03`+`b04` (24,4) | "OBESIDADE GRAU I" | **33,3** |
+| `b05m_d1` | `b02`+`b03` (20,4) | "SOBREPESO, não obeso" | **26,9** |
+
+Baixar a âncora de 27,8 → 24,4 moveu o pouso **0,7** (captura pelo atrator ~33,5 do Gemini na d1). Trocar o **nome da categoria** moveu **6,4** de uma vez, e passou do alvo. **Confirma a doutrina do §5c item 5 com número: quem manda no pouso é o SUBSTANTIVO DE CATEGORIA, não a âncora.** A âncora ajusta dentro da categoria; o substantivo escolhe em qual atrator o corpo cai. Não existe categoria nomeável entre "sobrepeso" (~27) e "obesidade grau I" (~33,5), e é exatamente isso que o vão é: **o vazio entre dois atratores do gerador.**
+
+**Recomendação registrada: ACEITAR o vão de 5,5 e encerrar a onda masculina.** Já foram gastas 3 gerações e 3 rodadas de Meshy nele. O gerador não tem corpo ali. A cobertura em volta é boa (26,2 · 26,9 · 27,8 de um lado; 33,3 · 34,0 do outro), e o meio se resolve por **shape keys** no sistema híbrido — os insumos (`circumferences_cm`) já viajam no `library.json` desde o schema 3.
+
+> **Nenhum dos três é desperdício.** O `b05m_d1` adensou a fronteira normal/sobrepeso (26,2 · 26,9 · 27,8), que é zona de muito usuário. Doutrina de sempre: inserção, nunca substituição ([[distribuicao-e-visao-hibrida]]).
+
+**Nota de nomenclatura:** a sequência de inserção da d1 é `h · i · j · k · m` — **o `l` foi pulado de propósito**, porque `b05l_d1` se lê como `b051_d1` no `logs/process.log`, que é append-only.
+
+## `zen_m_b05k_d1` — a tentativa 2
+
+**`zen_m_b05k_d1` PROCESSADO.** Cru 131.062 tri, decimação 0,1373, 18.000 tri, 9/9, simetria média 0,00032 m. Medido: **IMC 33,3 · 101,9 kg · cint/alt 0,637 · cintura 111,4 · peito 109,7**. Var. altura da folha 0,28% — **a melhor de toda a produção**. QA em `qa/inspect/zen_m_b05k_d1/`. No tester.
+
+**O vão d1 NÃO fechou: 27,8→34,0 (6,2) virou 27,8→33,3 (5,5), e o corte de `high` é 5,0.** Ganho marginal. Mirado em ~31, caiu em 33,3, colado no `b05j_d1` (34,0).
+
+**🔴 O GEMINI TEM UM ATRATOR EM ~33,5 NA LINHA d1 — e ele explica os dois pousos.** Duas âncoras bem diferentes entregaram praticamente o mesmo corpo:
+
+| folha | par de âncoras | topo | pouso | delta |
+|---|---|---|---:|---:|
+| `b05j_d1` | `b05h`+`b05` | 27,8 | **34,0** | +6,2 |
+| `b05k_d1` | `b03`+`b04` | 24,4 | **33,3** | +8,9 |
+
+Baixar a âncora em 3,4 moveu o pouso em 0,7. **Quando o pouso é insensível à âncora, não é regra aditiva — é captura por atrator** (mesmo padrão do atrator obeso ~40 do ChatGPT, que capturou 3 tentativas). A regra aditiva só descreve o comportamento em espaço aberto; dentro do raio de um atrator ela não vale, para nenhum gerador.
+
+**Suspeita a testar: o descritor apontou para o atrator.** Escrevi "este corpo é um caso de OBESIDADE GRAU I", que é exatamente a faixa 30–35 onde o atrator mora — o mesmo erro do `b06i_d3` (§5c item 7). Ainda não foi tentado na d1: âncora baixa **junto com** nome de categoria abaixo do alvo ("SOBREPESO", não "obesidade").
+
+**`zen_m_b06j_d3` PROCESSADO. 37 avatares. O vão `high` da d3 FECHOU.** Cru 179.778 tri, decimação 0,1001, 18.000 tri, 9/9, altura crua 1,899 m. Medido: **IMC 32,3 · 98,9 kg · cint/alt 0,498 · peito 109,0 · cintura 87,2 · bíceps 44,1**. Var. altura da folha 0,34% (a melhor das 5 folhas do Gemini). QA em `qa/inspect/zen_m_b06j_d3/`. No tester.
+
+O vão 27,4→34,6 (7,2) virou 27,4→**32,3** (4,9) + 32,3→34,6 (2,3) e saiu da lista. **Sobrou um `high` na biblioteca inteira: d1 27,8→34,0.**
+
+**🔑 A REGRA ADITIVA É DO GERADOR, NÃO UNIVERSAL — o +6,5 é do ChatGPT.** No Gemini, na d3, o delta sobre a âncora de topo mediu **+3,3** (`b06i`) e **+4,9** (`b06j`). Aplicar o +6,5 do ChatGPT foi o que fez o `b06i` cair abaixo do vão — a culpa **não** era só do descritor, como a sessão anterior concluiu. Corrigido pela âncora: subir o par de `b04+b05` (topo 23,7) para **`b05+b06` (topo 27,4)** levou o corpo de ~27 para 32,3, com o MESMO descritor.
+
+> Cuidado: esse mesmo par `b05+b06` no **ChatGPT** entregou 34,6 e 35,7 (+7,2/+8,3). O par não determina o pouso; o par **mais o gerador**, sim.
+
+**🟠 Uma folha foi REJEITADA sem gastar Meshy, e a régua 2D acertou.** A g1 do `b06j` mediu 13,9/31,1 contra 13,9/31,4 do `b06i` — mesma folha, na prática. Comparação válida porque é **mesmo gerador, mesma linha, mesma pose**, que é exatamente o caso de uso do `measure.py`. A g2 mediu 15,5/33,4, entre os vizinhos do vão, e o 3D confirmou. **Folha duplicada não vira avatar:** a regra "nunca descartar" vale para master produzido, não para folha reprovada antes da Meshy (precedente: g1 do `b06_d3`).
+
+**🔴 FLUXO CORRIGIDO — arquivo nenhum entra no repo pela mão do Rogério.** Ele cobrou nesta sessão: *"o fluxo é você pega em downloads, apaga selo do gemini, recorta e me devolve as 3 folhas"*. Estava certo e não estava documentado. Escrito o **`scripts/intake.py`**: pega a imagem mais recente do Downloads, acha e apaga o selo, grava em `00_input/sheets/{id}_sheet.png`, recusa sobrescrever sem `--force`. `CLAUDE.md` e `CHARACTER_BIBLE.md` §6 corrigidos.
+
+**⚠️ O `intake.py` teve um bug que ia apagar UMA MÃO — a correção importa.** A 2ª folha do Gemini tem o fundo o dobro de granulado (ruído 27 contra 13); o limiar adaptativo subiu para 54, **o selo ficou ABAIXO dele** e pedaços do corpo viraram blobs soltos — o script elegeu um blob 21×59 na coluna do perfil, que era uma mão. Não usar a máscara de figura do `crop.py` para achar selo. Dois critérios que o corpo não satisfaz: **mais claro que o fundo em todos os canais** (sombra e vinco são mais escuros) e **20 px de fundo limpo em volta** (pedaço de corpo tem corpo do lado). Testado nas 5 folhas do Gemini: 5 selos achados, todos **96×96 px**, resíduo 0; nenhum falso positivo na do ChatGPT. Em 4 das 5 o selo saiu em `y 1248–1343`.
+
+**Próximo passo:** o último vão `high` — **d1 27,8→34,0**, alvo ~31. Pela regra do gerador, no Gemini o delta é ~+4 sobre a âncora de topo, o que pede um par com topo em ~27: **`b05h_d1` (26,2) + `b05_d1` (27,8)**. É o mesmo par que o ChatGPT usou para entregar 40,7 e o Gemini para entregar 34,0 — com passo de par pequeno (1,6), esperar pouso entre 31 e 34. Se voltar colado no 34,0, considerar o vão fechado o bastante e encerrar a produção masculina.
+
+## ⚡ Bloco da sessão anterior (27/07, fim do dia)
 
 **A sessão de hoje testou o GEMINI como segundo gerador e produziu 3 avatares.** Placar: **2 acertos, 1 erro** — e o erro tem causa identificada e é minha, não do Gemini (ver 🟡 abaixo).
 

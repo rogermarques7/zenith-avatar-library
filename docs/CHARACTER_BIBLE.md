@@ -294,7 +294,17 @@ Vale tanto para "ganhar músculo" quanto para "ganhar gordura", então é compor
 
 **Ordem revista quando um alvo não sai:** (1) bracketing · (2) trocar de atrator por nome de categoria · (3) **trocar de gerador** · (4) só então declarar saturação e cobrir o resto por **shape keys** no sistema híbrido (os insumos, `circumferences_cm`, já viajam no `library.json`).
 
-> **⚠️ Operacional do Gemini — ele carimba um selo (estrelinha) no canto inferior direito.** O `crop.py` **não** acusa: o selo cai dentro da coluna de uma das vistas em vez de virar uma 4ª figura, passa batido e chega na Meshy como mancha sobre o fundo liso. **Apagar o selo na folha antes do crop, sempre.** A pose do Gemini também é mais fechada (braços mais colados ao corpo), o que faz o `measure.py` **subestimar** a barriga em relação à série do ChatGPT — mais um motivo para decidir no `metrics.py`.
+> **⚠️ Operacional do Gemini — ele carimba um selo (estrelinha) no canto inferior direito.** O `crop.py` **não** acusa: o selo cai dentro da coluna de uma das vistas em vez de virar uma 4ª figura, passa batido e chega na Meshy como mancha sobre o fundo liso. **Isso é trabalho do `scripts/intake.py`, que roda antes do `crop.py` e apaga o selo sozinho** (cobre com retalho de fundo limpo e confere o resíduo) — não pedir para o humano apagar à mão. Nas duas folhas medidas o selo saiu no MESMO lugar, `x 2464–2559`. A pose do Gemini também é mais fechada (braços mais colados ao corpo), o que faz o `measure.py` **subestimar** a barriga em relação à série do ChatGPT — mais um motivo para decidir no `metrics.py`.
+
+**10. QUEM ESCOLHE O ATRATOR É O SUBSTANTIVO DE CATEGORIA; a âncora só ajusta dentro dele.** Medido na linha d1 do Gemini, três folhas mirando o mesmo vão (27,8→33,3):
+
+| folha | âncora de topo | substantivo do descritor | pouso |
+|---|---|---|---:|
+| `b05j_d1` | 27,8 | obesidade | 34,0 |
+| `b05k_d1` | **24,4** | "OBESIDADE GRAU I" | 33,3 |
+| `b05m_d1` | **20,4** | **"SOBREPESO, não obeso"** | **26,9** |
+
+Baixar a âncora em 3,4 moveu o pouso **0,7**. Trocar o substantivo moveu **6,4** — e passou do alvo por baixo. Consequência prática: **um vão é o vazio entre dois atratores nomeáveis do gerador.** Se não existe palavra de categoria entre os dois (aqui: nada entre "sobrepeso" ~27 e "obesidade grau I" ~33,5), nenhuma âncora e nenhum adjetivo colocam corpo ali — trocar de gerador (item 8) ou cobrir por shape keys. Três gerações foram gastas nesse vão antes de aceitar; não repetir.
 
 **9. Para pares de âncoras MUITO parecidas, não peça identificação.** Pedir "diga qual é a etapa mais recente" convida ao erro quando os dois corpos são próximos (e as folhas podem até sugerir a ordem inversa da real — ver a limitação de braço do `measure.py`). Em vez disso: *"gere um corpo mais pesado que os DOIS anexos, com um passo do tamanho da diferença entre eles"*. Dispensa a ordenação e a direção sai correta.
 
@@ -330,7 +340,10 @@ Comprovado no `zen_m_b05h_d2` (27/07): vão d2 de 26,7→35,0. O par adjacente (
 4. Se o resultado divergir do personagem: responder `mantenha o personagem idêntico à imagem anexa — mesmo rosto, mesma careca, mesma roupa, mesma altura`.
 5. Se as vistas divergirem entre si: `mantenha o personagem idêntico à vista frontal nas outras duas vistas`.
 6. Conferir contra o checklist abaixo.
-7. Salvar como `zen_{sexo}_{imc}_{def}_sheet.png` em `00_input/sheets/`.
+7. **Baixar e deixar em Downloads. Não salvar à mão no repositório.** O Claude
+   Code roda `python scripts/intake.py {id}`: pega a imagem mais recente do
+   Downloads, apaga o selo do Gemini, grava em `00_input/sheets/{id}_sheet.png`
+   e se recusa a sobrescrever folha existente.
 
 O recorte em três imagens é feito por script (`scripts/crop.py`), não à mão.
 Ele detecta as 3 figuras por diferença de fundo e recorta cada uma com margem

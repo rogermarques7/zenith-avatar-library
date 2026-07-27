@@ -40,7 +40,7 @@
 <div class="wrap">
   <div class="panel controls">
     <h1>Testador de Avatares Zenith</h1>
-    <p class="sub">Sliders → qual avatar o app escolhe (lógica do ARCHETYPES.md). Linha d1 completa (b01→b12) — clique os botões em ordem para ver a continuidade.</p>
+    <p class="sub">Sliders → qual avatar o app escolhe (lógica do ARCHETYPES.md). Os botões vêm do <code>library.json</code>, ordenados por <b>IMC medido</b> — clique em sequência para ver a escada de corpos (é o teste de continuidade do QA).</p>
 
     <label>Peso <span class="val" id="pesoV">75 kg</span></label>
     <div class="row"><input type="range" id="peso" min="40" max="180" step="0.5" value="75"></div>
@@ -60,8 +60,16 @@
 
   <div class="viewer">
     <div class="panel" style="padding:12px; display:inline-block;">
+      <!-- environment-image: a identidade Zenith (rim roxo + azul frio) mora
+           AQUI, nao no GLB. glTF nao transporta iluminacao de forma portavel;
+           o model-viewer ilumina por IBL. Gerado por scripts/make_env.py.
+           skybox-image fica de fora de proposito: queremos a LUZ, nao o fundo.
+           tone-mapping neutral para nao dessaturar o roxo do rim. -->
       <model-viewer id="mv" auto-rotate rotation-per-second="30deg" interaction-prompt="none"
-                    disable-zoom camera-orbit="0deg 90deg auto" exposure="1" shadow-intensity="0"></model-viewer>
+                    disable-zoom camera-orbit="0deg 90deg auto" exposure="1" shadow-intensity="0"
+                    environment-image="../03_dist/env/zenith_env.hdr"
+                    tone-mapping="neutral"></model-viewer>
+      <div class="sub" id="count" style="margin:10px 0 4px">carregando library.json…</div>
       <div class="quick" id="quick"></div>
       <div class="opt">
         <span>Card:</span>
@@ -81,62 +89,76 @@
 </div>
 
 <script>
-// ---- grade e faixas (ARCHETYPES.md §6) ----
-const BANDS = [
-  {id:"b01",min:null,max:18.5},{id:"b02",min:18.5,max:20.0},{id:"b03",min:20.0,max:21.5},
-  {id:"b04",min:21.5,max:23.0},{id:"b05",min:23.0,max:24.5},{id:"b06",min:24.5,max:26.0},
-  {id:"b07",min:26.0,max:27.5},{id:"b08",min:27.5,max:29.0},{id:"b09",min:29.0,max:31.0},
-  {id:"b10",min:31.0,max:34.0},{id:"b11",min:34.0,max:38.0},{id:"b12",min:38.0,max:null}
-];
-// combos que NÃO existem (36 - 4)
-const REMOVED = new Set(["b01_d3","b11_d3","b12_d3","b12_d2"]);
+// ---- selecao de avatar: schema 3 (ARCHETYPES.md §5) ----
+//
+// ATE 27/07 ESTE ARQUIVO SIMULAVA A REGRA ERRADA. Ele montava o id colando
+// faixa nominal + definicao ("zen_m_" + b07 + "_d2") e usava a tabela BANDS de
+// 12 faixas de IMC. Isso e a logica anterior ao schema 3, revogada em 26/07
+// quando o metrics.py mostrou que o corpo produzido nao corresponde a faixa
+// que o NOME promete (o zen_m_b12_d1 foi pedido para IMC >= 38 e o corpo tem
+// IMC 147). Consequencias de ter ficado para tras:
+//
+//   - os 9 avatares de insercao eram INALCANCAVEIS pelos sliders: nenhuma
+//     combinacao de peso/altura/gordura gera um id com sufixo h/i/j/k/m;
+//   - a correcao de altura nao existia (ver abaixo), entao o testador dava um
+//     resultado que o app nao vai dar.
+//
+// Agora vale a regra do indice: DEFINICAO pelo % de gordura, e dentro dela o
+// avatar de menor |measured_bmi - IMC_alvo|. Nao existe mais "combinacao
+// inexistente" - sempre ha um mais proximo.
+//
+// ⚠️ ESCALA UNIFORME NAO PRESERVA IMC. Ao escalar por s, o volume vai com s³ e
+// a altura com s², entao o IMC representado vai com s. O mesmo avatar exibido
+// para alguem de 1,90 m representa ~8,6% mais IMC do que para alguem de
+// 1,75 m. Sem a correcao o app entrega corpo sistematicamente errado nos
+// extremos de altura. A formula viaja no proprio indice, em
+// selection.target_bmi_formula.
 const DEF_LABEL = {d1:"Baixa",d2:"Média",d3:"Alta"};
-const BAND_LABEL = {b01:"Abaixo do peso",b02:"Muito magro",b03:"Magro",b04:"Normal baixo",b05:"Normal",
-  b06:"Normal alto",b07:"Sobrepeso leve",b08:"Sobrepeso",b09:"Sobrepeso alto",b10:"Obesidade I",
-  b11:"Obesidade II",b12:"Obesidade III"};
-// GLBs que existem em disco: 36 masters. Sufixo h/i/j = INSERCAO num vao de
-// cobertura; marca a intencao, nao a posicao (quem ordena e o measured_bmi).
-const AVAILABLE = new Set([
-  "zen_m_b01_d1","zen_m_b02_d1","zen_m_b03_d1","zen_m_b04_d1","zen_m_b05_d1",
-  "zen_m_b05h_d1","zen_m_b05i_d1","zen_m_b05j_d1",
-  "zen_m_b06_d1","zen_m_b07_d1","zen_m_b08_d1","zen_m_b09_d1","zen_m_b10_d1",
-  "zen_m_b11_d1","zen_m_b12_d1",
-  "zen_m_b01_d2","zen_m_b02_d2","zen_m_b03_d2","zen_m_b04_d2","zen_m_b05_d2",
-  "zen_m_b05h_d2","zen_m_b06_d2",
-  "zen_m_b07_d2","zen_m_b08_d2","zen_m_b09_d2","zen_m_b10_d2","zen_m_b11_d2",
-  "zen_m_b02_d3","zen_m_b03_d3","zen_m_b04_d3","zen_m_b05_d3","zen_m_b06_d3",
-  "zen_m_b06i_d3","zen_m_b06h_d3","zen_m_b07_d3","zen_m_b08_d3"]);
+// Avatares que existem, preenchido a partir do library.json no fim do arquivo.
+// Era uma lista mantida A MAO e ja tinha apodrecido: o comentario dizia "36
+// masters" enquanto listava 39. Duplicar o indice aqui nao paga.
+// Sufixo h/i/j/k/m = INSERCAO num vao de cobertura; marca a intencao, nao a
+// posicao (quem ordena e o measured_bmi).
+const AVAILABLE = new Set();
+let LIB = null;          // library.json, carregado no fim do arquivo
 
-function bandFor(imc){
-  for(const b of BANDS){
-    const okMin = b.min===null || imc>=b.min;
-    const okMax = b.max===null || imc<b.max;
-    if(okMin && okMax) return b.id;
-  }
-  return "b05";
-}
-function defFor(g){ if(g<13) return "d3"; if(g<=20) return "d2"; return "d1"; } // masculino §5
-function reduceDef(d){ return d==="d3"?"d2":(d==="d2"?"d1":null); }
+function defFor(g, thr){ if(g < thr.d3_below) return "d3"; if(g < thr.d2_below) return "d2"; return "d1"; }
 
 function classify(peso, alturaCm, gordura){
-  const altura=alturaCm/100, imc=peso/(altura*altura);
-  const band=bandFor(imc), def0=defFor(gordura);
-  let def=def0, steps=[];
-  while(def && REMOVED.has(band+"_"+def)){ steps.push(band+"_"+def); def=reduceDef(def); }
-  let id, fallback=false;
-  if(def){ id="zen_m_"+band+"_"+def; if(def!==def0) fallback=true; }
-  else { id="zen_m_b05_d2"; fallback=true; } // fallback final §5
-  return {imc,band,def0,def,id,fallback,steps};
+  const altura = alturaCm/100;
+  const imc = peso/(altura*altura);
+  const imcAlvo = imc * (LIB.reference_height_m / altura);
+  const sel = LIB.selection;
+  const def0 = defFor(gordura, sel.definition_thresholds_bodyfat_pct.m);
+
+  // Fallback de definicao: so entra se a LINHA INTEIRA estiver vazia (hoje,
+  // so o feminino). Ordem vem do indice, nao hardcoded.
+  const ordem = sel.definition_fallback;
+  const steps = [];
+  let def = def0, candidatos = [];
+  for(let d = ordem.indexOf(def0); d < ordem.length; d++){
+    def = ordem[d];
+    candidatos = LIB.avatars.filter(a => a.sex === "m" && a.definition === def);
+    if(candidatos.length) break;
+    steps.push(def);
+  }
+  if(!candidatos.length){
+    return {imc, imcAlvo, def0, def:null, id:LIB.default.m, fallback:true, steps, escolhido:null};
+  }
+  const escolhido = candidatos.reduce((melhor,a) =>
+    Math.abs(a.measured_bmi-imcAlvo) < Math.abs(melhor.measured_bmi-imcAlvo) ? a : melhor);
+  return {imc, imcAlvo, def0, def, id:escolhido.id,
+          fallback:def!==def0, steps, escolhido};
 }
 
 const mv=document.getElementById("mv");
-// versoes de comparacao de resolucao em test/compare/
-const COMPARE={ "zen_m_b02_d3":[18000,40000,60000], "zen_m_b11_d1":[18000,40000,60000] };
-let curId="zen_m_b05_d2", curRes=18000;
+// O seletor de resolucao saiu em 27/07: o LOD foi decidido em 60k e passou a
+// valer para os 39. Os GLBs de comparacao em test/compare/ existiam so para
+// b02_d3 e b11_d1, ficaram para tras no restyle e apareciam ROXOS ao lado dos
+// demais. Toda a biblioteca vem de 03_dist/glb/ agora.
+let curId="zen_m_b05_d2";
 
 function srcFor(id){
-  if(COMPARE[id] && COMPARE[id].includes(curRes))
-    return "../test/compare/"+id+"_"+curRes+".glb?t="+Date.now();
   return "../03_dist/glb/"+id+"_v1.glb?t="+Date.now();
 }
 function setAvatar(id){
@@ -145,11 +167,13 @@ function setAvatar(id){
   const miss=document.getElementById("missing");
   if(AVAILABLE.has(id)){
     mv.src=srcFor(id); mv.style.display="block";
-    if(COMPARE[id]) miss.innerHTML="<b style='color:#b17ddf'>"+(curRes/1000)+"k triângulos</b>";
-    else miss.innerHTML = curRes!==18000 ? "<span class='fallback-note'>⚠ "+(curRes/1000)+"k só existe para <b>b02_d3</b> e <b>b11_d1</b> — este avatar só tem 18k, nada muda aqui.</span>" : "";
+    miss.innerHTML="";
   } else {
+    // Com a selecao por measured_bmi isto nao deveria acontecer: todo id vem
+    // do proprio library.json. Se aparecer, o indice esta apontando para um
+    // GLB que nao existe em 03_dist/glb/.
     mv.removeAttribute("src"); mv.style.display="block";
-    miss.textContent="asset "+id+" ainda não produzido (d1 completo; d2/d3 em produção)";
+    miss.textContent="asset "+id+" está no library.json mas não existe em 03_dist/glb/";
   }
 }
 
@@ -164,12 +188,21 @@ function update(){
   const badge=document.getElementById("existBadge");
   badge.className="badge "+(exists?"ok":"no");
   badge.textContent=exists?"existe":"não produzido";
-  let reason=`IMC <b>${r.imc.toFixed(1)}</b> → faixa <b>${r.band}</b> (${BAND_LABEL[r.band]}) · `+
-    `%gordura <b>${gordura}%</b> → definição <b>${r.def0}</b> (${DEF_LABEL[r.def0]})`;
-  if(r.fallback){
-    if(r.steps.length) reason+=`<br><span class="fallback-note">fallback: ${r.steps.join(" → ")} não existe, reduziu para ${r.def||"padrão b05_d2"}</span>`;
-    else reason+=`<br><span class="fallback-note">fallback para o padrão b05_d2</span>`;
+
+  const corrigido = Math.abs(r.imcAlvo-r.imc) >= 0.05;
+  let reason=`IMC <b>${r.imc.toFixed(1)}</b>`;
+  reason += corrigido
+    ? ` → corrigido para a altura: <b>${r.imcAlvo.toFixed(1)}</b> `+
+      `<span style="opacity:.65">(×${(LIB.reference_height_m/(altura/100)).toFixed(3)}, escala uniforme não preserva IMC)</span>`
+    : ` <span style="opacity:.65">(altura de referência, sem correção)</span>`;
+  reason += `<br>%gordura <b>${gordura}%</b> → definição <b>${r.def0}</b> (${DEF_LABEL[r.def0]})`;
+  if(r.escolhido){
+    const d = Math.abs(r.escolhido.measured_bmi-r.imcAlvo);
+    reason += `<br>mais próximo na linha <b>${r.def}</b>: IMC medido <b>${r.escolhido.measured_bmi}</b>`+
+      ` <span style="opacity:.65">(distância ${d.toFixed(1)})</span> · ${r.escolhido.label}`;
+    if(d > 2.5) reason += `<br><span class="fallback-note">⚠ vizinho a ${d.toFixed(1)} de IMC — vão de cobertura nesta região</span>`;
   }
+  if(r.fallback) reason+=`<br><span class="fallback-note">fallback de definição: ${r.steps.join(" → ")} sem avatares, usou ${r.def||"o default do índice"}</span>`;
   document.getElementById("reason").innerHTML=reason;
   setAvatar(r.id);
 }
@@ -177,33 +210,42 @@ function update(){
 const peso_=document.getElementById("peso"), altura_=document.getElementById("altura"), gordura_=document.getElementById("gordura");
 [peso_,altura_,gordura_].forEach(s=>s.addEventListener("input",update));
 
-// quick buttons: linhas d1 e d2 completas em ordem, para o teste de
-// continuidade, + a d3 ate onde ja foi produzida.
+// Botoes de avatar, lidos do library.json.
+//
+// ANTES eles eram gerados por lacos da grade nominal (b01..b12), e por isso
+// os 9 avatares de INSERCAO (sufixo h/i/j/k/m) nunca ganhavam botao: a
+// biblioteca tinha 39 e o testador mostrava 30. Sumiam justamente os mais
+// caros de produzir, os que fecharam vaos de cobertura.
+//
+// A ordem e por measured_bmi, nao pelo nome do arquivo. E o que o
+// ARCHETYPES.md §4 exige: o sufixo de insercao marca a INTENCAO, nao a
+// posicao, entao ordenar por nome embaralha a escada de corpos e destroi o
+// teste de continuidade do QA.
+//
+// Precisa de http (localhost) por causa do fetch - file:// nao serve, o que
+// ja valia para carregar os GLBs.
 const quick=document.getElementById("quick");
-const QUICK=[];
-for(let i=1;i<=12;i++){ const n=String(i).padStart(2,"0"); QUICK.push(["zen_m_b"+n+"_d1","b"+n+"_d1"]); }
-for(let i=1;i<=11;i++){ const n=String(i).padStart(2,"0"); const lbl="b"+n+"_d2"+(i===5?" (mãe)":""); QUICK.push(["zen_m_b"+n+"_d2",lbl]); }
-// d3 vai de b02 a b10 (b01/b11/b12 nao existem na grade); so entra o que ja
-// foi produzido, entao basta adicionar o id em AVAILABLE para o botao surgir.
-for(let i=2;i<=10;i++){ const n=String(i).padStart(2,"0"); const id="zen_m_b"+n+"_d3";
-  if(AVAILABLE.has(id)) QUICK.push([id,"b"+n+"_d3"]); }
-QUICK.forEach(([id,lbl])=>{
-  const b=document.createElement("button"); b.textContent=lbl; b.dataset.id=id;
-  b.onclick=()=>setAvatar(id); quick.appendChild(b);
-});
 
-// seletor de resolucao (comparacao 18k/40k/60k em b02_d3 e b11_d1)
-const resWrap=document.createElement("div"); resWrap.className="opt";
-resWrap.innerHTML='<span>Resolução <span style="opacity:.6">(b02_d3 · b11_d1)</span>:</span>';
-[18000,40000,60000].forEach(n=>{
-  const b=document.createElement("button"); b.textContent=(n/1000)+"k"; b.dataset.res=n;
-  if(n===curRes) b.classList.add("active");
-  b.onclick=()=>{ curRes=n;
-    document.querySelectorAll("[data-res]").forEach(x=>x.classList.remove("active"));
-    b.classList.add("active"); setAvatar(curId); };
-  resWrap.appendChild(b);
+fetch("../library.json?t="+Date.now()).then(r=>r.json()).then(lib=>{
+  LIB = lib;
+  const avatares=[...lib.avatars].sort((a,b)=>a.measured_bmi-b.measured_bmi);
+  for(const a of avatares){
+    AVAILABLE.add(a.id);
+    const b=document.createElement("button");
+    b.textContent=a.id.replace("zen_m_","")+" · "+a.measured_bmi.toFixed(1);
+    b.dataset.id=a.id;
+    b.title=`${a.definition} · IMC ${a.measured_bmi} · ${a.label} · cintura/altura ${a.waist_to_height}`;
+    b.onclick=()=>setAvatar(a.id);
+    quick.appendChild(b);
+  }
+  document.getElementById("count").textContent=
+    avatares.length+" avatares · ordenados por IMC medido";
+  update();   // so agora AVAILABLE existe
+}).catch(err=>{
+  document.getElementById("missing").innerHTML=
+    "<span class='fallback-note'>não consegui ler library.json ("+err+"). "+
+    "Abra por http (localhost), não por file://.</span>";
 });
-quick.after(resWrap);
 
 // opções de card / fundo / orbit
 document.querySelectorAll(".opt button[data-w]").forEach(b=>b.onclick=()=>{
@@ -218,7 +260,7 @@ document.getElementById("orbit").addEventListener("change",e=>{
   if(e.target.checked) mv.setAttribute("camera-controls",""); else mv.removeAttribute("camera-controls");
 });
 
-update();
+// update() e chamado pelo fetch acima, quando AVAILABLE ja estiver preenchido.
 </script>
 </body>
 </html>

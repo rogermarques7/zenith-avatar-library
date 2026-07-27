@@ -16,8 +16,14 @@ O app Zenith é separado e apenas consome o resultado. Não editar nada do app a
 
 1. **A Meshy é operada manualmente pelo humano, no site.** Não existe integração com a API da Meshy neste projeto. Não escrever código que chame a API, não pedir chave de API, não criar `.env` para isso.
 2. **Normalização é crítica.** Todos os avatares saem com altura idêntica, pés em Y=0, centralizados em X/Z, mesma orientação frontal. Um avatar desalinhado faz o corpo "pular" na tela do usuário ao trocar de arquétipo.
-3. **Decimação é obrigatória.** O GLB cru da Meshy é inviável para celular. A produção mediu de **130k a 232k triângulos** conforme o volume e a definição do corpo (não os ~211k fixos que se supunha). Alvo: ~18k triângulos — o `process.py` calcula a razão de decimação sobre a contagem real. Razões já rodadas vão de 0,15 a **0,077** (`b07_d3`, o mais pesado) sem perda visível de definição.
-4. **A cor roxa Zenith é aplicada no pipeline**, nunca vem da textura da Meshy. Gerar sem textura no site.
+3. **Decimação é obrigatória, e o alvo é 60k (revisto em 27/07).** O GLB cru da Meshy é inviável para celular; a produção mediu de **130k a 317k triângulos** conforme o volume e a definição do corpo. O `process.py` calcula a razão sobre a contagem real (`--tris N`).
+
+   O alvo era 18k e **subiu para 60k** quando o corpo deixou de ser roxo: com material claro e specular, a faceta da decimação passou a aparecer e o relevo muscular ficava borrado — o roxo saturado vinha escondendo isso. Custo medido: **~183 KB por avatar** com Draco (contra ~64 KB em 18k), bem dentro do orçamento de 1–3 MB. Os masters 18k anteriores estão em `02_master_18k/` (fora do git) até o 60k ser aprovado.
+4. **A textura da Meshy nunca é usada** — gerar sem textura no site. O visual é aplicado aqui e, desde 27/07, tem **duas metades**:
+   - **material** — `scripts/zenith_material.py`: titânio cinza `#6D737B`, metallic 0.50, roughness 0.35. Fonte única, lida pelo `process.py` *e* pelo `restyle.py`.
+   - **iluminação** — `scripts/make_env.py` → `03_dist/env/zenith_env.hdr`: rim roxo + key fria + kicker traseiro.
+
+   **O corpo NÃO é mais roxo.** O roxo saturado achatava o relevo muscular, que é o foco do app. A identidade Zenith virou **luz**, não cor de corpo. Consequência que o app precisa saber: **metade do visual mora fora do GLB.** glTF não transporta iluminação de forma portável — o model-viewer ilumina por IBL (`environment-image`). Sem carregar o HDR, o avatar aparece cinza e sem identidade.
 5. **A diferença entre arquétipos é largura e volume, nunca altura.**
 5c. **A régua 2D (`measure.py`) não atravessa troca de gerador nem de pose.** Ela ordena folhas do MESMO gerador com a MESMA pose, e mais nada. Quem decide onde um avatar caiu é sempre o `metrics.py`, sobre o master 3D. Errar isso já custou três previsões nesta produção.
 5b. **Nunca regerar nem descartar um avatar já produzido.** Se ele não corresponde ao que o nome promete, o conserto é **reclassificar** (o rótulo é dado, vive no `library.json`) e **inserir** um novo onde faltar cobertura — nunca substituir. Decisão do Rogério, cobrada em 26/07: "quanto mais avatares tivermos, maior será nossa biblioteca".
@@ -27,12 +33,15 @@ O app Zenith é separado e apenas consome o resultado. Não editar nada do app a
 ## Divisão do trabalho
 
 **Humano (fora deste repositório):**
-1. Gera a folha de 3 vistas no ChatGPT seguindo o Character Bible
+1. Gera a folha de 3 vistas no ChatGPT/Gemini seguindo o Character Bible e **deixa em Downloads**
 2. Sobe as 3 imagens (recortadas pelo `crop.py`) no site da Meshy, gera o avatar, baixa o GLB
 3. Deixa o GLB em Downloads — o Claude Code renomeia e move para `01_raw/`
 4. Aprova ou reprova os avatares na folha de contato do QA
 
+> **Arquivo nenhum entra no repositório pela mão do humano.** Ele larga em Downloads; o Claude Code busca, renomeia, limpa e move — folha (`intake.py`) e GLB. **Pedir para ele salvar, renomear ou apagar selo à mão é regressão de fluxo**, e já aconteceu (27/07): o certo é `python scripts/intake.py {id}`, que pega a imagem mais recente do Downloads sozinho.
+
 **Scripts (o que este repositório faz):**
+0. `intake.py` — traz a folha do Downloads, **apaga o selo do Gemini** e grava em `00_input/sheets/{id}_sheet.png`
 1. `crop.py` — recorta a folha em frente/perfil/costas por detecção de fundo
 2. `process.py` — Blender headless: normaliza, decima, aplica material Zenith, valida
 3. `measure.py` — mede a **folha 2D** (barriga/ombros em % da altura): régua rápida para julgar folha antes da Meshy
@@ -40,6 +49,9 @@ O app Zenith é separado e apenas consome o resultado. Não editar nada do app a
 5. `metrics.py` — mede o **master 3D**: circunferências em cm e IMC real por volume da malha. É a régua de verdade, e a base da classificação
 6. `build_index.py` — monta o `library.json` a partir das medidas
 7. `render.py` — gera os frames de turntable (ainda não escrito)
+8. `zenith_material.py` — **não é executável**: é a fonte única do material (cor/metallic/roughness), importada pelo `process.py` e pelo `restyle.py`
+9. `make_env.py` — gera o ambiente de iluminação (`03_dist/env/zenith_env.hdr`). A identidade Zenith mora aqui
+10. `restyle.py` — reaplica o material nos 39 `03_dist/glb/` **lendo os masters, sem re-decimar e sem tocar em `02_master/`**. É o jeito de mexer em cor sem refazer QA. `--preview {id}` renderiza 4 vistas com o ambiente em `qa/look/{id}/`
 
 O contrato entre o humano e o pipeline é o **nome do arquivo**: o script extrai o ID do arquétipo do nome do GLB em `01_raw/`. Nome errado = avatar errado na biblioteca.
 
@@ -47,11 +59,13 @@ O script não gera imagens e não fala com a Meshy.
 
 ## Estado atual
 
-**36 avatares masculinos produzidos e processados (27/07/2026).** Todos com 9/9 validações, medidos pelo `metrics.py`, indexados no `library.json` (schema 3) e no `test/avatar_tester.html`. `crop.py`, `process.py`, `measure.py`, `qa_render.py`, `metrics.py` e `build_index.py` escritos. Só o `render.py` (turntable) não existe — e pode nem ser necessário, porque o GLB com auto-rotate no model-viewer foi aprovado no teste do app.
+**39 avatares masculinos produzidos e processados (27/07/2026) — a onda masculina está ENCERRADA.** Todos com 9/9 validações, medidos pelo `metrics.py`, indexados no `library.json` (schema 3) e no `test/avatar_tester.html`. `intake.py`, `crop.py`, `process.py`, `measure.py`, `qa_render.py`, `metrics.py` e `build_index.py` escritos. Só o `render.py` (turntable) não existe — e pode nem ser necessário, porque o GLB com auto-rotate no model-viewer foi aprovado no teste do app.
 
-**O número 32 não é meta.** A meta é COBERTURA do eixo de IMC, não contagem: produzir enquanto houver buraco `high` em `coverage_gaps`. Restam **dois**, ambos na zona de sobrepeso: d3 (27,4→34,6) e d1 (27,8→34,0). A grade feminina segue PENDENTE e não deve ser produzida ainda.
+**O número 32 não é meta.** A meta é COBERTURA do eixo de IMC, não contagem. Sobrou **um** vão `high` — d1 27,8→33,3 (salto 5,5) — e **três tentativas não o fecharam**: ele é o vazio entre dois atratores do gerador, e a recomendação registrada é aceitar e cobrir por shape keys. Os 8 vãos `low` estão todos em IMC 38+, sem população. A grade feminina segue PENDENTE e não deve ser produzida ainda.
 
-**Dois geradores de imagem em uso, de propósito.** ChatGPT e Gemini têm atratores em lugares diferentes, então o vazio de um é coberto pelo outro — o buraco de IMC 28–38 resistiu a 3 tentativas no ChatGPT e o Gemini entrou nele de primeira. Nenhum é "melhor"; usar o outro quando o alvo cair numa zona morta comprovada. **Folha do Gemini exige apagar o selo (estrelinha) antes do crop** — o `crop.py` não acusa.
+**Próxima fase: ambiente de testes**, não mais produção. Ver `state.md`.
+
+**Dois geradores de imagem em uso, de propósito.** ChatGPT e Gemini têm atratores em lugares diferentes, então o vazio de um é coberto pelo outro — o buraco de IMC 28–38 resistiu a 3 tentativas no ChatGPT e o Gemini entrou nele de primeira. Nenhum é "melhor"; usar o outro quando o alvo cair numa zona morta comprovada. **Folha do Gemini tem um selo (estrelinha) que o `crop.py` não acusa** — o `intake.py` acha e apaga sozinho, sempre; não pedir isso ao humano.
 
 Os avatares dos testes exploratórios (plano gratuito, CC BY 4.0) **não entraram na biblioteca**. Tudo em `02_master/` é do plano Pro.
 
