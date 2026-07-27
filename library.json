@@ -1,0 +1,1185 @@
+{
+  "schema_version": 3,
+  "generated_at": "2026-07-27T05:39:44Z",
+  "cdn_base": "https://cdn.exemplo.com/avatars/",
+  "reference_height_m": 1.75,
+  "selection": {
+    "rule": "nearest_measured_bmi_within_definition",
+    "target_bmi_formula": "bmi_usuario * (reference_height_m / altura_usuario_m)",
+    "definition_thresholds_bodyfat_pct": {
+      "m": {
+        "d3_below": 13.0,
+        "d2_below": 20.0
+      },
+      "f": {
+        "d3_below": 21.0,
+        "d2_below": 29.0
+      }
+    },
+    "definition_fallback": [
+      "d3",
+      "d2",
+      "d1"
+    ]
+  },
+  "default": {
+    "m": "zen_m_b04_d2",
+    "f": null
+  },
+  "coverage_gaps": [
+    {
+      "sex": "m",
+      "definition": "d3",
+      "between": [
+        "zen_m_b06_d3",
+        "zen_m_b06h_d3"
+      ],
+      "bmi_from": 27.4,
+      "bmi_to": 34.6,
+      "bmi_step": 7.2,
+      "priority": "high"
+    },
+    {
+      "sex": "m",
+      "definition": "d1",
+      "between": [
+        "zen_m_b05_d1",
+        "zen_m_b05j_d1"
+      ],
+      "bmi_from": 27.8,
+      "bmi_to": 34.0,
+      "bmi_step": 6.2,
+      "priority": "high"
+    },
+    {
+      "sex": "m",
+      "definition": "d1",
+      "between": [
+        "zen_m_b11_d1",
+        "zen_m_b12_d1"
+      ],
+      "bmi_from": 107.1,
+      "bmi_to": 147.6,
+      "bmi_step": 40.5,
+      "priority": "low"
+    },
+    {
+      "sex": "m",
+      "definition": "d2",
+      "between": [
+        "zen_m_b10_d2",
+        "zen_m_b11_d2"
+      ],
+      "bmi_from": 84.7,
+      "bmi_to": 111.8,
+      "bmi_step": 27.1,
+      "priority": "low"
+    },
+    {
+      "sex": "m",
+      "definition": "d1",
+      "between": [
+        "zen_m_b10_d1",
+        "zen_m_b11_d1"
+      ],
+      "bmi_from": 83.6,
+      "bmi_to": 107.1,
+      "bmi_step": 23.5,
+      "priority": "low"
+    },
+    {
+      "sex": "m",
+      "definition": "d2",
+      "between": [
+        "zen_m_b08_d2",
+        "zen_m_b09_d2"
+      ],
+      "bmi_from": 53.5,
+      "bmi_to": 74.2,
+      "bmi_step": 20.7,
+      "priority": "low"
+    },
+    {
+      "sex": "m",
+      "definition": "d1",
+      "between": [
+        "zen_m_b09_d1",
+        "zen_m_b10_d1"
+      ],
+      "bmi_from": 63.1,
+      "bmi_to": 83.6,
+      "bmi_step": 20.5,
+      "priority": "low"
+    },
+    {
+      "sex": "m",
+      "definition": "d3",
+      "between": [
+        "zen_m_b07_d3",
+        "zen_m_b08_d3"
+      ],
+      "bmi_from": 35.7,
+      "bmi_to": 53.8,
+      "bmi_step": 18.1,
+      "priority": "low"
+    },
+    {
+      "sex": "m",
+      "definition": "d2",
+      "between": [
+        "zen_m_b07_d2",
+        "zen_m_b08_d2"
+      ],
+      "bmi_from": 38.4,
+      "bmi_to": 53.5,
+      "bmi_step": 15.1,
+      "priority": "low"
+    },
+    {
+      "sex": "m",
+      "definition": "d1",
+      "between": [
+        "zen_m_b08_d1",
+        "zen_m_b09_d1"
+      ],
+      "bmi_from": 48.0,
+      "bmi_to": 63.1,
+      "bmi_step": 15.1,
+      "priority": "low"
+    },
+    {
+      "sex": "m",
+      "definition": "d2",
+      "between": [
+        "zen_m_b09_d2",
+        "zen_m_b10_d2"
+      ],
+      "bmi_from": 74.2,
+      "bmi_to": 84.7,
+      "bmi_step": 10.5,
+      "priority": "low"
+    },
+    {
+      "sex": "m",
+      "definition": "d1",
+      "between": [
+        "zen_m_b05i_d1",
+        "zen_m_b08_d1"
+      ],
+      "bmi_from": 40.7,
+      "bmi_to": 48.0,
+      "bmi_step": 7.3,
+      "priority": "low"
+    }
+  ],
+  "avatars": [
+    {
+      "id": "zen_m_b01_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 16.1,
+      "measured_mass_kg": 49.3,
+      "label": "muito magro",
+      "waist_to_height": 0.405,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b01_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 35.2,
+        "chest": 78.2,
+        "waist_navel": 70.9,
+        "waist_min": 65.9,
+        "hip": 85.1,
+        "forearm": 20.2,
+        "biceps": 20.9,
+        "wrist": 15.3,
+        "thigh": 45.4,
+        "calf": 29.8
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b02_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 18.0,
+      "measured_mass_kg": 55.2,
+      "label": "muito magro",
+      "waist_to_height": 0.41,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b02_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 34.8,
+        "chest": 85.3,
+        "waist_navel": 71.7,
+        "waist_min": 67.6,
+        "hip": 87.7,
+        "forearm": 22.9,
+        "biceps": 22.9,
+        "wrist": 16.3,
+        "thigh": 51.5,
+        "calf": 33.1
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b03_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 20.4,
+      "measured_mass_kg": 62.4,
+      "label": "magro",
+      "waist_to_height": 0.434,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b03_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 36.6,
+        "chest": 89.7,
+        "waist_navel": 76.0,
+        "waist_min": 73.2,
+        "hip": 92.0,
+        "forearm": 24.6,
+        "biceps": 25.9,
+        "wrist": 18.3,
+        "thigh": 55.7,
+        "calf": 36.6
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b04_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 24.4,
+      "measured_mass_kg": 74.8,
+      "label": "magro",
+      "waist_to_height": 0.494,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b04_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 40.2,
+        "chest": 96.9,
+        "waist_navel": 86.5,
+        "waist_min": 84.4,
+        "hip": 99.8,
+        "forearm": 25.0,
+        "biceps": 29.8,
+        "wrist": 18.4,
+        "thigh": 58.4,
+        "calf": 38.7
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b05h_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 26.2,
+      "measured_mass_kg": 80.2,
+      "label": "medio",
+      "waist_to_height": 0.53,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b05h_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 40.6,
+        "chest": 102.0,
+        "waist_navel": 92.7,
+        "waist_min": 90.2,
+        "hip": 105.3,
+        "forearm": 28.6,
+        "biceps": 30.1,
+        "wrist": 21.5,
+        "thigh": 63.7,
+        "calf": 39.3
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b05_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 27.8,
+      "measured_mass_kg": 85.0,
+      "label": "cheio",
+      "waist_to_height": 0.551,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b05_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 43.1,
+        "chest": 102.5,
+        "waist_navel": 96.5,
+        "waist_min": 92.2,
+        "hip": 106.3,
+        "forearm": 28.2,
+        "biceps": 33.6,
+        "wrist": 20.5,
+        "thigh": 63.3,
+        "calf": 41.3
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b05j_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 34.0,
+      "measured_mass_kg": 104.0,
+      "label": "muito cheio",
+      "waist_to_height": 0.631,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b05j_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 47.3,
+        "chest": 110.9,
+        "waist_navel": 110.5,
+        "waist_min": 105.3,
+        "hip": 116.9,
+        "forearm": 31.1,
+        "biceps": 36.2,
+        "wrist": 23.0,
+        "thigh": 70.5,
+        "calf": 47.5
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b06_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 38.8,
+      "measured_mass_kg": 119.0,
+      "label": "extremo",
+      "waist_to_height": 0.759,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b06_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 46.6,
+        "chest": 119.2,
+        "waist_navel": 132.8,
+        "waist_min": 119.3,
+        "hip": 129.5,
+        "forearm": 31.0,
+        "biceps": 32.0,
+        "wrist": 27.5,
+        "thigh": 72.7,
+        "calf": 48.2
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b07_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 39.8,
+      "measured_mass_kg": 122.0,
+      "label": "muito cheio",
+      "waist_to_height": 0.739,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b07_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 51.3,
+        "chest": 117.9,
+        "waist_navel": 129.4,
+        "waist_min": 115.9,
+        "hip": 129.8,
+        "forearm": 32.8,
+        "biceps": 37.8,
+        "wrist": 27.8,
+        "thigh": 72.3,
+        "calf": 49.4
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b05i_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 40.7,
+      "measured_mass_kg": 124.7,
+      "label": "extremo",
+      "waist_to_height": 0.754,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b05i_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 50.4,
+        "chest": 119.0,
+        "waist_navel": 132.0,
+        "waist_min": 119.6,
+        "hip": 131.3,
+        "forearm": 31.3,
+        "biceps": 36.4,
+        "wrist": 27.8,
+        "thigh": 75.7,
+        "calf": 50.8
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b08_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 48.0,
+      "measured_mass_kg": 147.0,
+      "label": "extremo",
+      "waist_to_height": 0.821,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b08_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 53.9,
+        "chest": 132.9,
+        "waist_navel": 143.6,
+        "waist_min": 132.6,
+        "hip": 147.2,
+        "forearm": 34.3,
+        "biceps": 35.5,
+        "wrist": 33.1,
+        "thigh": 80.7,
+        "calf": 56.3
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b09_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 63.1,
+      "measured_mass_kg": 193.2,
+      "label": "extremo",
+      "waist_to_height": 0.933,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b09_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 57.1,
+        "chest": 150.2,
+        "waist_navel": 163.3,
+        "waist_min": 148.7,
+        "hip": 167.2,
+        "forearm": 37.3,
+        "biceps": 36.9,
+        "wrist": 33.9,
+        "thigh": 88.7,
+        "calf": 65.1
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b10_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 83.6,
+      "measured_mass_kg": 255.9,
+      "label": "extremo",
+      "waist_to_height": 1.081,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b10_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 64.1,
+        "chest": 174.1,
+        "waist_navel": 189.1,
+        "waist_min": 173.4,
+        "hip": 199.5,
+        "forearm": 40.1,
+        "biceps": 42.6,
+        "wrist": 40.3,
+        "thigh": 104.6,
+        "calf": 79.0
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b11_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 107.1,
+      "measured_mass_kg": 327.9,
+      "label": "extremo",
+      "waist_to_height": 1.19,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b11_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 65.7,
+        "chest": 242.8,
+        "waist_navel": 208.3,
+        "waist_min": 194.5,
+        "hip": 224.1,
+        "forearm": 48.9,
+        "biceps": 53.6,
+        "wrist": 46.1,
+        "thigh": 109.7,
+        "calf": 89.3
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b12_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 147.6,
+      "measured_mass_kg": 451.9,
+      "label": "extremo",
+      "waist_to_height": 1.611,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b12_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 73.9,
+        "chest": 244.6,
+        "waist_navel": 281.9,
+        "waist_min": 250.3,
+        "hip": 257.0,
+        "biceps": null,
+        "forearm": null,
+        "wrist": null,
+        "thigh": 118.1,
+        "calf": 119.4
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b01_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 19.7,
+      "measured_mass_kg": 60.2,
+      "label": "muito magro",
+      "waist_to_height": 0.415,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b01_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 37.2,
+        "chest": 87.4,
+        "waist_navel": 72.7,
+        "waist_min": 69.8,
+        "hip": 92.0,
+        "forearm": 23.4,
+        "biceps": 23.9,
+        "wrist": 16.1,
+        "thigh": 54.1,
+        "calf": 34.2
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b03_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 20.4,
+      "measured_mass_kg": 62.5,
+      "label": "muito magro",
+      "waist_to_height": 0.415,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b03_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 37.6,
+        "chest": 88.9,
+        "waist_navel": 72.7,
+        "waist_min": 71.9,
+        "hip": 92.6,
+        "forearm": 24.9,
+        "biceps": 25.9,
+        "wrist": 17.2,
+        "thigh": 53.5,
+        "calf": 36.3
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b02_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 20.8,
+      "measured_mass_kg": 63.7,
+      "label": "muito magro",
+      "waist_to_height": 0.418,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b02_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 37.3,
+        "chest": 89.5,
+        "waist_navel": 73.1,
+        "waist_min": 70.7,
+        "hip": 93.1,
+        "forearm": 24.8,
+        "biceps": 27.5,
+        "wrist": 17.0,
+        "thigh": 54.6,
+        "calf": 35.3
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b04_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 22.5,
+      "measured_mass_kg": 68.9,
+      "label": "magro",
+      "waist_to_height": 0.45,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b04_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 38.1,
+        "chest": 94.0,
+        "waist_navel": 78.7,
+        "waist_min": 77.5,
+        "hip": 96.4,
+        "forearm": 26.9,
+        "biceps": 29.4,
+        "wrist": 18.4,
+        "thigh": 55.5,
+        "calf": 36.8
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b05_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 26.7,
+      "measured_mass_kg": 81.9,
+      "label": "magro",
+      "waist_to_height": 0.482,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b05_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 42.8,
+        "chest": 101.2,
+        "waist_navel": 84.3,
+        "waist_min": 83.2,
+        "hip": 103.7,
+        "forearm": 30.9,
+        "biceps": 34.0,
+        "wrist": 21.0,
+        "thigh": 63.4,
+        "calf": 40.4
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b05h_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 30.6,
+      "measured_mass_kg": 93.6,
+      "label": "cheio",
+      "waist_to_height": 0.587,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b05h_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 49.3,
+        "chest": 109.7,
+        "waist_navel": 102.8,
+        "waist_min": 101.2,
+        "hip": 108.4,
+        "forearm": 29.6,
+        "biceps": 35.9,
+        "wrist": 21.5,
+        "thigh": 65.3,
+        "calf": 44.8
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b06_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 35.0,
+      "measured_mass_kg": 107.0,
+      "label": "cheio",
+      "waist_to_height": 0.581,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b06_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 46.9,
+        "chest": 112.3,
+        "waist_navel": 101.7,
+        "waist_min": 99.6,
+        "hip": 117.3,
+        "forearm": 34.9,
+        "biceps": 37.3,
+        "wrist": 22.4,
+        "thigh": 70.5,
+        "calf": 46.9
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b07_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 38.4,
+      "measured_mass_kg": 117.5,
+      "label": "muito cheio",
+      "waist_to_height": 0.638,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b07_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 50.2,
+        "chest": 121.3,
+        "waist_navel": 111.6,
+        "waist_min": 111.1,
+        "hip": 123.1,
+        "forearm": 36.7,
+        "biceps": 43.3,
+        "wrist": 26.2,
+        "thigh": 72.7,
+        "calf": 46.4
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b08_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 53.5,
+      "measured_mass_kg": 163.9,
+      "label": "extremo",
+      "waist_to_height": 0.801,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b08_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 56.2,
+        "chest": 135.6,
+        "waist_navel": 140.2,
+        "waist_min": 133.0,
+        "hip": 146.1,
+        "forearm": 41.1,
+        "biceps": 44.4,
+        "wrist": 30.2,
+        "thigh": 86.2,
+        "calf": 60.4
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b09_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 74.2,
+      "measured_mass_kg": 227.2,
+      "label": "extremo",
+      "waist_to_height": 0.992,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b09_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 61.2,
+        "chest": 156.3,
+        "waist_navel": 173.6,
+        "waist_min": 156.0,
+        "hip": 172.2,
+        "forearm": 44.8,
+        "biceps": 45.2,
+        "wrist": 37.1,
+        "thigh": 98.8,
+        "calf": 73.5
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b10_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 84.7,
+      "measured_mass_kg": 259.5,
+      "label": "extremo",
+      "waist_to_height": 1.058,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b10_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 64.8,
+        "chest": 172.3,
+        "waist_navel": 185.2,
+        "waist_min": 172.1,
+        "hip": 189.8,
+        "forearm": 45.6,
+        "biceps": 49.2,
+        "wrist": 37.6,
+        "thigh": 105.0,
+        "calf": 76.5
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b11_d2",
+      "sex": "m",
+      "definition": "d2",
+      "measured_bmi": 111.8,
+      "measured_mass_kg": 342.2,
+      "label": "extremo",
+      "waist_to_height": 1.257,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b11_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 62.5,
+        "chest": 206.0,
+        "waist_navel": 219.9,
+        "waist_min": 205.3,
+        "hip": 224.1,
+        "forearm": 45.6,
+        "biceps": 50.2,
+        "wrist": 50.4,
+        "thigh": 111.8,
+        "calf": 94.9
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b02_d3",
+      "sex": "m",
+      "definition": "d3",
+      "measured_bmi": 19.9,
+      "measured_mass_kg": 61.0,
+      "label": "muito magro",
+      "waist_to_height": 0.409,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b02_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 38.0,
+        "chest": 87.8,
+        "waist_navel": 71.5,
+        "waist_min": 69.7,
+        "hip": 91.0,
+        "forearm": 23.7,
+        "biceps": 25.4,
+        "wrist": 18.0,
+        "thigh": 54.5,
+        "calf": 34.6
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b03_d3",
+      "sex": "m",
+      "definition": "d3",
+      "measured_bmi": 20.7,
+      "measured_mass_kg": 63.4,
+      "label": "muito magro",
+      "waist_to_height": 0.408,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b03_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 38.4,
+        "chest": 88.4,
+        "waist_navel": 71.4,
+        "waist_min": 68.1,
+        "hip": 92.0,
+        "forearm": 25.7,
+        "biceps": 29.0,
+        "wrist": 18.1,
+        "thigh": 51.9,
+        "calf": 35.0
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b04_d3",
+      "sex": "m",
+      "definition": "d3",
+      "measured_bmi": 21.1,
+      "measured_mass_kg": 64.6,
+      "label": "muito magro",
+      "waist_to_height": 0.394,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b04_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 36.9,
+        "chest": 90.6,
+        "waist_navel": 69.0,
+        "waist_min": 66.9,
+        "hip": 97.1,
+        "forearm": 25.6,
+        "biceps": 30.4,
+        "wrist": 19.4,
+        "thigh": 53.4,
+        "calf": 34.9
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b05_d3",
+      "sex": "m",
+      "definition": "d3",
+      "measured_bmi": 23.7,
+      "measured_mass_kg": 72.7,
+      "label": "muito magro",
+      "waist_to_height": 0.422,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b05_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 42.8,
+        "chest": 96.6,
+        "waist_navel": 73.9,
+        "waist_min": 70.6,
+        "hip": 98.4,
+        "forearm": 28.1,
+        "biceps": 29.6,
+        "wrist": 20.2,
+        "thigh": 60.5,
+        "calf": 36.9
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b06i_d3",
+      "sex": "m",
+      "definition": "d3",
+      "measured_bmi": 27.0,
+      "measured_mass_kg": 82.6,
+      "label": "magro",
+      "waist_to_height": 0.455,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b06i_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 46.6,
+        "chest": 101.9,
+        "waist_navel": 79.7,
+        "waist_min": 74.9,
+        "hip": 99.5,
+        "forearm": 33.7,
+        "biceps": 40.2,
+        "wrist": 21.1,
+        "thigh": 61.0,
+        "calf": 42.3
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b06_d3",
+      "sex": "m",
+      "definition": "d3",
+      "measured_bmi": 27.4,
+      "measured_mass_kg": 83.8,
+      "label": "magro",
+      "waist_to_height": 0.475,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b06_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 42.3,
+        "chest": 101.2,
+        "waist_navel": 83.2,
+        "waist_min": 78.9,
+        "hip": 101.6,
+        "forearm": 32.8,
+        "biceps": 37.7,
+        "wrist": 21.0,
+        "thigh": 59.3,
+        "calf": 41.3
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b06h_d3",
+      "sex": "m",
+      "definition": "d3",
+      "measured_bmi": 34.6,
+      "measured_mass_kg": 105.9,
+      "label": "medio",
+      "waist_to_height": 0.5,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b06h_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 45.3,
+        "chest": 110.9,
+        "waist_navel": 87.5,
+        "waist_min": 84.0,
+        "hip": 110.8,
+        "forearm": 40.7,
+        "biceps": 46.0,
+        "wrist": 24.0,
+        "thigh": 67.5,
+        "calf": 49.4
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b07_d3",
+      "sex": "m",
+      "definition": "d3",
+      "measured_bmi": 35.7,
+      "measured_mass_kg": 109.3,
+      "label": "magro",
+      "waist_to_height": 0.488,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b07_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 51.2,
+        "chest": 116.1,
+        "waist_navel": 85.4,
+        "waist_min": 84.6,
+        "hip": 112.9,
+        "forearm": 38.4,
+        "biceps": 43.1,
+        "wrist": 23.1,
+        "thigh": 69.9,
+        "calf": 50.3
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_m_b08_d3",
+      "sex": "m",
+      "definition": "d3",
+      "measured_bmi": 53.8,
+      "measured_mass_kg": 164.7,
+      "label": "cheio",
+      "waist_to_height": 0.593,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b08_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 56.7,
+        "chest": 132.5,
+        "waist_navel": 103.8,
+        "waist_min": 100.6,
+        "hip": 129.9,
+        "forearm": 49.7,
+        "biceps": 61.7,
+        "wrist": 27.7,
+        "thigh": 82.6,
+        "calf": 62.7
+      },
+      "approved": true
+    }
+  ]
+}

@@ -99,6 +99,22 @@ Exemplo: `zen_m_b07_d1_v1`
 
 O ID da faixa usa **dois dígitos** (`b07`, não `b7`) para que a ordenação alfabética dos arquivos coincida com a ordem da grade. Isso importa na folha de contato do QA, onde os vizinhos precisam aparecer lado a lado.
 
+### Avatares inseridos
+
+Um avatar produzido para **preencher um buraco de cobertura** leva o sufixo `h`
+na banda: `zen_m_b06h_d3` foi gerado mirando o vão entre `b06` e `b07`.
+
+> **O sufixo registra a INTENÇÃO, não o resultado.** O `zen_m_b05h_d1` foi
+> pedido para o vão `b05`→`b06` e o corpo saiu em IMC 26,2, ou seja **entre
+> `b04` e `b05`**. O nome ficou "errado" e **isso não importa**: desde o
+> schema 3 quem ordena a biblioteca é o `measured_bmi`, não o nome do arquivo.
+> Renomear o asset só moveria a inconsistência para o `logs/process.log`, que
+> é append-only.
+
+Consequência: a antiga regra de "ordenação alfabética = ordem da grade" só vale
+para a grade nominal original. **A folha de contato do QA deve ser ordenada por
+`measured_bmi` do `library.json`**, que é a ordem real dos corpos.
+
 **O nome do arquivo é o contrato com o pipeline.** O script extrai o ID do arquétipo do nome do GLB em `01_raw/`. Nome errado = avatar errado na biblioteca.
 
 ### Versionamento
@@ -109,11 +125,29 @@ O sufixo `_v1` só existe nos arquivos de distribuição. Ao substituir um avata
 
 ## 5. Classificação: medidas → arquétipo
 
-### Passo 1 — IMC → faixa
+> **Revisado em 26/07/2026 (schema 3).** A classificação deixou de usar a faixa
+> nominal do ID e passou a usar o **IMC medido de cada avatar**. Motivo: o
+> `scripts/metrics.py` mediu o volume dos masters e mostrou que o corpo
+> produzido não corresponde à faixa que o nome promete — o `zen_m_b12_d1` foi
+> pedido para IMC ≥ 38 e o corpo tem IMC **147**. O ID virou apenas nome de
+> arquivo; quem classifica é a medida.
+>
+> Isso não descarta nenhum asset: os corpos formam uma escada bem ordenada,
+> só estavam rotulados errado. Avatar novo é **inserção** — vira mais um ponto
+> no eixo de IMC, sem renomear nem substituir nada.
+
+### Passo 1 — IMC do usuário → IMC alvo (corrigir pela altura)
+
 ```
-IMC = peso_kg / (altura_m ** 2)
+IMC_usuario = peso_kg / (altura_m ** 2)
+IMC_alvo    = IMC_usuario * (1.75 / altura_m)
 ```
-Mapear pela tabela da seção 2.
+
+**Escala uniforme não preserva IMC.** Ao escalar por `s`, o volume vai com `s³`
+e a altura com `s²`, então o IMC representado vai com `s`. O mesmo avatar
+exibido para alguém de 1,90 m representa ~8,6% mais IMC do que para alguém de
+1,75 m. Sem essa correção, o app entrega um corpo sistematicamente errado nos
+extremos de altura.
 
 ### Passo 2 — % gordura → definição
 
@@ -124,18 +158,30 @@ Mapear pela tabela da seção 2.
 
 > Cortes heurísticos para **seleção de asset**, não classificação clínica. Servem para escolher qual corpo desenhar, nada além disso.
 
-### Passo 3 — fallback
+### Passo 3 — selecionar o avatar mais próximo
 
-Se a combinação não existir na grade, **reduzir a definição em um nível** e tentar de novo:
+Dentro da linha de definição escolhida, pegar o avatar de **menor
+`|measured_bmi − IMC_alvo|`**. Não existe mais tabela de faixas: a lista de
+avatares É o eixo, e cada um é um ponto nele.
 
-- `b01_d3` → `b01_d2`
-- `b11_d3` → `b11_d2`
-- `b12_d3` → `b12_d2` → `b12_d1`
-- `b12_d2` → `b12_d1`
+Por isso não há mais "combinação inexistente" — sempre existe um mais próximo.
+O fallback de definição (`d3 → d2 → d1`) só entra se a linha inteira estiver
+vazia, o que hoje só vale para o feminino.
 
-Se ainda assim falhar, usar o padrão do sexo: `zen_m_b05_d2`.
+Se nem isso resolver, usar `default` do índice. O app **nunca** deve exibir
+tela vazia por falta de arquétipo.
 
-O app **nunca** deve exibir tela vazia por falta de arquétipo.
+> **Vantagem estrutural:** inversões se resolvem sozinhas. Na grade nominal
+> `b02_d2` e `b03_d2` estavam trocados (IMC medido 20,8 contra 20,4);
+> ordenados pela medida, cada um cai no seu lugar sem intervenção.
+
+### Passo 3b — buracos de cobertura
+
+O `build_index.py` emite `coverage_gaps`: onde o salto de IMC entre vizinhos é
+grande, o usuário que cai no meio recebe um corpo distante do dele. **Não é
+erro — é a lista de onde inserir os próximos avatares.** Os buracos marcados
+`high` estão na faixa onde há usuário de verdade (IMC 17–40); os `low` estão na
+obesidade extrema e quase não têm população, por maior que seja o salto.
 
 ### Passo 4 — avatar da meta (tela Objetivo)
 
@@ -152,46 +198,59 @@ Nenhum asset adicional é necessário — a tela de Objetivo consome a mesma bib
 
 ## 6. Esquema do `library.json`
 
+Gerado por `scripts/build_index.py` a partir de `metrics/library_metrics.json`.
+
 ```json
 {
-  "schema_version": 2,
-  "generated_at": "2026-07-22T00:00:00Z",
+  "schema_version": 3,
+  "generated_at": "2026-07-26T22:00:00Z",
   "cdn_base": "https://cdn.exemplo.com/avatars/",
-  "default": { "m": "zen_m_b05_d2", "f": null },
-  "bmi_bands": [
-    { "id": "b01", "min": null, "max": 18.5 },
-    { "id": "b02", "min": 18.5, "max": 20.0 },
-    { "id": "b03", "min": 20.0, "max": 21.5 },
-    { "id": "b04", "min": 21.5, "max": 23.0 },
-    { "id": "b05", "min": 23.0, "max": 24.5 },
-    { "id": "b06", "min": 24.5, "max": 26.0 },
-    { "id": "b07", "min": 26.0, "max": 27.5 },
-    { "id": "b08", "min": 27.5, "max": 29.0 },
-    { "id": "b09", "min": 29.0, "max": 31.0 },
-    { "id": "b10", "min": 31.0, "max": 34.0 },
-    { "id": "b11", "min": 34.0, "max": 38.0 },
-    { "id": "b12", "min": 38.0, "max": null }
+  "reference_height_m": 1.75,
+  "selection": {
+    "rule": "nearest_measured_bmi_within_definition",
+    "target_bmi_formula": "bmi_usuario * (reference_height_m / altura_usuario_m)",
+    "definition_thresholds_bodyfat_pct": {
+      "m": { "d3_below": 13.0, "d2_below": 20.0 }
+    },
+    "definition_fallback": ["d3", "d2", "d1"]
+  },
+  "default": { "m": "zen_m_b04_d2", "f": null },
+  "coverage_gaps": [
+    { "sex": "m", "definition": "d1", "between": ["zen_m_b05_d1", "zen_m_b06_d1"],
+      "bmi_from": 27.8, "bmi_to": 38.8, "bmi_step": 11.0, "priority": "high" }
   ],
   "avatars": [
     {
-      "id": "zen_m_b07_d1",
+      "id": "zen_m_b07_d3",
       "sex": "m",
-      "bmi_band": "b07",
-      "definition": "d1",
+      "definition": "d3",
+      "measured_bmi": 35.7,
+      "measured_mass_kg": 109.3,
+      "waist_to_height": 0.488,
+      "label": "magro",
       "body_shape": "medium",
       "version": 1,
-      "assets": {
-        "glb": "zen_m_b07_d1_v1.glb",
-        "turntable": "zen_m_b07_d1_v1.webp"
-      },
-      "triangles": 18042,
+      "assets": { "glb": "zen_m_b07_d3_v1.glb", "turntable": null },
+      "circumferences_cm": { "chest": 116.1, "waist_navel": 85.4, "thigh": 69.9 },
       "approved": true
     }
   ]
 }
 ```
 
-As faixas de IMC vivem no `library.json`, não no código do app. Assim, refinar a grade no futuro não exige atualização do aplicativo.
+**Não existe mais `bmi_bands`.** A lista de avatares é o próprio eixo: cada um
+carrega o IMC que tem, e o app pega o mais próximo. Refinar a grade continua
+não exigindo atualização do app — e agora **acrescentar** avatar também não.
+
+`bmi_band` saiu do avatar: a faixa nominal do ID não descrevia o corpo.
+
+`label` e `waist_to_height` são para leitura humana. O rótulo vem de
+**cintura/altura, não de IMC** — o IMC não separa músculo de gordura, e o
+`zen_m_b07_d3` (IMC 35,7) sairia como "obesidade II" sendo um fisiculturista de
+cintura 85 cm. Por cintura/altura ele dá 0,488, que lê corretamente como magro.
+
+`circumferences_cm` viaja no índice porque é o insumo das **shape keys** do
+sistema híbrido: ajustar um membro exige saber a medida de base dele.
 
 O campo `body_shape` fica fixo em `"medium"` na Onda 1 e existe para acomodar formatos corporais (pera / maçã / retângulo) numa onda futura sem migração de esquema.
 

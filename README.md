@@ -45,6 +45,7 @@ Estes achados são a base de todas as decisões abaixo. Não repetir os testes.
    - Aba **Imagem → 3D single** (não "Geração em lote", que trata cada imagem como objeto separado)
    - **Meshy 6, tipo Padrão** (não Smart Topology)
    - Densidade alta (~200k faces). **15k polígonos destrói a definição muscular.**
+   - **Divisão automática desligada** (achado do piloto, 23/07) — ligada, o Meshy separa o modelo em partes e quebra a validação de malha única do `process.py`.
 
 3. **Smart Topology não é necessário** — o tipo Padrão do Meshy 6 produziu resultado superior.
 
@@ -58,9 +59,11 @@ Estes achados são a base de todas as decisões abaixo. Não repetir os testes.
 
 ```
 [MANUAL]     ChatGPT → folha de 3 vistas: frente | perfil | costas (Character Bible)
-                ↓ recorta em 3 imagens
-[MANUAL]     Site da Meshy → Multi-View → gera → baixa GLB
-                ↓ salva em 01_raw/ com o ID do arquétipo no nome
+                ↓
+[AUTOMÁTICO] crop.py → recorta a folha em 3 imagens (00_input/references/{id}/)
+                ↓
+[MANUAL]     Site da Meshy → Multi-View → gera → baixa GLB (fica em Downloads)
+                ↓ Claude Code renomeia e move para 01_raw/ com o ID no nome
 [AUTOMÁTICO] process.py → Blender headless: normaliza, decima, material Zenith, valida
                 ↓
 [AUTOMÁTICO] render.py → GLB otimizado + frames de turntable
@@ -82,17 +85,19 @@ O contrato entre o humano e o pipeline é o **nome do arquivo** do GLB salvo em 
 zenith-avatar-library/
 ├── 00_input/
 │   ├── sheets/              # folhas de 3 vistas do ChatGPT
-│   └── references/          # recortes frente/perfil/costas
+│   └── references/          # recortes: uma subpasta {id}/ por avatar (front/side/back)
 ├── 01_raw/                  # GLBs baixados do site da Meshy (entrada do pipeline)
 ├── 02_master/               # GLBs normalizados (fonte de verdade)
 ├── 03_dist/
 │   ├── glb/                 # otimizado para o app
 │   └── turntable/           # frames / WebP animado
-├── qa/                      # folhas de contato
+├── qa/
+│   └── inspect/             # renders de QA por avatar
 ├── scripts/
+│   ├── crop.py              # recorta a folha em 3 vistas
 │   ├── process.py           # Blender headless
-│   ├── render.py            # turntable
-│   └── build_index.py       # library.json
+│   ├── render.py            # turntable (ainda não escrito)
+│   └── build_index.py       # library.json (ainda não escrito)
 └── library.json
 ```
 
@@ -114,7 +119,7 @@ Duas rotas viáveis:
 
 ### Peso e distribuição
 
-O output cru da Meshy (~211k faces) é inviável para celular.
+O output cru da Meshy é inviável para celular — a produção mediu **130k a 232k triângulos** conforme o volume *e a definição* do corpo (não os ~211k fixos que se supunha; a decimação usa a contagem real). O topo da faixa é o `b07_d3`, um fisiculturista: massa alta somada a relevo abdominal profundo. Decimar 232k → 18k (razão 0,077) **não** custou definição visível.
 
 - Alvo pós-decimação: **~18k triângulos**
 - GLB otimizado com Draco: ~1–3 MB por avatar
@@ -177,10 +182,10 @@ Racional do faseamento: o custo em créditos é irrelevante (~US$36 para 90 avat
 
 ## 8. Roadmap
 
-- [ ] Assinar plano Meshy Pro (licença comercial + download + Multi-View)
-- [ ] Definir e aprovar a folha-mãe masculina (`m_b05_d2`)
-- [ ] **Piloto: 4 avatares masculinos** nos extremos (`m_b02_d3`, `m_b05_d2`, `m_b08_d1`, `m_b11_d1`) para validar o pipeline ponta a ponta — avaliar as costas com atenção
-- [ ] Validar formato de entrega no app (GLB vs turntable)
+- [x] Assinar plano Meshy Pro (licença comercial + download + Multi-View)
+- [x] Definir e aprovar a folha-mãe masculina (`m_b05_d2`)
+- [x] **Piloto: 4 avatares masculinos** nos extremos (`m_b02_d3`, `m_b05_d2`, `m_b08_d1`, `m_b11_d1`) — pipeline validado ponta a ponta; definição e volume sobrevivem a 18k
+- [ ] Validar formato de entrega no app (GLB vs turntable) — resolve também a borda serrilhada do short
 - [ ] Produzir as 32 folhas masculinas (`docs/CHARACTER_BIBLE.md`)
 - [ ] Reescrever a grade feminina com 12 faixas
 - [ ] Rodar pipeline completo

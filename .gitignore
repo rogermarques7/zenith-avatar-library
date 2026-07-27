@@ -1,6 +1,17 @@
+# Binarios pesados do pipeline. Reproduziveis a partir de 01_raw/ (Meshy).
 01_raw/
 02_master/
 03_dist/
 qa/
+
+# Insumo das imagens. Fora do git de proposito: e o material de origem
+# comercial da biblioteca e o repo e publico.
+#   00_input/sheets/     -> IRREPRODUZIVEL (gerar de novo nao devolve o mesmo
+#                           personagem). Precisa de backup FORA do git.
+#   00_input/references/ -> derivado, o crop.py refaz das folhas.
+00_input/
+
+__pycache__/
+*.pyc
 Thumbs.db
 .DS_Store

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zenith — Testador de Avatares</title>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<style>
+  :root { --bg:#0d0d12; --panel:#17171f; --line:#2a2a36; --text:#e8e8ef; --muted:#8b8b9a; --accent:#8346c6; --accent2:#b17ddf; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); }
+  .wrap { display:flex; gap:24px; padding:24px; flex-wrap:wrap; align-items:flex-start; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:20px; }
+  .controls { width:360px; }
+  h1 { font-size:18px; margin:0 0 4px; }
+  .sub { color:var(--muted); font-size:12px; margin:0 0 20px; }
+  label { display:block; font-size:13px; margin:16px 0 6px; color:var(--muted); }
+  .row { display:flex; align-items:center; gap:10px; }
+  input[type=range] { flex:1; accent-color:var(--accent); }
+  .val { width:64px; text-align:right; font-variant-numeric:tabular-nums; font-weight:600; }
+  .result { margin-top:22px; padding:16px; background:#101017; border:1px solid var(--line); border-radius:10px; }
+  .pickid { font-size:22px; font-weight:700; color:var(--accent2); letter-spacing:.5px; }
+  .reason { font-size:12px; color:var(--muted); line-height:1.7; margin-top:8px; }
+  .reason b { color:var(--text); font-weight:600; }
+  .badge { display:inline-block; font-size:11px; padding:2px 8px; border-radius:99px; margin-left:8px; vertical-align:middle; }
+  .badge.ok { background:#1f3d29; color:#6ee7a0; }
+  .badge.no { background:#3d2029; color:#f0a; }
+  .viewer { width:320px; }
+  model-viewer { width:300px; height:400px; background:#0d0d12; border-radius:12px; border:1px solid var(--line); }
+  .quick { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  .quick button, .opt button { background:#20202b; color:var(--text); border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:12px; cursor:pointer; }
+  .quick button:hover, .opt button:hover { border-color:var(--accent); }
+  .quick button.active { background:var(--accent); border-color:var(--accent); }
+  .opt { display:flex; gap:8px; margin-top:12px; align-items:center; font-size:12px; color:var(--muted); flex-wrap:wrap; }
+  .missing { font-size:12px; color:#f0a; margin-top:8px; min-height:16px; }
+  .fallback-note { color:#e0b055; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="panel controls">
+    <h1>Testador de Avatares Zenith</h1>
+    <p class="sub">Sliders → qual avatar o app escolhe (lógica do ARCHETYPES.md). Linha d1 completa (b01→b12) — clique os botões em ordem para ver a continuidade.</p>
+
+    <label>Peso <span class="val" id="pesoV">75 kg</span></label>
+    <div class="row"><input type="range" id="peso" min="40" max="180" step="0.5" value="75"></div>
+
+    <label>Altura <span class="val" id="alturaV">175 cm</span></label>
+    <div class="row"><input type="range" id="altura" min="150" max="205" step="1" value="175"></div>
+
+    <label>% Gordura corporal <span class="val" id="gorduraV">18%</span></label>
+    <div class="row"><input type="range" id="gordura" min="4" max="45" step="0.5" value="18"></div>
+
+    <div class="result">
+      <div><span class="pickid" id="pickId">—</span><span class="badge" id="existBadge"></span></div>
+      <div class="reason" id="reason"></div>
+      <div class="missing" id="missing"></div>
+    </div>
+  </div>
+
+  <div class="viewer">
+    <div class="panel" style="padding:12px; display:inline-block;">
+      <model-viewer id="mv" auto-rotate rotation-per-second="30deg" interaction-prompt="none"
+                    disable-zoom camera-orbit="0deg 90deg auto" exposure="1" shadow-intensity="0"></model-viewer>
+      <div class="quick" id="quick"></div>
+      <div class="opt">
+        <span>Card:</span>
+        <button data-w="300" data-h="400" class="active">300px (app)</button>
+        <button data-w="500" data-h="640">500px (inspeção)</button>
+        <span style="margin-left:8px">|</span>
+        <label style="margin:0"><input type="checkbox" id="orbit"> girar com mouse</label>
+      </div>
+      <div class="opt">
+        <span>Fundo:</span>
+        <button data-bg="#0d0d12" class="active">escuro</button>
+        <button data-bg="#e9e9ee">claro</button>
+        <button data-bg="#8346c6">roxo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---- grade e faixas (ARCHETYPES.md §6) ----
+const BANDS = [
+  {id:"b01",min:null,max:18.5},{id:"b02",min:18.5,max:20.0},{id:"b03",min:20.0,max:21.5},
+  {id:"b04",min:21.5,max:23.0},{id:"b05",min:23.0,max:24.5},{id:"b06",min:24.5,max:26.0},
+  {id:"b07",min:26.0,max:27.5},{id:"b08",min:27.5,max:29.0},{id:"b09",min:29.0,max:31.0},
+  {id:"b10",min:31.0,max:34.0},{id:"b11",min:34.0,max:38.0},{id:"b12",min:38.0,max:null}
+];
+// combos que NÃO existem (36 - 4)
+const REMOVED = new Set(["b01_d3","b11_d3","b12_d3","b12_d2"]);
+const DEF_LABEL = {d1:"Baixa",d2:"Média",d3:"Alta"};
+const BAND_LABEL = {b01:"Abaixo do peso",b02:"Muito magro",b03:"Magro",b04:"Normal baixo",b05:"Normal",
+  b06:"Normal alto",b07:"Sobrepeso leve",b08:"Sobrepeso",b09:"Sobrepeso alto",b10:"Obesidade I",
+  b11:"Obesidade II",b12:"Obesidade III"};
+// GLBs que existem em disco: 36 masters. Sufixo h/i/j = INSERCAO num vao de
+// cobertura; marca a intencao, nao a posicao (quem ordena e o measured_bmi).
+const AVAILABLE = new Set([
+  "zen_m_b01_d1","zen_m_b02_d1","zen_m_b03_d1","zen_m_b04_d1","zen_m_b05_d1",
+  "zen_m_b05h_d1","zen_m_b05i_d1","zen_m_b05j_d1",
+  "zen_m_b06_d1","zen_m_b07_d1","zen_m_b08_d1","zen_m_b09_d1","zen_m_b10_d1",
+  "zen_m_b11_d1","zen_m_b12_d1",
+  "zen_m_b01_d2","zen_m_b02_d2","zen_m_b03_d2","zen_m_b04_d2","zen_m_b05_d2",
+  "zen_m_b05h_d2","zen_m_b06_d2",
+  "zen_m_b07_d2","zen_m_b08_d2","zen_m_b09_d2","zen_m_b10_d2","zen_m_b11_d2",
+  "zen_m_b02_d3","zen_m_b03_d3","zen_m_b04_d3","zen_m_b05_d3","zen_m_b06_d3",
+  "zen_m_b06i_d3","zen_m_b06h_d3","zen_m_b07_d3","zen_m_b08_d3"]);
+
+function bandFor(imc){
+  for(const b of BANDS){
+    const okMin = b.min===null || imc>=b.min;
+    const okMax = b.max===null || imc<b.max;
+    if(okMin && okMax) return b.id;
+  }
+  return "b05";
+}
+function defFor(g){ if(g<13) return "d3"; if(g<=20) return "d2"; return "d1"; } // masculino §5
+function reduceDef(d){ return d==="d3"?"d2":(d==="d2"?"d1":null); }
+
+function classify(peso, alturaCm, gordura){
+  const altura=alturaCm/100, imc=peso/(altura*altura);
+  const band=bandFor(imc), def0=defFor(gordura);
+  let def=def0, steps=[];
+  while(def && REMOVED.has(band+"_"+def)){ steps.push(band+"_"+def); def=reduceDef(def); }
+  let id, fallback=false;
+  if(def){ id="zen_m_"+band+"_"+def; if(def!==def0) fallback=true; }
+  else { id="zen_m_b05_d2"; fallback=true; } // fallback final §5
+  return {imc,band,def0,def,id,fallback,steps};
+}
+
+const mv=document.getElementById("mv");
+// versoes de comparacao de resolucao em test/compare/
+const COMPARE={ "zen_m_b02_d3":[18000,40000,60000], "zen_m_b11_d1":[18000,40000,60000] };
+let curId="zen_m_b05_d2", curRes=18000;
+
+function srcFor(id){
+  if(COMPARE[id] && COMPARE[id].includes(curRes))
+    return "../test/compare/"+id+"_"+curRes+".glb?t="+Date.now();
+  return "../03_dist/glb/"+id+"_v1.glb?t="+Date.now();
+}
+function setAvatar(id){
+  curId=id;
+  document.querySelectorAll("#quick button").forEach(b=>b.classList.toggle("active", b.dataset.id===id));
+  const miss=document.getElementById("missing");
+  if(AVAILABLE.has(id)){
+    mv.src=srcFor(id); mv.style.display="block";
+    if(COMPARE[id]) miss.innerHTML="<b style='color:#b17ddf'>"+(curRes/1000)+"k triângulos</b>";
+    else miss.innerHTML = curRes!==18000 ? "<span class='fallback-note'>⚠ "+(curRes/1000)+"k só existe para <b>b02_d3</b> e <b>b11_d1</b> — este avatar só tem 18k, nada muda aqui.</span>" : "";
+  } else {
+    mv.removeAttribute("src"); mv.style.display="block";
+    miss.textContent="asset "+id+" ainda não produzido (d1 completo; d2/d3 em produção)";
+  }
+}
+
+function update(){
+  const peso=+peso_.value, altura=+altura_.value, gordura=+gordura_.value;
+  pesoV.textContent=peso.toFixed(1).replace(/\.0$/,"")+" kg";
+  alturaV.textContent=altura+" cm";
+  gorduraV.textContent=gordura.toFixed(1).replace(/\.0$/,"")+"%";
+  const r=classify(peso,altura,gordura);
+  pickId.textContent=r.id;
+  const exists=AVAILABLE.has(r.id);
+  const badge=document.getElementById("existBadge");
+  badge.className="badge "+(exists?"ok":"no");
+  badge.textContent=exists?"existe":"não produzido";
+  let reason=`IMC <b>${r.imc.toFixed(1)}</b> → faixa <b>${r.band}</b> (${BAND_LABEL[r.band]}) · `+
+    `%gordura <b>${gordura}%</b> → definição <b>${r.def0}</b> (${DEF_LABEL[r.def0]})`;
+  if(r.fallback){
+    if(r.steps.length) reason+=`<br><span class="fallback-note">fallback: ${r.steps.join(" → ")} não existe, reduziu para ${r.def||"padrão b05_d2"}</span>`;
+    else reason+=`<br><span class="fallback-note">fallback para o padrão b05_d2</span>`;
+  }
+  document.getElementById("reason").innerHTML=reason;
+  setAvatar(r.id);
+}
+
+const peso_=document.getElementById("peso"), altura_=document.getElementById("altura"), gordura_=document.getElementById("gordura");
+[peso_,altura_,gordura_].forEach(s=>s.addEventListener("input",update));
+
+// quick buttons: linhas d1 e d2 completas em ordem, para o teste de
+// continuidade, + a d3 ate onde ja foi produzida.
+const quick=document.getElementById("quick");
+const QUICK=[];
+for(let i=1;i<=12;i++){ const n=String(i).padStart(2,"0"); QUICK.push(["zen_m_b"+n+"_d1","b"+n+"_d1"]); }
+for(let i=1;i<=11;i++){ const n=String(i).padStart(2,"0"); const lbl="b"+n+"_d2"+(i===5?" (mãe)":""); QUICK.push(["zen_m_b"+n+"_d2",lbl]); }
+// d3 vai de b02 a b10 (b01/b11/b12 nao existem na grade); so entra o que ja
+// foi produzido, entao basta adicionar o id em AVAILABLE para o botao surgir.
+for(let i=2;i<=10;i++){ const n=String(i).padStart(2,"0"); const id="zen_m_b"+n+"_d3";
+  if(AVAILABLE.has(id)) QUICK.push([id,"b"+n+"_d3"]); }
+QUICK.forEach(([id,lbl])=>{
+  const b=document.createElement("button"); b.textContent=lbl; b.dataset.id=id;
+  b.onclick=()=>setAvatar(id); quick.appendChild(b);
+});
+
+// seletor de resolucao (comparacao 18k/40k/60k em b02_d3 e b11_d1)
+const resWrap=document.createElement("div"); resWrap.className="opt";
+resWrap.innerHTML='<span>Resolução <span style="opacity:.6">(b02_d3 · b11_d1)</span>:</span>';
+[18000,40000,60000].forEach(n=>{
+  const b=document.createElement("button"); b.textContent=(n/1000)+"k"; b.dataset.res=n;
+  if(n===curRes) b.classList.add("active");
+  b.onclick=()=>{ curRes=n;
+    document.querySelectorAll("[data-res]").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active"); setAvatar(curId); };
+  resWrap.appendChild(b);
+});
+quick.after(resWrap);
+
+// opções de card / fundo / orbit
+document.querySelectorAll(".opt button[data-w]").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".opt button[data-w]").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active"); mv.style.width=b.dataset.w+"px"; mv.style.height=b.dataset.h+"px";
+});
+document.querySelectorAll(".opt button[data-bg]").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".opt button[data-bg]").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active"); mv.style.background=b.dataset.bg;
+});
+document.getElementById("orbit").addEventListener("change",e=>{
+  if(e.target.checked) mv.setAttribute("camera-controls",""); else mv.removeAttribute("camera-controls");
+});
+
+update();
+</script>
+</body>
+</html>
