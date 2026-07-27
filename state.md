@@ -1,7 +1,86 @@
 # state.md — Zenith Avatar Library
 
-Última atualização: **27/07/2026 (sessão 3)**
-Fase atual: **REFINAMENTO VISUAL CONCLUÍDO — 39 avatares em 60k, material titânio, ambiente Zenith.** Próxima frente: **o short**, que agora aparece.
+Última atualização: **27/07/2026 (sessão 4)**
+Fase atual: **O SHORT FOI MAPEADO NOS 39.** `scripts/shorts.py` escrito, mapa em `config/shorts_map.json`, validado por duas réguas independentes.
+
+## ⚡ ABRIR AQUI — sessão 4: o short
+
+**O short é lido da MALHA, não da imagem.** Em 60k a bainha e o cós existem como geometria (é o relevo que apareceu quando a malha subiu de 18k). O `process.py` tentava achar o short projetando a imagem frontal e chamando pixel escuro de tecido; isso não sobrevive a um corpo obeso, em que a barriga cai por cima do cós e imagem e malha discordam sobre onde o tecido começa.
+
+**O modelo da região:**
+
+```
+short = (z >= bainha_da_perna) E (z <= cos(azimute)) E nao e braco
+```
+
+O cós é **função do azimute** — é isso que acompanha a prega da barriga descendo na frente e subindo nos lados. A bainha é escalar por perna (duas, não uma: a pose das folhas não é simétrica).
+
+### As quatro coisas que essa sessão aprendeu errando
+
+1. **Vinco ≠ músculo, e o que separa é TOPOLOGIA.** Gomo abdominal é mais fundo que bainha, então detectar por profundidade escolhe o errado. A bainha dá a **volta** no membro; o sulco de músculo cobre um arco. A pontuação virou o **quantil baixo da concavidade sobre os setores de azimute** — "o setor mais fraco desta altura ainda está vincado?", que é a definição de anel fechado. Foi a troca que fez o cós parar de pousar no abdômen.
+2. **Limiar de altura morre em A-pose.** A 1ª virilha detectada saiu em 0,81 da altura — o vão que o detector viu era entre **braço e tronco**. Não existe altura em que a fatia horizontal contenha só as pernas: na altura da coxa ela contém as duas mãos. Trocado por **union-find varrendo a malha de baixo para cima**: os eventos de fusão entregam virilha e axilas por conexão. O mesmo bug pintava os antebraços de preto.
+3. **A bainha fica entre dois anéis MAIS FORTES que ela** — virilha em cima, joelho embaixo, ambos fechados e portanto imunes ao critério do anel. Com janela larga ela perde para um dos dois: 4 avatares grudaram na virilha, 1 caiu no joelho. Resolvido ancorando as janelas na virilha e calibrando pelas faixas medidas da própria biblioteca (ver `HEM_BELOW_CROTCH` / `WAIST_ABOVE_CROTCH`).
+4. **Perseguir o vinco setor a setor PIOROU.** A hipótese era que a bainha modelada serpenteia e a reta passava perto dela em vez de em cima. Implementado, encheu a borda de farpas. Quem explicou foi um **render de emissão pura** — sem luz nenhuma, cinza = região pintada, vermelho = concavidade. Sem luz porque no render normal a sombra do degrau de tecido se confunde com a divisa de cor, e foi essa confusão que gerou a hipótese errada. O vinco da bainha é **fraco e praticamente horizontal**: a bainha já é um anel reto, e o `argmax` numa janela de 2 cm com sinal fraco só acha ruído de decimação. **Antes de fazer a borda perseguir um vinco, medir se o vinco tem sinal — e medir sem luz.**
+
+### A borda: o corte é EXATO
+
+Atribuir triângulo inteiro deixava dente-de-serra de ~6 mm — o **piso da quantização**, não ruído em cima dela; suavizar por maioria não tira. Agora a malha é **cortada na linha**: aresta que cruza a fronteira é partida no ponto de cruzamento e religada. Custo ~900 vértices de costura (+2,9% de triângulo), só na borda. O dist do `b05_d2` foi de 183 KB para **201 KB**.
+
+> A linha escura logo acima da bainha no render **não é erro de pintura** — é a sombra do degrau de tecido modelado pela Meshy. Ela continua lá faça-se o que se fizer com a cor, e é ela que faz o olho ler "barra de short".
+
+## 🔴 A LIÇÃO QUE CUSTOU MAIS CARO: conferir contra a SÉRIE não é conferir
+
+O `zen_m_b12_d1` (IMC 148) passou como **"dentro da faixa"** com o cós **25 cm baixo demais**. O Rogério pegou no olho, olhando o render de costas.
+
+**O motivo de eu não ter visto:** as duas travas que existiam eram internas. A de conexidade só pega ilha; o `--report` compara cada avatar **com a série** — e a série pode estar uniformemente errada, porque foi calibrada pelos próprios ajustes. **Não havia nada comparando o resultado com a INTENÇÃO.**
+
+Agora há: **`scripts/shorts_ref.py`** mede o short **na folha de referência**, onde ele é literalmente preto sobre corpo cinza claro, e compara com o 3D. É externo ao detector e independente dele.
+
+O instrumento nasceu errado também, e isso o validou: a 1ª versão acusou "short até os pés" em **todos os d3**. Padrão implausível demais para ser verdade — era a sombra dura entre as coxas dos corpos definidos lida como tecido. Corrigido para medir **fração da largura do corpo em faixa contígua** (sombra não cobre a largura; short cobre).
+
+Com o medidor confiável: **38 dos 39 já batiam** com a referência dentro de ±0,06, a maioria dentro de ±0,02. Só o `b12_d1` estava errado — e era invisível para a outra régua.
+
+**O conserto foi UM número.** A virilha dele tinha sido detectada em 0,297, que é onde as coxas param de se tocar, **não** a virilha anatômica (num IMC 148 as coxas encostam até quase o joelho). Como todas as janelas são ancoradas nela, o short inteiro desceu junto. As próprias relações da série diziam qual deveria ser: cós 0,528 e bainha 0,339 exigem virilha ≈ 0,37. Campo **`crotch_override_zh`** no mapa, que sobrevive a um `--fit` posterior. Resultado: cós 0,385 → **0,544** (referência 0,528).
+
+> **Doutrina:** toda régua interna mede consistência, não correção. Uma biblioteca inteira pode estar coerente e errada. Manter sempre uma régua ancorada **fora** do gerador — aqui, a folha que originou a malha.
+
+## Comandos do short
+
+```
+python scripts/shorts.py --fit --all      # detecta, grava o mapa, renderiza QA
+python scripts/shorts.py --check --all    # so as travas, sem render (~6 min)
+python scripts/shorts.py --report         # coerencia com a SERIE (instantaneo)
+python scripts/shorts_ref.py              # coerencia com a REFERENCIA (instantaneo)
+python scripts/shorts.py --apply --all    # grava os 2 materiais em 03_dist/glb/
+```
+
+`--fit` **propõe**; quem decide é o olho, avatar por avatar. Entrada com `"source": "manual"` não é sobrescrita por um `--fit` posterior.
+
+## Travas automáticas do short (e por que cada uma existe)
+
+| trava | pega | onde |
+|---|---|---|
+| região **conexa** | mão/antebraço pintado por falha da máscara de braço | sinaliza no `--fit`, **recusa** no `--apply` |
+| lasca < 5% da maior peça | triângulos pretos soltos no corpo (5 avatares tinham) | apagada automaticamente |
+| contagem de triângulos | export mexendo na malha | `--apply` |
+| nome dos materiais | `Zenith_Body.001` indo para o app | `--apply` |
+| faixa da série | erro grosso de altura | `--report` |
+| folha de referência | série uniformemente errada | `shorts_ref.py` |
+
+**Blender sai com código 0 mesmo com exceção no script** — um worker que estourou foi reportado como `[ok]`. A prova de sucesso é a linha `RESULT`, nunca o exit code.
+
+## Estado do short — CONCLUÍDO
+
+- **39/39** nas duas réguas · zero ilhas · série varrida no olho em ordem de IMC
+- **39/39 aplicados** em `03_dist/glb/`, conferidos **no byte** (JSON do GLB): 2 primitives, `Zenith_Body` + `Zenith_Shorts`, `baseColorFactor` exato nos dois
+- Peso: **203 KB de média** (era ~183 KB sem short), **7,7 MB** a biblioteca inteira — o orçamento era 1–3 MB *por avatar*, então sobra folga enorme
+- Costura: +1.400 a +2.000 triângulos por avatar (~+2,5%), só na borda
+- `02_master/` e `00_input/` **intocados**
+
+**Pendências desta frente:**
+1. **O short lê CINZA de costas, não preto.** O albedo já é quase preto (`#0D0D12`); o que lava é o specular de Fresnel pegando o kicker traseiro do HDR em ângulo rasante. É decisão do `zenith_material.py`, não da segmentação — e, como toda decisão de material, se resolve com `--apply --all` de novo em ~20 min, sem refazer mapa nem QA
+2. `restyle.py` tem o mesmo bug de material não purgado que este script teve (`materials.clear()` esvazia o slot mas não apaga o datablock, então `bpy.data.materials.new("Zenith_Body")` devolve `Zenith_Body.001`). Não grava errado calado — a validação dele reprova — mas quebra sobre estes masters, que já trazem `Zenith_Body`
+3. O `--report` do `shorts.py` e o `shorts_ref.py` **não conferem o traçado do cós**, só a altura. Um cós com curva azimutal esquisita mas topo certo passaria nos dois. Hoje isso só é pego no olho
 
 ## ⚡ ABRIR AQUI — o que mudou na sessão 3
 

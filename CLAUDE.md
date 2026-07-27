@@ -19,6 +19,8 @@ O app Zenith é separado e apenas consome o resultado. Não editar nada do app a
 3. **Decimação é obrigatória, e o alvo é 60k (revisto em 27/07).** O GLB cru da Meshy é inviável para celular; a produção mediu de **130k a 317k triângulos** conforme o volume e a definição do corpo. O `process.py` calcula a razão sobre a contagem real (`--tris N`).
 
    O alvo era 18k e **subiu para 60k** quando o corpo deixou de ser roxo: com material claro e specular, a faceta da decimação passou a aparecer e o relevo muscular ficava borrado — o roxo saturado vinha escondendo isso. Custo medido: **~183 KB por avatar** com Draco (contra ~64 KB em 18k), bem dentro do orçamento de 1–3 MB. Os masters 18k anteriores estão em `02_master_18k/` (fora do git) até o 60k ser aprovado.
+3b. **O short é lido da MALHA, um avatar por vez — nunca da imagem.** Em 60k a bainha e o cós existem como geometria de verdade. Achá-los projetando a imagem frontal (o que o `process.py` fazia, e por isso `SHORTS_ENABLED=False`) **não sobrevive a corpo obeso**: a barriga cai por cima do cós, e aí imagem e malha discordam sobre onde o tecido começa. O `scripts/shorts.py` detecta pelo vinco, **corta a malha na linha exata** e grava dois materiais. Os números de cada avatar vivem em `config/shorts_map.json` — **o mapa é o produto; o detector só propõe.** Ver `state.md`.
+
 4. **A textura da Meshy nunca é usada** — gerar sem textura no site. O visual é aplicado aqui e, desde 27/07, tem **duas metades**:
    - **material** — `scripts/zenith_material.py`: titânio cinza `#6D737B`, metallic 0.50, roughness 0.35. Fonte única, lida pelo `process.py` *e* pelo `restyle.py`.
    - **iluminação** — `scripts/make_env.py` → `03_dist/env/zenith_env.hdr`: rim roxo + key fria + kicker traseiro.
@@ -52,6 +54,8 @@ O app Zenith é separado e apenas consome o resultado. Não editar nada do app a
 8. `zenith_material.py` — **não é executável**: é a fonte única do material (cor/metallic/roughness), importada pelo `process.py` e pelo `restyle.py`
 9. `make_env.py` — gera o ambiente de iluminação (`03_dist/env/zenith_env.hdr`). A identidade Zenith mora aqui
 10. `restyle.py` — reaplica o material nos 39 `03_dist/glb/` **lendo os masters, sem re-decimar e sem tocar em `02_master/`**. É o jeito de mexer em cor sem refazer QA. `--preview {id}` renderiza 4 vistas com o ambiente em `qa/look/{id}/`
+11. `shorts.py` — segmenta e pinta o short, **um avatar por vez**, lendo o vinco da malha. `--fit` propõe e renderiza QA · `--report` confere contra a série · `--check` roda só as travas · `--apply` grava em `03_dist/glb/`
+12. `shorts_ref.py` — **régua externa**: mede o short na folha de referência (preto sobre cinza) e compara com o 3D. Existe porque o `--report` compara cada avatar com a SÉRIE, e uma série pode estar inteira errada — foi assim que o `b12_d1` passou com o cós 25 cm fora do lugar
 
 O contrato entre o humano e o pipeline é o **nome do arquivo**: o script extrai o ID do arquétipo do nome do GLB em `01_raw/`. Nome errado = avatar errado na biblioteca.
 
@@ -62,6 +66,8 @@ O script não gera imagens e não fala com a Meshy.
 **39 avatares masculinos produzidos e processados (27/07/2026) — a onda masculina está ENCERRADA.** Todos com 9/9 validações, medidos pelo `metrics.py`, indexados no `library.json` (schema 3) e no `test/avatar_tester.html`. `intake.py`, `crop.py`, `process.py`, `measure.py`, `qa_render.py`, `metrics.py` e `build_index.py` escritos. Só o `render.py` (turntable) não existe — e pode nem ser necessário, porque o GLB com auto-rotate no model-viewer foi aprovado no teste do app.
 
 **O número 32 não é meta.** A meta é COBERTURA do eixo de IMC, não contagem. Sobrou **um** vão `high` — d1 27,8→33,3 (salto 5,5) — e **três tentativas não o fecharam**: ele é o vazio entre dois atratores do gerador, e a recomendação registrada é aceitar e cobrir por shape keys. Os 8 vãos `low` estão todos em IMC 38+, sem população. A grade feminina segue PENDENTE e não deve ser produzida ainda.
+
+**O short foi mapeado nos 39 (27/07, sessão 4).** `shorts.py` + `config/shorts_map.json`, validados por duas réguas independentes (série e folha de referência), 39/39 nas duas. Aplicado em `03_dist/` só no `zen_m_b05_d2` até aqui.
 
 **Próxima fase: ambiente de testes**, não mais produção. Ver `state.md`.
 
