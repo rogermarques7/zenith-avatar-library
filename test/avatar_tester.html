@@ -34,6 +34,18 @@
   .opt { display:flex; gap:8px; margin-top:12px; align-items:center; font-size:12px; color:var(--muted); flex-wrap:wrap; }
   .missing { font-size:12px; color:#f0a; margin-top:8px; min-height:16px; }
   .fallback-note { color:#e0b055; }
+  /* Chave de sexo: dois conjuntos que NAO se misturam. Trocar aqui troca a
+     colecao inteira (botoes, selecao, limiares de gordura, default). */
+  .sexsw { display:flex; gap:8px; margin:0 0 18px; }
+  .sexsw button { flex:1; display:flex; align-items:center; justify-content:center; gap:8px;
+    background:#20202b; color:var(--muted); border:1px solid var(--line); border-radius:10px;
+    padding:10px 12px; font-size:13px; font-weight:600; cursor:pointer; }
+  .sexsw button .ico { font-size:18px; line-height:1; }
+  .sexsw button:hover { border-color:var(--accent); }
+  .sexsw button.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .sexsw button .n { font-weight:400; opacity:.75; font-size:11px; }
+  .empty { margin-top:14px; padding:14px; border:1px dashed var(--line); border-radius:10px;
+    color:var(--muted); font-size:12px; line-height:1.6; }
 </style>
 </head>
 <body>
@@ -41,6 +53,11 @@
   <div class="panel controls">
     <h1>Testador de Avatares Zenith</h1>
     <p class="sub">Sliders → qual avatar o app escolhe (lógica do ARCHETYPES.md). Os botões vêm do <code>library.json</code>, ordenados por <b>IMC medido</b> — clique em sequência para ver a escada de corpos (é o teste de continuidade do QA).</p>
+
+    <div class="sexsw" id="sexsw">
+      <button data-sex="m"><span class="ico">♂</span> Masculino <span class="n" id="nM"></span></button>
+      <button data-sex="f"><span class="ico">♀</span> Feminino <span class="n" id="nF"></span></button>
+    </div>
 
     <label>Peso <span class="val" id="pesoV">75 kg</span></label>
     <div class="row"><input type="range" id="peso" min="40" max="180" step="0.5" value="75"></div>
@@ -71,6 +88,7 @@
                     tone-mapping="neutral"></model-viewer>
       <div class="sub" id="count" style="margin:10px 0 4px">carregando library.json…</div>
       <div class="quick" id="quick"></div>
+      <div class="empty" id="empty" style="display:none"></div>
       <div class="opt">
         <span>Card:</span>
         <button data-w="300" data-h="400" class="active">300px (app)</button>
@@ -113,7 +131,22 @@
 // 1,75 m. Sem a correcao o app entrega corpo sistematicamente errado nos
 // extremos de altura. A formula viaja no proprio indice, em
 // selection.target_bmi_formula.
+//
+// ⚠️ SEXO NAO E FILTRO DE EXIBICAO, E COLECAO SEPARADA. Trocar a chave ♂/♀ troca
+// tambem os LIMIARES DE GORDURA (21/29% no feminino contra 13/20% no masculino,
+// ARCHETYPES.md §5 passo 2) e o `default` do indice. Mostrar os dois conjuntos
+// juntos e ordenados por IMC seria pior que inutil: a escada de corpos do teste
+// de continuidade so faz sentido dentro de um sexo, porque no mesmo IMC os dois
+// corpos sao formas diferentes, nao etapas da mesma progressao.
+//
+// Os GLBs continuam TODOS em 03_dist/glb/, sem subpasta por sexo: o id ja diz
+// (zen_m_ / zen_f_) e o library.json carrega o campo `sex`. Separar em pastas
+// fisicas obrigaria a mexer no caminho de process.py, restyle.py, shorts.py,
+// build_index.py e no CDN, sem ganho nenhum.
 const DEF_LABEL = {d1:"Baixa",d2:"Média",d3:"Alta"};
+const SEX_LABEL = {m:"masculino", f:"feminino"};   // concorda com "avatar"
+const SEX_LABEL_A = {m:"masculina", f:"feminina"}; // concorda com "biblioteca"
+let SEX = "m";
 // Avatares que existem, preenchido a partir do library.json no fim do arquivo.
 // Era uma lista mantida A MAO e ja tinha apodrecido: o comentario dizia "36
 // masters" enquanto listava 39. Duplicar o indice aqui nao paga.
@@ -129,21 +162,23 @@ function classify(peso, alturaCm, gordura){
   const imc = peso/(altura*altura);
   const imcAlvo = imc * (LIB.reference_height_m / altura);
   const sel = LIB.selection;
-  const def0 = defFor(gordura, sel.definition_thresholds_bodyfat_pct.m);
+  const def0 = defFor(gordura, sel.definition_thresholds_bodyfat_pct[SEX]);
 
   // Fallback de definicao: so entra se a LINHA INTEIRA estiver vazia (hoje,
-  // so o feminino). Ordem vem do indice, nao hardcoded.
+  // todo o feminino). Ordem vem do indice, nao hardcoded.
   const ordem = sel.definition_fallback;
   const steps = [];
   let def = def0, candidatos = [];
   for(let d = ordem.indexOf(def0); d < ordem.length; d++){
     def = ordem[d];
-    candidatos = LIB.avatars.filter(a => a.sex === "m" && a.definition === def);
+    candidatos = LIB.avatars.filter(a => a.sex === SEX && a.definition === def);
     if(candidatos.length) break;
     steps.push(def);
   }
   if(!candidatos.length){
-    return {imc, imcAlvo, def0, def:null, id:LIB.default.m, fallback:true, steps, escolhido:null};
+    // Sem nenhum avatar do sexo: o indice manda usar o default, que tambem pode
+    // ser null enquanto a colecao nao existir. Nao inventar o do outro sexo.
+    return {imc, imcAlvo, def0, def:null, id:LIB.default[SEX], fallback:true, steps, escolhido:null};
   }
   const escolhido = candidatos.reduce((melhor,a) =>
     Math.abs(a.measured_bmi-imcAlvo) < Math.abs(melhor.measured_bmi-imcAlvo) ? a : melhor);
@@ -165,6 +200,17 @@ function setAvatar(id){
   curId=id;
   document.querySelectorAll("#quick button").forEach(b=>b.classList.toggle("active", b.dataset.id===id));
   const miss=document.getElementById("missing");
+  if(!id){
+    // Colecao vazia (hoje, o feminino inteiro). Nao e erro; e producao pendente.
+    // Duas coisas, e as DUAS sao necessarias para a tela ficar vazia de verdade:
+    //  1. `mv.src = null`, nao `removeAttribute("src")` - no model-viewer o src
+    //     e uma PROPRIEDADE que nao reflete no atributo;
+    //  2. esconder o elemento - mesmo com src nulo ele MANTEM o ultimo frame
+    //     desenhado no canvas, entao o avatar masculino continuava na tela
+    //     depois de trocar para o feminino. Medido no preview, nao suposto.
+    mv.src = null; mv.style.display="none"; miss.innerHTML="";
+    return;
+  }
   if(AVAILABLE.has(id)){
     mv.src=srcFor(id); mv.style.display="block";
     miss.innerHTML="";
@@ -172,7 +218,7 @@ function setAvatar(id){
     // Com a selecao por measured_bmi isto nao deveria acontecer: todo id vem
     // do proprio library.json. Se aparecer, o indice esta apontando para um
     // GLB que nao existe em 03_dist/glb/.
-    mv.removeAttribute("src"); mv.style.display="block";
+    mv.src = null; mv.style.display="block";
     miss.textContent="asset "+id+" está no library.json mas não existe em 03_dist/glb/";
   }
 }
@@ -183,11 +229,11 @@ function update(){
   alturaV.textContent=altura+" cm";
   gorduraV.textContent=gordura.toFixed(1).replace(/\.0$/,"")+"%";
   const r=classify(peso,altura,gordura);
-  pickId.textContent=r.id;
+  pickId.textContent=r.id || "—";
   const exists=AVAILABLE.has(r.id);
   const badge=document.getElementById("existBadge");
   badge.className="badge "+(exists?"ok":"no");
-  badge.textContent=exists?"existe":"não produzido";
+  badge.textContent=exists?"existe":(r.id?"não produzido":"biblioteca "+SEX_LABEL_A[SEX]+" vazia");
 
   const corrigido = Math.abs(r.imcAlvo-r.imc) >= 0.05;
   let reason=`IMC <b>${r.imc.toFixed(1)}</b>`;
@@ -195,7 +241,9 @@ function update(){
     ? ` → corrigido para a altura: <b>${r.imcAlvo.toFixed(1)}</b> `+
       `<span style="opacity:.65">(×${(LIB.reference_height_m/(altura/100)).toFixed(3)}, escala uniforme não preserva IMC)</span>`
     : ` <span style="opacity:.65">(altura de referência, sem correção)</span>`;
-  reason += `<br>%gordura <b>${gordura}%</b> → definição <b>${r.def0}</b> (${DEF_LABEL[r.def0]})`;
+  const thr = LIB.selection.definition_thresholds_bodyfat_pct[SEX];
+  reason += `<br>%gordura <b>${gordura}%</b> → definição <b>${r.def0}</b> (${DEF_LABEL[r.def0]})`+
+    ` <span style="opacity:.65">(cortes ${SEX_LABEL[SEX]}s: d3 &lt;${thr.d3_below}% · d2 &lt;${thr.d2_below}%)</span>`;
   if(r.escolhido){
     const d = Math.abs(r.escolhido.measured_bmi-r.imcAlvo);
     reason += `<br>mais próximo na linha <b>${r.def}</b>: IMC medido <b>${r.escolhido.measured_bmi}</b>`+
@@ -226,20 +274,48 @@ const peso_=document.getElementById("peso"), altura_=document.getElementById("al
 // ja valia para carregar os GLBs.
 const quick=document.getElementById("quick");
 
-fetch("../library.json?t="+Date.now()).then(r=>r.json()).then(lib=>{
-  LIB = lib;
-  const avatares=[...lib.avatars].sort((a,b)=>a.measured_bmi-b.measured_bmi);
+// Reconstroi a fileira de botoes para o sexo corrente. Chamado no load e a cada
+// troca da chave ♂/♀.
+function renderQuick(){
+  const avatares=LIB.avatars.filter(a=>a.sex===SEX).sort((a,b)=>a.measured_bmi-b.measured_bmi);
+  quick.innerHTML="";
   for(const a of avatares){
-    AVAILABLE.add(a.id);
     const b=document.createElement("button");
-    b.textContent=a.id.replace("zen_m_","")+" · "+a.measured_bmi.toFixed(1);
+    b.textContent=a.id.replace(/^zen_[mf]_/,"")+" · "+a.measured_bmi.toFixed(1);
     b.dataset.id=a.id;
     b.title=`${a.definition} · IMC ${a.measured_bmi} · ${a.label} · cintura/altura ${a.waist_to_height}`;
     b.onclick=()=>setAvatar(a.id);
     quick.appendChild(b);
   }
-  document.getElementById("count").textContent=
-    avatares.length+" avatares · ordenados por IMC medido";
+  const empty=document.getElementById("empty");
+  empty.style.display = avatares.length ? "none" : "block";
+  if(!avatares.length){
+    empty.innerHTML="Nenhum avatar <b>"+SEX_LABEL[SEX]+"</b> produzido ainda.<br>"+
+      "A grade está definida em <code>docs/ARCHETYPES.md</code> §3b (32 arquétipos) "+
+      "e os descritores em <code>docs/CHARACTER_BIBLE.md</code> §5. O primeiro passo "+
+      "é a folha-mãe <code>f_b05_d2</code>.";
+  }
+  document.getElementById("count").textContent = avatares.length
+    ? avatares.length+" avatares "+SEX_LABEL[SEX]+"s · ordenados por IMC medido"
+    : "biblioteca "+SEX_LABEL_A[SEX]+" ainda não produzida";
+}
+
+document.querySelectorAll("#sexsw button").forEach(b=>b.onclick=()=>{
+  if(!LIB) return;
+  SEX=b.dataset.sex;
+  document.querySelectorAll("#sexsw button").forEach(x=>x.classList.toggle("active", x===b));
+  renderQuick();
+  update();
+});
+
+fetch("../library.json?t="+Date.now()).then(r=>r.json()).then(lib=>{
+  LIB = lib;
+  for(const a of lib.avatars) AVAILABLE.add(a.id);
+  const n = s => lib.avatars.filter(a=>a.sex===s).length;
+  document.getElementById("nM").textContent="("+n("m")+")";
+  document.getElementById("nF").textContent="("+n("f")+")";
+  document.querySelector('#sexsw button[data-sex="'+SEX+'"]').classList.add("active");
+  renderQuick();
   update();   // so agora AVAILABLE existe
 }).catch(err=>{
   document.getElementById("missing").innerHTML=

@@ -2,7 +2,7 @@
 
 Define **quais** avatares existem, **como se chamam** e **como o app escolhe** um deles.
 
-> **Status:** grade masculina definida (32 avatares). Grade feminina pendente — será espelhada com a mesma estrutura após a produção masculina.
+> **Status:** grade masculina definida (32 nominais) e **produzida** (39 assets, com 7 inserções). Grade feminina **reescrita de 6 para 12 faixas em 28/07/2026** (§3b) — definida, produção não iniciada.
 
 ---
 
@@ -77,6 +77,72 @@ Produto cartesiano = 36. Removidas **4 combinações fisicamente implausíveis**
 **Total: 32 avatares masculinos.**
 
 > `b10_d3` (IMC 31–34 com alta definição) **permanece na grade** e é importante. Um homem de 1,75 m com 100 kg e baixa gordura tem IMC 32,6 — é o arquétipo do fisiculturista, público-alvo direto de um app de musculação, não uma exceção.
+
+---
+
+## 3b. A grade feminina (32 avatares)
+
+> **Reescrita em 28/07/2026.** A grade anterior tinha **6 faixas** (`f_b1`…`f_b6`,
+> 17 arquétipos) e nunca foi produzida — o Character Bible a marcava como "não
+> produzir ainda" exatamente por isso. Ela usa agora **as mesmas 12 faixas de IMC
+> da §2**, com a mesma numeração de dois dígitos.
+
+**As faixas de IMC são idênticas às masculinas, de propósito.** IMC é peso sobre
+altura ao quadrado — a fórmula não tem termo de sexo, e os cortes da OMS também
+não. O que muda entre os sexos não é onde a faixa começa, é **que corpo ela
+desenha**: no mesmo IMC 23, a mulher tem quadril mais largo, cintura mais
+marcada e ombros mais estreitos. É por isso que existe uma biblioteca separada, e
+não uma tabela separada.
+
+**O que muda entre os sexos é o eixo de DEFINIÇÃO**, porque percentual de gordura
+essencial é diferente: os cortes femininos (§5, passo 2) são 21% e 29%, contra
+13% e 20% dos masculinos. Já estão no `library.json`, em
+`selection.definition_thresholds_bodyfat_pct.f`.
+
+Produto cartesiano = 36. Removidas as **mesmas 4 combinações implausíveis**:
+
+| Removida | Motivo |
+|---|---|
+| `b01_d3` | Abaixo do peso não comporta massa muscular alta |
+| `b11_d3` | IMC 34–38 com < 21% de gordura: apenas fisiculturismo feminino de elite |
+| `b12_d3` | IMC ≥ 38 com alta definição: fora da realidade da base de usuárias |
+| `b12_d2` | IMC ≥ 38 com tônus visível: obesidade III tem essencialmente uma apresentação visual |
+
+|  | d1 | d2 | d3 |
+|---|:---:|:---:|:---:|
+| **b01** | ✅ | ✅ | ❌ |
+| **b02** | ✅ | ✅ | ✅ |
+| **b03** | ✅ | ✅ | ✅ |
+| **b04** | ✅ | ✅ | ✅ |
+| **b05** | ✅ | ✅ | ✅ |
+| **b06** | ✅ | ✅ | ✅ |
+| **b07** | ✅ | ✅ | ✅ |
+| **b08** | ✅ | ✅ | ✅ |
+| **b09** | ✅ | ✅ | ✅ |
+| **b10** | ✅ | ✅ | ✅ |
+| **b11** | ✅ | ✅ | ❌ |
+| **b12** | ✅ | ❌ | ❌ |
+
+**Total: 32 avatares femininos.** Descritores em `docs/CHARACTER_BIBLE.md` §5.
+
+### A altura de referência continua sendo 1,75 m — e isso está certo
+
+Parece errado: a brasileira média tem ~1,62 m. Mas `reference_height_m` **não é
+uma afirmação sobre a usuária**, é a altura em que a malha foi normalizada para
+que o `metrics.py` converta volume em massa. Todos os avatares, dos dois sexos,
+saem com a **mesma altura normalizada** — é a regra 2 do `CLAUDE.md`, e ela vale
+entre sexos pelo mesmo motivo que vale entre arquétipos: o app escala
+uniformemente para a altura real e um segundo padrão faria os dois conjuntos
+saltarem de tamanho um em relação ao outro.
+
+A correção de altura do passo 1 já resolve o resto: uma mulher de 1,62 m recebe
+`IMC_alvo = IMC × 1,080`, e o vizinho mais próximo é buscado nessa escala. Não há
+nada a mudar no `process.py` nem no esquema.
+
+### Ordem de produção feminina
+
+Mesma da §7, com a folha-mãe `f_b05_d2` gerada e aprovada **antes de tudo**.
+Trocá-la depois obriga a regerar a biblioteca feminina inteira.
 
 ---
 

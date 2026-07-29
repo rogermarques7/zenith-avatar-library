@@ -84,7 +84,7 @@ def repo_root():
     return os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
 
-def band_label(waist_cm, height_m):
+def band_label(waist_cm, height_m, sex="m"):
     """Rotulo legivel, por CINTURA/ALTURA - nao por IMC.
 
     IMC nao separa musculo de gordura: o 'b07_d3' tem IMC 35,7 e sairia como
@@ -97,10 +97,13 @@ def band_label(waist_cm, height_m):
     if not waist_cm:
         return None
     r = waist_cm / (height_m * 100.0)
+    # Os CORTES sao os mesmos nos dois sexos - e a mesma razao cintura/altura,
+    # que ja e adimensional. So a concordancia do adjetivo muda.
     for limit, name in ((0.43, "muito magro"), (0.50, "magro"),
                         (0.55, "medio"), (0.63, "cheio"), (0.75, "muito cheio")):
         if r < limit:
-            return name
+            return name.replace("magro", "magra").replace("medio", "media") \
+                       .replace("cheio", "cheia") if sex == "f" else name
     return "extremo"
 
 
@@ -145,7 +148,7 @@ def main():
             "measured_bmi": info["est_bmi"],
             "measured_mass_kg": info["est_mass_kg"],
             "label": band_label(info["circumferences_cm"].get("waist_navel", {}).get("cm"),
-                                info["height_m"]),
+                                info["height_m"], m.group("sex")),
             "waist_to_height": (round(info["circumferences_cm"]["waist_navel"]["cm"]
                                       / (info["height_m"] * 100.0), 3)
                                 if info["circumferences_cm"].get("waist_navel", {}).get("cm")
@@ -186,7 +189,10 @@ def main():
                     })
     gaps.sort(key=lambda g: (g["priority"] != "high", -g["bmi_step"]))
 
-    default_m = nearest_id(avatars, "m", "d2", DEFAULT_TARGET_BMI)
+    # `nearest_id` ja devolve None quando a linha nao existe, entao o feminino
+    # sai null sozinho enquanto a onda feminina nao for produzida - e passa a
+    # sair preenchido no primeiro build depois dela, sem tocar aqui.
+    defaults = {s: nearest_id(avatars, s, "d2", DEFAULT_TARGET_BMI) for s in ("m", "f")}
 
     index = {
         "schema_version": SCHEMA_VERSION,
@@ -200,7 +206,7 @@ def main():
             "definition_thresholds_bodyfat_pct": DEFINITION_THRESHOLDS,
             "definition_fallback": DEFINITION_FALLBACK,
         },
-        "default": {"m": default_m, "f": None},
+        "default": defaults,
         "coverage_gaps": gaps,
         "avatars": avatars,
     }

@@ -2,10 +2,9 @@
 """
 crop.py - Recorta a folha de 3 vistas em frente / perfil / costas.
 
-Le  00_input/sheets/{id}_sheet.png
-Gera 00_input/references/{id}_ref_front.png
-     00_input/references/{id}_ref_side.png
-     00_input/references/{id}_ref_back.png
+Le  00_input/sheets/{m|f}/{id}_sheet.png
+Gera 00_input/references/{m|f}/{id}/{id}_ref_front.png
+     (e _ref_side.png, _ref_back.png)
 
 A folha do ChatGPT tem 3 vistas do MESMO personagem lado a lado, na ordem
 FRENTE | PERFIL | COSTAS, sobre fundo cinza liso. Este script separa as tres
@@ -27,6 +26,9 @@ import sys
 import argparse
 import numpy as np
 from PIL import Image
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import zenith_paths as zp                                          # noqa: E402
 
 # --- parametros de recorte (ajustar aqui) ---------------------------------
 TARGET_H     = 1200     # altura final de cada vista, em pixels (casa com a mae)
@@ -116,7 +118,7 @@ def main():
     a = ap.parse_args()
 
     root = repo_root()
-    sheet = os.path.join(root, "00_input", "sheets", a.id + "_sheet.png")
+    sheet = zp.sheet_path(root, a.id)
     if not os.path.isfile(sheet):
         die("folha nao encontrada: {}".format(os.path.relpath(sheet, root)))
 
@@ -160,7 +162,7 @@ def main():
         print("\n--check: nada gravado.")
         return
 
-    outdir = os.path.join(root, "00_input", "references", a.id)
+    outdir = zp.refs_dir(root, a.id)
     os.makedirs(outdir, exist_ok=True)
     img_u8 = np.asarray(img)
     for name, box in zip(VIEW_NAMES, boxes):
@@ -168,7 +170,7 @@ def main():
         out = os.path.join(outdir, "{}_ref_{}.png".format(a.id, name))
         im.save(out)
         print("  -> {}  ({}x{})".format(os.path.relpath(out, root), im.size[0], im.size[1]))
-    print("\nOK: 3 vistas gravadas em 00_input/references/")
+    print("\nOK: 3 vistas gravadas em {}".format(os.path.relpath(outdir, root)))
 
 
 if __name__ == "__main__":

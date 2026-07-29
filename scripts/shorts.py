@@ -98,7 +98,66 @@ CURV_SMOOTH   = 3        # passadas de suavizacao da concavidade (mata ruido de 
 RING_QUANTILE = 0.35     # quantil sobre os setores de azimute (ver w_ring_map)
 RING_SMOOTH   = 2        # suavizacao do perfil de ring_score em z
 WAIST_AZ_BINS = 24       # resolucao azimutal do cos
-WAIST_WINDOW_ZH = 0.10   # quanto um setor do cos pode se afastar do anel (fracao da altura)
+
+# --- de quanto um setor do cos pode se afastar do anel ----------------------
+# A JANELA E ASSIMETRICA, e a assimetria e o modelo anatomico que o docstring de
+# w_back_side_mask ja declarava desde a primeira versao: a barriga cobre o cos
+# SO NA FRENTE; nas costas e nos lados o elastico esta sempre a vista. Ate a
+# sessao 5 o codigo nao aplicava isso - chamava w_ridge_by_azimuth com a MESMA
+# janela larga nos 24 setores, para os dois lados. Duas familias de defeito
+# sairam exatamente dessa folga, e as duas eram invisiveis para as duas reguas:
+#
+#   frente subindo  -> num corpo d3 nao existe prega, e o que existe no
+#                      centro-frente e o sulco do baixo-ventre / V inguinal. O
+#                      argmax subia nele e o cos ganhava uma ABA RETANGULAR de 4
+#                      setores por cima do baixo-ventre (b06i_d3, b07_d3,
+#                      b08_d3). Foi o que o Rogerio viu.
+#   costas descendo -> nos dois IMC 107+ o anel nem foi achado (ver
+#                      WAIST_ABOVE_CROTCH), a janela ficou centrada num chute, e
+#                      nas costas o argmax pousou no SULCO GLUTEO. O cos cortava
+#                      a bunda no meio (b11_d1, b11_d2).
+#
+# Os numeros nao sao chute - saem da propria biblioteca, medindo desvio em
+# relacao ao anel nos 31 avatares que tem anel:
+#
+#   frente sobe acima do anel : maximo +0.0000 em 31/31 limpos
+#                               +0.0208 / +0.0208 / +0.0250 nos 3 defeituosos
+#   costas/lados descem       : maximo -0.0417 (b10_d1) em 31/31 limpos
+#
+# A separacao e total: "a frente nunca sobe acima do anel" nao e uma tolerancia
+# escolhida, e uma lei que a serie inteira obedece e que so os defeitos quebram.
+#
+# ---------------------------------------------------------------------------
+# E A TERCEIRA FAMILIA, a que o Rogerio pegou depois: A PINTURA SUBIU NA BARRIGA
+# ---------------------------------------------------------------------------
+# Nos corpos pesados a barriga cai POR CIMA do cos, entao o que o usuario ve na
+# frente nao e o elastico - e a PREGA. O detector entregava uma reta quase plana
+# e pintava de preto a barriga acima dela. Medido na folha de referencia
+# (shorts_ref.py --tracado), o cos da frente e um ARCO cuja profundidade cresce
+# com o IMC, e o erro do 3D crescia junto:
+#
+#   b05_d2 (IMC 27)  arco na folha 0.009   3D 0.008   erro -0.008
+#   b08_d1 (IMC 48)  arco na folha 0.028   3D 0.017   erro -0.013
+#   b11_d2 (IMC 112) arco na folha 0.076   3D 0.021   erro -0.050
+#   b12_d1 (IMC 148) arco na folha 0.120   3D 0.017   erro +0.184  (~32 cm)
+#
+# A conclusao INTUITIVA seria abrir a janela da frente ate 0.22, ja que a folha
+# mostra uma descida de 0.184. Medido nos 39, isso PIORA de 8 para 24 fora:
+# janela funda nao acha prega funda, acha ruido fundo - nos corpos sem prega ela
+# so da espaco para o argmax cair em qualquer coisa. O otimo medido e 0.12.
+#
+# O motivo de nao adiantar e mais fundo, e vale registrar: NOS CORPOS MUITO
+# PESADOS A MALHA NAO TEM O SINAL. No centro da frente do b12_d1 a concavidade e
+# 0.000 em toda a faixa, e um render de emissao pura mostra a barriga preta de
+# ponta a ponta - o pannus e um dome liso e convexo, faz BALANCO e nao vinco.
+# Nenhum ajuste de janela acha o que nao esta la. Para esses poucos avatares a
+# curva da frente vem da folha, por shorts_ref.py --escrever, marcada manual.
+WAIST_WINDOW_FRONT_DOWN = 0.12   # a frente desce ate a prega
+WAIST_WINDOW_FRONT_UP   = 0.00   # e NUNCA sobe acima do anel
+WAIST_WINDOW_BACK_ZH    = 0.05   # costas/lados: so o jogo do proprio elastico
+WAIST_PRIOR_SIGMA       = 0.70   # largura do prior, em fracao da janela
+WAIST_MEDIAN            = 7      # termos da mediana circular (era 5)
+
 
 # --- janelas de busca, ancoradas na VIRILHA e calibradas pela biblioteca -----
 # A virilha e o unico marco anatomico que acompanha a distorcao de proporcao de
@@ -112,8 +171,41 @@ WAIST_WINDOW_ZH = 0.10   # quanto um setor do cos pode se afastar do anel (fraca
 # em +0.001..+0.007 grudada na virilha, ou +0.095 no joelho; cos em
 # +0.037..+0.051). Ou seja: a serie separa certo de errado sozinha, e a janela
 # so precisa cortar no vazio entre os dois grupos.
+#
+# TETO DO COS REVISTO EM 0.170 -> 0.230 (sessao 5), e a licao aqui e a mesma da
+# doutrina da regua externa: a faixa 0.103..0.155 foi medida no que O PROPRIO
+# DETECTOR acertou, ou seja um teto calibrado com dados que o teto ja tinha
+# filtrado. Medindo o cos na FOLHA DE REFERENCIA (shorts_ref.py), que e externa
+# ao detector, a distancia real vai de 0.100 a 0.1944 nos 39 - e o teto de 0.170
+# corta 3 deles. Nos dois piores (b11_d1 0.1718, b11_d2 0.1944) nao havia
+# nenhum maximo local dentro da janela, entao w_peaks voltava VAZIO, waist_b
+# caia no chute "virilha + 0.12" e a janela do ridge ficava boiando. Dai o cos
+# cortando a bunda no meio. Corpo muito obeso tem virilha baixa e cintura alta:
+# a distancia entre as duas cresce, e a janela precisa acompanhar.
 HEM_BELOW_CROTCH   = (0.015, 0.065)
-WAIST_ABOVE_CROTCH = (0.090, 0.170)
+WAIST_ABOVE_CROTCH = (0.090, 0.230)
+
+# --- e uma segunda janela do cos, esta ABSOLUTA ------------------------------
+# Abrir o teto acima era necessario para os IMC 107+, mas sozinho ele QUEBROU o
+# b08_d1: com mais espaco, o anel agarrou um pico falso (dobra da barriga) em
+# 0.635 e o cos inteiro subiu 0.098 acima da folha. Uma janela mais larga nao
+# custa so ruido - ela troca o marco anatomico por outro.
+#
+# A saida foi perguntar a folha o que ela diz da altura ABSOLUTA do cos nos 39, e
+# ela e bem mais estavel do que a sessao 4 supunha ao dizer que "nao existe
+# altura absoluta que signifique a mesma coisa nos dois extremos": 36 dos 39
+# caem entre 0.560 e 0.587, e so os tres mais pesados descem (0.504 · 0.528 ·
+# 0.553). A faixa toda, 0.504..0.587, e mais ESTREITA que a ancorada na virilha
+# (0.100..0.194) - e, ao contrario dela, nao depende de a virilha estar certa.
+#
+# As duas janelas ficam, e vale a INTERSECAO: ancorar so na virilha erra quando a
+# virilha erra; ancorar so no absoluto erra num corpo de proporcao atipica.
+# Medido contra a folha (qa/probe/varre_anel.py), sobre o topo do cos:
+#
+#   teto 0.170 (sessao 4)              4 sem anel   rms 0.0086
+#   teto 0.230 sozinho                 2 sem anel   rms 0.0144   (b08_d1 +0.069)
+#   teto 0.230 + absoluta 0.48..0.60   2 sem anel   rms 0.0090
+WAIST_ABS_RANGE = (0.48, 0.60)
 
 
 def repo_root():
@@ -195,6 +287,62 @@ def composite_previews(paths, bg_hex):
         flat.convert("RGB").save(p)
 
 
+# Salto maximo tolerado entre setores VIZINHOS do cos, em fracao da altura.
+# Calibrado na FOLHA (shorts_ref.py --tracado), nao na serie 3D: o maior passo
+# real da biblioteca e 0.0399 (b12_d1, o arco da barriga pendente), e o segundo
+# 0.0376 (b11_d2). A primeira versao desta trava usou a serie 3D e saiu em
+# 0.032 - que e MENOR que o arco verdadeiro e reprovaria o resultado certo.
+# Mesma armadilha da doutrina da regua externa: calibrar um limite com dados
+# que o proprio limite ja filtrou.
+WAIST_STEP_MAX_ZH = 0.045
+
+
+def _trace_flags(e):
+    """Travas de TRACADO do cos - o que faltava nas duas reguas.
+
+    O --report media so a ALTURA do topo do cos e o shorts_ref.py so comparava
+    essa altura com a folha. Um cos com o topo certo e o CAMINHO errado passava
+    nas duas: foi assim que a aba retangular dos d3 e o cos cortando a bunda dos
+    b11 chegaram aos 39 aplicados sem nenhum alarme. Estava anotado como
+    pendencia 3 do state.md e custou o Rogerio ver no olho, de novo.
+
+    Sao tres perguntas, e cada uma pega uma familia diferente:
+
+      SEM-ANEL  o anel nem foi achado, a curva boia sobre um chute
+      FRENTE^   algum setor da frente esta ACIMA do anel - a barriga so pode
+                empurrar o elastico para BAIXO; subir significa que o argmax
+                pegou sulco de musculo (baixo-ventre / V inguinal)
+      DEGRAU    salto entre setores vizinhos maior que tecido nenhum faz"""
+    out = []
+    diag = e.get("diag", {})
+    w = e.get("waist_zh")
+    if not isinstance(w, (list, tuple)) or len(w) < 4:
+        return out
+
+    n = len(w)
+    pk = diag.get("waist_peaks_zh")
+    # waist_ring_zh so existe em mapa gravado da sessao 5 em diante; antes disso
+    # o anel so da para reconstruir pelo primeiro pico, que e como w_fit o escolhe.
+    ring = diag.get("waist_ring_zh")
+    if ring is None and pk:
+        ring = pk[0][1]
+    if diag.get("waist_ring_found", bool(pk)) is False:
+        out.append("SEM-ANEL")
+
+    if ring is not None:
+        front = n // 4                    # mesma convencao de w_back_side_mask
+        half = max(1, n // 6)
+        acima = [d for d in range(-half, half + 1)
+                 if w[(front + d) % n] > ring + 1e-6]
+        if acima:
+            out.append("FRENTE^{}".format(len(acima)))
+
+    salto = max(abs(w[i] - w[(i + 1) % n]) for i in range(n))
+    if salto > WAIST_STEP_MAX_ZH:
+        out.append("DEGRAU{:.3f}".format(salto))
+    return out
+
+
 def report(root):
     """Tabela de coerencia ANATOMICA do mapa. Nao abre o Blender: le so o
     shorts_map.json, entao roda em um piscar e da para conferir a cada mudanca.
@@ -237,6 +385,7 @@ def report(root):
             obs.append("BAINHA")
         if not (WAIST_ABOVE_CROTCH[0] <= rise <= WAIST_ABOVE_CROTCH[1] + 0.06):
             obs.append("COS")
+        obs += _trace_flags(e)
         if e.get("islands", 1) > 1:
             obs.append("{}ILHAS".format(e["islands"]))
         if obs:
@@ -580,8 +729,11 @@ def w_ring_map(np, co, kn, sel, H, center_mode, az_bins=AZ_BINS, az_mask=None):
     REAVALIADA depois em w_field, que nao tem os centroides por fatia."""
     import math
     A = np.zeros((az_bins, Z_BINS))
+    # occ marca a celula que TEM vertice. Sem isso nao da para distinguir
+    # "superficie lisa aqui" de "nao ha superficie aqui" - as duas dao zero em A.
+    occ = np.zeros((az_bins, Z_BINS), dtype=bool)
     if sel.size < 50:
-        return A, np.zeros(Z_BINS)
+        return A, np.zeros(Z_BINS), occ
     zb = np.clip((co[sel, 2] / H * Z_BINS).astype(np.int64), 0, Z_BINS - 1)
     for b in np.unique(zb):
         g = sel[zb == b]
@@ -597,11 +749,50 @@ def w_ring_map(np, co, kn, sel, H, center_mode, az_bins=AZ_BINS, az_mask=None):
         ab = np.clip(((az + math.pi) / (2 * math.pi) * az_bins).astype(np.int64),
                      0, az_bins - 1)
         np.maximum.at(A[:, b], ab, kn[g])
+        occ[ab, b] = True
 
     ring = np.quantile(A if az_mask is None else A[az_mask], RING_QUANTILE, axis=0)
     for _ in range(RING_SMOOTH):
         ring = np.convolve(ring, np.array([0.25, 0.5, 0.25]), mode="same")
-    return A, ring
+    return A, ring, occ
+
+
+def w_fill_holes(np, A, occ, raio_az=1, raio_z=2):
+    """Preenche as celulas VAZIAS do mapa (azimute x altura) com a media das
+    vizinhas ocupadas.
+
+    ---------------------------------------------------------------------
+    ISTO E O QUE CEGAVA O DETECTOR NA FRENTE DOS CORPOS PESADOS
+    ---------------------------------------------------------------------
+    24 setores x 240 fatias sao 5760 celulas para ~30k vertices, e os vertices
+    nao se distribuem por igual - cabeca, maos e pes levam a maior parte. No
+    trecho do cos do b12_d1 medimos **32% de ocupacao**: dois tercos das celulas
+    do mapa nao tinham vertice nenhum.
+
+    O efeito disso nao e ruido, e um vies com cara de verdade: uma celula vazia
+    vale ZERO, ou seja "aqui a superficie e lisa", que e indistinguivel de "aqui
+    nao ha superficie". Um argmax lendo esse mapa acha vinco onde calhou de cair
+    um vertice, e le prega funda como regiao sem sinal. Foi por isso que uma
+    sonda anterior concluiu que "a prega da barriga nao tem sinal na malha" - o
+    render de emissao pura mostrou o contrario, a faixa de concavidade esta la.
+
+    Media normalizada pela OCUPACAO, e nao dilatacao por maximo: dilatar espalha
+    o pico de um vinco para as celulas vizinhas e inventa vinco onde nao ha
+    (a primeira tentativa fez isso e criou um plato de 1.00 em 4 setores).
+    Ocupacao 100% devolve o mapa inalterado, entao onde o mapa ja e denso nada
+    muda - o que mantem os avatares magros exatamente como estavam."""
+    A = np.asarray(A, dtype=np.float64)
+    occ = np.asarray(occ, dtype=np.float64)
+    num = np.zeros_like(A)
+    den = np.zeros_like(A)
+    for dz in range(-raio_z, raio_z + 1):
+        Az = np.roll(A * occ, dz, axis=1)
+        Oz = np.roll(occ, dz, axis=1)
+        for da in range(-raio_az, raio_az + 1):
+            num += np.roll(Az, da, axis=0)
+            den += np.roll(Oz, da, axis=0)
+    media = np.where(den > 0, num / np.maximum(den, 1e-9), 0.0)
+    return np.where(occ > 0, A, media)
 
 
 def w_peaks(np, ring, lo_b, hi_b, floor=0.0):
@@ -632,37 +823,75 @@ def w_resample_circ(np, vals, n_out):
     return w_interp_circ(np, vals, az)
 
 
-def w_ridge_by_azimuth(np, A, center_b, half_b, az_bins, fallback_b):
-    """Para cada setor de azimute, a altura de concavidade maxima dentro de uma
-    janela em volta do anel. E isto que faz o cos ACOMPANHAR a prega da barriga
-    em vez de cortar reto: cada setor acha a sua propria altura.
+def w_waist_curve(np, A, center_b, floor_b, az_bins, front_mask):
+    """A curva do cos: por setor de azimute, a altura de concavidade maxima
+    dentro de uma janela ASSIMETRICA em volta do anel, com prior gaussiano e
+    mediana circular.
 
-    Duas travas, e as duas foram postas depois de ver o estrago:
+    ---------------------------------------------------------------------
+    O QUE MUDOU NA SESSAO 5, E O QUE FOI TENTADO E DESCARTADO
+    ---------------------------------------------------------------------
+    A estrutura (prior + mediana) e a da sessao 4 e sobreviveu; o que mudou foi
+    a JANELA, que era simetrica e larga nos 24 setores, e o MAPA, que era lido
+    com dois tercos das celulas vazias. As duas mudancas foram medidas contra a
+    folha nos 39 (qa/probe/bench.py):
 
-    1. PRIOR GAUSSIANO em volta do anel. O argmax puro e indefeso contra sulco
-       VERTICAL: a linha alba desce pelo meio da barriga e esta forte em toda a
-       janela, entao nos setores da frente o argmax pousava em qualquer altura.
-       Saia um V no meio do cos. O prior diz "sem uma razao forte, fique na
-       altura do anel" - a prega da barriga, que e um vinco fundo e horizontal,
-       ainda ganha do prior; a linha alba, que e rasa, nao.
-    2. MEDIANA CIRCULAR DE 5 sobre os setores. O cos e uma curva suave em volta
-       do corpo; nenhum setor isolado tem o direito de destoar dos vizinhos."""
-    lo = max(0, int(center_b - half_b))
-    hi = min(Z_BINS, int(center_b + half_b) + 1)
-    zz = np.arange(lo, hi, dtype=np.float64)
-    sigma = max(half_b * 0.5, 1.0)
-    prior = np.exp(-0.5 * ((zz - center_b) / sigma) ** 2)
+        sessao 4  - simetrica 0.10, sem preencher   10 fora   rms 0.0475
+        agora     - assimetrica, preenchida          8 fora   rms 0.0391
 
+    **TENTATIVA DESCARTADA 1 - janela funda.** A folha mostra que no b12_d1 o
+    cos desce 0.184 abaixo do anel, entao parecia obvio abrir a janela para
+    0.16 ou 0.22 e deixar o argmax alcancar a prega. Medido: piorou MUITO,
+    para 19 e 24 fora. Janela funda nao acha prega funda - acha ruido fundo,
+    porque nos corpos em que nao ha prega ela da espaco para o argmax cair em
+    qualquer coisa. O otimo medido e 0.12.
+
+    **TENTATIVA DESCARTADA 2 - programacao dinamica.** Trocar prior por custo de
+    degrau entre setores vizinhos era teoricamente mais bonito: deixaria a prega
+    passar quando COERENTE e barraria a linha alba, sem punir distancia. Foi
+    implementada e testada. Um unico lambda nao serve a serie inteira: com o
+    valor que deixa o b11_d2 descer, o b08_d1 sobe para +0.061; com o que segura
+    o b08_d1, o b12_d1 nao sai do lugar. Reprovada por medida, nao por gosto.
+
+    As duas travas herdadas continuam valendo pelos motivos originais:
+
+    1. PRIOR GAUSSIANO. O argmax puro e indefeso contra sulco VERTICAL: a linha
+       alba desce pelo meio da barriga e esta forte em toda a janela, entao nos
+       setores da frente o argmax pousava em qualquer altura e saia um V no meio
+       do cos. O prior diz "sem razao forte, fique na altura do anel".
+    2. MEDIANA CIRCULAR. Nenhum setor isolado destoa dos vizinhos. Passou de 5
+       para 7 termos: com 5 um plato de 4 setores atravessa inteiro, e foi assim
+       que a aba retangular dos d3 passou batida na sessao 4.
+
+    3. JANELA ASSIMETRICA (nova). A frente desce e NAO sobe; costas e lados quase
+       nao se mexem. Ver WAIST_WINDOW_* - e o modelo que o docstring de
+       w_back_side_mask ja declarava e que o codigo nao aplicava."""
     out = []
     for j in range(az_bins):
-        w = A[j, lo:hi] * prior
-        out.append(lo + int(w.argmax()) if w.size and w.max() > 0 else fallback_b)
+        if front_mask[j]:
+            lo_f = center_b - WAIST_WINDOW_FRONT_DOWN * Z_BINS
+            hi_f = center_b + WAIST_WINDOW_FRONT_UP * Z_BINS
+        else:
+            lo_f = center_b - WAIST_WINDOW_BACK_ZH * Z_BINS
+            hi_f = center_b + WAIST_WINDOW_BACK_ZH * Z_BINS
+        # o cos nunca desce abaixo da bainha: ali o short acabaria antes de comecar
+        lo = int(max(0, floor_b + 1, round(lo_f)))
+        hi = int(min(Z_BINS - 1, round(hi_f)))
+        if hi < lo:
+            out.append(center_b)
+            continue
+        zz = np.arange(lo, hi + 1, dtype=np.float64)
+        sigma = max((center_b - lo) * WAIST_PRIOR_SIGMA, 1.0)
+        w = A[j, lo:hi + 1] * np.exp(-0.5 * ((zz - center_b) / sigma) ** 2)
+        out.append(lo + int(w.argmax()) if w.size and w.max() > 0 else center_b)
 
-    return [int(sorted([out[(j + d) % az_bins] for d in (-2, -1, 0, 1, 2)])[2])
+    k = WAIST_MEDIAN // 2
+    return [int(sorted([out[(j + d) % az_bins] for d in range(-k, k + 1)])[k])
             for j in range(az_bins)]
 
 
-def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None):
+def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
+          waist_override=None):
     """Devolve (cfg em metros, diagnostico).
 
     A bainha sai como ESCALAR por perna e o cos como curva de 24 setores.
@@ -730,7 +959,7 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None):
     hem_curves, hem_centers, hem_peaks_d = [], [], []
     for lid in lids:
         sel = np.where(leg_id == lid)[0]
-        A, ring = w_ring_map(np, co, kn, sel, H, "slice")
+        A, ring, _ = w_ring_map(np, co, kn, sel, H, "slice")
         pk = w_peaks(np, ring,
                      crotch_b - HEM_BELOW_CROTCH[1] * Z_BINS,
                      crotch_b - HEM_BELOW_CROTCH[0] * Z_BINS)
@@ -751,16 +980,36 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None):
     # entao satisfaz o criterio do anel e vencia como "cos" nos corpos pesados
     # (b07_d1 e b08_d1 pousaram os dois exatamente na altura da virilha).
     torso = np.where((~is_arm) & (z >= crotch))[0]
-    A_t, ring_t = w_ring_map(np, co, kn, torso, H, "axis", WAIST_AZ_BINS,
-                             az_mask=w_back_side_mask(np, WAIST_AZ_BINS))
+    back_side = w_back_side_mask(np, WAIST_AZ_BINS)
+    A_t, ring_t, occ_t = w_ring_map(np, co, kn, torso, H, "axis", WAIST_AZ_BINS,
+                                    az_mask=back_side)
+    # intersecao das duas janelas: a ancorada na virilha e a absoluta
     waist_peaks = w_peaks(np, ring_t,
-                          crotch_b + WAIST_ABOVE_CROTCH[0] * Z_BINS,
-                          crotch_b + WAIST_ABOVE_CROTCH[1] * Z_BINS)
+                          max(crotch_b + WAIST_ABOVE_CROTCH[0] * Z_BINS,
+                              WAIST_ABS_RANGE[0] * Z_BINS),
+                          min(crotch_b + WAIST_ABOVE_CROTCH[1] * Z_BINS,
+                              WAIST_ABS_RANGE[1] * Z_BINS))
     waist_b = waist_peaks[0][1] if waist_peaks else int(crotch_b + 0.12 * Z_BINS)
 
-    # janela larga: e o que deixa a frente descer ate a prega da barriga
-    wf = w_ridge_by_azimuth(np, A_t, waist_b, WAIST_WINDOW_ZH * Z_BINS,
-                            WAIST_AZ_BINS, waist_b)
+    # ANCORA DO COS corrigida a mao, se houver. Mesmo padrao - e mesmo motivo -
+    # do crotch_override_zh: o anel e a ancora de TODA a curva, entao quando ele
+    # erra, erra tudo junto, e um numero so conserta. Sobrevive a --fit.
+    #
+    # Existe porque em dois avatares (b10_d2, b11_d2) o perfil do anel nao tem
+    # maximo local nenhum dentro da janela - sobe monotono. w_peaks volta vazio,
+    # waist_b cai no chute "virilha + 0.12" e o cos inteiro fica baixo: no
+    # b11_d2 deu 0.485 contra 0.553 medidos na folha. Nao adianta alargar a
+    # janela, porque o problema nao e onde procurar, e que nao ha pico.
+    if waist_override:
+        waist_b = int(waist_override * Z_BINS)
+        waist_peaks = waist_peaks or [[0.0, waist_b]]
+
+    # Janela ASSIMETRICA: funda para baixo so na frente, zero para cima na
+    # frente, estreita nos dois sentidos nas costas. O piso e a bainha mais alta
+    # das duas pernas: abaixo dela o short acabaria antes de comecar.
+    floor_b = int(max(hem_curves) / H * Z_BINS)
+    A_f = w_fill_holes(np, A_t, occ_t)  # ver w_fill_holes: 32% -> 84% de ocupacao
+    wf = w_waist_curve(np, A_f, waist_b, floor_b, WAIST_AZ_BINS, ~back_side)
 
     cfg = {
         "hem_l": hem_curves[0],
@@ -776,6 +1025,12 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None):
         "hem_peaks_zh": hem_peaks_d,
         "waist_peaks_zh": [[round(s, 3), round((b + 0.5) / Z_BINS, 4)]
                            for s, b in waist_peaks[:4]],
+        # a altura do anel e a ancora de TODO o cos, e a trava de tracado do
+        # --report compara cada setor com ela. Sem anel (lista de picos vazia) a
+        # curva inteira boia sobre um chute - isso e defeito por si so e precisa
+        # sobreviver ao mapa, nao ficar so no log.
+        "waist_ring_zh": round((waist_b + 0.5) / Z_BINS, 4),
+        "waist_ring_found": bool(waist_peaks),
     }
     return cfg, diag
 
@@ -910,8 +1165,11 @@ def worker_main():
 
     if a.mode == "fit":
         # correcao manual da ancora, se houver: sobrevive a um --fit posterior
-        ov = load_map(a.root).get(a.id, {}).get("crotch_override_zh")
-        cfg, diag = w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=ov)
+        _e = load_map(a.root).get(a.id, {})
+        ov = _e.get("crotch_override_zh")
+        wov = _e.get("waist_ring_override_zh")
+        cfg, diag = w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=ov,
+                          waist_override=wov)
         entry = {
             # gravado em FRACAO DA ALTURA, nao em metros: assim um numero copiado
             # de um avatar para outro continua querendo dizer a mesma coisa
@@ -924,6 +1182,8 @@ def worker_main():
         }
         if ov:
             entry["crotch_override_zh"] = ov
+        if wov:
+            entry["waist_ring_override_zh"] = wov
     else:
         smap = load_map(a.root)
         entry = smap[a.id]

@@ -1,7 +1,591 @@
 # state.md — Zenith Avatar Library
 
-Última atualização: **27/07/2026 (sessão 4)**
-Fase atual: **O SHORT FOI MAPEADO NOS 39.** `scripts/shorts.py` escrito, mapa em `config/shorts_map.json`, validado por duas réguas independentes.
+Última atualização: **29/07/2026 (sessão 7)**
+Fase atual: **ONDA FEMININA — em produção.** O short segue PARADO por decisão do Rogério.
+
+## 🟢🟢 ABRIR AQUI NA SESSÃO NOVA
+
+**A onda feminina destravou por completo na sessão 7.** Grade escrita, folha-mãe
+aprovada e validada, primeiro avatar feminino pronto e indexado. **A esteira está
+livre — daqui para frente é só produzir folha.**
+
+### ➡️ O PRÓXIMO PASSO, exato
+
+**Gerar `f_b04_d2` e `f_b06_d2`** — os vizinhos imediatos da mãe, um de cada
+lado. Ordem de produção: linha `d2` inteira primeiro (§7 do `ARCHETYPES.md`),
+depois `d1`, depois `d3`.
+
+O Rogério **pediu para NÃO adiantar o prompt** no fim da sessão 7 (contexto no
+teto). Monte o prompt do `f_b04_d2` quando ele pedir, usando:
+
+- bloco fixo feminino de `CHARACTER_BIBLE.md` §3 (**já traz a faixa reta e o
+  parágrafo de NATUREZA DA IMAGEM — não reescrever nenhum dos dois**)
+- descritor de `CHARACTER_BIBLE.md` §5, linha d2
+- anexar `00_input/sheets/f/_mother_f.png` + o vizinho aprovado
+- ⚠️ **exceção do §6**: no trecho magro (`f_b01`–`f_b03`) largar a mãe e anexar
+  só o vizinho — a mãe atlética contamina banda magra. Já custou caro no masculino.
+
+**Fluxo, todo pronto e testado nos dois sexos:**
+```
+python scripts/intake.py zen_f_b04_d2      # pega do Downloads sozinho
+python scripts/crop.py   zen_f_b04_d2      # -> 00_input/references/f/{id}/
+   (humano sobe as 3 na Meshy: Multi-View, Meshy 6 Padrao, densidade alta,
+    SEM textura, divisao automatica DESLIGADA; deixa o GLB em Downloads)
+python scripts/process.py zen_f_b04_d2     # 60k, 9/9
+python scripts/metrics.py zen_f_b04_d2
+python scripts/build_index.py
+```
+
+**Antes de aprovar qualquer folha:** `scripts/sheet_qa.py` mede a
+folha **ainda em Downloads** (alinhamento, espaçamento, silhueta, tecido). E a
+régua é o **DESCRITOR**, não a folha anterior — ver a lição em destaque abaixo,
+que custou duas regerações nesta sessão.
+
+---
+
+## 🟢 SESSÃO 7 — o que foi feito
+
+Três frentes: documento, testador e a primeira produção feminina.
+
+1. **Grade feminina reescrita de 6 para 12 faixas.** `docs/ARCHETYPES.md` §3b
+   (nova seção, 32 arquétipos, mesmas exclusões da masculina) e
+   `docs/CHARACTER_BIBLE.md` §5 (**os 17 descritores antigos `f_b1`…`f_b6` foram
+   SUBSTITUÍDOS**, não renumerados — uma faixa de 6 cobria ~5 pontos de IMC e
+   virou duas ou três de 1,5). Nenhum asset ficou órfão: nada feminino tinha
+   sido produzido.
+2. **Chave ♂/♀ no `test/avatar_tester.html`.** Filtra por `sex` do
+   `library.json` e troca junto os **limiares de gordura** (21/29% feminino
+   contra 13/20% masculino) e o `default`. Verificado no localhost: 18% de
+   gordura dá `d2` no masculino e `d3` no feminino, que é o comportamento certo.
+   Os GLBs continuam todos em `03_dist/glb/`, **sem subpasta por sexo** — o id
+   já diz `zen_m_`/`zen_f_` e separar em pasta obrigaria a mexer no caminho de
+   5 scripts e do CDN sem ganho nenhum (decisão do Rogério nesta sessão).
+3. `build_index.py` — `default.f` deixou de ser `None` fixo e passa a ser
+   calculado igual ao masculino. Sai `null` sozinho enquanto não houver avatar
+   feminino, e se preenche no primeiro build depois da onda.
+
+4. **`build_index.py` — rótulo concorda com o sexo** (`magra`/`média`/`cheia`).
+   Os CORTES são os mesmos: é razão cintura/altura, que já é adimensional.
+5. **`00_input/` separado por sexo** e `scripts/zenith_paths.py` como fonte
+   única do layout — bloco próprio mais abaixo.
+
+**Os 39 masculinos seguem byte-idênticos** — nada nesta sessão os tocou.
+
+> **Armadilha do model-viewer, medida e não suposta:** `removeAttribute("src")`
+> não limpa o modelo (o `src` é propriedade, não atributo refletido) e, mesmo
+> com `src = null`, o elemento **mantém o último frame desenhado no canvas**.
+> Sem `display:none` junto, o avatar masculino continuava na tela depois de
+> trocar para o feminino vazio. Vale para qualquer tela do app que troque de
+> coleção.
+
+### ✅✅ O PRIMEIRO AVATAR FEMININO ESTÁ PRONTO — `zen_f_b05_d2`
+
+Ponta a ponta: folha → Meshy → `process.py` (**9/9**, 59.988 tri) → `metrics.py`
+→ `library.json` (40 avatares, `default.f` preenchido sozinho).
+
+**IMC medido 22,9** — a banda nominal `b05` é 23,0–24,4, então ela pousou 0,1
+abaixo da borda. Para folha-mãe é pontaria: a mãe MASCULINA foi pedida na mesma
+banda e mediu **26,8**.
+
+**O dimorfismo sobreviveu à malha**, que era a pergunta de verdade:
+
+| | `zen_f_b05_d2` | `zen_m_b05_d2` |
+|---|---:|---:|
+| IMC | 22,9 | 26,8 |
+| **cintura mín / quadril** | **0,658** | 0,802 |
+| quadril | **107,2 cm** | 103,7 cm |
+| cintura mín | 70,5 cm | 83,2 cm |
+| bíceps | 26,6 cm | 34,7 cm |
+| pescoço | 34,5 cm | 42,7 cm |
+
+Quadril **maior em centímetro absoluto** que o do homem, com 12 kg a menos de
+massa. Não é o desenho dizendo isso — é o volume da malha.
+
+Dist: **191 KB** com Draco (orçamento 1–3 MB). Renders em `qa/look/zen_f_b05_d2/`
+e a comparação em card de 300×400 em `qa/look/_card300.png`: **a 300 px o sexo é
+inconfundível**, que era o teste combinado antes de gerar as outras 31.
+
+> **A faixa e o short dela NÃO estão pintados de preto** — o `shorts.py` não
+> rodou, a frente segue parada por decisão do Rogério. Quando ela reabrir, o
+> feminino precisa de **duas** peças (faixa + short), e as duas são anel fechado,
+> que é a topologia boa. Ver `CHARACTER_BIBLE.md` §5.
+
+#### 🔴 BUG PEGO NA HORA: `TARGET_TRIS` estava em 18000
+
+O primeiro processamento saiu com **17.988 triângulos e 9/9 validações**, numa
+biblioteca em que os 39 masters estão em 60.000. A constante em
+`process.py` nunca foi atualizada depois da decisão de 27/07 — os 39 foram
+reprocessados com `--tris` explícito e ninguém voltou na constante.
+
+> **Doutrina: trava que confere o alvo contra ele mesmo não valida o alvo.** A
+> validação `tris` compara o resultado com `TARGET_TRIS ± 15%`. Com o alvo
+> errado, ela passa limpa — 9/9 num avatar que estava 42.000 triângulos abaixo
+> do resto da biblioteca. É a mesma família do `--report` do short, que comparava
+> cada avatar com a série. Corrigido para 60000, com o porquê no comentário.
+
+Junto: o log dizia `corpo=Zenith_Body (todo roxo...)` desde a fase roxa, o que
+atrapalha quem confere. Agora diz titânio.
+
+### ✅ A FOLHA-MÃE FEMININA — `zen_f_b05_d2`, aprovada na sessão 7
+
+Saiu **de primeira, no ChatGPT**, sem retrabalho. Já em
+`00_input/sheets/zen_f_b05_d2_sheet.png` + `_mother_f.png`, recortada em
+`00_input/references/zen_f_b05_d2/`. **Próximo passo é a Meshy** (Multi-View,
+Meshy 6 Padrão, densidade alta, sem textura, divisão automática DESLIGADA).
+
+### 📁 `00_input/` AGORA É SEPARADO POR SEXO (28/07, pedido do Rogério)
+
+```
+00_input/sheets/m/     40 folhas + _mother_m.png
+00_input/sheets/f/      1 folha  + _mother_f.png
+00_input/references/m/ 39 pastas
+00_input/references/f/  1 pasta
+```
+
+O motivo dele decide o escopo: **são as pastas que ele abre na mão** para
+escolher o que sobe na Meshy e o que anexa no ChatGPT. Com 39 + 32 no mesmo
+diretório, escolher a referência certa vira caça ao arquivo — e errar significa
+gerar o avatar errado.
+
+**`01_raw/`, `02_master/` e `03_dist/glb/` continuam PLANOS, de propósito** —
+pastas de máquina, ninguém navega nelas, o id já carrega o sexo, e o `03_dist`
+seria caminho de CDN. Mesma decisão que já valia para a chave ♂/♀ do testador.
+
+**A regra de layout mora em `scripts/zenith_paths.py` e só lá.** São 6 scripts +
+3 sondas lendo esses caminhos; se cada um montasse o seu, bastaria um esquecer a
+pasta de sexo para gravar folha feminina no meio da masculina. `sex_of()`
+**estoura** em id fora da convenção em vez de adivinhar.
+
+Duas coisas que a migração ensinou:
+
+- **A trava de "não move nada se algum id não casar" pegou um `.gitkeep`** antes
+  de mover 82 arquivos. Barata de escrever, e `00_input/` está no `.gitignore` —
+  não havia rede de segurança do git para desfazer.
+- **O `measure.py` agora imprime UMA TABELA POR SEXO**, com a coluna `passo`
+  reiniciando. Não é cosmético: a regra 5c diz que essa régua só ordena folhas do
+  mesmo gerador com a mesma pose, e o passo impresso entre o último masculino e a
+  primeira feminina seria um número sem significado com cara de medida.
+
+Conferido depois da migração: `crop.py --check` nos dois sexos, `measure.py` nos
+40, e o `shorts_ref.py` devolvendo os **mesmos** números de antes (`b11_d1`
+−0,048 · `b11_d2` −0,041 · `b12_d1` +0,009) — ou seja, nada regrediu.
+
+### 🔴🔴 A MÃE FOI REGERADA DUAS VEZES — e o erro das duas vezes foi MEU
+
+A folha aprovada é a **3ª tentativa** (ChatGPT, 29/07, faixa reta). As duas
+primeiras caíram por motivos diferentes, e as duas lições valem mais que o
+avatar:
+
+**1ª — racerback. Reprovada pelo Rogério, no olho: "esconde a musculatura das
+costas".** Medida a cobertura, ele estava certo (60,7% do dorsal alto). A troca
+para faixa reta está justificada no `CHARACTER_BIBLE.md` §5.
+
+**2ª — faixa certa, e eu declarei o corpo "regredido". ESTAVA ERRADO.** Usei a
+folha do racerback como referência de tônus e disse que a nova tinha perdido
+músculo. No zoom, o abdômen do racerback tem **gomos e linha alba visíveis** — e
+o descritor da mãe proíbe os dois, em maiúsculas. **A folha errada era a
+referência, não a nova.** Pior: eu tinha anotado esse exato desvio na primeira
+análise dela ("há linha alba visível que o descritor proibia") e aprovei assim
+mesmo; depois promovi a folha fora de especificação a régua.
+
+> **Doutrina: régua tem que ser o DESCRITOR, não a folha anterior.** Comparar
+> com o vizinho responde "mudou?", nunca "está certo?". Se o vizinho está fora
+> de especificação, comparar com ele propaga o desvio — e com a folha-MÃE
+> propaga para a biblioteca inteira. Mesma família da lição de 27/07
+> ([[regua-externa-antes-de-dizer-pronto]]): consistência interna não é correção.
+
+**E a minha régua de silhueta não viu nada disso.** Cintura 14,9% contra 14,8%,
+quadril 24,1% contra 24,3%, cintura/quadril 0,618 contra 0,607 — "o mesmo
+corpo". Ela mede **largura**; o que mudou foi **tônus**. Terceira vez neste
+projeto que uma régua passa porque a pergunta que ela faz não é a que importa.
+Ver [[regua-de-altura-nao-ve-tracado]].
+
+#### O ChatGPT ganhou do Gemini, e o critério foi o músculo
+
+Rodadas em paralelo na 3ª tentativa, mesma faixa, ambas dentro da tolerância:
+
+| | ChatGPT v2 ✅ | Gemini |
+|---|---|---|
+| figura | **915 px** (1536×1024) | 720 px (1376×768) |
+| alinhamento / espaçamento | 0,66% / 5,4% | **0,14% / 0,0%** |
+| cintura÷quadril | 0,615 | 0,612 |
+| tronco coberto (costas) | **18,3%** | 20,3% |
+| **estrutura nas costas** | **trapézio, deltoide e sulco da coluna visíveis** | ombro redondo, costas lisas |
+
+O Gemini ganha em alinhamento e perde no que importa: 195 px a menos de figura
+(ficaria **abaixo do piso de toda a biblioteca masculina**, cujo mínimo é 1536 de
+largura), pose mais fechada — viés já registrado no §5c item 8 — e, decisivo,
+costas sem estrutura muscular. **Alinhamento bom com músculo invisível não serve
+a um app de musculação.**
+
+---
+
+**Como a folha-mãe foi aprovada — a régua importa mais que o veredito.** O `measure.py` só
+roda sobre recortes já no repositório, e não faz sentido gravar folha que pode
+reprovar; a sonda `scripts/sheet_qa.py` mede a folha **onde ela
+está, em Downloads**. E a calibração que deu confiança foi rodar a MESMA régua
+na `_mother_m.png` já aprovada:
+
+| | mãe masculina (aprovada) | `f_b05_d2` |
+|---|---:|---:|
+| ombro (0,19 da altura) | 27,1% | **23,5%** |
+| cintura mínima | 17,4% @ 0,360 | **14,8%** @ 0,355 |
+| quadril máximo | 24,0% @ 0,560 | **24,3%** @ 0,530 |
+| cintura/quadril | 0,724 | **0,607** |
+
+Alinhamento: topo e sola com **3 px** de espalhamento, altura variando 0,69%,
+espaçamento entre centros 440 e 442 px (0,5%). Resolução 1536×1024 — é o **piso**
+da biblioteca masculina, mas o `zen_m_b01_d1` tem exatamente essa e funcionou.
+
+**🔑 O que essa medição CORRIGIU no meu próprio documento:** eu tinha escrito
+"quadril CLARAMENTE mais largo que os ombros" no descritor. Medido, o quadril é
+só 3,4% mais largo — e está certo assim. **O feminino aparece porque o ombro
+encolheu e a cintura afinou, com o quadril praticamente parado** (24,3% contra
+24,0% do homem). O descritor foi corrigido; pedir quadril exagerado empurraria
+as próximas folhas para proporção de desenho animado.
+
+**⚠️ Ressalva registrada:** a pele iluminada chega a **212–215** contra fundo
+215–216 — o lado claro do corpo encosta no fundo. O `crop.py` sobreviveu (3
+vistas detectadas, 0,69%), mas é "brilho estourado" de leve. Se piorar nas
+próximas folhas, vira falha de detecção e não aviso.
+
+**⚠️ Para quando a frente do short voltar:** o short feminino é **mais curto**
+(bainha 0,455 do chão contra 0,339–0,436 dos masculinos) e o top é **nadador
+(racerback)**. Alça de racerback cruzando as escápulas não é anel de bainha —
+é bem mais difícil que qualquer coisa que o `shorts.py` já enfrentou.
+
+**Duas decisões registradas para não serem redecididas:**
+
+- **Não anexar a folha-mãe masculina** ao gerar a feminina. A única coisa comum
+  entre os sexos é o *enquadramento* (altura, pose, câmera, fundo), que vem do
+  bloco fixo e não de imagem. Anexar `_mother_m.png` só arrastaria ombro e
+  peitoral para a silhueta feminina.
+- **O busto foi travado no BLOCO FIXO** (`CHARACTER_BIBLE.md` §3: "pequeno a
+  médio, proporcional, não muda entre os tipos de corpo"), não nos descritores.
+  É fonte grande de deriva e não é o que o app mede — travar uma vez em vez de
+  descrever 32 vezes.
+
+**A altura de referência continua 1,75 m para os dois sexos, e está certo** —
+`reference_height_m` é a altura de normalização da malha, não uma afirmação
+sobre a usuária. A correção do passo 1 (`IMC × 1,75/altura`) resolve o resto.
+Justificado em `ARCHETYPES.md` §3b; não reabrir.
+
+## 🟢🟢 ABRIR AQUI NA SESSÃO NOVA — a onda FEMININA, e o short está PARADO
+
+**Decisão do Rogério, 28/07 (fim da sessão 6), com o motivo dele:**
+
+> *"essas mudanças simples no short estão levando muito mais tempo que criar
+> bibliotecas inteiras de avatar, preciso otimizar meu tempo. Quando
+> completarmos as duas bibliotecas aí foco somente na pintura dos shorts."*
+
+**Ordem de prioridade a partir de agora:**
+1. **Biblioteca feminina** (~32 avatares) — é o que está na mesa
+2. Só depois, os **11 shorts** que sobraram reprovados
+
+O custo relativo é o argumento, e ele está certo em número: a onda masculina
+inteira (39 avatares, folha → Meshy → pipeline → índice) saiu em ~3 sessões; o
+short sozinho já consumiu 3 sessões e ainda tem 11 avatares reprovados. **Não
+reabrir a frente do short sem ele pedir.**
+
+### O que trava a onda feminina hoje (fazer NESTA ordem)
+
+1. **🔴 A grade feminina precisa ser REESCRITA de 6 para 12 faixas.** O
+   `docs/ARCHETYPES.md` §2 e o `docs/CHARACTER_BIBLE.md` §5 ainda trazem a
+   numeração antiga (`f_b1`…`f_b6`), e o próprio Character Bible diz, em letra
+   grande, que ela **não deve ser produzida assim**. São 17 descritores velhos
+   para virar ~32, espelhando a estrutura masculina. **É trabalho de documento,
+   não de geração — e é o primeiro passo.**
+2. **A folha-mãe feminina não existe.** O `CHARACTER_BIBLE.md` §7 manda gerar
+   `_mother_f.png` primeiro e regerar até ficar impecável, porque **trocá-la
+   depois obriga a regerar a biblioteca inteira daquele sexo**. A masculina é
+   `m_b05_d2`; a feminina deve ser o equivalente do meio da grade.
+3. Só então rodar o pipeline, que **já está pronto e não precisa de nada novo**:
+   `intake.py` → `crop.py` → (Meshy manual) → `process.py` → `metrics.py` →
+   `build_index.py`. O `library.json` schema 3 já classifica por `measured_bmi`,
+   então avatar feminino entra como inserção sem migração de esquema.
+
+### O que a onda masculina ensinou e vale trazer inteiro para a feminina
+
+Está tudo no `CHARACTER_BIBLE.md` §5b/§5c, mas os três que mais custaram caro:
+
+- **Bracketing entrega ~2× o passo pedido** (§5c item 6). Ao mirar um IMC,
+  contar com o dobro.
+- **A regra é ADITIVA: `pouso ≈ âncora de topo + 6,5 de IMC`** (§5c item 7).
+  Para mirar X, escolher o par cujo membro superior esteja em ~X−6,5.
+- **Quem manda no pouso é o SUBSTANTIVO DE CATEGORIA, não a âncora** (§5c item
+  10). Baixar a âncora em 3,4 moveu o corpo 0,7; trocar a palavra moveu 6,4.
+- **Largar a folha-mãe no trecho magro** (§6, exceção) — a mãe atlética
+  contamina as bandas baixas.
+
+---
+
+## ⏸️ FRENTE DO SHORT — PARADA. Onde ela ficou
+
+**`zen_m_b12_d1` foi corrigido e aplicado** (sessão 6, detalhe abaixo). **Sobram
+11 reprovados**, e há uma pista forte já medida para 4 deles.
+
+**Quando retomar, começar por `b11_d1`** — maior erro de bainha (−0,048) e a
+receita está escrita no bloco da sessão 6.
+
+**O combinado com o Rogério continua valendo: UM POR VEZ, com print dele.** Não
+varrer a biblioteca, não adiantar os próximos, não "aproveitar que está aberto".
+Isso foi cobrado nesta sessão.
+
+## ✅ SESSÃO 6 — `zen_m_b12_d1`: dois defeitos, duas causas diferentes
+
+O Rogério mandou dois prints (avatar girado de propósito) apontando:
+1. a pintura pegava **a parte de baixo da barriga**;
+2. a pintura formava **uma linha abaixo da perna, além da margem do short**.
+
+Os dois se confirmaram **sem luz** (emissão pura: corpo cinza, short vermelho) —
+era pintura, não sombra. Que essa checagem era necessária ficou provado ao rodar
+o mesmo ângulo **com o short desligado**: a cavidade sob o avental já renderiza
+escura por conta própria, e um render separou uma coisa da outra.
+
+### 🔑 Defeito 2 — a bainha do `b12_d1` nunca tinha sido MEDIDA
+
+`hem_peaks_zh` estava `[[], []]` no mapa: **lista vazia nas duas pernas**. O
+valor gravado (0,33125) era o chute do `else` (`virilha − 0,035`).
+
+**A causa é a interação entre duas coisas certas.** `w_limbs` só rotula perna
+**abaixo da altura em que as duas se separam** — aqui 0,297, porque num IMC 148
+as coxas se tocam até quase o joelho. O `crotch_override_zh = 0,37` (conserto da
+sessão 4) leva a janela da bainha para 0,305–0,355, faixa **sem nenhum vértice
+de perna**. `w_peaks` volta vazio e ninguém reclama.
+
+Refazendo a seleção de perna por **sinal de x até a virilha corrigida**, aparece
+anel forte e limpo em **zh 0,3479 nas duas pernas** (0,183 e 0,151). Conferido
+por instrumento independente: no render de emissão pura o vinco branco do tecido
+coincide com o anel 0,3479, e o 0,33125 cai em superfície lisa — **2,9 cm abaixo
+da barra**. Era exatamente a "linha abaixo da perna".
+
+> **Doutrina: `crotch_override_zh` conserta a ÂNCORA, não a SEGMENTAÇÃO.** Quem
+> usar override de virilha precisa conferir se `hem_peaks_zh` voltou vazio — o
+> chute não se anuncia.
+
+#### 🔑🔑 E A MESMA COISA VALE PARA MAIS 4 DOS 12 REPROVADOS
+
+Varrendo `hem_peaks_zh` no mapa inteiro (é instantâneo, lê só JSON), **cinco
+avatares têm a lista vazia nas DUAS pernas — ou seja, bainha 100% chutada**:
+
+| avatar | IMC | bainha folha/3D | erro |
+|---|---:|---|---:|
+| `b12_d1` | 147,7 | 0,339 / 0,331 | — ✅ corrigido para 0,348 |
+| `b11_d2` | 111,7 | 0,364 / 0,323 | **−0,041** |
+| `b11_d1` | 107,3 | 0,342 / 0,294 | **−0,048** |
+| `b09_d1` | 63,2 | 0,394 / 0,348 | **−0,046** |
+| `b08_d3` | 53,8 | 0,430 / 0,385 | **−0,045** |
+
+**São exatamente os quatro maiores erros de bainha da lista dos 12**, e todos com
+o mesmo sinal (short comprido demais) — que era a hipótese registrada no fim da
+sessão 5, agora com mecanismo: não é limiar mal escolhido, **é que a bainha nunca
+foi medida nesses cinco**. Nos quatro sem override, a janela
+`HEM_BELOW_CROTCH = (0.015, 0.065)` abaixo da virilha *detectada* não contém o
+vinco (nos corpos pesados as coxas se tocam bem abaixo da virilha anatômica, o
+mesmo mecanismo do `b12_d1`, só que sem ninguém ter corrigido a âncora).
+
+**Receita para os próximos:** medir o anel com a perna selecionada por sinal de x
+até a virilha (`qa/probe/sondas/probe_dobra.py`, parte b), confirmar sem luz com
+`probe_bainha_vinco.py`, e gravar o número no mapa. Foi o que resolveu o
+`b12_d1` — e não custa rodada de `--fit`.
+
+Os outros dois com lista vazia em **uma** perna (`b04_d3`, `b01_d2`) não estão
+entre os reprovados; deixar para depois.
+
+### Defeito 1 — o avental é uma PRATELEIRA, e o campo só sabe de altura
+
+`w_field` decide por altura (`cós(azimute) − z`). No `b12_d1` a barriga pendente
+forma uma **prateleira quase horizontal** em zh 0,335–0,372: a face de baixo do
+avental, voltando para trás e para dentro. Ela fica *abaixo* do cós da frente
+(0,3639, vindo da folha), então era pintada inteira. De frente não aparece —
+**só vaza por baixo**, que foi de onde ele pegou.
+
+Corrigir a bainha para 0,3479 apagou o miolo. O resto saiu baixando os **setores
+3–8 do cós para 0,347** (≈ a bainha): ali a divisa fica *debaixo* do avental,
+que é onde uma barra real some da vista. O ponto mais baixo da folha externa do
+avental, medido por setor, é 0,338 no centro e 0,360 a ±37°, com **simetria
+entre pares espelhados** (3↔8: 0,3603/0,3616 · 4↔7: 0,3404/0,3413 · 5↔6:
+0,3378/0,3380) — é medida, não gosto.
+
+### 🟡 Duas hipóteses testadas e REJEITADAS (não repetir)
+
+1. **Máscara pela normal** (`nz < −0,55`, "a prateleira é virada para baixo").
+   Come a prega do glúteo e abre um rasgo cinza no meio do short de costas.
+   Mesma família do `probe_nz` da sessão 5: prega de bunda também é horizontal.
+2. **Folha externa por raio** (só pinta o que está a menos de X do raio máximo
+   da célula azimute×altura). Perto da dobra as duas folhas se encontram *por
+   definição*, então sempre sobra faixa; apertar o X para 0,025 cortava **47%
+   das faces pintadas**. Valeu como **diagnóstico**, isso sim: mostrou que as
+   "asas" que restam vistas de baixo são folha EXTERNA — frente do quadril
+   legítima, não prateleira.
+
+### ⚠️ DUAS RÉGUAS PASSARAM A RECLAMAR, E ISSO É INTENCIONAL
+
+Quem mexer nisso depois **não deve "consertar" de volta**:
+
+| régua | antes | agora | por quê |
+|---|---|---|---|
+| `--report` | ok | **`DEGRAU0.121`** | o passo entre o setor 2 (0,4685) e o 3 (0,347) é o mergulho do cós para debaixo do avental. A trava foi calibrada na FOLHA, onde o arco é suave; a malha aqui tem uma quina real |
+| `--tracado` | `+0,038` | **`ERRO` (arco 0,159 contra 0,120 da folha)** | o arco 3D ficou 0,039 mais fundo que o da folha **de propósito**: no desenho o avental desce menos do que na malha que a Meshy gerou |
+
+A régua de ALTURA continua boa: cós 0,528/0,544 (+0,016) · bainha 0,339/0,348
+(+0,009). `--check`: **uma peça só, zero ilhas**. Aplicado em `03_dist/`
+(62.266 tri).
+
+> **A tensão é real e vale registrar:** a doutrina da régua externa manda
+> ancorar fora do gerador, e aqui eu me afastei da folha de propósito. O motivo
+> é que **a folha é um desenho 2D e a malha é o que se pinta** — seguir a folha
+> ao pé da letra foi justamente o que pintou a barriga de preto. A folha
+> continua valendo para ALTURA; para o TRAÇADO de um corpo com avental, ela não
+> enxerga que a superfície tem duas folhas.
+
+**Valores antigos, se precisar voltar:** `hem 0,33125` · cós frente (setores
+2–10) `[0.4685, 0.43, 0.3901, 0.3639, 0.3639, 0.3639, 0.3901, 0.43, 0.4685]`.
+
+**Sondas desta sessão** (em `qa/probe/sondas/`, fora de `scripts/`):
+`probe_vista.py` (qualquer ângulo, com luz e sem; `--master` pinta pelo mapa sem
+gravar dist; `--sem` desliga o short para separar sombra de pintura) ·
+`probe_corte.py` + `plot_corte.py` (corte sagital com a região pintada em
+vermelho — foi ele que revelou a prateleira) · `probe_dobra.py` (ocupação
+raio×altura por setor) · `probe_anel_bainha.py` · `probe_bainha_vinco.py`
+(emissão pura com anéis candidatos por cima) · `probe_pannus.py`.
+
+## 🔴🔴 OS 12 REPROVADOS NO OLHO (28/07) — 1 FEITO, 11 NA FILA
+
+O Rogério abriu o testador em localhost depois da correção da sessão 5 e **reprovou 12**, todos com "defeitos sérios no short". Ele disse ter **ignorado outros avatares defeituosos** além destes — ou seja, a lista é do que é grave, não do que é tudo.
+
+**O combinado: UM POR UM.** Ele manda print apontando o defeito, eu corrijo. Se não sair, ele tenta pelo Claude Code via **MCP do Blender**. Não mexer nesta frente sem o print do avatar da vez.
+
+| avatar | IMC | fonte do cós | âncora manual | cós folha/3D | bainha folha/3D | traçado md/mx |
+|---|---:|---|---|---|---|---|
+| ~~`b12_d1`~~ ✅ | 147,7 | manual (frente da folha) | virilha 0,370 | 0,528 / **0,544** | 0,339 / **0,348** | ver sessão 6 |
+| `b11_d2` | 111,7 | manual (frente da folha) | anel 0,553 | 0,553 / 0,560 | **0,364 / 0,323** | +0,007 / 0,050 |
+| `b11_d1` | 107,3 | manual (frente da folha) | — | 0,504 / 0,527 | **0,342 / 0,294** | +0,023 / 0,046 |
+| `b10_d2` | 84,8 | manual (frente da folha) | anel 0,560 | 0,560 / 0,569 | 0,380 / 0,377 | +0,009 / 0,046 |
+| `b10_d1` | 83,6 | auto | — | 0,564 / 0,552 | 0,389 / 0,365 | +0,023 / 0,027 |
+| `b09_d2` | 74,4 | manual (frente da folha) | — | 0,562 / 0,577 | 0,381 / 0,377 | +0,015 / 0,055 |
+| `b09_d1` | 63,2 | manual (frente da folha) | — | 0,565 / 0,565 | **0,394 / 0,348** | −0,001 / 0,026 |
+| `b08_d3` | 53,8 | auto | — | 0,572 / 0,573 | **0,430 / 0,385** | −0,022 / 0,017 |
+| `b08_d2` | 53,6 | auto | — | 0,572 / 0,573 | 0,405 / 0,398 | +0,014 / 0,026 |
+| `b08_d1` | 48,1 | manual (frente da folha) | — | 0,567 / 0,560 | 0,407 / 0,394 | −0,006 / 0,028 |
+| `b07_d1` | 39,9 | auto | — | 0,573 / 0,573 | 0,406 / 0,390 | −0,007 / 0,027 |
+| `b07_d3` | 35,7 | auto | — | 0,576 / 0,581 | 0,436 / 0,423 | −0,010 / 0,010 |
+
+### 🔑 A PISTA MAIS FORTE: é a BAINHA, e ela nunca foi investigada
+
+A sessão 5 inteira foi sobre o **cós**. A **bainha** (barra da perna) não foi tocada e **não tem régua de traçado nenhuma** — o `--tracado` só mede o cós.
+
+E o erro de bainha está concentrado exatamente nesta lista: **`b11_d1` −0,048 · `b09_d1` −0,046 · `b08_d3` −0,045 · `b11_d2` −0,041**. Sinal sempre negativo: **o short 3D desce mais que o da folha, ou seja está COMPRIDO DEMAIS.** Em corpo de 1,75 m, 0,048 da altura são ~8,5 cm de perna a mais de tecido preto.
+
+Compare com os avatares que ele NÃO reprovou: `b05_d2` −0,004 · `b02_d1` −0,005 · `b01_d1` −0,005. Os magros têm bainha certa; os pesados, não.
+
+**Primeira hipótese a testar (não testada ainda):** `HEM_BELOW_CROTCH = (0.015, 0.065)` é ancorado na virilha, e nos corpos pesados a virilha detectada desce (as coxas se tocam mais abaixo) — o mesmo mecanismo que já tinha estragado o `b12_d1` inteiro na sessão 4 e que foi consertado lá com `crotch_override_zh`. Se for isso, a correção é a mesma família: janela absoluta para a bainha (igual ao que resolveu o anel do cós), ou override por avatar.
+
+**Ferramenta já pronta para isso:** `qa/probe/bench.py` + `scripts/cache_maps.py` avaliam um candidato nos 39 em segundos. Os mapas já estão cacheados em `qa/probe/maps/`. **Não gastar rodada de `--fit --all` por palpite.**
+
+**Falta também escrever a régua de traçado da BAINHA** — o `perfil_frontal` do `shorts_ref.py` já mede a borda superior do preto por coluna; medir a borda INFERIOR é o mesmo código com o outro extremo da corrida contígua.
+
+### O que o estado "39/39" da sessão 5 realmente queria dizer
+
+As três réguas foram todas sobre o cós, e mesmo assim ele reprovou 12 no olho. Repetição literal da lição de 27/07: **régua que passa mede a pergunta que ela faz, não a qualidade do avatar.** Ver [[regua-de-altura-nao-ve-tracado]].
+
+---
+
+## ⚡ Sessão 5: o cós estava errado em 8 dos 39
+
+O Rogério pegou no olho, em duas rodadas: primeiro *"alguns têm defeitos pequenos e outros maiores tipo o b06i d3"*, depois *"os b8 pra cima a pintura do short pegou a barriga"*. As duas réguas existentes davam **39/39**. Elas não estavam mentindo — estavam respondendo outra pergunta.
+
+**🔑 As duas réguas mediam ALTURA; o defeito estava no TRAÇADO.** `--report` compara a altura do topo do cós com a série; `shorts_ref.py` compara essa mesma altura com a folha. Um cós com o topo certo e o **caminho** errado passa nas duas. Estava anotado como pendência 3 desde a sessão 4 e foi cobrado em avatar entregue.
+
+### As três famílias, e a causa comum
+
+A causa é uma só: `w_ridge_by_azimuth` escolhia cada setor **independentemente**, com a mesma janela larga nos 24, para os dois sentidos. O modelo anatômico correto já estava escrito no docstring de `w_back_side_mask` desde a primeira versão — *"a barriga cobre o cós só na frente; nas costas e nos lados o elástico está sempre à vista"* — **e o código não o aplicava.**
+
+| família | avatares | o que aparecia |
+|---|---|---|
+| frente SOBE | `b06i_d3` `b07_d3` `b08_d3` (+`b12_d1`) | num corpo d3 não há prega; há o sulco do baixo-ventre. O argmax subia nele e nascia uma **aba retangular** de 4 setores |
+| costas DESCEM | `b11_d1` `b11_d2` | o anel nem era achado, a janela boiava, e nas costas o argmax pousava no **sulco glúteo**: o cós cortava a bunda no meio |
+| **a pintura pegou a BARRIGA** | `b08`+ , pior no `b12_d1` | o cós da frente é um **arco fundo**; o detector entregava quase uma reta e pintava a barriga de preto |
+
+**A separação da 1ª família é uma LEI, não uma tolerância:** nos 31 avatares com anel, a frente sobe no máximo **+0,0000** acima dele. Os 3 defeituosos são os únicos positivos (+0,021 · +0,021 · +0,025).
+
+**O erro da 3ª família escala com o IMC**, medido contra a folha: `b05_d2` (27) −0,008 · `b08_d1` (48) −0,013 · `b11_d2` (112) −0,050 · **`b12_d1` (148) +0,184 — uns 32 cm.**
+
+## 🔴 O ERRO DE MÉTODO QUE QUASE ME FEZ CONCLUIR O OPOSTO
+
+Sondei a concavidade célula a célula no `b12_d1` e deu **zero em toda a faixa da frente**. Ia registrar "a prega não tem sinal na malha". Estava errado, e por um motivo que vale para qualquer mapa esparso:
+
+**24 setores × 240 fatias são 5.760 células para ~30k vértices, e a ocupação real no trecho do cós era 32%.** Célula vazia vale zero, que é **indistinguível** de "aqui a superfície é lisa". O mapa não tinha ruído; tinha buraco com cara de medida. Corrigido em `w_fill_holes` (média normalizada pela ocupação — dilatação por máximo espalha pico de vinco e **inventa** vinco, o que a primeira tentativa fez). Ocupação foi a 84%, e onde o mapa já era denso nada mudou.
+
+> **Doutrina: mapa esparso mente em silêncio.** Antes de concluir "não há sinal", medir a OCUPAÇÃO. Zero por ausência de superfície e zero por superfície lisa são a mesma coisa no array e coisas opostas na conclusão.
+
+## 🟡 HIPÓTESE TESTADA E REJEITADA — a normal para baixo (não repetir)
+
+Com o mapa cheio, no **centro** da frente do `b12_d1` a concavidade continua **0,000 de verdade**: um render de emissão pura mostrou a barriga preta de ponta a ponta. **O pannus não faz vinco — faz balanço**, e é um dome liso e convexo. Não há vinco ali para perseguir; insistir repetiria o erro da sessão 4 com a bainha.
+
+Testei então um sinal geométrico: a face de baixo do balanço tem a normal virada para **baixo** (`nz < −0,35`), e a transição para "virada para fora" marcaria a borda do tecido. **No `b12_d1` bateu com a folha com erro 0,004–0,05.** Convincente.
+
+**Rodado nos 39, errou por −0,06 a −0,13 sistematicamente.** Em corpo normal a transição acontece logo acima da virilha. O acerto era coincidência de uma amostra. Custou uma varredura de 25 min e nenhuma linha de código de produção — porque foi testado na SÉRIE antes de virar detector.
+
+> Mesma lição do `measure.py` e do fator 2×: **n=1 não separa sinal de sorte.** Validar na série é barato; desfazer um detector errado não é.
+
+## 🟡 SEGUNDA HIPÓTESE REJEITADA — janela funda, e programação dinâmica
+
+**"Se a folha mostra descida de 0,184, é só abrir a janela da frente."** Parece óbvio. Medido nos 39: de 8 para **24 fora**. Janela funda não acha prega funda — acha ruído fundo, porque nos corpos em que não há prega ela só dá espaço para o argmax cair em qualquer coisa. O ótimo medido é **0,12**.
+
+**"Troque o prior gaussiano por custo de degrau entre setores (DP)."** Mais bonito na teoria: deixaria a prega passar quando *coerente* e barraria a linha alba, sem punir distância. Implementada e testada. **Um único λ não serve à série:** com o valor que deixa o `b11_d2` descer, o `b08_d1` sobe para +0,061; com o que segura o `b08_d1`, o `b12_d1` não sai do lugar. Reprovada por medida.
+
+## 🔑 O QUE DESTRAVOU A SESSÃO: parar de pagar 25 min por palpite
+
+Três rodadas de `--fit --all` foram gastas testando hipóteses uma por vez. Nada do que se ajusta na curva do cós depende do Blender — depende do mapa de concavidade, que é sempre o mesmo para um master que não mudou.
+
+`scripts/cache_maps.py` grava os mapas; `qa/probe/bench.py` avalia qualquer candidato contra a folha nos 39 **em segundos**. Uma varredura de 36 configurações escolheu os parâmetros finais e refutou a janela funda. **Fazer isso antes teria economizado umas duas horas.**
+
+## ⚠️ ARMADILHA DE PROCESSO: job em segundo plano contamina o mapa
+
+Um `--fit --all` deixado rodando em segundo plano **continuou vivo enquanto eu editava o `shorts.py`**. Resultado: 32 entradas gravadas por versões diferentes e incompatíveis do detector, sem erro nenhum. Só apareceu porque comparei o mapa com a baseline.
+
+**Antes de editar o detector, matar o Blender.** E guardar sempre um ponto de retorno — aqui, `config/shorts_map.sessao4.json`.
+
+## ✅ COMO FICOU
+
+| régua | antes | depois |
+|---|---|---|
+| altura (folha, costas) | 2 fora | **39/39** |
+| série (`--report`) | 35/39 | **38/39** |
+| **traçado (`--tracado`, nova)** | 12 fora | **36/39** |
+
+Os 3 que sobram no traçado são marginais: `b05j_d1` (−0,031) e `b05i_d1` (−0,033) têm arco de folha 0,022 com assimetria 0,023 — medida no piso de ruído; `b12_d1` está em +0,038, contra **+0,184** antes.
+
+O `b06i_d3` aparece como `SEM-ANEL` no `--report`: é **aviso, não defeito**. A reserva acertou, e os números batem com os vizinhos (0,598 contra 0,590 do `b06_d3`).
+
+### O detector, no fim
+
+Estrutura da sessão 4 (prior + mediana) preservada. O que mudou:
+
+1. **Janela assimétrica** — frente desce 0,12 e **não sobe**; costas ±0,05. É o modelo que o docstring do `w_back_side_mask` já declarava e o código não aplicava.
+2. **Mediana de 5 → 7.** Com 5, um platô de 4 setores atravessa inteiro — foi assim que a aba dos `d3` passou batida. Filtro de ordem não substitui limite físico.
+3. **`w_fill_holes`** — média normalizada pela ocupação. Dilatação por máximo **inventa** vinco (a 1ª tentativa criou um platô de 1,00 em 4 setores).
+4. **Duas janelas para o anel, e vale a interseção.** Abrir o teto de 0,170 para 0,230 era necessário para os IMC 107+, mas sozinho quebrou o `b08_d1`: o anel agarrou um pico falso em 0,635 e o cós subiu 0,098. A janela **absoluta** 0,48–0,60 resolve — e a folha mostra que a altura absoluta do cós é bem mais estável do que a sessão 4 supunha (36 dos 39 entre 0,560 e 0,587).
+5. **`waist_ring_override_zh`** — mesmo padrão do `crotch_override_zh`. Em `b10_d2` e `b11_d2` o perfil do anel sobe monótono e não tem máximo local nenhum: não adianta alargar a janela, não há pico. Um número resolve.
+
+### A exceção documentada: 7 avatares com a frente vinda da FOLHA
+
+Nos corpos pesados **a malha não tem o sinal** — não é limiar mal escolhido, é ausência. Para eles o arco da frente vem de `shorts_ref.py --escrever`, marcado `source: manual` + `waist_front_fonte: "folha"`:
+
+`b08_d1` · `b09_d1` · `b09_d2` · `b10_d2` · `b11_d1` · `b11_d2` · `b12_d1`
+
+**Isto NÃO revoga a regra 3b.** O `shorts.py` segue 100% na malha; o código que lê imagem vive no medidor externo. A regra proíbe achar o short por *pixel escuro projetado*, que não sobrevive a corpo obeso — aqui é o caso simétrico, e a medida foi conferida desenhando as marcas sobre a folha em 3 avatares.
+
+> **⚠️ PENDENTE DE DECISÃO DO ROGÉRIO: o `CLAUDE.md` NÃO foi alterado.** A regra 3b está na lista "regras que não se negociam", e abrir exceção nela por conta própria seria eu reescrever a minha própria instrução. A exceção está implementada e documentada **aqui**; se ele concordar, o texto para colar no `CLAUDE.md` (item 3b) é:
+>
+> *"Exceção medida (28/07): em 7 avatares de IMC 48+ a malha não tem o sinal — no centro-frente do `b12_d1` a concavidade é 0,000 em toda a faixa, porque o pannus é um dome liso e convexo: faz balanço, não vinco. Nesses, o arco da frente vem da folha por `shorts_ref.py --escrever`, marcado `source: manual`. O `shorts.py` continua 100% na malha; o código que lê imagem vive no medidor externo."*
+>
+> E vale acrescentar como regra nova (**3c**): *"Nenhuma régua de ALTURA vê o TRAÇADO. Duas réguas independentes deram 39/39 com oito avatares visivelmente errados. Antes de declarar um short pronto, rodar as TRÊS."*
+
+Três travas protegem essa entrada: **deslocamento** medido nas costas (não na forma solta — ancorar pelo topo do próprio arco subia o `b12_d1` em 0,074 contra os 0,016 reais); **rampa na emenda** com o trecho da malha; e **recusa** se a emenda daria degrau > 0,045. A recusa disparou de verdade e pegou um bug meu — um setor não medido no meio ficando com valor de malha, degrau de 0,130.
+
+**Regressão isotônica (PAVA) na folha.** Do flanco para o centro a divisa só pode descer — a barriga cobre mais no meio. `b09_d2` e `b10_d2` mediam um W (sombra do vinco central lida como tecido) que virava serrilhado no render. Mínimo corrente **não** serve: ele adota o pior ponto e achatou o perfil inteiro em 0,472. A isotônica só toca quem viola a forma — os 5 perfis limpos saem idênticos.
 
 ## ⚡ ABRIR AQUI — sessão 4: o short
 
@@ -47,12 +631,35 @@ Com o medidor confiável: **38 dos 39 já batiam** com a referência dentro de �
 ## Comandos do short
 
 ```
-python scripts/shorts.py --fit --all      # detecta, grava o mapa, renderiza QA
-python scripts/shorts.py --check --all    # so as travas, sem render (~6 min)
-python scripts/shorts.py --report         # coerencia com a SERIE (instantaneo)
-python scripts/shorts_ref.py              # coerencia com a REFERENCIA (instantaneo)
-python scripts/shorts.py --apply --all    # grava os 2 materiais em 03_dist/glb/
+python scripts/shorts.py --fit --all       # detecta, grava o mapa, renderiza QA
+python scripts/shorts.py --check --all     # so as travas, sem render (~6 min)
+python scripts/shorts.py --report          # coerencia com a SERIE (instantaneo)
+python scripts/shorts_ref.py               # ALTURA do cos contra a folha
+python scripts/shorts_ref.py --tracado     # CAMINHO do cos contra a folha  (sessao 5)
+python scripts/shorts_ref.py --escrever ID # grava o arco da frente da folha (sessao 5)
+python scripts/shorts.py --apply --all     # grava os 2 materiais em 03_dist/glb/
 ```
+
+**As tres reguas respondem perguntas diferentes e nenhuma substitui as outras.**
+`--report` = coerencia interna com a serie · `shorts_ref.py` = ALTURA contra a
+folha · `--tracado` = CAMINHO contra a folha. As duas primeiras davam 39/39 com
+oito avatares visivelmente errados.
+
+**Iterar no algoritmo, sem Blender:**
+```
+blender --background --python scripts/cache_maps.py -- --id ID   # cacheia o mapa
+python qa/probe/bench.py                                          # avalia candidato
+```
+
+**Ver o que a malha realmente tem, sem luz:**
+```
+blender --background --python scripts/probe_vinco.py -- --id ID --ref "[...]"
+```
+Render de emissão pura da concavidade, com a curva do mapa (verde) e a da folha
+(vermelha) por cima. Foi ele que mostrou que a barriga do `b12_d1` é preta de
+ponta a ponta — sem luz, porque com luz a sombra se confunde com a divisa de cor.
+As sondas descartáveis da sessão 5 (`probe_belly`, `probe2`, `probe_dp`,
+`probe_nz`) estão em `qa/probe/sondas/`, fora de `scripts/`.
 
 `--fit` **propõe**; quem decide é o olho, avatar por avatar. Entrada com `"source": "manual"` não é sobrescrita por um `--fit` posterior.
 
@@ -66,16 +673,23 @@ python scripts/shorts.py --apply --all    # grava os 2 materiais em 03_dist/glb/
 | nome dos materiais | `Zenith_Body.001` indo para o app | `--apply` |
 | faixa da série | erro grosso de altura | `--report` |
 | folha de referência | série uniformemente errada | `shorts_ref.py` |
+| **`SEM-ANEL`** | âncora do cós veio de chute, curva inteira boiando | `--report` (sessão 5) |
+| **`FRENTE^n`** | setor da frente acima do anel = sulco de músculo virou cós | `--report` (sessão 5) |
+| **`DEGRAU`** | salto entre setores vizinhos maior que tecido nenhum faz | `--report` (sessão 5) |
+| **`ERRO` / `ARCO-RASO`** | o CAMINHO do cós, que nenhuma régua de altura vê | `--tracado` (sessão 5) |
+| emenda folha↔malha | degrau na junção ao gravar arco manual | `--escrever` (sessão 5) |
 
 **Blender sai com código 0 mesmo com exceção no script** — um worker que estourou foi reportado como `[ok]`. A prova de sucesso é a linha `RESULT`, nunca o exit code.
 
-## Estado do short — CONCLUÍDO
+## Estado do short — CONCLUÍDO (revisto na sessão 5)
 
-- **39/39** nas duas réguas · zero ilhas · série varrida no olho em ordem de IMC
-- **39/39 aplicados** em `03_dist/glb/`, conferidos **no byte** (JSON do GLB): 2 primitives, `Zenith_Body` + `Zenith_Shorts`, `baseColorFactor` exato nos dois
-- Peso: **203 KB de média** (era ~183 KB sem short), **7,7 MB** a biblioteca inteira — o orçamento era 1–3 MB *por avatar*, então sobra folga enorme
-- Costura: +1.400 a +2.000 triângulos por avatar (~+2,5%), só na borda
+- **Três** réguas agora, não duas: altura **39/39** · série **38/39** (1 aviso) · traçado **36/39** (3 marginais)
+- **39/39 aplicados** em `03_dist/glb/`, conferidos **no byte** (JSON do GLB): 2 primitives, `Zenith_Body` + `Zenith_Shorts` nos 39
+- `--check --all`: **39/39, uma peça só em cada, zero ilhas**
+- Peso: **203 KB de média**, **8,1 MB** a biblioteca inteira — o orçamento era 1–3 MB *por avatar*
+- 7 entradas `source: manual` (arco da frente vindo da folha) · 3 com override de âncora
 - `02_master/` e `00_input/` **intocados**
+- Série varrida no olho na folha de contato, em ordem de IMC
 
 **Pendências desta frente:**
 1. **O short lê CINZA de costas, não preto.** O albedo já é quase preto (`#0D0D12`); o que lava é o specular de Fresnel pegando o kicker traseiro do HDR em ângulo rasante. É decisão do `zenith_material.py`, não da segmentação — e, como toda decisão de material, se resolve com `--apply --all` de novo em ~20 min, sem refazer mapa nem QA

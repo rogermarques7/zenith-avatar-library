@@ -28,7 +28,10 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-REFS = Path(__file__).resolve().parent.parent / "00_input" / "references"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import zenith_paths as zp                                           # noqa: E402
+
+ROOT = Path(__file__).resolve().parent.parent
 
 # Faixa vertical medida, em fração da altura da figura (0 = topo da cabeça).
 BELLY_BAND = (0.44, 0.56)
@@ -65,7 +68,7 @@ def band_width(mask, top, bot, band):
 
 
 def measure(avatar_id):
-    folder = REFS / avatar_id
+    folder = Path(zp.refs_dir(str(ROOT), avatar_id))
     out = {"id": avatar_id}
     for view, band, key in (("side", BELLY_BAND, "belly"),
                             ("front", SHOULDER_BAND, "shoulders")):
@@ -84,27 +87,37 @@ def measure(avatar_id):
 
 def main():
     args = [a for a in sys.argv[1:]]
+    todos = [aid for aid, _ in zp.all_ref_dirs(str(ROOT))]
     if args and args[0] == "--def":
         suffix = "_" + args[1]
-        ids = sorted(p.name for p in REFS.iterdir()
-                     if p.is_dir() and p.name.endswith(suffix))
+        ids = [a for a in todos if a.endswith(suffix)]
     elif args:
         ids = args
     else:
-        ids = sorted(p.name for p in REFS.iterdir() if p.is_dir())
+        ids = todos
 
-    print(f"{'avatar':<16} {'barriga%':>9} {'passo':>7} {'ombros%':>9}")
-    prev = None
-    for avatar_id in ids:
-        m = measure(avatar_id)
-        belly = m["belly"]
-        shoulders = m["shoulders"]
-        step = "" if prev is None or belly is None else f"{belly - prev:+.1f}"
-        b = "  --" if belly is None else f"{belly:.1f}"
-        s = "  --" if shoulders is None else f"{shoulders:.1f}"
-        print(f"{avatar_id:<16} {b:>9} {step:>7} {s:>9}")
-        if belly is not None:
-            prev = belly
+    # ⚠️ UMA TABELA POR SEXO, com a coluna `passo` reiniciando em cada uma.
+    # A regra 5c do CLAUDE.md diz que esta regua so ordena folhas do MESMO
+    # gerador com a MESMA pose - e um passo medido entre o ultimo masculino e a
+    # primeira feminina nao significaria absolutamente nada. Antes da separacao
+    # de pastas a lista era uma so e esse passo sairia impresso como se fosse
+    # uma medida.
+    for sex in zp.SEXES:
+        do_sexo = [a for a in ids if zp.sex_of(a) == sex]
+        if not do_sexo:
+            continue
+        print(f"\n[{sex}]  {'avatar':<16} {'barriga%':>9} {'passo':>7} {'ombros%':>9}")
+        prev = None
+        for avatar_id in do_sexo:
+            m = measure(avatar_id)
+            belly = m["belly"]
+            shoulders = m["shoulders"]
+            step = "" if prev is None or belly is None else f"{belly - prev:+.1f}"
+            b = "  --" if belly is None else f"{belly:.1f}"
+            s = "  --" if shoulders is None else f"{shoulders:.1f}"
+            print(f"     {avatar_id:<16} {b:>9} {step:>7} {s:>9}")
+            if belly is not None:
+                prev = belly
 
 
 if __name__ == "__main__":

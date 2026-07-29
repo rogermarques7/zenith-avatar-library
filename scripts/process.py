@@ -35,14 +35,26 @@ from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import zenith_material as _zm                                       # noqa: E402
+import zenith_paths as _zp                                          # noqa: E402
 
 # ==========================================================================
 # CONSTANTES  (ajustar aqui, nunca no meio do codigo)
 # ==========================================================================
 
 CANONICAL_HEIGHT_M = 1.75          # altura final identica para TODOS os avatares
-TARGET_TRIS        = 18000         # alvo de triangulos pos-decimacao
+TARGET_TRIS        = 60000         # alvo de triangulos pos-decimacao
 TRIS_TOLERANCE     = 0.15          # +/- 15% em torno do alvo
+
+# ⚠️ 60k, NAO 18k. Esta constante ficou em 18000 de 27/07 a 29/07 enquanto a
+# regra 3 do CLAUDE.md ja dizia 60k e os 39 masters ja estavam em 60000 - eles
+# foram reprocessados com --tris explicito e ninguem voltou aqui. O primeiro
+# avatar feminino saiu em 17988 por causa disso, com 9/9 validacoes: as travas
+# conferem o alvo CONTRA ELE MESMO, entao um alvo errado passa limpo.
+#
+# Por que 60k: em 18k, com o material titanio (claro e specular), a faceta da
+# decimacao aparece e o relevo muscular borra. O roxo saturado anterior
+# escondia isso. Custo medido: ~183 KB por avatar com Draco contra ~64 KB em
+# 18k, dentro do orcamento de 1-3 MB. Ver README secao 4.
 
 # O MATERIAL NAO MORA MAIS AQUI. Ele vive em scripts/zenith_material.py, que
 # tambem alimenta o restyle.py - se cada script tivesse sua constante, um
@@ -569,7 +581,7 @@ def worker_main():
         #     ele (padrao atual), o corpo sai TODO ROXO num unico material e o
         #     short fica para a etapa manual no Blender ao final.
         if SHORTS_ENABLED:
-            ref_front = os.path.join(root, "00_input", "references", aid, aid + "_ref_front.png")
+            ref_front = _zp.ref_path(root, aid, "front")
             if not os.path.isfile(ref_front):
                 fail("referencia frontal obrigatoria ausente: {}. Ela vem do "
                      "recorte e separa o short do corpo. Coloque a imagem em "
@@ -586,7 +598,10 @@ def worker_main():
                 p.material_index = 0
             me.update()
             shorts_frac = 0.0
-            print("materiais: corpo={} (todo roxo; short desligado)".format(MATERIAL_NAME))
+            # "roxo" saiu do texto em 29/07: o corpo e titanio cinza desde
+            # 27/07 e o log dizia o contrario, o que atrapalha quem confere.
+            print("materiais: corpo={} (titanio, peca unica; short e aplicado "
+                  "depois pelo shorts.py)".format(MATERIAL_NAME))
 
         # 11. VALIDAR (tudo antes de exportar; export glTF e apenas rotacao de
         #     eixos Z-up->Y-up, entao estas metricas valem para o GLB exportado:

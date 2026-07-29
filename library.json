@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-07-27T15:06:50Z",
+  "generated_at": "2026-07-29T03:38:29Z",
   "cdn_base": "https://cdn.exemplo.com/avatars/",
   "reference_height_m": 1.75,
   "selection": {
@@ -24,7 +24,7 @@
   },
   "default": {
     "m": "zen_m_b04_d2",
-    "f": null
+    "f": "zen_f_b05_d2"
   },
   "coverage_gaps": [
     {
@@ -173,6 +173,34 @@
     }
   ],
   "avatars": [
+    {
+      "id": "zen_f_b05_d2",
+      "sex": "f",
+      "definition": "d2",
+      "measured_bmi": 22.9,
+      "measured_mass_kg": 70.2,
+      "label": "magra",
+      "waist_to_height": 0.463,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_f_b05_d2_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 34.5,
+        "chest": 95.8,
+        "waist_navel": 81.0,
+        "waist_min": 70.5,
+        "hip": 107.2,
+        "forearm": 25.3,
+        "biceps": 26.6,
+        "wrist": 20.6,
+        "thigh": 55.5,
+        "calf": 40.5
+      },
+      "approved": true
+    },
     {
       "id": "zen_m_b01_d1",
       "sex": "m",

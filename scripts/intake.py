@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-intake.py - Traz a folha de 3 vistas do Downloads para 00_input/sheets/, apagando
+intake.py - Traz a folha de 3 vistas do Downloads para 00_input/sheets/{m|f}/, apagando
 o selo do Gemini no caminho.
 
 Le   a imagem mais recente de Downloads (ou --from CAMINHO)
-Gera 00_input/sheets/{id}_sheet.png
+Gera 00_input/sheets/{m|f}/{id}_sheet.png
 
 POR QUE ESTE SCRIPT EXISTE
     O humano gera a folha no ChatGPT/Gemini e ela cai em Downloads. Renomear,
@@ -36,6 +36,9 @@ import shutil
 import argparse
 import numpy as np
 from PIL import Image
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import zenith_paths as zp                                          # noqa: E402
 
 # --- parametros -----------------------------------------------------------
 FG_THRESHOLD  = 18.0    # mesmo piso do crop.py (soma dos canais)
@@ -213,7 +216,8 @@ def main():
     src = a.src or newest_download()
     if not os.path.isfile(src):
         die("arquivo nao encontrado: {}".format(src))
-    dst = os.path.join(root, "00_input", "sheets", a.id + "_sheet.png")
+    zp.ensure_dirs(root)
+    dst = zp.sheet_path(root, a.id)
     if os.path.exists(dst) and not a.force and not a.check:
         die("ja existe {} - use --force para sobrescrever.\n"
             "       (folha aprovada nao se substitui: gere um ID novo)".format(

@@ -83,9 +83,9 @@ O contrato entre o humano e o pipeline é o **nome do arquivo** do GLB salvo em 
 
 ```
 zenith-avatar-library/
-├── 00_input/
-│   ├── sheets/              # folhas de 3 vistas do ChatGPT
-│   └── references/          # recortes: uma subpasta {id}/ por avatar (front/side/back)
+├── 00_input/                # SEPARADO POR SEXO - ver nota abaixo
+│   ├── sheets/{m,f}/        # folhas de 3 vistas do ChatGPT (+ _mother_{m,f}.png)
+│   └── references/{m,f}/    # recortes: uma subpasta {id}/ por avatar (front/side/back)
 ├── 01_raw/                  # GLBs baixados do site da Meshy (entrada do pipeline)
 ├── 02_master/               # GLBs normalizados (fonte de verdade)
 ├── 03_dist/
@@ -94,12 +94,33 @@ zenith-avatar-library/
 ├── qa/
 │   └── inspect/             # renders de QA por avatar
 ├── scripts/
+│   ├── zenith_paths.py      # fonte única do layout das pastas de entrada
 │   ├── crop.py              # recorta a folha em 3 vistas
 │   ├── process.py           # Blender headless
 │   ├── render.py            # turntable (ainda não escrito)
-│   └── build_index.py       # library.json (ainda não escrito)
+│   └── build_index.py       # library.json
 └── library.json
 ```
+
+### Por que só a ENTRADA é separada por sexo
+
+`00_input/` é a única parte da árvore que o **humano abre na mão** — é de lá que
+saem os arquivos que ele sobe na Meshy e anexa no ChatGPT. Com 39 masculinos e
+32 femininos misturados, escolher a referência certa vira caça ao arquivo, e
+errar significa gerar o avatar errado. Separado em 28/07/2026, a pedido do
+Rogério, **antes** de a onda feminina crescer.
+
+`01_raw/`, `02_master/` e `03_dist/glb/` **continuam planos, de propósito.** São
+pastas de máquina: ninguém navega nelas, o id já carrega o sexo (`zen_m_` /
+`zen_f_`), a ordenação alfabética já agrupa, o `library.json` tem o campo `sex`
+e o `03_dist` ainda seria caminho de CDN. Separar lá seria mexer em 5 scripts
+sem ganho nenhum.
+
+A regra de layout mora em **`scripts/zenith_paths.py`** e só lá — são 6 scripts
+e 3 sondas lendo esses caminhos, e se cada um montasse o seu, bastaria um
+esquecer a pasta de sexo para gravar folha feminina no meio da masculina.
+`sex_of()` **estoura** em id fora da convenção em vez de adivinhar: o nome do
+arquivo é o contrato com o pipeline.
 
 ---
 
@@ -192,8 +213,10 @@ Racional do faseamento: o custo em créditos é irrelevante (~US$36 para 90 avat
 - [x] Definir e aprovar a folha-mãe masculina (`m_b05_d2`)
 - [x] **Piloto: 4 avatares masculinos** nos extremos (`m_b02_d3`, `m_b05_d2`, `m_b08_d1`, `m_b11_d1`) — pipeline validado ponta a ponta; definição e volume sobrevivem a 18k
 - [ ] Validar formato de entrega no app (GLB vs turntable) — resolve também a borda serrilhada do short
-- [ ] Produzir as 32 folhas masculinas (`docs/CHARACTER_BIBLE.md`)
-- [ ] Reescrever a grade feminina com 12 faixas
+- [x] Produzir as folhas masculinas (`docs/CHARACTER_BIBLE.md`) — 39 assets, onda encerrada em 27/07
+- [x] Reescrever a grade feminina com 12 faixas — 28/07, `ARCHETYPES.md` §3b, 32 arquétipos
+- [ ] **Fechar a folha-mãe feminina `f_b05_d2`** — trava todo o resto do feminino
+- [ ] Produzir as 32 folhas femininas
 - [ ] Rodar pipeline completo
 - [ ] QA por folha de contato
 - [ ] Publicar `library.json` + assets no CDN

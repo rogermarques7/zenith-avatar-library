@@ -42,9 +42,17 @@ PERSONAGEM (idêntico em todas as imagens):
 - Mulher, CARECA, sem nenhum cabelo.
 - Rosto neutro e liso, feições suaves e genéricas, sem maquiagem, sem
   expressão marcante, sem detalhes faciais fortes.
+- Busto PEQUENO A MÉDIO, proporcional ao corpo, mesmo formato em todas as
+  folhas. O busto NÃO muda entre os tipos de corpo.
 - Pele cinza-clara neutra e uniforme (a cor final é aplicada depois).
-- Roupa: top de compressão preto liso + shorts de compressão preto liso,
-  bem justos ao corpo, sem estampas, sem logos, sem texturas.
+- Roupa: FAIXA DE COMPRESSÃO ESPORTIVA preta (top reto, SEM ALÇAS, sem
+  decote) + shorts de compressão preto liso, justos ao corpo.
+- A FAIXA É LARGA e cobre todo o busto: vai da linha das axilas até a base
+  do busto, e PARA AÍ. Nas costas ela é uma faixa horizontal simples —
+  ombros, trapézio, escápulas e toda a região lombar ficam À MOSTRA.
+  Sem alças, sem tiras cruzadas, sem nadador, sem painel nas costas.
+- A faixa tem SEMPRE a mesma altura e o mesmo corte em todas as folhas.
+- Tecido fosco e liso, sem estampas, sem logos, sem texturas, sem brilho.
 - Sem calçados, sem acessórios, sem joias.
 
 POSE E ENQUADRAMENTO (idêntico nas 3 vistas e em todas as folhas):
@@ -71,15 +79,35 @@ FUNDO E LUZ (idêntico em todas as imagens):
 - Iluminação frontal difusa e neutra, sem sombras duras, sem sombra projetada
   no fundo, sem brilho estourado, sem contraluz.
 
+NATUREZA DA IMAGEM: é uma PRANCHA DE REFERÊNCIA ANATÔMICA para modelagem 3D
+de um app de treino de musculação — o mesmo tipo de material usado para estudo
+de anatomia e de proporção corporal. Postura neutra, expressão neutra, roupa
+esportiva funcional. NÃO é imagem de moda, nem editorial, nem sensual.
+
 NÃO INCLUIR: cabelo, texto, rótulos, setas, molduras, grades, linhas de
 separação entre as vistas, logos, marcas d'água, ou qualquer marcação sobre
-o corpo. Apenas as 3 figuras sobre o fundo liso.
+o corpo. Nem pose sensual, nem lingerie, nem decote, nem tecido transparente
+ou molhado, nem contorno de mamilo, nem ângulo de câmera valorizando o corpo.
+Apenas as 3 figuras sobre o fundo liso.
 
 TIPO DE CORPO desta folha (igual nas 3 vistas):
 {TIPO_DE_CORPO}
 
 Proporção da imagem larga (paisagem). Maior resolução possível.
 ```
+
+> **Por que o bloco declara a natureza da imagem.** O gargalo de filtro de
+> conteúdo do projeto **não é a Meshy** — o README §2 item 4 já registra que
+> image-to-3D passa. É a GERAÇÃO DA IMAGEM. Uma faixa sem alças descrita em
+> vocabulário de moda ("bandeau", "tomara que caia") flerta com recusa; a mesma
+> peça descrita como equipamento esportivo em prancha anatômica, não. Entrou em
+> 29/07 junto com a faixa. **Se alguma folha for recusada, é este parágrafo que
+> se reforça — não é o corte da roupa que se muda.**
+>
+> Vale lembrar o que efetivamente chega no app: a textura da Meshy é
+> **descartada** e o material Zenith é aplicado no pipeline. O asset publicado é
+> um manequim de titânio cinza, careca, sem textura e sem rosto definido. As
+> folhas de referência morrem em `00_input/` e nunca são distribuídas.
 
 ---
 
@@ -143,29 +171,119 @@ Proporção da imagem larga (paisagem). Maior resolução possível.
 
 Colar no slot `{TIPO_DE_CORPO}`. Um por arquétipo.
 
-### Feminino — PENDENTE
+### Feminino — 32 arquétipos
 
-> A grade feminina ainda usa a numeração antiga de 6 faixas (`b1`–`b6`) e **não deve ser produzida ainda**. Será reescrita com 12 faixas, espelhando a estrutura masculina, depois que a produção masculina validar o pipeline. Os descritores abaixo servem apenas como base de reescrita.
+> **Reescrito em 28/07/2026, de 6 faixas para 12.** Os 17 descritores antigos
+> (`f_b1`…`f_b6`) foram **substituídos**, não renumerados: uma faixa de 6 cobria
+> ~5 pontos de IMC e virou duas ou três de 1,5. Nenhum deles foi produzido, então
+> não há asset órfão. Grade em `docs/ARCHETYPES.md` §3b.
 
+Produzir **nesta ordem**, um nível de definição por vez. Cada folha usa a
+anterior como referência anexa. A folha-mãe é `f_b05_d2` e precisa estar
+aprovada antes de qualquer outra.
+
+**O que muda em relação aos descritores masculinos** — vale para os 32:
+
+- O eixo dominante da silhueta feminina é **quadril e cintura**, não ombros e
+  peitoral. Todo descritor diz explicitamente o que acontece com o quadril, a
+  cintura e os glúteos; sem isso o modelo desenha um homem mais magro.
+
+  > **Não peça "quadril CLARAMENTE mais largo que os ombros" — foi erro meu na
+  > 1ª redação, corrigido em 28/07 depois de medir.** Em mulher real o ombro e o
+  > quadril têm quase a mesma largura; o que lê como feminino é o **contraste da
+  > cintura**, não um quadril maior. Medido na folha-mãe `f_b05_d2` contra a
+  > `_mother_m.png` aprovada, mesma régua: ombro **23,5%** da altura contra
+  > 27,1% do masculino · quadril **24,3%** contra 24,0% (praticamente igual em
+  > absoluto) · cintura **14,8%** contra 17,4% · **cintura/quadril 0,607 contra
+  > 0,724**. Ou seja: o feminino aparece porque o **ombro encolheu e a cintura
+  > afinou** com o quadril parado, não porque o quadril cresceu. Pedir quadril
+  > exagerado empurraria as folhas para uma proporção de desenho animado.
+- **O busto é anexado ao bloco fixo, não ao descritor** (§3): "busto pequeno a
+  médio, proporcional ao corpo, mesmo formato em todas as folhas". É uma fonte
+  de deriva grande e não é o que o app mede — travar em vez de descrever 32 vezes.
+- **A roupa de cima é uma FAIXA RETA sem alças** (§3), e isso é decisão de
+  produto, não de estilo — ver o quadro abaixo.
+
+> ### 🔑 Por que faixa reta e não top nadador (29/07/2026)
+>
+> A 1ª folha-mãe voltou com um **racerback largo**, e o Rogério reprovou no olho:
+> "esconde muito a musculatura das costas". Medida a cobertura por região no
+> recorte de costas, ele estava certo — e o número é pior do que parece, porque
+> nas costas os braços entram na largura e **diluem** a conta:
+>
+> | região | coberta pelo racerback |
+> |---|---:|
+> | trapézio / ombro | 21,3% |
+> | escápulas / rombóides | 37,7% |
+> | **dorsal alto (o "V")** | **60,7%** |
+> | lombar | 0,4% |
+>
+> Mais da metade do dorsal alto — o músculo que faz a silhueta em V, e o avatar
+> **gira** no app. Pior: os descritores `f_b06_d3`, `f_b08_d3` e `f_b09_d3`
+> pedem "dorsais visíveis / desenvolvidos / largos". Com aquele top, **a linha
+> d3 inteira perderia de costas justamente o que a distingue.**
+>
+> **O segundo motivo é topológico e vale mais que o primeiro.** A faixa reta é a
+> única opção cuja borda é um **anel fechado** — duas bordas horizontais dando a
+> volta no tronco, idênticas em forma ao cós e à bainha do short. Alça de
+> racerback sobe pelo ombro, cruza a escápula e some: não tem volta, não tem
+> simetria de revolução, e passa em cima da região de mais relevo. Seria o
+> problema do short **sem** a propriedade que tornou o short solúvel (lição nº 1
+> da sessão 4: *"a bainha dá a VOLTA no membro; o sulco de músculo cobre um
+> arco"*).
+>
+> Bônus de paridade: o masculino é torso nu + short. Faixa + short é o mesmo
+> sistema visual, não duas linguagens.
+- O ganho de gordura feminino vai primeiro para **quadril, culote e coxas**, e só
+  depois para a barriga. Nas bandas `b04`–`b08` isso é o que separa a linha
+  feminina da masculina, e está escrito em cada descritor.
+
+#### d1 — definição baixa (12) · > 29% de gordura
 
 | ID | Descritor |
 |---|---|
-| `f_b1_d1` | Muito magra e frágil. Ossos aparentes na clavícula e nas costelas, membros muito finos, sem nenhum tônus muscular, quadril estreito, abdômen côncavo. |
-| `f_b1_d2` | Muito magra porém com leve tônus. Membros finos com contorno muscular sutil, sem volume, abdômen plano e liso, silhueta reta. |
-| `f_b2_d1` | Magra "skinny-fat": esbelta porém sem definição alguma. Superfície lisa e mole, abdômen liso sem gomos, braços e pernas finos mas sem tônus. Arquétipo da mulher sedentária de peso normal. |
-| `f_b2_d2` | Magra com tônus leve. Contorno suave de ombros, braços e pernas, abdômen plano sem gomos, aparência saudável mas não atlética. |
-| `f_b2_d3` | Magra e definida. Percentual de gordura muito baixo, gomos abdominais visíveis, ombros e pernas torneados, separação muscular clara. Atleta fitness magra. |
-| `f_b3_d1` | Peso normal, corpo mole. Cintura pouco marcada, leve acúmulo no abdômen e quadril, sem definição muscular nenhuma, superfície lisa. |
-| `f_b3_d2` | Peso normal e levemente atlética. Tônus visível nos braços e pernas, abdômen plano sem gomos, cintura definida, aparência ativa e saudável. |
-| `f_b3_d3` | Peso normal e bem definida. Físico de atleta fitness: gomos abdominais marcados, glúteos e coxas torneados, ombros desenhados, cintura fina. |
-| `f_b4_d1` | Sobrepeso. Acúmulo de gordura no abdômen, quadril e coxas, contornos arredondados e macios, sem definição muscular, braços mais cheios. |
-| `f_b4_d2` | Sobrepeso com musculatura por baixo. Corpo forte e volumoso, ombros e coxas largos, gordura cobrindo os músculos, abdômen sem definição. |
-| `f_b4_d3` | Musculosa com pouca gordura. Massa muscular alta, ombros largos, coxas grossas e definidas, abdômen com definição visível apesar do peso elevado. Atleta forte. |
-| `f_b5_d1` | Obesidade grau I. Abdômen proeminente, quadril e coxas volumosos, braços cheios, pescoço mais curto, contornos totalmente arredondados. |
-| `f_b5_d2` | Obesidade grau I com massa muscular. Corpo grande e forte, estrutura larga, musculatura presente porém coberta por gordura. |
-| `f_b5_d3` | Fisiculturista feminina pesada. Volume muscular muito alto com baixo percentual de gordura, ombros e coxas muito desenvolvidos, definição visível. |
-| `f_b6_d1` | Obesidade grau II. Corpo muito volumoso, abdômen grande e proeminente, membros espessos, dobras visíveis, silhueta arredondada. |
-| `f_b6_d2` | Obesidade grau II com força. Estrutura muito grande e pesada, ombros e costas largos, força evidente sob a camada de gordura. |
+| `f_b01_d1` | Extremamente magra. Clavícula, costelas e escápulas aparentes, membros muito finos, ombros estreitos, quadril estreito, abdômen côncavo, glúteos sem volume, nenhuma massa muscular. |
+| `f_b02_d1` | Muito magra e sem tônus. Costelas levemente visíveis, braços e pernas finos e moles, quadril estreito, barriga plana e lisa, silhueta praticamente reta. |
+| `f_b03_d1` | Magra sem definição nenhuma. Corpo liso e mole, braços e pernas finos sem tônus, cintura pouco marcada, glúteos pequenos e sem forma. |
+| `f_b04_d1` | Magra "skinny-fat": esbelta porém mole. Pequena camada de gordura na barriga baixa, coxas macias, quadril levemente arredondado, nenhum tônus muscular. Arquétipo da mulher sedentária de peso normal. |
+| `f_b05_d1` | Peso normal, corpo mole. Leve barriga baixa, gordura acumulada no quadril e na parte interna das coxas, cintura pouco marcada, braços sem tônus. |
+| `f_b06_d1` | Peso normal alto. Barriga levemente saliente, quadril e coxas arredondados, cintura larga, contornos macios, nenhum tônus muscular. |
+| `f_b07_d1` | Sobrepeso leve. Barriga saliente sobre a linha da cintura, culote no quadril, coxas grossas e macias, braços cheios, cintura pouco definida. |
+| `f_b08_d1` | Sobrepeso. Barriga claramente proeminente, quadril largo, coxas espessas que se tocam, braços cheios e moles, pescoço mais grosso. |
+| `f_b09_d1` | Sobrepeso alto. Barriga grande e arredondada, dobra visível na cintura, quadril e coxas muito volumosos, ombros arredondados. |
+| `f_b10_d1` | Obesidade grau I. Abdômen grande e proeminente, quadril e coxas muito volumosos, braços grossos, pescoço curto, silhueta totalmente arredondada. |
+| `f_b11_d1` | Obesidade grau II. Corpo muito volumoso, abdômen muito grande, dobras visíveis no tronco, quadril muito largo, membros muito espessos. |
+| `f_b12_d1` | Obesidade grau III. Corpo extremamente volumoso, abdômen enorme e pendente, dobras acentuadas, pescoço muito curto, membros muito grossos. |
+
+#### d2 — definição média (11) · 21–29% de gordura
+
+| ID | Descritor |
+|---|---|
+| `f_b01_d2` | Muito magra com leve tônus. Membros finos com contorno muscular sutil, sem volume, abdômen plano e liso, ombros e quadril estreitos, silhueta reta. |
+| `f_b02_d2` | Magra com tônus leve. Contorno suave em braços e pernas, abdômen plano sem gomos, cintura marcada, aparência saudável mas não atlética. |
+| `f_b03_d2` | Magra e levemente atlética. Ombros com forma discreta, coxas e glúteos com leve tônus, abdômen plano sem gomos, cintura fina. |
+| `f_b04_d2` | Peso normal com tônus. Glúteos e coxas com forma, braços sutilmente definidos, abdômen plano, cintura marcada, quadril tão largo quanto os ombros. |
+| `f_b05_d2` | **FOLHA-MÃE.** Peso normal e atlética, aparência saudável e ativa. Ombros com forma clara, glúteos e coxas torneados, quadril tão largo quanto os ombros e cintura bem mais fina que os dois. Abdômen **PLANO e LISO, SEM gomos abdominais visíveis, SEM linha alba marcada, SEM separação muscular**. Percentual de gordura médio, cerca de 25%: musculatura com forma, mas coberta por uma camada leve de gordura. **NÃO é um físico de atleta seca nem de modelo fitness.** |
+| `f_b06_d2` | Peso normal alto com musculatura. Volume muscular moderado coberto por leve camada de gordura, quadril e coxas cheios, abdômen sem definição, cintura pouco marcada. |
+| `f_b07_d2` | Sobrepeso leve com musculatura por baixo. Ombros e costas largos, coxas e glúteos volumosos e fortes, barriga leve, força evidente sob a gordura. |
+| `f_b08_d2` | Sobrepeso com boa massa muscular. Tronco largo e espesso, barriga presente, braços e coxas grossos, quadril largo, sem definição visível. |
+| `f_b09_d2` | Corpo grande e forte. Ombros muito largos, musculatura evidente sob camada de gordura, barriga proeminente, quadril e coxas muito volumosos. |
+| `f_b10_d2` | Obesidade grau I com força. Físico de powerlifter feminina: estrutura muito larga, massa muscular alta sob a gordura, abdômen grande, coxas enormes. |
+| `f_b11_d2` | Obesidade grau II com força. Corpo enorme e pesado, costas e ombros muito largos, força visível apesar do volume de gordura. |
+
+#### d3 — definição alta (9) · < 21% de gordura
+
+| ID | Descritor |
+|---|---|
+| `f_b02_d3` | Magra e muito seca, IMC ~19: corpo esguio, **ombros estreitos, membros finos, quadril estreito**. Percentual de gordura muito baixo revelando os músculos que já existem — gomos abdominais visíveis, serrátil aparente. **NÃO adicionar massa muscular**, sem volume de fisiculturista e sem glúteo de atleta: é uma magra definida, não uma atleta cheia. *(Herdado do piloto masculino: a 1ª geração da banda equivalente saiu volumosa demais copiando a massa da mãe `d2`. Nesta banda, anexar SÓ o vizinho e largar a folha-mãe — ver §6.)* |
+| `f_b03_d3` | Magra e definida. Abdômen com gomos marcados, ombros e braços desenhados, glúteos firmes porém pequenos, cintura muito fina, pouca massa muscular. |
+| `f_b04_d3` | Atlética e definida. Gomos abdominais claros, ombros desenhados, coxas e glúteos torneados com separação muscular visível, cintura fina. |
+| `f_b05_d3` | Musculosa e definida. Físico de atleta fitness: ombros e costas desenhados, glúteos e coxas com volume e separação, abdômen com gomos evidentes. |
+| `f_b06_d3` | Bem musculosa e seca. Ombros largos, dorsais visíveis, quadríceps com separação clara, abdômen definido, veias aparentes nos braços. |
+| `f_b07_d3` | Muito musculosa. Massa alta com baixa gordura, ombros muito largos, braços e coxas volumosos, abdômen definido, cintura estreita. |
+| `f_b08_d3` | Físico de fisiculturista feminina. Massa muscular alta, dorsais desenvolvidos, cintura estreita em relação aos ombros e ao quadril, abdômen definido. |
+| `f_b09_d3` | Fisiculturista pesada. Volume muscular muito alto, dorsais largos, braços e coxas muito desenvolvidos, definição mantida. |
+| `f_b10_d3` | Fisiculturista de grande porte. Massa muscular extrema, estrutura enorme, ombros e coxas muito volumosos, abdômen ainda definido. |
 
 ### Masculino — 32 arquétipos
 
@@ -377,7 +495,13 @@ sair com espaçamento irregular, regerar; não tentar compensar no recorte.
 
 ## 7. Folha-mãe
 
-A primeira folha aprovada de cada sexo vira a **folha-mãe** e é anexada em todas as gerações seguintes daquele sexo. Usar `m_b05_d2` (peso normal, definição média) como mãe: fica no meio da grade, servindo de âncora equidistante para os dois extremos.
+A primeira folha aprovada de cada sexo vira a **folha-mãe** e é anexada em todas as gerações seguintes daquele sexo. Usar a banda `b05_d2` (peso normal, definição média) como mãe — `m_b05_d2` no masculino, **`f_b05_d2` no feminino**: fica no meio da grade, servindo de âncora equidistante para os dois extremos.
+
+> **A folha-mãe feminina não herda nada da masculina.** Não anexar `_mother_m.png`
+> ao gerar `f_b05_d2`: são personagens diferentes, e a única coisa que precisa ser
+> comum entre os sexos é o **enquadramento** — altura, pose, câmera, fundo —, que
+> vem do bloco fixo e não de imagem anexa. Anexar a mãe masculina só arrastaria
+> ombro e peitoral para a silhueta feminina.
 
 Guardar em `00_input/sheets/_mother_f.png` e `_mother_m.png`.
 
