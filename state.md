@@ -27,8 +27,9 @@
 
 ## Onde estamos
 
-**48 avatares no `library.json`.** Onda masculina ENCERRADA (39). Onda feminina
-EM PRODUÇÃO (9), com **um vão `high` novo e esperado**: `f d1` 16,5 → 23,3.
+**49 avatares no `library.json`.** Onda masculina ENCERRADA (39). Onda feminina
+EM PRODUÇÃO (10) — e **sem nenhum vão `high`**. Os dois que restam no índice
+são masculinos e estão parados por decisão do Rogério.
 
 | linha | avatares | IMC medido |
 |---|---:|---|
@@ -36,13 +37,14 @@ EM PRODUÇÃO (9), com **um vão `high` novo e esperado**: `f d1` 16,5 → 23,3.
 | m d2 | 12 | 19,7 – 111,7 |
 | m d3 | 10 | 19,9 – 53,8 |
 | **f d2** | **7** | **18,3 – 53,9** |
-| **f d1** | **2** | **16,5 · 23,3** |
+| **f d1** | **3** | **16,5 · 19,0 · 23,3** |
 
 Os oito femininos, todos 8/8 em 60k:
 
 | id | IMC | banda nominal | onde caiu | gerador |
 |---|---:|---|---|---|
 | `zen_f_b01_d1` | 16,5 | < 18,5 | ✅ **previsto 16,3–16,7** | ChatGPT |
+| `zen_f_b03_d1` | 19,0 | 20,0–21,4 | ✅ **previsto 18,5–21,5** | **Gemini** |
 | `zen_f_b04_d1` | 23,3 | 21,5–22,9 | ✅ 0,4 acima (é `b05`) | ChatGPT |
 | `zen_f_b02_d2` | 18,3 | 18,5–19,9 | 0,2 abaixo (é `b01`) | ChatGPT |
 | `zen_f_b04_d2` | 22,2 | 21,5–22,9 | ✅ no meio | ChatGPT |
@@ -71,42 +73,45 @@ população mínima. Os dois saltos baixos (3,9 e 4,4) ficam abaixo do limiar do
 > não em PNG de `qa/look/`. Quem tira medida e decide se o avatar presta é o
 > Claude Code, com `metrics.py` e as travas do `process.py`. Cobrado em 29/07.
 
-**Fechar o vão `high` 16,5 → 23,3 e seguir subindo a `f d1`.** O vão é tiro
-fácil: o atrator de ~18 do ChatGPT cai dentro dele, ancorando nos 16,5 com
-substantivo fraco ("magra", sem "peso normal"). Uma geração, talvez duas.
+**Subir a `f d1` a partir de 23,3.** O trecho baixo está fechado (16,5 · 19,0 ·
+23,3, saltos de 2,5 e 4,3) e o que falta é de 23,3 para cima: sobrepeso,
+obesidade I, II e III sem tônus. **Daqui para cima o gerador é o Gemini**, com
+âncora em **alvo − 7** (subindo). O ChatGPT não tem corpo entre 27 e 54.
 
-**Depois, subir a linha, que hoje para em 23,3.** Enquanto ela estiver
-assim, qualquer mulher classificada `d1` recebe o corpo de IMC 16,5 —
-degradação conhecida e **aceita** (a biblioteca feminina não está no app), mas
-que obriga a produzir a `d1` **em sequência, sem intercalar e sem parar no
-meio**. Se precisar parar pela metade, nomear as folhas restantes como `d2` até
-haver densidade — nunca deixar a linha com 2 ou 3 avatares soltos.
+A linha ainda é esparsa, e enquanto for, qualquer mulher classificada `d1`
+recebe o vizinho mais próximo dentro dela — degradação conhecida e **aceita**
+(a biblioteca feminina não está no app), mas que obriga a produzir a `d1` **em
+sequência, sem intercalar e sem parar no meio**. Se precisar parar pela metade,
+nomear as folhas restantes como `d2` até haver densidade.
 
-**O plano de cobertura da `d1`, com o gerador escolhido por trecho.** O limiar
-de vão do `build_index.py` é **5,0** de IMC.
+**Alvos que faltam**, mirando por escolha de âncora (`LICOES.md` §2.4b: âncora
+= alvo − 7 subindo, alvo + 4,3 descendo), nunca por adjetivo:
 
-| trecho | gerador | por quê |
-|---|---|---|
-| até ~27 | **ChatGPT** | passo menor e mais variável; é onde ficam os atratores dele (~18 e ~22–27) |
-| ~27 → cima | **Gemini** (passo ~7,1) | 28–38 é zona morta do ChatGPT, comprovada nos dois sexos |
+| alvo | âncora | gerador |
+|---:|---|---|
+| ~30 | `b04_d1` (23,3) | Gemini |
+| ~37 | o corpo de ~30 | Gemini |
+| ~44 | o corpo de ~37 | Gemini |
+| ≥ 50 | o corpo de ~44 | Gemini |
 
-> ⚠️ **O passo do ChatGPT NÃO é ~4,4 — escrevi isso e a amostra seguinte
-> desmentiu.** Quatro amostras femininas: **+4,4 · +6,8 · −3,9 · −1,8**. Ele
-> varia por um fator de quase 4, então **não dá para planejar contando que o
-> vão fique abaixo de 5,0**. O passo do Gemini é que é apertado (+7,1 e +7,2).
-> Consequência: no trecho do ChatGPT, produzir e **medir**, aceitando que às
-> vezes sobra vão para inserir depois — foi o que aconteceu em 16,5 → 23,3.
+Acima de 40 o `build_index.py` marca vão como `low` (fora de 17–40), então
+dali para cima a densidade importa menos — o que fecha a linha é chegar até a
+obesidade III, não encher cada faixa.
 
-Mirar por **escolha de âncora** (`LICOES.md` §2.4b: âncora = alvo − passo), não
-por adjetivo.
+> ⚠️ **Não planejar contando com passo constante.** O do ChatGPT varia por um
+> fator de quase 4 (**+4,4 · +6,8 · −3,9 · −1,8**); só o do Gemini é apertado
+> (+7,1 · +7,2 subindo, −4,3 descendo). E **o ChatGPT não tem corpo entre 27 e
+> 54 no feminino** — daqui para cima ele não serve.
 
 **A âncora não precisa ser da mesma linha de definição** — foi assim que a `d1`
 abriu, ancorada numa folha `d2`. A âncora move o IMC, o descritor move o tônus,
 e eles não interferem (`LICOES.md` §3.5). Isso vale para abrir a `f d3` depois,
 sem produzir mãe nova.
 
-**Fluxo, quando voltar a produzir** (a folha de referência do `sheet_qa` é a
-**âncora usada**, não a mãe — é ela que responde "o corpo deu o passo?"):
+**Fluxo, quando voltar a produzir.** As duas primeiras linhas valem **só em
+folha do ChatGPT** — em folha do Gemini as duas réguas mentem (§1.1), e quem
+aprova geometria é o próprio `crop.py`. A referência delas é a **âncora usada**,
+não a mãe: é ela que responde "o corpo deu o passo?".
 ```
 python scripts/sheet_qa.py "<folha em Downloads>" 00_input/sheets/f/<ancora>_sheet.png
 cd qa/probe/sondas && python probe_tonus_f.py "<folha>" "<ancora>"   # tonus: a

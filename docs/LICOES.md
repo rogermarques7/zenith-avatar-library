@@ -167,6 +167,20 @@ Gemini:
 **O Gemini feminino dá +7,15, duas amostras a 0,1 uma da outra** — e bate com o
 +6,5 masculino do mesmo gerador. O que muda o passo é a ferramenta, não o sexo.
 
+**⚠️ MAS o passo tem sinal: DESCER move menos que subir, nos dois geradores.**
+O diário registrava isso com uma amostra de cada lado e mandava não decidir.
+Agora são seis:
+
+| gerador | subindo | descendo |
+|---|---|---|
+| ChatGPT | +4,4 · +6,8 | −3,9 · −1,8 |
+| Gemini | +7,1 · +7,2 | **−4,3** |
+
+**Consequência: a receita "âncora = alvo − 7 no Gemini" só vale SUBINDO.** Para
+mirar X descendo no Gemini, âncora em **X + 4,3**. Foi assim que o vão feminino
+16,5→23,3 fechou: âncora na folha de 23,3, previsão 18,5–21,5 registrada antes
+de gerar, medido **19,0**.
+
 **Consequência operacional:** para mirar X no feminino, âncora em **X − 7** e
 gerar no Gemini. Foi assim que o vão 27,3→34,4 fechou: âncora na folha-mãe
 (22,9), previsão registrada de 29–31 **antes** de gerar, medido **30,1**. É a
@@ -181,6 +195,17 @@ atratores em lugares diferentes.
 **Confirmado uma segunda vez, no feminino (29/07).** O ChatGPT mostrou três
 atratores femininos e nada entre eles — **~18 · ~22–27 · ~54** —, com uma folha
 mirando 31 pousando em **53,9**. A mesma âncora no Gemini deu **34,4**.
+
+**Terceira confirmação, e a primeira do lado MAGRO (29/07).** O vazio entre os
+atratores ~18 e ~22–27 do ChatGPT é real e simétrico: mirando 20–21,5, duas
+gerações caíram em **~17,0 e ~17,5** — e a única coisa que mudou entre elas e a
+folha que pousou em **23,3** foi o substantivo ("magra" contra "peso normal").
+Passo de +6,8 com um, +1,1 com o outro: **não existe palavra entre os dois.**
+O mesmo alvo no Gemini pousou em **19,0 de primeira**.
+
+> Vale registrar que isto **não** era previsível pela direção: as duas
+> tentativas do ChatGPT subiam de 16,5 e a do Gemini descia de 23,3. O que
+> decidiu não foi a direção nem a âncora — foi onde cada ferramenta tem corpo.
 
 > **O atrator "OBESIDADE GRAU I" do Gemini fica em ~33–34, e é a única
 > constante que atravessou os dois sexos:** 33,3 e 34,0 no masculino, **34,4 no
