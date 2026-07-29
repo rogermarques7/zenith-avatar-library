@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-07-29T14:05:59Z",
+  "generated_at": "2026-07-29T14:35:12Z",
   "cdn_base": "https://cdn.exemplo.com/avatars/",
   "reference_height_m": 1.75,
   "selection": {
@@ -27,6 +27,18 @@
     "f": "zen_f_b05_d2"
   },
   "coverage_gaps": [
+    {
+      "sex": "f",
+      "definition": "d1",
+      "between": [
+        "zen_f_b01_d1",
+        "zen_f_b04_d1"
+      ],
+      "bmi_from": 16.5,
+      "bmi_to": 23.3,
+      "bmi_step": 6.8,
+      "priority": "high"
+    },
     {
       "sex": "m",
       "definition": "d1",
@@ -210,6 +222,34 @@
         "wrist": 16.6,
         "thigh": 46.1,
         "calf": 32.6
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_f_b04_d1",
+      "sex": "f",
+      "definition": "d1",
+      "measured_bmi": 23.3,
+      "measured_mass_kg": 71.5,
+      "label": "media",
+      "waist_to_height": 0.505,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_f_b04_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 32.1,
+        "chest": 90.1,
+        "waist_navel": 88.4,
+        "waist_min": 74.3,
+        "hip": 109.3,
+        "forearm": 24.3,
+        "biceps": 25.8,
+        "wrist": 21.7,
+        "thigh": 63.0,
+        "calf": 40.2
       },
       "approved": true
     },

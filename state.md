@@ -27,8 +27,8 @@
 
 ## Onde estamos
 
-**47 avatares no `library.json`.** Onda masculina ENCERRADA (39). Onda feminina
-EM PRODUÇÃO (8) — e **sem nenhum vão `high` restante**.
+**48 avatares no `library.json`.** Onda masculina ENCERRADA (39). Onda feminina
+EM PRODUÇÃO (9), com **um vão `high` novo e esperado**: `f d1` 16,5 → 23,3.
 
 | linha | avatares | IMC medido |
 |---|---:|---|
@@ -36,13 +36,14 @@ EM PRODUÇÃO (8) — e **sem nenhum vão `high` restante**.
 | m d2 | 12 | 19,7 – 111,7 |
 | m d3 | 10 | 19,9 – 53,8 |
 | **f d2** | **7** | **18,3 – 53,9** |
-| **f d1** | **1** | **16,5** |
+| **f d1** | **2** | **16,5 · 23,3** |
 
 Os oito femininos, todos 8/8 em 60k:
 
 | id | IMC | banda nominal | onde caiu | gerador |
 |---|---:|---|---|---|
 | `zen_f_b01_d1` | 16,5 | < 18,5 | ✅ **previsto 16,3–16,7** | ChatGPT |
+| `zen_f_b04_d1` | 23,3 | 21,5–22,9 | ✅ 0,4 acima (é `b05`) | ChatGPT |
 | `zen_f_b02_d2` | 18,3 | 18,5–19,9 | 0,2 abaixo (é `b01`) | ChatGPT |
 | `zen_f_b04_d2` | 22,2 | 21,5–22,9 | ✅ no meio | ChatGPT |
 | `zen_f_b05_d2` (mãe) | 22,9 | 23,0–24,4 | 0,1 abaixo | ChatGPT |
@@ -70,7 +71,11 @@ população mínima. Os dois saltos baixos (3,9 e 4,4) ficam abaixo do limiar do
 > não em PNG de `qa/look/`. Quem tira medida e decide se o avatar presta é o
 > Claude Code, com `metrics.py` e as travas do `process.py`. Cobrado em 29/07.
 
-**Subir a linha `f d1`, que hoje tem UM ponto (16,5).** Enquanto ela estiver
+**Fechar o vão `high` 16,5 → 23,3 e seguir subindo a `f d1`.** O vão é tiro
+fácil: o atrator de ~18 do ChatGPT cai dentro dele, ancorando nos 16,5 com
+substantivo fraco ("magra", sem "peso normal"). Uma geração, talvez duas.
+
+**Depois, subir a linha, que hoje para em 23,3.** Enquanto ela estiver
 assim, qualquer mulher classificada `d1` recebe o corpo de IMC 16,5 —
 degradação conhecida e **aceita** (a biblioteca feminina não está no app), mas
 que obriga a produzir a `d1` **em sequência, sem intercalar e sem parar no
@@ -78,18 +83,22 @@ meio**. Se precisar parar pela metade, nomear as folhas restantes como `d2` até
 haver densidade — nunca deixar a linha com 2 ou 3 avatares soltos.
 
 **O plano de cobertura da `d1`, com o gerador escolhido por trecho.** O limiar
-de vão do `build_index.py` é **5,0** de IMC, então o passo do gerador decide
-quantas inserções sobram depois:
+de vão do `build_index.py` é **5,0** de IMC.
 
 | trecho | gerador | por quê |
 |---|---|---|
-| 16,5 → ~27 | **ChatGPT** (passo ~4,4) | passo menor que 5,0: nenhum vão fica marcado |
+| até ~27 | **ChatGPT** | passo menor e mais variável; é onde ficam os atratores dele (~18 e ~22–27) |
 | ~27 → cima | **Gemini** (passo ~7,1) | 28–38 é zona morta do ChatGPT, comprovada nos dois sexos |
 
-Acima de 27 cada passo de 7 abre um vão `high` (mid < 40) que pede inserção
-depois — é o preço de atravessar a zona morta, não erro de método. Mirar por
-**escolha de âncora** (`LICOES.md` §2.4b: âncora = alvo − passo), não por
-adjetivo.
+> ⚠️ **O passo do ChatGPT NÃO é ~4,4 — escrevi isso e a amostra seguinte
+> desmentiu.** Quatro amostras femininas: **+4,4 · +6,8 · −3,9 · −1,8**. Ele
+> varia por um fator de quase 4, então **não dá para planejar contando que o
+> vão fique abaixo de 5,0**. O passo do Gemini é que é apertado (+7,1 e +7,2).
+> Consequência: no trecho do ChatGPT, produzir e **medir**, aceitando que às
+> vezes sobra vão para inserir depois — foi o que aconteceu em 16,5 → 23,3.
+
+Mirar por **escolha de âncora** (`LICOES.md` §2.4b: âncora = alvo − passo), não
+por adjetivo.
 
 **A âncora não precisa ser da mesma linha de definição** — foi assim que a `d1`
 abriu, ancorada numa folha `d2`. A âncora move o IMC, o descritor move o tônus,

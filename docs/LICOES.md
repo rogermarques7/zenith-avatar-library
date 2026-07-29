@@ -230,13 +230,36 @@ fração do corpo que não se mexeu.
 Quatro amostras, todas femininas. Não é lei; é melhor que um fator fixo que
 errou 2 pontos para baixo e depois 3 para cima.
 
-**O fator sai por INTERPOLAÇÃO em |Δombro|, e isso já foi usado às cegas com
-acerto.** Entre as duas amostras de ombro quase parado, a reta é
-`fator ≈ 0,60 + (|Δombro| − 0,17) × 0,305`, válida até ~1,2 pp; acima disso
-satura em 1,0 (o `f_b09`, com 5,71 pp, deu exatamente 1,00). No `f_b01_d1`
-(29/07) a interpolação deu **0,68**, a previsão saiu **16,3–16,7** e o corpo
-mediu **16,5** — fator implícito real **0,66**. É a segunda previsão de IMC
-acertada do projeto e a primeira feita antes da Meshy, olhando só a folha.
+### 2.6c ⚠️ A interpolação por |Δombro| FALHOU no primeiro teste fora da amostra
+
+Escrevi em 29/07, com 4 amostras, que o fator saía de uma reta em |Δombro|
+(`0,60 + (|Δombro| − 0,17) × 0,305`, saturando em 1,0). Ela acertou o
+`f_b01_d1` — previu 0,68, o real foi 0,66. **Na amostra seguinte errou feio:**
+no `f_b04_d1` o ombro moveu **+1,58 pp**, a reta mandava usar **~1,00** e o
+fator real foi **0,64**. Previ IMC 25–27; o corpo mediu **23,3**.
+
+**Não usar a reta de |Δombro|.** As seis amostras, ordenadas pelo tamanho da
+estimativa crua:
+
+| folha | cru | fator real | Δombro |
+|---|---:|---:|---:|
+| `f_b04_d2` (desceu) | −5,3% | 0,60 | +0,17 |
+| `f_b01_d1` (desceu) | −14,5% | 0,66 | −0,42 |
+| `f_b02` (desceu) | −22,6% | 0,89 | −1,12 |
+| `f_b06` (subiu) | +38,3% | 0,50 | — |
+| `f_b04_d1` (subiu) | +64,2% | **0,64** | +1,58 |
+| `f_b09` (subiu) | +97,2% | 1,00 | +5,71 |
+
+O que sobrevive às seis é **monotonicidade no TAMANHO da mudança**, dentro de
+cada direção: subindo, 38→0,50 · 64→0,64 · 97→1,00; descendo, 5→0,60 ·
+14→0,66 · 23→0,89. Bate com a explicação de sempre (quanto maior a mudança,
+menos sobra de região parada para descontar) e **não precisa do ombro**.
+
+Três amostras por direção não são uma lei (§1.5). Usar como faixa: mudança
+pequena → 0,5–0,65 · mudança grande (|cru| > 60%) → 0,9–1,0. **E lembrar que
+esta conta serve para dizer "vai passar da banda", não o decimal** — no
+`f_b04_d1` a previsão pela folha ficou PIOR que o palpite feito só com o
+prompt (20,5–22,5, que errou por 0,8 contra os 1,7–3,7 da conta).
 
 ---
 
@@ -390,3 +413,22 @@ compartilhado.
 
 Ele larga em Downloads; o script busca, renomeia, limpa e move. Pedir para ele
 salvar, renomear ou apagar selo à mão é **regressão de fluxo**.
+
+### 6.6 Não explicar um desvio antes de a MEDIDA confirmar que houve desvio
+
+No `f_b04_d1` (29/07) a conta sobre a folha deu IMC 25–27 contra os 20,5–22,5
+que eu tinha previsto. Anunciei o erro, achei a causa e escrevi o culpado: o
+parágrafo que eu tinha acrescentado ao descritor pedia *"as coxas encostam uma
+na outra"*, que é traço do `f_b08_d1` — logo eu teria misturado as bandas e
+empurrado o corpo para `b07`.
+
+Era uma história inteira, coerente e **falsa**. O corpo mediu **23,3**: 0,4
+acima da banda `b04` que eu pedi. O prompt estava certo; errada estava a
+estimativa que me fez procurar culpado.
+
+**O gatilho é reconhecível:** a explicação nasceu de uma régua 2D e contradizia
+o que o pedido tinha feito. É a §5.5 outra vez — a folha não decide onde o
+corpo caiu, o `metrics.py` decide. Enquanto a medida não sai, o desvio é
+hipótese, e hipótese não tem culpado. Custo desta vez: só uma explicação
+retirada. Se eu tivesse "consertado" o método de escrever descritor em cima
+dela, teria estragado o que funciona.
