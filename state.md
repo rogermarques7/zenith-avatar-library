@@ -9,10 +9,10 @@
 > que já têm conserto conhecido e **ficam anotados para depois**.
 >
 > A cobertura de IMC da linha `f d2` está **resolvida**: 7 avatares, 18,3 a
-> 53,9, nenhum vão `high`. O que falta são as **outras duas linhas de
-> definição**: `f d1` (12 arquétipos) e `f d3` (9), as duas **vazias**.
+> 53,9, nenhum vão `high`. A **`f d1` foi ABERTA** (1 avatar, IMC 16,5) e agora
+> **não pode parar no meio** — ver "O próximo passo". A `f d3` segue vazia.
 >
-> Ordem: **`d1` primeiro, depois `d3`** (`ARCHETYPES.md` §5 — um nível por vez).
+> Ordem: **terminar a `d1`, depois a `d3`** (`ARCHETYPES.md` §5).
 >
 > **A receita que funciona, medida hoje:** âncora ÚNICA em **IMC alvo − 7**,
 > substantivo de categoria positivo (sem negar o atrator), gerar no **Gemini**.
@@ -27,8 +27,8 @@
 
 ## Onde estamos
 
-**46 avatares no `library.json`.** Onda masculina ENCERRADA (39). Onda feminina
-EM PRODUÇÃO (7) — e **sem nenhum vão `high` restante**.
+**47 avatares no `library.json`.** Onda masculina ENCERRADA (39). Onda feminina
+EM PRODUÇÃO (8) — e **sem nenhum vão `high` restante**.
 
 | linha | avatares | IMC medido |
 |---|---:|---|
@@ -36,11 +36,13 @@ EM PRODUÇÃO (7) — e **sem nenhum vão `high` restante**.
 | m d2 | 12 | 19,7 – 111,7 |
 | m d3 | 10 | 19,9 – 53,8 |
 | **f d2** | **7** | **18,3 – 53,9** |
+| **f d1** | **1** | **16,5** |
 
-Os sete femininos, todos 8/8 em 60k:
+Os oito femininos, todos 8/8 em 60k:
 
 | id | IMC | banda nominal | onde caiu | gerador |
 |---|---:|---|---|---|
+| `zen_f_b01_d1` | 16,5 | < 18,5 | ✅ **previsto 16,3–16,7** | ChatGPT |
 | `zen_f_b02_d2` | 18,3 | 18,5–19,9 | 0,2 abaixo (é `b01`) | ChatGPT |
 | `zen_f_b04_d2` | 22,2 | 21,5–22,9 | ✅ no meio | ChatGPT |
 | `zen_f_b05_d2` (mãe) | 22,9 | 23,0–24,4 | 0,1 abaixo | ChatGPT |
@@ -68,24 +70,38 @@ população mínima. Os dois saltos baixos (3,9 e 4,4) ficam abaixo do limiar do
 > não em PNG de `qa/look/`. Quem tira medida e decide se o avatar presta é o
 > Claude Code, com `metrics.py` e as travas do `process.py`. Cobrado em 29/07.
 
-**Abrir a linha `f d1`** — 12 arquétipos, descritores prontos em
-`CHARACTER_BIBLE.md` §5. É a linha de **> 29% de gordura**: mulher sedentária,
-corpo sem tônus. Depois dela, `f d3`.
+**Subir a linha `f d1`, que hoje tem UM ponto (16,5).** Enquanto ela estiver
+assim, qualquer mulher classificada `d1` recebe o corpo de IMC 16,5 —
+degradação conhecida e **aceita** (a biblioteca feminina não está no app), mas
+que obriga a produzir a `d1` **em sequência, sem intercalar e sem parar no
+meio**. Se precisar parar pela metade, nomear as folhas restantes como `d2` até
+haver densidade — nunca deixar a linha com 2 ou 3 avatares soltos.
 
-**Uma decisão a tomar logo na primeira folha da linha nova.** Hoje TUDO é `d2`
-por um motivo bom (o aviso acima): avatar sozinho numa linha é entregue a
-qualquer IMC daquela linha. Ao começar a `d1`, a linha fica esparsa por algumas
-folhas e a seleção degrada nesse intervalo. **Isso é aceitável** — a biblioteca
-feminina ainda não está no app —, mas a consequência é produzir a `d1`
-**inteira e em sequência**, sem intercalar com outra linha e sem parar no meio.
+**O plano de cobertura da `d1`, com o gerador escolhido por trecho.** O limiar
+de vão do `build_index.py` é **5,0** de IMC, então o passo do gerador decide
+quantas inserções sobram depois:
 
-Se por algum motivo a produção precisar parar com a `d1` pela metade, a saída é
-nomear as folhas restantes como `d2` até haver densidade — nunca deixar uma
-linha com 2 ou 3 avatares soltos.
+| trecho | gerador | por quê |
+|---|---|---|
+| 16,5 → ~27 | **ChatGPT** (passo ~4,4) | passo menor que 5,0: nenhum vão fica marcado |
+| ~27 → cima | **Gemini** (passo ~7,1) | 28–38 é zona morta do ChatGPT, comprovada nos dois sexos |
 
-**Fluxo, quando voltar a produzir:**
+Acima de 27 cada passo de 7 abre um vão `high` (mid < 40) que pede inserção
+depois — é o preço de atravessar a zona morta, não erro de método. Mirar por
+**escolha de âncora** (`LICOES.md` §2.4b: âncora = alvo − passo), não por
+adjetivo.
+
+**A âncora não precisa ser da mesma linha de definição** — foi assim que a `d1`
+abriu, ancorada numa folha `d2`. A âncora move o IMC, o descritor move o tônus,
+e eles não interferem (`LICOES.md` §3.5). Isso vale para abrir a `f d3` depois,
+sem produzir mãe nova.
+
+**Fluxo, quando voltar a produzir** (a folha de referência do `sheet_qa` é a
+**âncora usada**, não a mãe — é ela que responde "o corpo deu o passo?"):
 ```
-python scripts/sheet_qa.py "<folha em Downloads>" 00_input/sheets/f/_mother_f.png
+python scripts/sheet_qa.py "<folha em Downloads>" 00_input/sheets/f/<ancora>_sheet.png
+cd qa/probe/sondas && python probe_tonus_f.py "<folha>" "<ancora>"   # tonus: a
+                                              # regua de largura nao ve relevo
 python scripts/intake.py  zen_f_bXX_d2
 python scripts/crop.py    zen_f_bXX_d2
    (Meshy: Multi-View, Meshy 6 Padrao, densidade alta,

@@ -202,6 +202,7 @@ referência; **multiplicar o delta por 0,5–0,6**; aplicar ao volume conhecido.
 | `f_b06` (subiu) | +38,3% | +19,0% | ×0,50 | ganho concentrado no tronco |
 | `f_b02` (desceu) | −22,6% | −20,1% | **×0,89** | **moveu** (−1,12 pp), com coxa e braço |
 | `f_b09` (subiu) | +97,2% | +97,4% | **×1,00** | **moveu** (+5,71 pp), tudo junto |
+| `f_b01` (desceu) | −14,5% | −9,6% | **×0,66** | quase parado (−0,42 pp), queda no quadril/coxa |
 
 O desconto existe porque a conta trata o corpo como elipse e ignora que cabeça,
 braços, mãos e pés quase não mudam entre bandas. **Serve para dizer "vai passar
@@ -229,6 +230,14 @@ fração do corpo que não se mexeu.
 Quatro amostras, todas femininas. Não é lei; é melhor que um fator fixo que
 errou 2 pontos para baixo e depois 3 para cima.
 
+**O fator sai por INTERPOLAÇÃO em |Δombro|, e isso já foi usado às cegas com
+acerto.** Entre as duas amostras de ombro quase parado, a reta é
+`fator ≈ 0,60 + (|Δombro| − 0,17) × 0,305`, válida até ~1,2 pp; acima disso
+satura em 1,0 (o `f_b09`, com 5,71 pp, deu exatamente 1,00). No `f_b01_d1`
+(29/07) a interpolação deu **0,68**, a previsão saiu **16,3–16,7** e o corpo
+mediu **16,5** — fator implícito real **0,66**. É a segunda previsão de IMC
+acertada do projeto e a primeira feita antes da Meshy, olhando só a folha.
+
 ---
 
 ## 3. Produção de folhas
@@ -253,6 +262,24 @@ Folha com altura diferente das anteriores: descartar sem tentar aproveitar.
 
 Vira uma 4ª mancha sobre o fundo liso, quebra a detecção do `crop.py` e pode
 chegar na Meshy como geometria.
+
+### 3.5 A ÂNCORA move o IMC; o DESCRITOR move o TÔNUS — e são independentes
+
+Abrir uma linha de definição nova **não exige folha-mãe própria daquela linha**.
+Medido ao abrir a `f d1` (29/07): a folha do `f_b01_d1` foi gerada com anexo
+único `zen_f_b02_d2` — uma folha `d2`, com tônus — e o descritor `d1` mandando
+"sem nenhum tônus, magreza por ausência de massa, sem gomo/serrátil/veia".
+
+Saiu volume **−9,6%** (18,3 → 16,5 de IMC) e relevo abdominal **2,171 contra
+2,113 da âncora** — ou seja, o corpo encolheu e o tônus **não veio junto**, ficou
+na mesma casa da folha-mãe (2,080). Os dois eixos responderam a comandos
+diferentes sem interferir um no outro.
+
+**Consequência operacional:** para abrir a `f d3` não é preciso produzir uma mãe
+`d3` antes. Escolhe-se a âncora pelo IMC que se quer (§2.4b: alvo − passo do
+gerador) e deixa-se o tônus por conta do descritor. A trava é conferir o relevo
+com `qa/probe/sondas/probe_tonus_f.py` **antes** de subir na Meshy — a régua de
+largura não vê tônus (§1.1), e é justamente o eixo que o descritor está movendo.
 
 ---
 

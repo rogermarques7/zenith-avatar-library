@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-07-29T13:36:16Z",
+  "generated_at": "2026-07-29T14:05:59Z",
   "cdn_base": "https://cdn.exemplo.com/avatars/",
   "reference_height_m": 1.75,
   "selection": {
@@ -185,6 +185,34 @@
     }
   ],
   "avatars": [
+    {
+      "id": "zen_f_b01_d1",
+      "sex": "f",
+      "definition": "d1",
+      "measured_bmi": 16.5,
+      "measured_mass_kg": 50.6,
+      "label": "muito magra",
+      "waist_to_height": 0.401,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_f_b01_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 30.2,
+        "chest": 80.0,
+        "waist_navel": 70.1,
+        "waist_min": 59.5,
+        "hip": 94.1,
+        "forearm": 21.3,
+        "biceps": 21.4,
+        "wrist": 16.6,
+        "thigh": 46.1,
+        "calf": 32.6
+      },
+      "approved": true
+    },
     {
       "id": "zen_f_b02_d2",
       "sex": "f",
