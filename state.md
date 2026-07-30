@@ -8,68 +8,72 @@
 > Masculino não se toca até isso acabar — os dois vãos `high` dele já têm
 > conserto conhecido e ficam anotados no fim deste arquivo.
 >
-> **59 avatares. A `f d3` — o eixo de MÚSCULO — foi ABERTA na sessão 13**, com 4
-> avatares num dia. Era a linha vazia que o Rogério cobrou ("quase não vi nenhum
-> avatar musculoso").
+> **60 avatares. A `f d3` — o eixo de MÚSCULO — foi aberta na sessão 13** e ganhou
+> o 5º na 14. Era a linha vazia que o Rogério cobrou ("quase não vi nenhum avatar
+> musculoso").
 >
 > | linha | n | IMC medido |
 > |---|---:|---|
 > | `f d1` | 9 | 16,5 · 19,0 · 23,3 · 24,1 · 31,9 · 34,1 · 42,6 · 52,5 · 114,2 |
 > | `f d2` | 7 | 18,3 · 22,2 · 22,9 · 27,3 · 30,1 · 34,4 · 53,9 |
-> | **`f d3`** | **4** | **21,0 · 22,1 · 28,4 · 32,4** |
+> | **`f d3`** | **5** | **21,0 · 22,1 · 28,4 · 30,1 · 32,4** |
 >
-> ### 🔴🔴 RETOMAR AQUI: a folha do `zen_f_b09h_d3` ESTÁ EM DOWNLOADS, sem medir
+> ### ✅ `zen_f_b09h_d3` FECHADO em IMC 30,1 — a identidade feminina está consertada
 >
-> ```
-> C:\Users\VAIO\Downloads\ChatGPT Image 30 de jul. de 2026, 02_55_03.png
-> ```
+> 8/8, cru 183.361 tri, 91,3 L · 92,2 kg, Draco 193 KB. Âncora única
+> `zen_f_b08_d3` (28,4), **ChatGPT**, descritor `f_b09_d3` mais duas cláusulas no
+> slot do descritor (o bloco fixo ficou literal): *"a definição já está no teto, o
+> que cresce é só VOLUME"* (§2.2) e uma **trava de identidade feminina** nomeando
+> os três defeitos do `b09_d3` velho.
 >
-> **Ela NÃO entrou no repositório e não foi medida** — o classificador de
-> segurança que autoriza execução de comando caiu na madrugada de 30/07 e
-> bloqueou `python`, `git commit` e `preview_start` (leitura e edição de arquivo
-> continuaram funcionando; `git status` passou por ser allowlistado). Nada foi
-> contornado à mão de propósito: reimplementar a régua ad-hoc divergiria da
-> validada (§1.3).
+> **A trava funcionou, e aparece na MEDIDA, não só no olho:**
 >
-> **O PRIMEIRO comando da sessão, antes de qualquer outra coisa:**
-> ```
-> python scripts/sheet_qa.py "C:/Users/VAIO/Downloads/ChatGPT Image 30 de jul. de 2026, 02_55_03.png" 00_input/sheets/f/zen_f_b08_d3_sheet.png
-> ```
+> | | `b08_d3` | **`b09h_d3`** | `b09_d3` (lê masc.) |
+> |---|---:|---:|---:|
+> | IMC | 28,4 | **30,1** | 32,4 |
+> | quadril | 120,4 | **125,3** | 115,2 |
+> | cintura mín. | 68,5 | **68,8** | 75,3 |
+> | bíceps | 34,3 | **35,2** | 43,6 |
+> | cintura/quadril | 0,569 | **0,549** | 0,654 |
+> | quadril/peito | 1,204 | **1,239** | 1,142 |
 >
-> **Como a folha foi gerada:** âncora única `zen_f_b08_d3_sheet.png` (IMC 28,4),
-> **ChatGPT**, descritor canônico `f_b09_d3` ("Fisiculturista pesada") **mais duas
-> cláusulas acrescentadas ao slot do descritor** (o bloco fixo ficou literal):
+> **10 cm mais de quadril e 6,5 cm menos de cintura que o `b09_d3`, sendo 2,3 de
+> IMC mais leve.** O antigo põe massa em braço e cintura; este põe em quadril e
+> coxa. `arm_split_frac` 0,731, acima do limiar de contaminação — as
+> circunferências valem aqui (§1.1). No preview: busto distinto da faixa, gomos e
+> separação de quadríceps legíveis, orientação frontal correta.
 >
-> 1. *"a definição já está no teto; o que cresce é somente VOLUME"* — o padrão da
->    §2.2, o único que já tirou corpo de atrator. Existe porque "Fisiculturista
->    **pesada**" é intensificador sobre o mesmo substantivo do `b08`
->    ("Fisiculturista"), e §2.1 diz que intensificador não move corpo.
-> 2. **trava de identidade feminina** nomeando os três defeitos do `b09_d3` velho:
->    busto mantido (peitoral cresce POR BAIXO), cintura afunilada em relação a
->    ombros E quadril, quadril/glúteos largos.
+> ⚠️ **Ressalva anotada:** o busto está no limite alto do *"PEQUENO A MÉDIO"* do
+> bloco fixo. Deriva leve de personagem, não defeito de malha — não se regera
+> (5b), mas vale reforçar essa linha nas próximas folhas femininas.
 >
-> **Meu parecer a olho, comparando lado a lado com a âncora (não é medida):**
-> - **Geometria OK** no que a imagem reduzida deixa ver: 3 vistas, topos e pés
->   alinhados, espaçamento uniforme, fundo liso, sem selo, perfil aparentando 90°.
-> - **A trava de identidade PEGOU** — há afunilamento de cintura, quadril com
->   largura, glúteo com volume no perfil, e busto sob a faixa em vez de peitoral.
->   É melhor que o `b09_d3` do Gemini.
-> - ⚠️ **Suspeita de ATRATOR: o corpo parece muito próximo da âncora.** Ombro um
->   pouco mais largo, coxa um pouco mais espessa, quase nada além disso.
+> ### 🔴 Duas coisas que essa produção MEDIU e mudaram doutrina
 >
-> **A suspeita NÃO está resolvida, e o olho não a resolve** — largura frontal
-> parada não prova passo zero (no `f_b04_d2` o ombro andou +0,17 pp enquanto a
-> profundidade caía 4–5%). Só o `sheet_qa` com o **perfil** separa as duas coisas.
+> **1. Intensificador continua não movendo corpo — agora com número no feminino.**
+> Passo **+1,7** (28,4 → 30,1), contra os **+6,3** que a troca de substantivo deu
+> no `b08`. "Fisiculturista **pesada**" é adjetivo sobre o mesmo substantivo do
+> `b08` ("Fisiculturista"). A cláusula de "só VOLUME" arrancou 1,7 em vez de zero,
+> mas **não vale uma categoria**. Previsão declarada 33–42, **medido 30,1** — 2,9
+> abaixo do piso. Minha leitura ordinal dizia "ponta de baixo" e ainda ficou curta.
 >
-> **Decisão que depende da medida:**
-> - largura **e** profundidade paradas → é atrator: **não gastar geração da
->   Meshy**, regerar trocando o substantivo de categoria (§2.2).
-> - qualquer um dos dois eixos andou → seguir o fluxo: `probe_tonus_f` →
->   `intake` → `crop` → Meshy.
+> **2. Eu quase reprovei essa folha pelo olho, e a régua me corrigiu.** Olhando a
+> folha ao lado da âncora eu vi "quase nada mudou" e levantei suspeita de atrator.
+> O `sheet_qa` mostrou **largura frontal quase parada (ombro +0,83 pp) e
+> profundidade subindo uniforme nos quatro pontos do perfil (+1,76 a +2,21)**. É o
+> `f_b04_d2` de novo (§1.1): **julgar por vista frontal reprova folha boa.** O olho
+> não substitui a régua nem para dizer "não mudou".
 >
-> Previsão registrada antes de gerar: **33–42**, palpite declarado (§2.6).
+> ⚠️ **E a assinatura de vazamento do `sheet_qa` apareceu na ÂNCORA, não na folha
+> nova:** o `b08_d3_sheet.png` deu costas em `y=2` e 4,05% de variação de altura.
+> Não contamina o delta (largura e profundidade saem das vistas de frente e
+> perfil, que concordaram em 0,65%), e aquele avatar já está produzido. É §1.1.
 >
-> Slots `d3` que faltam depois dele: **b02 b03 b04 · b06 b07 b10**.
+> ### ⚠️ O `b09_d3` masculino AINDA é servido acima de IMC 31,2
+>
+> A inserção resolve a faixa de ~29 a ~31,2, onde o `b09h_d3` passa a ser o mais
+> próximo. **Acima de 31,25 (o ponto médio entre 30,1 e 32,4) o `nearest_id` volta
+> a devolver o `b09_d3`**, que lê masculino. O conserto de verdade continua sendo
+> o campo `approved` (ver a pendência), não mais um avatar.
 >
 > ### ⚠️ `zen_f_b09_d3` — o asset FICA, mas ele lê MASCULINO
 >
@@ -124,18 +128,21 @@
 >
 > ### 🔴 FALTAM 17 SLOTS FEMININOS — 11 deles MUSCULOSOS
 >
-> **59 avatares; 20 femininos ocupando 17 dos 32 slots da grade.** Os outros 3 são
-> inserções em slot já ocupado (`b04h_d1`, `b09h_d2`, `b09i_d2`).
->
-> ⚠️ *A redação anterior dizia "18 femininos ocupando 15 slots" com a tabela ao
-> lado somando 20 e 17 — contado à mão, e errado, o que é a §5.4 outra vez.
-> Conferido contra o `library.json`: 59 ids, 39 masculinos, 20 femininos.*
+> **60 avatares; 21 femininos ocupando 17 dos 32 slots da grade.** Os outros 4 são
+> inserções em slot já ocupado (`b04h_d1`, `b09h_d2`, `b09i_d2`, `b09h_d3`).
 >
 > | linha | grade | feitos | faltam | quais |
 > |---|---:|---:|---:|---|
 > | `f d1` | 12 | 8 | 4 | b02 b05 b06 b10 |
 > | `f d2` | 11 | 5 | 6 | b01 b03 b07 b08 b10 b11 |
-> | **`f d3`** | **9** | **4** | **5** | **b02 b03 b04 · b06 b07 b10** |
+> | **`f d3`** | **9** | **4** | **5** | **b02 b03 b04 · b07 b10** |
+>
+> ⚠️ **Duas contagens à mão erradas foram corrigidas aqui em 30/07, e é a §5.4
+> reincidindo:** dizia "18 femininos ocupando 15 slots" com a própria tabela
+> somando 20 e 17; e listava **`b06`** como slot `d3` faltando quando o
+> `zen_f_b06_d3` estava feito desde a sessão 13 — a coluna "faltam" dizia 5 e a
+> lista tinha 6 itens. Conferido contra o `library.json`: 60 ids, 39 masculinos,
+> 21 femininos.
 >
 > **Contagem impressa pelo índice, não contada à mão (§5.4)** — `build_index.py`.
 > **⚠️ NÃO confundir com os vãos `high` de IMC**, que medem continuidade da escada
@@ -264,16 +271,19 @@ reclassificar ou inserir, nunca regerar.
   cortar mais começaria a tirar números que sustentam doutrina. Duas linhas novas
   na tabela da §1.1 (orientação frontal e resolução vs. identidade) também
   cresceram o arquivo de propósito.
-- ⏳ **COMMIT AINDA PENDENTE — o Rogério pediu na sessão 14 e eu NÃO consegui.**
-  `git commit` caiu no mesmo bloqueio do classificador. **É a primeira coisa a
-  fazer depois de medir a folha.** São 4 sessões sem commit (o último é `7c3e1b6`,
-  de 29/07 12:09): sessões 12, 13 e 14 estão só no diretório de trabalho —
-  incluindo os 6 masters novos, o `library.json` com 59, a reorganização da
-  documentação e o `docs/blocos/` que ainda está **untracked**.
-- **O testador não precisava de nada.** Ele lê o `library.json` por `fetch` desde
-  27/07 e não tem lista fixa; conferido que os 59 estão no índice, os 4 `d3` da
-  sessão 13 inclusive. Só faltou subir o servidor, que também caiu no bloqueio —
-  `preview_start` na config `static` quando voltar.
+- ✅ **COMMITADO em 30/07 pela manhã**, em dois commits: `c0819c8` com os 6
+  avatares das sessões 12 e 13 mais o `SEAL_ISOLATION`, e `0a462ac` com a
+  documentação e o diário. **Sem push** — não foi pedido.
+- **O testador nunca precisou de nada.** Ele lê o `library.json` por `fetch` desde
+  27/07 e não tem lista fixa. Conferido no ar: **39 masculinos e 21 femininos**,
+  escada ordenada por IMC medido, zero erro de console.
+  `preview_start` na config `static` → http://localhost:8765/test/avatar_tester.html
+- ⚠️ **O classificador de permissão caiu na madrugada de 30/07** e bloqueou
+  `python`, `git commit` e `preview_start` por horas (leitura e edição de arquivo
+  seguiram; comandos read-only allowlistados como `git status` também). **Não era
+  configuração** — a mensagem nomeava o modelo, e não existe `.claude/settings.json`
+  neste projeto. Se acontecer de novo: não contornar reimplementando régua à mão
+  (§1.3), e deixar o handoff no `state.md` com o caminho exato do arquivo parado.
 - ✅ **Documentação reorganizada em 30/07, a pedido do Rogério** — ele apontou que
   ela comia ~40% do contexto antes de qualquer trabalho. Medido: 35,6k tokens em
   4 arquivos. Sessão de produção agora custa **24,7k (−31%)**, sem perder nada:
