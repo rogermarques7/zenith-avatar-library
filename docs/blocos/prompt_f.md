@@ -90,7 +90,7 @@ Proporção da imagem larga (paisagem). Maior resolução possível.
 | `f_b03_d1` | Magra sem definição nenhuma. Corpo liso e mole, braços e pernas finos sem tônus, cintura pouco marcada, glúteos pequenos e sem forma. |
 | `f_b04_d1` | Magra "skinny-fat": esbelta porém mole. Pequena camada de gordura na barriga baixa, coxas macias, quadril levemente arredondado, nenhum tônus muscular. Arquétipo da mulher sedentária de peso normal. |
 | `f_b05_d1` | Peso normal, corpo mole. Leve barriga baixa, gordura acumulada no quadril e na parte interna das coxas, cintura pouco marcada, braços sem tônus. |
-| `f_b06_d1` | Peso normal alto. Barriga levemente saliente, quadril e coxas arredondados, cintura larga, contornos macios, nenhum tônus muscular. |
+| `f_b06_d1` | Mulher de PESO NORMAL ALTO, sem nenhum tônus muscular. Barriga levemente saliente e macia, quadril e coxas arredondados, cintura larga e pouco definida, braços macios. Contornos todos suaves e arredondados. Ela NÃO é obesa e NÃO tem sobrepeso marcado: é apenas uma mulher comum, no limite superior do peso normal, sem nenhum treino. |
 | `f_b07_d1` | Sobrepeso leve. Barriga saliente sobre a linha da cintura, culote no quadril, coxas grossas e macias, braços cheios, cintura pouco definida. |
 | `f_b08_d1` | Sobrepeso. Barriga claramente proeminente, quadril largo, coxas espessas que se tocam, braços cheios e moles, pescoço mais grosso. |
 | `f_b09_d1` | Sobrepeso alto. Barriga grande e arredondada, dobra visível na cintura, quadril e coxas muito volumosos, ombros arredondados. |
@@ -121,7 +121,64 @@ Proporção da imagem larga (paisagem). Maior resolução possível.
 | `f_b04_d3` | Atlética e definida. Gomos abdominais claros, ombros desenhados, coxas e glúteos torneados com separação muscular visível, cintura fina. |
 | `f_b05_d3` | Musculosa e definida. Físico de atleta fitness: ombros e costas desenhados, glúteos e coxas com volume e separação, abdômen com gomos evidentes. |
 | `f_b06_d3` | Bem musculosa e seca. Ombros largos, dorsais visíveis, quadríceps com separação clara, abdômen definido, veias aparentes nos braços. |
-| `f_b07_d3` | Muito musculosa. Massa alta com baixa gordura, ombros muito largos, braços e coxas volumosos, abdômen definido, cintura estreita. |
+| `f_b06h_d3` | ATLETA DE BIKINI FITNESS DE COMPETIÇÃO — a divisão MAIS LEVE do fisiculturismo feminino, julgada por proporção e simetria, NÃO por volume muscular. Corpo esbelto e tonificado, com músculo visível mas SEM massa: ombros com forma arredondada e discreta, braços finos e definidos, coxas firmes e torneadas porém MAGRAS, glúteos redondos e firmes de tamanho moderado. Cintura muito fina. Abdômen seco com gomos visíveis. É um físico de PALCO ENXUTO, bem mais leve que uma fisiculturista. |
+| `f_b08h_d3` | ATLETA DE CROSSFIT DE ELITE, competidora dos CrossFit Games. Físico funcional e POTENTE, construído para levantamento olímpico e ginástica: ombros redondos e desenvolvidos, dorsais largos que abrem o formato em V nas costas, braços grossos e definidos, antebraços fortes, glúteos e quadríceps potentes e volumosos, panturrilhas marcadas. Corpo SÓLIDO E DENSO, de musculatura pesada. Abdômen seco com gomos bem visíveis e oblíquos marcados. Percentual de gordura baixo. |
+| `f_b07_d3` | ATLETA DE WELLNESS DE COMPETIÇÃO — a divisão do fisiculturismo feminino que é julgada pelo desenvolvimento de quadril, glúteos e coxas. Quadríceps e glúteos muito volumosos, com separação muscular clara e visível. Quadril largo e cintura estreita, criando um contraste forte entre os dois. Dorsais e ombros desenvolvidos, braços definidos. Abdômen seco, com gomos visíveis. |
 | `f_b08_d3` | Físico de fisiculturista feminina. Massa muscular alta, dorsais desenvolvidos, cintura estreita em relação aos ombros e ao quadril, abdômen definido. |
 | `f_b09_d3` | Fisiculturista pesada. Volume muscular muito alto, dorsais largos, braços e coxas muito desenvolvidos, definição mantida. |
 | `f_b10_d3` | Fisiculturista de grande porte. Massa muscular extrema, estrutura enorme, ombros e coxas muito volumosos, abdômen ainda definido. |
+
+> ### 🔴 O `f_b07_d3` foi TROCADO em 30/07 — e o descritor velho não deve voltar
+>
+> Ele era *"Muito musculosa. Massa alta com baixa gordura, ombros muito largos,
+> braços e coxas volumosos, abdômen definido, cintura estreita."* — **puro
+> intensificador**, e a §2.1 já tinha medido que adjetivo de intensidade não move
+> corpo. O `state.md` da sessão 13 chegou a marcar essa linha como inutilizável.
+>
+> O Rogério a substituiu por um **substantivo de categoria** ("atleta de wellness
+> de competição"), que é o único lever medido (§2.2), e o resultado foi o
+> `zen_f_b07_d3` em **IMC 27,7** — um corpo que não existia na biblioteca:
+> `cintura/quadril` **0,524** e `quadril/peito` **1,317**, ambos os extremos da
+> série `d3` inteira, com cintura de **64,3 cm** — mais fina que a da `b05_d3`,
+> que tem IMC 21,0.
+>
+> **A lição é maior que esta linha:** descritor inerte não se conserta com mais
+> adjetivo, se conserta trocando o substantivo por uma **categoria do mundo real**
+> que já carrega uma forma. "Wellness" é uma divisão de competição com regras de
+> julgamento próprias — o gerador sabe o que é. "Muito musculosa" não é nada.
+>
+> ### 📊 Escada de categorias medida — use isto para MIRAR
+>
+> Todas femininas, ChatGPT, sessões 13–15. **Esta é a régua de mira, não a
+> numeração das bandas** (§2.5: a ordem da tabela NÃO é a ordem dos pousos):
+>
+> | categoria no descritor | IMC medido | id |
+> |---|---:|---|
+> | bikini fitness de competição | **22,3** | `b06h_d3` |
+> | wellness de competição | **27,7** | `b07_d3` |
+> | fisiculturista feminina | **28,4** | `b08_d3` |
+> | CrossFit de elite | **29,0** | `b08h_d3` |
+> | fisiculturista pesada | **30,1** | `b09h_d3` |
+> | peso normal alto, sem tônus (`d1`) | **32,4** | `b06_d1` |
+>
+> ⚠️ **O passo mínimo entre categorias é ~6,3.** Vão mais estreito que isso não se
+> fecha trocando descritor — o lever passa a ser a **âncora**.
+>
+> ### ⚠️ UM LEVER POR FOLHA — não empilhar
+>
+> **Categoria governa TAMANHO; direção de volume governa FORMA.** Os dois juntos,
+> com negações, dão **zero**: no `b06h_d3` eu empilhei categoria leve + *"o passo é
+> PEQUENO"* + *"NÃO aumentar ombros/braços/coxas"* e o passo foi **+0,2**. Tirando
+> as negações no avatar seguinte, o mesmo lever deu **+6,7**.
+>
+> **Negação legítima nomeia o ATRATOR a evitar** (*"NÃO é obesa"*), nunca um traço
+> que o próprio descritor pede (*"ombros largos… NÃO aumentar ombros"*).
+>
+> **Duas cláusulas foram usadas no slot junto com o descritor** (o bloco fixo
+> ficou literal), e a medida mostra que as duas pegaram:
+> 1. **direção do volume** — *"o volume cresce principalmente na METADE DE BAIXO
+>    do corpo […] enquanto a cintura permanece estreita"*. Contra o `b08_d3`:
+>    coxa igual (74,1 × 75,0) e quadril maior (+2,3), mas peito **−6,8** e bíceps
+>    **−3,2**. Cresceu embaixo e *encolheu* em cima.
+> 2. **trava de identidade feminina** — a mesma do `b09h_d3`, nomeando os três
+>    defeitos do `b09_d3` velho.

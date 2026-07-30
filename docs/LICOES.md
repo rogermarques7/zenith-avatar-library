@@ -232,6 +232,71 @@ base da `m d3` também é comprimida (19,9 · 20,8 · 21,1), então não é atra
 travando o feminino — as bandas `b02`–`b06` da `d3` têm pouca massa entre si por
 natureza. Para andar ali, trocar o substantivo.
 
+### 2.2b Descritor inerte se conserta com CATEGORIA DO MUNDO REAL, não com adjetivo
+
+O `f_b07_d3` era *"Muito musculosa. Massa alta com baixa gordura, ombros muito
+largos…"*: só intensificador, e o `state.md` já o tinha marcado como inutilizável
+por causa da §2.1. Trocado por **"ATLETA DE WELLNESS DE COMPETIÇÃO"** — uma
+divisão de fisiculturismo que existe, com regras de julgamento próprias — rendeu
+**IMC 27,7** e um corpo inédito na biblioteca.
+
+**O critério não é "substantivo em vez de adjetivo", é se a palavra nomeia algo
+que o gerador já viu julgado.** "Wellness" carrega uma forma inteira; "muito
+musculosa" não carrega nenhuma. É a §2.2 vista pelo avesso: um vão é o vazio
+entre atratores nomeáveis, então **procurar o nome antes de concluir que o vão é
+intransponível.**
+
+### 2.2c A DIREÇÃO DO VOLUME é um 2º lever, independente do tamanho
+
+Junto do descritor de wellness foi ao slot: *"o volume cresce principalmente na
+METADE DE BAIXO do corpo — glúteos, quadril e coxas […] enquanto a cintura
+permanece estreita"*. Contra o `f_b08_d3`, com **0,7 de IMC a menos**:
+
+| | `b07_d3` | `b08_d3` | Δ |
+|---|---:|---:|---:|
+| coxa | 74,1 | 75,0 | −0,9 |
+| quadril | 122,7 | 120,4 | **+2,3** |
+| peito | 93,2 | 100,0 | **−6,8** |
+| bíceps | 31,1 | 34,3 | **−3,2** |
+| cintura mín | 64,3 | 68,5 | **−4,2** |
+
+Cresceu embaixo **e encolheu em cima**. `cintura/quadril` **0,524** e
+`quadril/peito` **1,317** são os extremos da série `d3` inteira, e a cintura de
+64,3 cm é mais fina que a da `b05_d3`, que tem **IMC 21,0**.
+
+**Consequência de método: dá para mover FORMA sem mover IMC.** A grade de bandas
+só indexa tamanho, então esse eixo é invisível nela — dois avatares a 0,7 de IMC
+podem ser corpos diferentes para o usuário. Não é motivo para abandonar a grade,
+é motivo para **não tratar proximidade de IMC como redundância**.
+
+✅ **Confirmado no extremo, no mesmo dia:** o `f_b06h_d3` saiu a **0,2 de IMC** da
+âncora (22,1 → 22,3) e ainda assim é outro corpo — cintura **−1,9 cm**, quadril
+**+2,2**, coxa **+2,1**, bíceps **−1,7**, `cintura/quadril` 0,614 → **0,584**.
+Forma andou, tamanho não andou nada.
+
+⚠️ **Mas esse mesmo avatar é o contraexemplo: eu queria +2,9 e recebi +0,2.**
+Mirando o vão 22,1→27,7 eu empilhei **três freios de uma vez**: a categoria mais
+leve que existe ("bikini fitness… **NÃO** por volume muscular"), a instrução *"o
+passo é PEQUENO"*, e três negações — *"NÃO aumentar ombros, NÃO aumentar braços,
+NÃO engrossar as coxas"*. É exatamente o "nomear o atrator e negar a saída" da
+§2.2, que já tinha custado o `b06i_d3` (+3,3 contra +6,5) e o `f_b05_d3`.
+
+**A regra que faltava: escolher UM lever por folha.** Categoria governa tamanho,
+direção de volume governa forma. Querendo tamanho, trocar a categoria e **não
+pôr negação nenhuma**; querendo forma sem tamanho, manter a categoria e só dirigir
+o volume. Empilhar os dois com negações não dá "um passo médio" — dá zero.
+
+⚠️ **E o medo veio do lugar errado:** o fator ~2× da §2.3 é de *bracketing*, e eu
+apliquei o freio dele a um lever que não é bracketing. **Régua de um método não
+calibra outro** — é a 5c aplicada ao próprio prompt.
+
+⚠️ **E isso quebra o alarme ordinal se ele for lido no eixo errado.** Antes da
+Meshy, minha primeira leitura da folha foi de *massa total* — "lê no nível do
+`b08`, redundante" — e teria reprovado uma folha boa. A leitura certa saiu ao
+comparar o pedido com a medida: ombro −0,72 pp e quadril +2,29 pp contra o `b08`.
+**Perguntar que eixo o prompt mandou mover, e medir esse.** Mesma família do
+`f_b04_d2`, onde a largura frontal parada escondia +4–5% de profundidade.
+
 ### 2.3 Bracketing — e seus três limites
 
 Anexar **duas** folhas consecutivas aprovadas e pedir "a próxima etapa, com um
@@ -334,6 +399,23 @@ faixa, é tiro de uma geração.
 - **Acima de ~54 não há palavra nenhuma:** um único degrau de categoria no topo
   vale **+71,6**, quase 8× o maior passo já medido. Para um corpo em ~60–80, **não
   pedir por palavra de categoria** — não há uma.
+- **ChatGPT feminino `d1`, poço em ~32:** duas tentativas na sessão 15 mirando
+  ~28 a partir de 24,1. A 1ª (descritor pesado: "nunca treinou", "culote", "coxas
+  que se tocam") foi reprovada pelo alarme ordinal antes da Meshy — deltas de
+  **+8 a +12 pp** contra os +3 a +4 de um passo de +6,7. A 2ª, deliberadamente
+  contida (*"peso normal alto… NÃO é obesa e NÃO tem sobrepeso marcado"*), pousou
+  em **32,4** — colada nos 31,9 do `b07_d1`. **Amansar o descritor não tira o
+  corpo do poço.**
+
+⚠️ **Vão MAIS ESTREITO que o passo mínimo não se fecha por descritor.** A `f d3`
+tem um vão de **5,4** (22,3 → 27,7) e o passo do substantivo é **~6,3**: a troca
+de categoria pula por cima por construção. E entre "bikini fitness" e "CrossFit"
+**não existe nome de divisão** para pôr no meio. Quando o vão for menor que o
+passo, o lever é a **âncora**, não o descritor.
+
+**Escada de categorias femininas medida na sessão 15 (ChatGPT, todas `d3` salvo
+a última):** bikini fitness **22,3** · wellness **27,7** · fisiculturista
+**28,4** · CrossFit de elite **29,0** · fisiculturista pesada **32,4**.
 
 ⚠️ **Inverter a direção ATRAVESSA o poço, mas não mira.** O mesmo `f_b07_d1` que
 pousou em 31,9 subindo de 23,3 pousou em **24,1 descendo de 31,9**, mirando ~28.
@@ -417,6 +499,23 @@ etapa anterior"*. Custa uma linha e você vê o erro antes de gastar a geração
 Folha com altura diferente das anteriores: descartar sem tentar aproveitar.
 ⚠️ Mas conferir antes se a altura divergente não é o vazamento do `sheet_qa`
 (§1.1) — foi por pouco que essa regra não descartou três folhas boas.
+
+### 3.3b `--check` que grava não é `--check`
+
+`crop.py --check` não escreve nada, mas ele **exige a folha já em
+`00_input/sheets/`** — ou seja, o `intake.py` roda antes e **grava**. Na sessão 15
+usei isso para auditar uma folha duvidosa, **reprovei a folha**, e ela ficou no
+repositório. Na folha seguinte, com o mesmo id, o `intake` barrou corretamente
+("folha aprovada não se substitui") e o **`crop` rodou na folha velha**, gerando
+as 3 referências do avatar errado.
+
+**Só apareceu porque a variação de altura veio 1,52% em vez dos 0,22% que o
+`sheet_qa` tinha acabado de medir na folha nova.** Sem esse número, teria ido
+para a Meshy uma folha reprovada.
+
+**Regra: para auditar folha que pode reprovar, usar um id descartável** (ex.
+`zen_f_tmp`), nunca o id real. E ao ver o `intake` recusar, **parar** — não seguir
+para o `crop`, porque ele vai rodar em conteúdo antigo sem avisar.
 
 ### 3.4 Marca d'água na folha é proibida
 

@@ -11,11 +11,11 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 
 | quando a tarefa for… | ler ANTES de agir | tamanho |
 |---|---|---:|
-| **montar prompt de folha** (o caso mais comum) | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 3,1k / 2,5k |
+| **montar prompt de folha** (o caso mais comum) | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 4,4k / 2,5k |
 | decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,9k |
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,3k |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 4,1k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **10,6k** |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **12,2k** |
 | entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-07.md` (**grep**, não ler inteiro) | 54k |
 
 > ### ⚠️ Manter a coluna de TAMANHO honesta — o número errado já custou
@@ -96,9 +96,11 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
 9. `make_env.py` — gera o ambiente de iluminação (`03_dist/env/zenith_env.hdr`). A identidade Zenith mora aqui
 10. `restyle.py` — reaplica o material nos 39 `03_dist/glb/` **lendo os masters, sem re-decimar e sem tocar em `02_master/`**. É o jeito de mexer em cor sem refazer QA. `--preview {id}` renderiza 4 vistas com o ambiente em `qa/look/{id}/`
 11. `shorts.py` — segmenta e pinta o short, **um avatar por vez**, lendo o vinco da malha. `--fit` propõe e renderiza QA · `--report` confere contra a série · `--check` roda só as travas · `--apply` grava em `03_dist/glb/`
-12. `sheet_qa.py` — mede a folha **ainda em Downloads**, antes de ela entrar no repositório: alinhamento das 3 vistas, espaçamento, **largura do tronco na frente** (ombro/cintura/quadril/coxa, com o braço fora da conta), **profundidade no perfil** (barriga/glúteo/coxa) e extensão do tecido. Aceita uma 2ª folha como referência e imprime o delta. O `measure.py` só roda depois do `crop.py`, e não se grava folha que pode reprovar. **Passo padrão antes de aprovar folha do ChatGPT — e SÓ do ChatGPT.**
+12. `sheet_qa.py` — mede a folha **ainda em Downloads**, antes de ela entrar no repositório: alinhamento das 3 vistas, espaçamento, **largura do tronco na frente** (ombro/cintura/quadril/coxa, com o braço fora da conta), **profundidade no perfil** (barriga/glúteo/coxa) e extensão do tecido. Aceita uma 2ª folha como referência e imprime o delta. O `measure.py` só roda depois do `crop.py`, e não se grava folha que pode reprovar. **Passo padrão antes de aprovar qualquer folha, dos dois geradores.**
 
-    ⚠️ **Em folha do GEMINI ele não mede nada, e falha de um jeito que parece medida.** O preenchimento a partir do contorno vaza, a figura sai começando em `y=0`, e como a altura da figura é o denominador de todas as porcentagens, **todas** saem deflacionadas — um corpo maior aparece como "ombro −10 pp". Comprovado em 29/07 rodando na `zen_m_b05j_d1`, folha do Gemini **já aprovada e produzida**: mesma patologia (4,39% de variação de altura). Em folha do Gemini quem aprova a geometria é o `crop.py`, que tem limiar mais tolerante e leu a mesma folha com os 3 topos no mesmo pixel; quem decide o corpo é o `metrics.py`. É a regra 5c aplicada à própria régua. Ver `docs/LICOES.md` §1.1
+    ⚠️ **O critério é a ASSINATURA DE VAZAMENTO, não o gerador — este parágrafo já ensinou o contrário e estava errado.** Até 30/07 ele dizia "em folha do Gemini ele não mede nada", e o `LICOES.md` §1.1 já tinha derrubado isso: **o gerador nunca foi a variável.** A folha do `zen_f_b06_d3` é do **ChatGPT** e vazou (5,05% de variação, `cintura/ombro 1,245`), enquanto a folha do Gemini medida em 30/07 leu **sã** — 0,14% de variação, 0 px nos pés, `cintura/ombro 0,554` — e a leitura dela decidiu uma escolha entre duas folhas. Pela redação antiga eu teria jogado fora uma medida válida.
+
+    **A assinatura a procurar:** figura começando em `y=0` **e** alturas das 3 vistas divergindo 4–5% **e** razões impossíveis (ombro menor que cintura). Ao vê-la: remedir o topo em vários limiares, ou rodar o `crop.py`, que é o detector do caminho do produto. Sem a assinatura, a medida vale — inclusive no Gemini. Ver `docs/LICOES.md` §1.1
 
     **Reescrito em 29/07 (sessão 8) — a versão anterior media outra coisa.** Ela dava "quadril 52% da altura" na mãe *e* na filha, porque media `cols[-1]−cols[0]` da linha inteira: em A-pose isso é **mão a mão**, não osso a osso. E o `BG_TOL=28` herdado do `measure.py` não acha o corpo nas folhas femininas — não é o limiar, é que **a pele iluminada mede diferença ZERO do fundo** por dezenas de pixels; a silhueta agora vem por preenchimento a partir do contorno. Os três defeitos apareceram de uma vez ao rodar a régua nova na **folha-mãe já aprovada**, que é a calibração que se deve fazer sempre.
 

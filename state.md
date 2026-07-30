@@ -1,6 +1,6 @@
 # state.md — o presente
 
-Última atualização: **30/07/2026, madrugada (sessão 14)**
+Última atualização: **30/07/2026, fim da sessão 15**
 
 > ## 🔴 ABRIR AQUI NA SESSÃO NOVA
 >
@@ -8,65 +8,69 @@
 > Masculino não se toca até isso acabar — os dois vãos `high` dele já têm
 > conserto conhecido e ficam anotados no fim deste arquivo.
 >
-> **60 avatares. A `f d3` — o eixo de MÚSCULO — foi aberta na sessão 13** e ganhou
-> o 5º na 14. Era a linha vazia que o Rogério cobrou ("quase não vi nenhum avatar
-> musculoso").
+> **64 avatares — 39 masculinos e 25 femininos.** A sessão 15 fechou **4**:
+> `b07_d3`, `b06h_d3`, `b08h_d3` e `b06_d1`. Todos 8/8.
 >
 > | linha | n | IMC medido |
 > |---|---:|---|
-> | `f d1` | 9 | 16,5 · 19,0 · 23,3 · 24,1 · 31,9 · 34,1 · 42,6 · 52,5 · 114,2 |
+> | `f d1` | 10 | 16,5 · 19,0 · 23,3 · 24,1 · 31,9 · **32,4** · 34,1 · 42,6 · 52,5 · 114,2 |
 > | `f d2` | 7 | 18,3 · 22,2 · 22,9 · 27,3 · 30,1 · 34,4 · 53,9 |
-> | **`f d3`** | **5** | **21,0 · 22,1 · 28,4 · 30,1 · 32,4** |
+> | **`f d3`** | **8** | **21,0 · 22,1 · 22,3 · 27,7 · 28,4 · 29,0 · 30,1 · 32,4** |
 >
-> ### ✅ `zen_f_b09h_d3` FECHADO em IMC 30,1 — a identidade feminina está consertada
+> ### 📋 A SESSÃO 15 EM UMA TABELA — 4 avatares, 4 previsões, 4 erros
 >
-> 8/8, cru 183.361 tri, 91,3 L · 92,2 kg, Draco 193 KB. Âncora única
-> `zen_f_b08_d3` (28,4), **ChatGPT**, descritor `f_b09_d3` mais duas cláusulas no
-> slot do descritor (o bloco fixo ficou literal): *"a definição já está no teto, o
-> que cresce é só VOLUME"* (§2.2) e uma **trava de identidade feminina** nomeando
-> os três defeitos do `b09_d3` velho.
+> | id | descritor | âncora | previsto | **medido** | erro |
+> |---|---|---:|---|---:|---:|
+> | `b07_d3` | atleta de **wellness** de competição | ~28,4 | — | **27,7** | — |
+> | `b06h_d3` | atleta de **bikini fitness** | 22,1 | 25 | **22,3** | −2,7 |
+> | `b08h_d3` | atleta de **CrossFit** de elite | 22,3 | 25–28 | **29,0** | +1,0 |
+> | `b06_d1` | peso normal alto, sem tônus | 24,1 | 27–31 | **32,4** | +1,4 |
 >
-> **A trava funcionou, e aparece na MEDIDA, não só no olho:**
+> **Nenhuma previsão caiu dentro** (§2.6). Narrativa completa da sessão 15 no
+> `docs/historico/diario-2026-07.md`; doutrinas em §2.2b, §2.2c e §3.3b.
 >
-> | | `b08_d3` | **`b09h_d3`** | `b09_d3` (lê masc.) |
-> |---|---:|---:|---:|
-> | IMC | 28,4 | **30,1** | 32,4 |
-> | quadril | 120,4 | **125,3** | 115,2 |
-> | cintura mín. | 68,5 | **68,8** | 75,3 |
-> | bíceps | 34,3 | **35,2** | 43,6 |
-> | cintura/quadril | 0,569 | **0,549** | 0,654 |
-> | quadril/peito | 1,204 | **1,239** | 1,142 |
+> ### 🔴 AS DUAS REGRAS QUE SAÍRAM DAQUI — usar já na próxima folha
 >
-> **10 cm mais de quadril e 6,5 cm menos de cintura que o `b09_d3`, sendo 2,3 de
-> IMC mais leve.** O antigo põe massa em braço e cintura; este põe em quadril e
-> coxa. `arm_split_frac` 0,731, acima do limiar de contaminação — as
-> circunferências valem aqui (§1.1). No preview: busto distinto da faixa, gomos e
-> separação de quadríceps legíveis, orientação frontal correta.
+> **1. Categoria do mundo real, não adjetivo.** Descritor inerte não se conserta
+> com mais intensificador: troca-se o substantivo por uma **categoria que existe e
+> é julgada** ("wellness", "bikini fitness", "CrossFit de elite"). Escada medida,
+> feminina/ChatGPT: bikini fitness **22,3** · wellness **27,7** · fisiculturista
+> **28,4** · CrossFit **29,0** · fisiculturista pesada **30,1**.
 >
-> ⚠️ **Ressalva anotada:** o busto está no limite alto do *"PEQUENO A MÉDIO"* do
-> bloco fixo. Deriva leve de personagem, não defeito de malha — não se regera
-> (5b), mas vale reforçar essa linha nas próximas folhas femininas.
+> **2. UM lever por folha.** Categoria governa **tamanho**, direção de volume
+> governa **forma**. Empilhados com negações dão **zero**: no `b06h_d3` três freios
+> juntos deram **+0,2**; tirando as negações, o mesmo lever deu **+6,7**.
+> ✅ Negação legítima nomeia o **atrator a evitar** (*"NÃO é obesa"*), nunca um
+> traço que o descritor pede.
 >
-> ### 🔴 Duas coisas que essa produção MEDIU e mudaram doutrina
+> ### ⚠️ DOIS VÃOS RESISTIRAM — e o remédio dos dois é a ÂNCORA
 >
-> **1. Intensificador continua não movendo corpo — agora com número no feminino.**
-> Passo **+1,7** (28,4 → 30,1), contra os **+6,3** que a troca de substantivo deu
-> no `b08`. "Fisiculturista **pesada**" é adjetivo sobre o mesmo substantivo do
-> `b08` ("Fisiculturista"). A cláusula de "só VOLUME" arrancou 1,7 em vez de zero,
-> mas **não vale uma categoria**. Previsão declarada 33–42, **medido 30,1** — 2,9
-> abaixo do piso. Minha leitura ordinal dizia "ponta de baixo" e ainda ficou curta.
+> **`f d3` 22,3 → 27,7 (5,4)** — o vão é **mais estreito que o passo mínimo do
+> substantivo (~6,3)**, então a categoria pula por cima por construção, e não
+> existe nome de divisão entre "bikini fitness" e "CrossFit". **Manter "CrossFit"
+> e baixar a âncora para ~19–20**, mirando ~26.
 >
-> **2. Eu quase reprovei essa folha pelo olho, e a régua me corrigiu.** Olhando a
-> folha ao lado da âncora eu vi "quase nada mudou" e levantei suspeita de atrator.
-> O `sheet_qa` mostrou **largura frontal quase parada (ombro +0,83 pp) e
-> profundidade subindo uniforme nos quatro pontos do perfil (+1,76 a +2,21)**. É o
-> `f_b04_d2` de novo (§1.1): **julgar por vista frontal reprova folha boa.** O olho
-> não substitui a régua nem para dizer "não mudou".
+> **`f d1` 24,1 → 31,9 (7,8)** — duas tentativas, as duas acima. A 2ª tinha
+> descritor deliberadamente contido e ainda pousou em **32,4**. **Amansar o
+> descritor não tira o corpo do poço** — baixar a âncora.
 >
-> ⚠️ **E a assinatura de vazamento do `sheet_qa` apareceu na ÂNCORA, não na folha
-> nova:** o `b08_d3_sheet.png` deu costas em `y=2` e 4,05% de variação de altura.
-> Não contamina o delta (largura e profundidade saem das vistas de frente e
-> perfil, que concordaram em 0,65%), e aquele avatar já está produzido. É §1.1.
+> ### ⚠️ `b08h_d3` nasceu `b06i_d3` e foi RECLASSIFICADO
+>
+> Pousou em 29,0, entre o `b08` (28,4) e o `b09h` (30,1) — o id mentia sobre a
+> ordem. Renomeado em todos os planos e no `library_metrics.json`.
+> ⚠️ Existe um `zen_m_b06i_d3` **masculino** intocado — conferir o prefixo de sexo
+> antes de qualquer renomeação em massa.
+>
+> ### ⚠️ Rótulos fora de ordem na `f d1`, não consertados
+>
+> `b09_d1` mede **34,1** e `b08_d1` mede **42,6** — invertidos, de antes desta
+> sessão. E o `b06_d1` mede **32,4** contra os 31,9 do `b07_d1`. Não quebra o app
+> (o `nearest_id` usa IMC medido, não o nome), mas o **nome mente sobre a ordem**.
+> Decidir se vale reclassificar ou se o rótulo de banda é só histórico.
+>
+> ⚠️ **Busto no limite alto do "PEQUENO A MÉDIO" — 3 folhas seguidas** (`b09h_d3`,
+> `b07_d3`, `b06h_d3`). Não é acaso: **reforçar essa linha no slot do descritor**,
+> como já foi feito nas últimas duas (*"não aumentá-lo, ele é pequeno"*).
 >
 > ### ⚠️ O `b09_d3` masculino AINDA é servido acima de IMC 31,2
 >
@@ -118,67 +122,46 @@
 > travando o feminino** — as bandas `b02`–`b06` da `d3` têm pouca massa entre si
 > por natureza. Para andar, trocar o substantivo.
 >
-> ⚠️ **Não usar `b07_d3` para subir:** o descritor dela é *"Muito musculosa"*,
-> intensificador, e a §2.1 registra que adjetivo de intensidade não move o corpo.
->
 > **Corpo feminino vem ~2,8 mais leve que o masculino no mesmo descritor `d3`.**
 > O `f_b05_d3` (21,0) caiu no nível do `m_b04_d3` (21,1), não do `m_b05_d3` (23,8).
 > Escada da `m d3` para planejar: 19,9 · 20,8 · 21,1 · 23,8 · 27,0 · 27,4 · 32,4 ·
 > 34,7 · 35,7 · 53,8.
 >
-> ### 🔴 FALTAM 17 SLOTS FEMININOS — 11 deles MUSCULOSOS
+> ### 🔴 FALTAM 13 SLOTS FEMININOS — a `f d2` é a linha mais atrasada
 >
-> **60 avatares; 21 femininos ocupando 17 dos 32 slots da grade.** Os outros 4 são
-> inserções em slot já ocupado (`b04h_d1`, `b09h_d2`, `b09i_d2`, `b09h_d3`).
+> **64 avatares; 25 femininos ocupando 19 dos 32 slots da grade.** Os outros 6 são
+> inserções em slot já ocupado (`b04h_d1`, `b09h_d2`, `b09i_d2`, `b06h_d3`,
+> `b08h_d3`, `b09h_d3`).
 >
-> | linha | grade | feitos | faltam | quais |
-> |---|---:|---:|---:|---|
-> | `f d1` | 12 | 8 | 4 | b02 b05 b06 b10 |
-> | `f d2` | 11 | 5 | 6 | b01 b03 b07 b08 b10 b11 |
-> | **`f d3`** | **9** | **4** | **5** | **b02 b03 b04 · b07 b10** |
+> | linha | grade | slots | insrç. | faltam | quais |
+> |---|---:|---:|---:|---:|---|
+> | `f d1` | 12 (b01–b12) | 9 | 1 | **3** | b02 b05 b10 |
+> | **`f d2`** | 11 (b01–b11) | 5 | 2 | **6** | b01 b03 b07 b08 b10 b11 |
+> | `f d3` | 9 (**b02–b10**) | 5 | 3 | **4** | b02 b03 b04 b10 |
 >
-> ⚠️ **Duas contagens à mão erradas foram corrigidas aqui em 30/07, e é a §5.4
-> reincidindo:** dizia "18 femininos ocupando 15 slots" com a própria tabela
-> somando 20 e 17; e listava **`b06`** como slot `d3` faltando quando o
-> `zen_f_b06_d3` estava feito desde a sessão 13 — a coluna "faltam" dizia 5 e a
-> lista tinha 6 itens. Conferido contra o `library.json`: 60 ids, 39 masculinos,
-> 21 femininos.
+> ⚠️ **A grade da `d3` começa em `b02` e termina em `b10`** — não existe `b01_d3`.
+> Um script de contagem que assume `b01..b09` inventa um slot que não existe e
+> esconde o `b10`; aconteceu nesta sessão e foi corrigido na hora.
 >
-> **Contagem impressa pelo índice, não contada à mão (§5.4)** — `build_index.py`.
+> **Contar SEMPRE derivando do `library.json`**, nunca à mão (§5.4) — e conferir a
+> faixa da grade contra o `docs/blocos/prompt_f.md`, que é a fonte dos descritores.
+>
 > **⚠️ NÃO confundir com os vãos `high` de IMC**, que medem continuidade da escada
 > dentro das linhas que existem; estes medem completude da grade. Já troquei uma
 > coisa pela outra e respondi errado.
 >
-> ### O que a sessão 13 mediu, e mudou de doutrina
+> ### 🔧 Quatro pegadinhas de régua que se pagam caro — todas em `LICOES.md` §1.1
 >
-> Quatro avatares fechados, todos 8/8. Detalhe no `LICOES.md`:
->
-> | id | previsto | medido | erro | gerador |
-> |---|---|---:|---:|---|
-> | `zen_f_b05_d3` | 22–26 | **21,0** | −1,0 | ChatGPT |
-> | `zen_f_b06_d3` | 23–27 | **22,1** | −0,9 | ChatGPT |
-> | `zen_f_b08_d3` | 26–34 | **28,4** | ✅ | ChatGPT |
-> | `zen_f_b09_d3` | 32–45 | **32,4** | ✅ | **Gemini** |
->
-> - **§1.1 — o vazamento do `sheet_qa` NÃO é do Gemini, é do método.** Três folhas
->   do ChatGPT deram a assinatura (`y=0`, 4–5% de variação) com geometria real de
->   0,54–0,65%. A doutrina antiga teria **descartado três folhas boas** por violar
->   a §3.3. Ao ver a assinatura: medir o topo em vários limiares, ou rodar o
->   `crop.py`, que é o detector do caminho do produto.
-> - **§1.1 — a sonda de tônus AFIRMA, mas não NEGA.** Leu −1,1% num abdômen com
->   gomos laterais e +24,4% / +30,7% em gomos centrais, porque amostra só a tira
->   central (`meia_frac` 0,22). Silêncio dela não reprova folha `d3`.
-> - **§3.6 — meia resolução serve inclusive em `d3`.** A ressalva antiga era
->   hipótese nunca medida, recomendada como se fosse regra. Testada: 718 px
->   ampliados **1,67×** entregaram gomos e separação de quadríceps limpos.
-> - **§4.2c — o SLOT do Multi-View da Meshy não muda a malha.** Medido em 58
->   masters: esquerdo 0,288 mm de média contra direito 0,334, e **por faixa de IMC
->   o sinal troca de lado**. Quem governa é o tamanho do corpo (r = 0,544), e a
->   tolerância é 5 mm. **Nenhuma trava valida orientação frontal** — isso é olho.
-> - **§3.5 confirmada na direção oposta.** A âncora move o IMC, o descritor move o
->   tônus; agora medido nos dois sentidos.
-> - **§1.1 — `thigh` e circunferências de tronco não valem por avatar.** `at_frac`
->   fixo contra virilha que se move; usar `volume_l`.
+> - **Assinatura de vazamento do `sheet_qa`** (`y=0` + alturas divergindo 4–5% +
+>   ombro menor que cintura): **não é do gerador, é do método.** Ao vê-la, remedir
+>   em vários limiares ou rodar o `crop.py`. Sem a assinatura, a medida vale —
+>   inclusive no Gemini.
+> - **A sonda de tônus AFIRMA, mas não NEGA.** Amostra só a tira central
+>   (`meia_frac` 0,22): silêncio dela não reprova folha `d3`.
+> - **`thigh` e circunferências de tronco não valem por avatar** — `at_frac` fixo
+>   contra virilha que se move. Usar `volume_l`.
+> - **Nenhuma trava valida orientação frontal** (§4.2c) — isso é olho, no preview.
+>   O slot do Multi-View da Meshy não muda a malha; medido em 58 masters.
 
 > **Este arquivo só guarda o AGORA.** Doutrinas duráveis estão em
 > `docs/LICOES.md`; a narrativa de como cada uma foi descoberta está em
@@ -215,6 +198,26 @@ O GLB do Downloads vira `01_raw/{id}_raw.glb` — **com o sufixo `_raw`**, senã
 **Os passos que eu pulo são sempre os do FIM** (§6.2b): `probe_tonus_f` e
 `restyle --preview` não bloqueiam nada e por isso somem quando a sessão acelera.
 Reler este bloco linha a linha antes de dizer que um avatar acabou.
+
+> ### 🔴 RITMO DA ESTEIRA — cobrado pelo Rogério em 30/07, sessão 15
+>
+> *"É só pra seguir o fluxo: gera prompt, passou, cropa, gero GLB, você recebe,
+> organiza na biblioteca e já manda próximo prompt."* E: *"você parece que a cada
+> sessão vem com uma personalidade diferente, preciso de consistência."*
+>
+> 1. **UM prompt por vez.** Ele recusou explicitamente a ideia de mandar 2–3
+>    prompts adiantados: *"se mandar 3 e der erro em um, ficam 2 travados no meio
+>    da conversa, eu preciso voltar ou pedir de novo, e vira bagunça."* **Não
+>    propor isso de novo.**
+> 2. **O prompt vai SEMPRE completo**, nunca só o bloco `TIPO DE CORPO` a trocar.
+> 3. **Não documentar entre um avatar e outro, e não commitar sem ele mandar.**
+>    Documentação é despejada de uma vez no fim da sessão, quando ele pedir. Na
+>    sessão 15 a escrita entre avatares custou mais tempo que a produção.
+> 4. Entre um avatar e o próximo, a saída é só: **veredito da medida, o número, e
+>    o prompt seguinte.**
+>
+> **O gargalo real são 3 dias sem fechar a biblioteca** — e a causa não é a Meshy,
+> é tudo que eu escrevo em volta.
 
 **Ao olhar o preview, olhar DUAS coisas:** se o relevo sobreviveu ao 60k **e se a
 identidade do personagem se manteve**. Foi a segunda que falhou no `b09_d3`,
@@ -271,6 +274,24 @@ reclassificar ou inserir, nunca regerar.
   cortar mais começaria a tirar números que sustentam doutrina. Duas linhas novas
   na tabela da §1.1 (orientação frontal e resolução vs. identidade) também
   cresceram o arquivo de propósito.
+- 🔴 **A SESSÃO 15 ESTÁ SEM COMMIT.** 7 arquivos modificados: `library.json`,
+  `metrics/library_metrics.json`, `logs/process.log`, `state.md`, `CLAUDE.md`,
+  `docs/LICOES.md`, `docs/blocos/prompt_f.md`. **Ele pediu para commitar só quando
+  mandar** — perguntar no começo da sessão 16.
+
+  ⚠️ **Os 4 avatares novos NÃO entram em commit nenhum.** O `.gitignore` cobre
+  `00_input/`, `02_master/` e `03_dist/`, então **folha, master e GLB existem só
+  no disco local do Rogério** — o git guarda apenas o índice, as medidas e a
+  documentação. Consequência real: **não há backup dos assets**, e uma
+  reclassificação como a do `b06i_d3`→`b08h_d3` é irreversível pelo git. Se algum
+  dia isso importar, a conversa é sobre LFS ou storage externo, não sobre commit.
+- ⚠️ **`intake.py --check` deixa armadilha: a folha fica gravada.** Rodei
+  `crop.py --check` numa folha que depois **reprovei**, mas o `intake` já a tinha
+  escrito em `00_input/sheets/f/`. Na folha seguinte com o mesmo id o `intake`
+  barrou ("folha aprovada não se substitui") e o `crop` rodou na folha **velha**,
+  gerando referências erradas — só apareceu porque a variação de altura veio
+  1,52% em vez de 0,22%. Conserto: `--force`. **Para testar folha duvidosa, usar
+  um id descartável**, nunca o id real.
 - ✅ **COMMITADO em 30/07 pela manhã**, em dois commits: `c0819c8` com os 6
   avatares das sessões 12 e 13 mais o `SEAL_ISOLATION`, e `0a462ac` com a
   documentação e o diário. **Sem push** — não foi pedido.
@@ -297,6 +318,13 @@ reclassificar ou inserir, nunca regerar.
   junto com o do `LICOES.md`.
 - **`approved` é campo morto no `library.json`** — ver o bloco do `b09_d3`.
 - **Conferir `git status` antes de mexer** — ver o item do commit pendente acima.
+- ✅ **`state.md` enxugado no fim da sessão 15: 8,1k → 5,5k tokens (−32%).** Saíram
+  os blocos narrativos das sessões 13 e 14 (`b09h_d3`, o "o que a sessão 13
+  mediu", as duas contagens à mão erradas) — a narrativa foi para o diário, que
+  ganhou a seção da sessão 15 inteira. As quatro pegadinhas de régua viraram uma
+  lista de 4 linhas apontando para §1.1. **Não bateu os ~4k estimados**: o bloco da
+  sessão 15 é o contexto corrente e precisa ficar por inteiro. Quando a sessão 16
+  fechar, é ele que desce para o diário.
 - 🧹 **`state.md.cauda.tmp` está untracked na raiz**, sobra do enxugamento do
   `state.md` na sessão 13. Conferir o conteúdo e apagar; não entrou em nenhum
   commit, então não há histórico a preservar.
