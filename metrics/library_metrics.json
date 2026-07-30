@@ -3477,6 +3477,713 @@
         "thigh": 0.2646,
         "calf": 0.2063
       }
+    },
+    "zen_f_b08_d1": {
+      "measured_at": "2026-07-29T16:09:51Z",
+      "height_m": 1.75,
+      "arm_split_frac": 0.691,
+      "leg_split_frac": 0.397,
+      "volume_l": 129.0,
+      "est_mass_kg": 130.3,
+      "est_bmi": 42.6,
+      "circumferences_cm": {
+        "neck": {
+          "cm": 45.3,
+          "at_frac": 0.856
+        },
+        "chest": {
+          "cm": 123.0,
+          "at_frac": 0.686
+        },
+        "waist_navel": {
+          "cm": 125.1,
+          "at_frac": 0.6
+        },
+        "waist_min": {
+          "cm": 111.4,
+          "at_frac": 0.653
+        },
+        "hip": {
+          "cm": 141.4,
+          "at_frac": 0.507
+        },
+        "forearm": {
+          "cm": 34.1,
+          "left_cm": 34.1,
+          "right_cm": 34.2,
+          "at_frac": 0.629
+        },
+        "biceps": {
+          "cm": 34.5,
+          "left_cm": 34.6,
+          "right_cm": 34.5,
+          "at_frac": 0.677
+        },
+        "wrist": {
+          "cm": 29.8,
+          "at_frac": 0.583
+        },
+        "thigh": {
+          "cm": 76.6,
+          "left_cm": 76.6,
+          "right_cm": 76.6,
+          "at_frac": 0.391
+        },
+        "calf": {
+          "cm": 57.1,
+          "left_cm": 57.1,
+          "right_cm": 57.0,
+          "at_frac": 0.32
+        }
+      },
+      "ratios_to_height": {
+        "neck": 0.2589,
+        "chest": 0.7029,
+        "waist_navel": 0.7149,
+        "waist_min": 0.6366,
+        "hip": 0.808,
+        "forearm": 0.1949,
+        "biceps": 0.1971,
+        "wrist": 0.1703,
+        "thigh": 0.4377,
+        "calf": 0.3263
+      }
+    },
+    "zen_f_b07_d1": {
+      "measured_at": "2026-07-29T16:37:32Z",
+      "height_m": 1.75,
+      "arm_split_frac": 0.709,
+      "leg_split_frac": 0.409,
+      "volume_l": 96.6,
+      "est_mass_kg": 97.6,
+      "est_bmi": 31.9,
+      "circumferences_cm": {
+        "neck": {
+          "cm": 34.8,
+          "at_frac": 0.87
+        },
+        "chest": {
+          "cm": 96.1,
+          "at_frac": 0.703
+        },
+        "waist_navel": {
+          "cm": 105.8,
+          "at_frac": 0.6
+        },
+        "waist_min": {
+          "cm": 88.6,
+          "at_frac": 0.673
+        },
+        "hip": {
+          "cm": 127.0,
+          "at_frac": 0.501
+        },
+        "forearm": {
+          "cm": 28.7,
+          "left_cm": 28.6,
+          "right_cm": 28.8,
+          "at_frac": 0.643
+        },
+        "biceps": {
+          "cm": 32.3,
+          "left_cm": 32.3,
+          "right_cm": 32.2,
+          "at_frac": 0.696
+        },
+        "wrist": {
+          "cm": 23.4,
+          "at_frac": 0.592
+        },
+        "thigh": {
+          "cm": 68.7,
+          "left_cm": 68.7,
+          "right_cm": 68.7,
+          "at_frac": 0.403
+        },
+        "calf": {
+          "cm": 49.0,
+          "left_cm": 48.7,
+          "right_cm": 49.3,
+          "at_frac": 0.32
+        }
+      },
+      "ratios_to_height": {
+        "neck": 0.1989,
+        "chest": 0.5491,
+        "waist_navel": 0.6046,
+        "waist_min": 0.5063,
+        "hip": 0.7257,
+        "forearm": 0.164,
+        "biceps": 0.1846,
+        "wrist": 0.1337,
+        "thigh": 0.3926,
+        "calf": 0.28
+      }
+    },
+    "zen_f_b09_d1": {
+      "measured_at": "2026-07-29T16:55:48Z",
+      "height_m": 1.75,
+      "arm_split_frac": 0.72,
+      "leg_split_frac": 0.414,
+      "volume_l": 103.3,
+      "est_mass_kg": 104.3,
+      "est_bmi": 34.1,
+      "circumferences_cm": {
+        "neck": {
+          "cm": 36.0,
+          "at_frac": 0.873
+        },
+        "chest": {
+          "cm": 101.6,
+          "at_frac": 0.72
+        },
+        "waist_navel": {
+          "cm": 113.4,
+          "at_frac": 0.6
+        },
+        "waist_min": {
+          "cm": 90.1,
+          "at_frac": 0.673
+        },
+        "hip": {
+          "cm": 133.4,
+          "at_frac": 0.49
+        },
+        "forearm": {
+          "cm": 31.8,
+          "left_cm": 31.4,
+          "right_cm": 32.2,
+          "at_frac": 0.64
+        },
+        "biceps": {
+          "cm": 32.1,
+          "left_cm": 32.2,
+          "right_cm": 32.0,
+          "at_frac": 0.698
+        },
+        "wrist": {
+          "cm": 26.0,
+          "at_frac": 0.589
+        },
+        "thigh": {
+          "cm": 75.1,
+          "left_cm": 75.4,
+          "right_cm": 74.9,
+          "at_frac": 0.409
+        },
+        "calf": {
+          "cm": 48.9,
+          "left_cm": 48.6,
+          "right_cm": 49.2,
+          "at_frac": 0.32
+        }
+      },
+      "ratios_to_height": {
+        "neck": 0.2057,
+        "chest": 0.5806,
+        "waist_navel": 0.648,
+        "waist_min": 0.5149,
+        "hip": 0.7623,
+        "forearm": 0.1817,
+        "biceps": 0.1834,
+        "wrist": 0.1486,
+        "thigh": 0.4291,
+        "calf": 0.2794
+      }
+    },
+    "zen_f_b04h_d1": {
+      "measured_at": "2026-07-29T17:12:15Z",
+      "height_m": 1.75,
+      "arm_split_frac": 0.74,
+      "leg_split_frac": 0.474,
+      "volume_l": 73.0,
+      "est_mass_kg": 73.7,
+      "est_bmi": 24.1,
+      "circumferences_cm": {
+        "neck": {
+          "cm": 32.1,
+          "at_frac": 0.873
+        },
+        "chest": {
+          "cm": 95.4,
+          "at_frac": 0.72
+        },
+        "waist_navel": {
+          "cm": 89.3,
+          "at_frac": 0.6
+        },
+        "waist_min": {
+          "cm": 74.7,
+          "at_frac": 0.659
+        },
+        "hip": {
+          "cm": 115.2,
+          "at_frac": 0.49
+        },
+        "forearm": {
+          "cm": 23.6,
+          "left_cm": 23.9,
+          "right_cm": 23.3,
+          "at_frac": 0.635
+        },
+        "biceps": {
+          "cm": 27.2,
+          "left_cm": 27.4,
+          "right_cm": 27.1,
+          "at_frac": 0.698
+        },
+        "wrist": {
+          "cm": 19.5,
+          "at_frac": 0.583
+        },
+        "thigh": {
+          "cm": 53.1,
+          "left_cm": 53.8,
+          "right_cm": 52.4,
+          "at_frac": 0.46
+        },
+        "calf": {
+          "cm": 42.1,
+          "left_cm": 42.4,
+          "right_cm": 41.9,
+          "at_frac": 0.32
+        }
+      },
+      "ratios_to_height": {
+        "neck": 0.1834,
+        "chest": 0.5451,
+        "waist_navel": 0.5103,
+        "waist_min": 0.4269,
+        "hip": 0.6583,
+        "forearm": 0.1349,
+        "biceps": 0.1554,
+        "wrist": 0.1114,
+        "thigh": 0.3034,
+        "calf": 0.2406
+      }
+    },
+    "zen_f_b12_d1": {
+      "measured_at": "2026-07-29T17:50:26Z",
+      "height_m": 1.75,
+      "arm_split_frac": 0.606,
+      "leg_split_frac": 0.3,
+      "volume_l": 346.4,
+      "est_mass_kg": 349.9,
+      "est_bmi": 114.2,
+      "circumferences_cm": {
+        "neck": {
+          "cm": 60.4,
+          "at_frac": 0.89
+        },
+        "chest": {
+          "cm": 202.7,
+          "at_frac": 0.6
+        },
+        "waist_navel": {
+          "cm": 202.7,
+          "at_frac": 0.6
+        },
+        "waist_min": {
+          "cm": 199.5,
+          "at_frac": 0.607,
+          "arms_merged": true
+        },
+        "hip": {
+          "cm": 237.4,
+          "at_frac": 0.487
+        },
+        "biceps": {
+          "cm": null,
+          "at_frac": null
+        },
+        "forearm": {
+          "cm": null,
+          "at_frac": null
+        },
+        "wrist": {
+          "cm": null,
+          "at_frac": null
+        },
+        "thigh": {
+          "cm": 110.4,
+          "left_cm": 110.4,
+          "right_cm": 110.5,
+          "at_frac": 0.294
+        },
+        "calf": {
+          "cm": 112.0,
+          "left_cm": 112.0,
+          "right_cm": 112.1,
+          "at_frac": 0.297
+        }
+      },
+      "ratios_to_height": {
+        "neck": 0.3451,
+        "chest": 1.1583,
+        "waist_navel": 1.1583,
+        "waist_min": 1.14,
+        "hip": 1.3566,
+        "biceps": null,
+        "forearm": null,
+        "wrist": null,
+        "thigh": 0.6309,
+        "calf": 0.64
+      }
+    },
+    "zen_f_b11_d1": {
+      "measured_at": "2026-07-29T18:16:31Z",
+      "height_m": 1.75,
+      "arm_split_frac": 0.671,
+      "leg_split_frac": 0.409,
+      "volume_l": 159.1,
+      "est_mass_kg": 160.7,
+      "est_bmi": 52.5,
+      "circumferences_cm": {
+        "neck": {
+          "cm": 48.6,
+          "at_frac": 0.85
+        },
+        "chest": {
+          "cm": 124.5,
+          "at_frac": 0.666
+        },
+        "waist_navel": {
+          "cm": 141.2,
+          "at_frac": 0.6
+        },
+        "waist_min": {
+          "cm": 122.6,
+          "at_frac": 0.656
+        },
+        "hip": {
+          "cm": 164.8,
+          "at_frac": 0.49
+        },
+        "forearm": {
+          "cm": 37.3,
+          "left_cm": 36.9,
+          "right_cm": 37.7,
+          "at_frac": 0.62
+        },
+        "biceps": {
+          "cm": 39.9,
+          "left_cm": 40.5,
+          "right_cm": 39.4,
+          "at_frac": 0.659
+        },
+        "wrist": {
+          "cm": 32.9,
+          "at_frac": 0.583
+        },
+        "thigh": {
+          "cm": 87.3,
+          "left_cm": 87.2,
+          "right_cm": 87.4,
+          "at_frac": 0.403
+        },
+        "calf": {
+          "cm": 66.0,
+          "left_cm": 66.6,
+          "right_cm": 65.5,
+          "at_frac": 0.32
+        }
+      },
+      "ratios_to_height": {
+        "neck": 0.2777,
+        "chest": 0.7114,
+        "waist_navel": 0.8069,
+        "waist_min": 0.7006,
+        "hip": 0.9417,
+        "forearm": 0.2131,
+        "biceps": 0.228,
+        "wrist": 0.188,
+        "thigh": 0.4989,
+        "calf": 0.3771
+      }
+    },
+    "zen_f_b05_d3": {
+      "measured_at": "2026-07-30T04:01:47Z",
+      "height_m": 1.75,
+      "arm_split_frac": 0.757,
+      "leg_split_frac": 0.477,
+      "volume_l": 63.6,
+      "est_mass_kg": 64.3,
+      "est_bmi": 21.0,
+      "circumferences_cm": {
+        "neck": {
+          "cm": 31.2,
+          "at_frac": 0.873
+        },
+        "chest": {
+          "cm": 88.4,
+          "at_frac": 0.72
+        },
+        "waist_navel": {
+          "cm": 75.3,
+          "at_frac": 0.6
+        },
+        "waist_min": {
+          "cm": 65.0,
+          "at_frac": 0.639
+        },
+        "hip": {
+          "cm": 106.9,
+          "at_frac": 0.479
+        },
+        "forearm": {
+          "cm": 25.1,
+          "left_cm": 25.1,
+          "right_cm": 25.1,
+          "at_frac": 0.629
+        },
+        "biceps": {
+          "cm": 26.8,
+          "left_cm": 26.8,
+          "right_cm": 26.9,
+          "at_frac": 0.698
+        },
+        "wrist": {
+          "cm": 19.5,
+          "at_frac": 0.566
+        },
+        "thigh": {
+          "cm": 49.5,
+          "left_cm": 49.3,
+          "right_cm": 49.6,
+          "at_frac": 0.46
+        },
+        "calf": {
+          "cm": 37.6,
+          "left_cm": 37.7,
+          "right_cm": 37.5,
+          "at_frac": 0.209
+        }
+      },
+      "ratios_to_height": {
+        "neck": 0.1783,
+        "chest": 0.5051,
+        "waist_navel": 0.4303,
+        "waist_min": 0.3714,
+        "hip": 0.6109,
+        "forearm": 0.1434,
+        "biceps": 0.1531,
+        "wrist": 0.1114,
+        "thigh": 0.2829,
+        "calf": 0.2149
+      }
+    },
+    "zen_f_b06_d3": {
+      "measured_at": "2026-07-30T04:41:44Z",
+      "height_m": 1.75,
+      "arm_split_frac": 0.749,
+      "leg_split_frac": 0.486,
+      "volume_l": 66.9,
+      "est_mass_kg": 67.6,
+      "est_bmi": 22.1,
+      "circumferences_cm": {
+        "neck": {
+          "cm": 32.4,
+          "at_frac": 0.876
+        },
+        "chest": {
+          "cm": 91.7,
+          "at_frac": 0.72
+        },
+        "waist_navel": {
+          "cm": 77.9,
+          "at_frac": 0.6
+        },
+        "waist_min": {
+          "cm": 65.7,
+          "at_frac": 0.644
+        },
+        "hip": {
+          "cm": 107.0,
+          "at_frac": 0.49
+        },
+        "forearm": {
+          "cm": 25.5,
+          "left_cm": 25.6,
+          "right_cm": 25.5,
+          "at_frac": 0.635
+        },
+        "biceps": {
+          "cm": 28.4,
+          "left_cm": 28.2,
+          "right_cm": 28.5,
+          "at_frac": 0.698
+        },
+        "wrist": {
+          "cm": 18.1,
+          "at_frac": 0.577
+        },
+        "thigh": {
+          "cm": 59.4,
+          "left_cm": 59.9,
+          "right_cm": 58.9,
+          "at_frac": 0.46
+        },
+        "calf": {
+          "cm": 40.1,
+          "left_cm": 40.2,
+          "right_cm": 40.1,
+          "at_frac": 0.22
+        }
+      },
+      "ratios_to_height": {
+        "neck": 0.1851,
+        "chest": 0.524,
+        "waist_navel": 0.4451,
+        "waist_min": 0.3754,
+        "hip": 0.6114,
+        "forearm": 0.1457,
+        "biceps": 0.1623,
+        "wrist": 0.1034,
+        "thigh": 0.3394,
+        "calf": 0.2291
+      }
+    },
+    "zen_f_b08_d3": {
+      "measured_at": "2026-07-30T05:06:51Z",
+      "height_m": 1.75,
+      "arm_split_frac": 0.72,
+      "leg_split_frac": 0.477,
+      "volume_l": 86.2,
+      "est_mass_kg": 87.0,
+      "est_bmi": 28.4,
+      "circumferences_cm": {
+        "neck": {
+          "cm": 36.3,
+          "at_frac": 0.876
+        },
+        "chest": {
+          "cm": 100.0,
+          "at_frac": 0.72
+        },
+        "waist_navel": {
+          "cm": 83.5,
+          "at_frac": 0.6
+        },
+        "waist_min": {
+          "cm": 68.5,
+          "at_frac": 0.641
+        },
+        "hip": {
+          "cm": 120.4,
+          "at_frac": 0.49
+        },
+        "forearm": {
+          "cm": 33.4,
+          "left_cm": 33.7,
+          "right_cm": 33.1,
+          "at_frac": 0.629
+        },
+        "biceps": {
+          "cm": 34.3,
+          "left_cm": 34.0,
+          "right_cm": 34.5,
+          "at_frac": 0.697
+        },
+        "wrist": {
+          "cm": 22.2,
+          "at_frac": 0.563
+        },
+        "thigh": {
+          "cm": 75.0,
+          "left_cm": 75.0,
+          "right_cm": 75.1,
+          "at_frac": 0.446
+        },
+        "calf": {
+          "cm": 48.5,
+          "left_cm": 48.4,
+          "right_cm": 48.6,
+          "at_frac": 0.217
+        }
+      },
+      "ratios_to_height": {
+        "neck": 0.2074,
+        "chest": 0.5714,
+        "waist_navel": 0.4771,
+        "waist_min": 0.3914,
+        "hip": 0.688,
+        "forearm": 0.1909,
+        "biceps": 0.196,
+        "wrist": 0.1269,
+        "thigh": 0.4286,
+        "calf": 0.2771
+      }
+    },
+    "zen_f_b09_d3": {
+      "measured_at": "2026-07-30T05:20:12Z",
+      "height_m": 1.75,
+      "arm_split_frac": 0.711,
+      "leg_split_frac": 0.489,
+      "volume_l": 98.2,
+      "est_mass_kg": 99.2,
+      "est_bmi": 32.4,
+      "circumferences_cm": {
+        "neck": {
+          "cm": 47.4,
+          "at_frac": 0.893
+        },
+        "chest": {
+          "cm": 100.9,
+          "at_frac": 0.706
+        },
+        "waist_navel": {
+          "cm": 88.5,
+          "at_frac": 0.6
+        },
+        "waist_min": {
+          "cm": 75.3,
+          "at_frac": 0.653
+        },
+        "hip": {
+          "cm": 115.2,
+          "at_frac": 0.496
+        },
+        "forearm": {
+          "cm": 38.8,
+          "left_cm": 38.4,
+          "right_cm": 39.2,
+          "at_frac": 0.635
+        },
+        "biceps": {
+          "cm": 43.6,
+          "left_cm": 44.2,
+          "right_cm": 43.1,
+          "at_frac": 0.698
+        },
+        "wrist": {
+          "cm": 21.3,
+          "at_frac": 0.572
+        },
+        "thigh": {
+          "cm": 71.4,
+          "left_cm": 71.2,
+          "right_cm": 71.7,
+          "at_frac": 0.432
+        },
+        "calf": {
+          "cm": 50.5,
+          "left_cm": 50.8,
+          "right_cm": 50.3,
+          "at_frac": 0.206
+        }
+      },
+      "ratios_to_height": {
+        "neck": 0.2709,
+        "chest": 0.5766,
+        "waist_navel": 0.5057,
+        "waist_min": 0.4303,
+        "hip": 0.6583,
+        "forearm": 0.2217,
+        "biceps": 0.2491,
+        "wrist": 0.1217,
+        "thigh": 0.408,
+        "calf": 0.2886
+      }
     }
   }
 }

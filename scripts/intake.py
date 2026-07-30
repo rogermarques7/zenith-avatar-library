@@ -47,7 +47,7 @@ SEAL_MAX_PX   = 300     # maior lado plausivel
 SEAL_MIN_FILL = 0.20    # blob compacto: area/bbox. Estrela cheia da ~0,45
 SEAL_QUADRANT = (0.55, 0.55)   # procura em x> e y> desta fracao do canvas
 SEAL_LIGHTER  = 6       # o selo e MAIS CLARO que o fundo, em TODOS os canais
-SEAL_ISOLATION = 20     # px de fundo limpo exigidos ao redor do selo
+SEAL_ISOLATION = 3      # px de fundo limpo exigidos ao redor do selo. Ver nota.
 PATCH_PAD     = 5       # folga ao redor do selo, em px
 RESIDUE_MAX   = 6       # pixels acima do limiar aceitos apos apagar
 SHEET_EXTS    = (".png", ".jpg", ".jpeg", ".webp")
@@ -159,6 +159,30 @@ def find_seal(arr, bg, body, W, H):
                 escuros que o fundo, nunca mais claros em todos os canais.
       isolado - o selo pousa em fundo limpo. Pedaco de corpo tem corpo do lado.
                 Isso tambem garante que o retalho de cobertura e seguro.
+
+    O RAIO DE ISOLAMENTO ERA 20 px E DEIXOU UM SELO PASSAR (29/07)
+        Na folha do zen_f_b11_d1 (obesidade grau II, meia resolucao pelo
+        "compartilhar imagem" do §3.6) o selo 48x48 passou em tamanho,
+        preenchimento e claridade, e foi rejeitado SO pelo isolamento: a perna
+        da vista de costas cai a menos de 6 px dele, e o anel de 20 px acusava
+        939 px de corpo. Corpo largo + meia resolucao = folga pequena em px.
+
+        Medido no banco de ensaio (2 selos vistos a olho, 6 falsos positivos
+        confirmados como corpo), fracao do anel que e corpo:
+
+            raio    selos          corpo
+            3 px    0,0% / 0,0%    1,4% .. 76,7%
+            6 px    0,0% / 1,1%    1,1% .. 78,7%
+            12 px   0,0% / 9,1%    2,8% .. 80,7%
+
+        So o raio de 3 px separa os dois grupos. Nao e "isolado num raio
+        grande", e "nao encosta no corpo" - que e o que a frase acima sempre
+        quis dizer. Os raios maiores mediam outra coisa: quanto espaco vazio
+        havia em volta, que depende do tamanho do corpo e da resolucao.
+
+        A protecao contra apagar corpo NAO depende so daqui: o clean_patch
+        morre se nao achar fundo limpo para copiar, e o residuo pos-retalho e
+        conferido contra RESIDUE_MAX.
     """
     qx, qy = W * SEAL_QUADRANT[0], H * SEAL_QUADRANT[1]
     lighter = (arr - bg).min(axis=2) > SEAL_LIGHTER
