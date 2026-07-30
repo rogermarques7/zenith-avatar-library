@@ -150,6 +150,36 @@ Custou duas regerações da mãe feminina: usei como referência de tônus uma f
 que tinha gomos abdominais que o descritor proibia em maiúsculas, e declarei a
 folha nova (correta) "regredida".
 
+### 1.4b ✅ AS RAZÕES separam "corpo novo" de "âncora reescalada" — a trava que faltava
+
+**A régua de largura não distingue um arquétipo novo de um zoom da âncora.** Se
+todas as larguras sobem os mesmos ~0,5 pp e as **razões ficam paradas**, o que
+voltou foi a mesma figura 2% maior, e o avatar sairia duplicado.
+
+| folha | `cintura/quadril` | `cintura/ombro` | veredito |
+|---|---:|---:|---|
+| `b06h_d3` (§2.5: "0,2 de IMC e ainda é outro corpo") | 0,614 → **0,584** | — | corpo novo |
+| tentativa `b03_d2` "magra e levemente atlética" | 0,594 → **0,595** | 0,587 → **0,583** | **âncora reescalada — reprovada** |
+| tentativa `b03_d2` "bailarina clássica" | 0,594 → 0,589 | 0,587 → **0,549** | corpo novo (mas leve demais) |
+
+**Limiar de trabalho: ~0,030 de movimento em alguma razão.** Abaixo de ~0,005 em
+todas, é cópia. Este é o único jeito barato de pegar duplicata **antes** da
+Meshy — o IMC próximo, sozinho, não decide nada (§2.5 proíbe tratar proximidade
+como redundância).
+
+### 1.4c ✅ A identidade feminina TEM assinatura na folha: cintura sobe E quadril encolhe
+
+O `zen_f_b09_d3` lê masculino por três traços — *peitoral em vez de busto, sem
+afunilamento de cintura, quadril estreito*. Os dois últimos são **mensuráveis na
+folha**: `cintura/quadril` subindo **ao mesmo tempo** que o quadril absoluto cai.
+
+Pego em 30/07 numa folha do Gemini antes da Meshy: `cintura/quadril` 0,594 →
+**0,651** com quadril **−0,62 pp**. Massa tinha ido na direção certa e o
+alinhamento era o melhor do dia (0,14%) — a folha teria passado por qualquer
+outra trava. **Rodar esta conferência em toda folha feminina**, e não confundir
+com a 1.4b: lá a razão parada reprova, aqui é a razão subindo *com quadril
+caindo* que reprova.
+
 ### 1.5 Duas estimativas concordando não são uma confirmação
 
 Estimei o IMC de uma folha por volume (~28) e pela regra aditiva (29,4), vi as
@@ -383,6 +413,39 @@ gerador, a previsão volta a ser faixa larga.
 **A única constante que atravessou os dois sexos é "OBESIDADE GRAU I" no Gemini,
 em ~33–34** (33,3 · 34,0 masculinos, 34,4 feminino). Quando o alvo for essa
 faixa, é tiro de uma geração.
+
+**Entradas novas (30/07, sessão 16) — ChatGPT feminino, extremo pesado:**
+
+| descritor | âncora anexa | pousou |
+|---|---|---:|
+| "powerlifter feminina / obesidade grau I" | **nenhuma** | **52,6** |
+| "mulher no começo da obesidade, NÃO mórbida" | **nenhuma** | **55,1** |
+| "corredora de maratona de elite" (`d3`) | 18,3 | **16,9** |
+
+### 2.5b ⛔ SATURADO: o vão `f d1` 34,1 → 42,6 — os dois geradores falham, em direções opostas
+
+**Cinco gerações em 30/07, e o resultado é uma medida, não um fracasso.** Este vão
+já não é candidato a folha: é caso para **shape key** no sistema híbrido, que é o
+4º degrau da escada de escalonamento e onde ela de fato termina.
+
+| gerador | âncora anexa | descritor | resultado |
+|---|---|---|---|
+| ChatGPT | nenhuma | "começo da obesidade" | **55,1** medido |
+| ChatGPT | par 24,1 + 31,9 | "obesidade grau I" | folha ordinalmente **maior** que a de 55,1 |
+| ChatGPT | 31,9 | "obesidade grau I" | idem |
+| Gemini | 19,0 | "obesidade grau I" | **Δ 0** — copiou a âncora |
+| Gemini | 19,0 **+ cláusula de direção explícita** | "obesidade grau I" | **Δ 0** — copiou a âncora |
+
+- **ChatGPT não tem corpo entre ~34 e ~52** na direção `d1`. É a mesma zona morta
+  da §2.5 documentada para 28–38, uma banda acima.
+- **Gemini com âncora muito abaixo do alvo devolve a âncora.** Δ de 0,1 a 0,5 pp
+  em todos os eixos, e a segunda tentativa trazia *"gere um corpo MUITO MAIS
+  PESADO e MUITO MAIS VOLUMOSO"* em parágrafo próprio. **Não adianta gritar a
+  direção**: com âncora a 19 pontos do alvo, a imagem ganha do texto.
+
+⚠️ **Não reabrir com "mais uma formulação".** Cinco redações diferentes já foram
+gastas. O que falta testar, se algum dia valer, é âncora **intermediária** no
+Gemini (~28–31), que é a única célula da matriz que nenhuma das cinco cobriu.
 
 **Os buracos medidos, e cada um é a falta de uma palavra:**
 
@@ -769,6 +832,36 @@ Conferir que nada está rodando antes de ler estado compartilhado.
 
 Ele larga em Downloads; o script busca, renomeia, limpa e move. Pedir para ele
 salvar, renomear ou apagar selo à mão é **regressão de fluxo**.
+
+**Corolário, cobrado em 30/07:** ao mandar subir na Meshy, **listar os três
+arquivos de referência pelo nome** (`{id}_ref_front.png`, `_ref_side.png`,
+`_ref_back.png`) e o caminho da pasta. *"Subir qual? sempre fala o nome da
+reference."* Repetir só os parâmetros da Meshy deixa ele parado.
+
+### 6.5b 🔴 A ÂNCORA é IMAGEM ANEXA — dizer o número não anexa nada
+
+**Duas gerações queimadas em 30/07 por isso.** Eu escrevia *"Âncora
+`zen_f_b09_d1` (34,1)"* como se fosse só a minha régua de comparação do
+`sheet_qa`, e **nunca mandava anexar a folha**. O `CHARACTER_BIBLE` §6.2 manda
+anexar em toda geração; sem imagem, o substantivo vai sozinho para o atrator do
+gerador. Os dois pousos batem exatamente com o passo sem âncora da §2.4:
+**+18,2** e **+21,0**.
+
+**O bloco de âncora precisa das DUAS metades**, e faltar qualquer uma quebra:
+1. **continuidade** — *"mesma personagem, mesmo rosto, mesma careca, mesma roupa,
+   mesma altura"*;
+2. **direção** — *"gere um corpo MAIS PESADO que a anexa"*.
+
+Só (1) → o gerador copia a âncora (Δ 0, medido duas vezes no Gemini). Só (2) ou
+nenhuma → estouro para o atrator. E a §2.4 continua valendo por cima disso: **não
+repetir no parágrafo de âncora traços de volume que o descritor já nomeia.**
+
+### 6.6b Instrução que zera o passo: "é um passo pequeno"
+
+A §2.3 já dizia que *o modelo tem passo mínimo e ignora pedido menor que ele*.
+Em 30/07 eu escrevi no prompt *"É um passo pequeno"* e recebi exatamente zero —
+a âncora reescalada da §1.4b. **Descrever o corpo-alvo; nunca descrever o
+tamanho do passo.**
 
 ### 6.6 Não explicar um desvio antes de a MEDIDA confirmar que houve desvio
 

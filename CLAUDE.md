@@ -15,8 +15,8 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 | decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,9k |
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,3k |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 4,1k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **12,2k** |
-| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-07.md` (**grep**, não ler inteiro) | 54k |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **13,7k** |
+| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-07.md` (**grep**, não ler inteiro) | 55,3k |
 
 > ### ⚠️ Manter a coluna de TAMANHO honesta — o número errado já custou
 >

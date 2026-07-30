@@ -1,6 +1,6 @@
 # state.md — o presente
 
-Última atualização: **30/07/2026, fim da sessão 15**
+Última atualização: **30/07/2026, fim da sessão 16**
 
 > ## 🔴 ABRIR AQUI NA SESSÃO NOVA
 >
@@ -8,69 +8,85 @@
 > Masculino não se toca até isso acabar — os dois vãos `high` dele já têm
 > conserto conhecido e ficam anotados no fim deste arquivo.
 >
-> **64 avatares — 39 masculinos e 25 femininos.** A sessão 15 fechou **4**:
-> `b07_d3`, `b06h_d3`, `b08h_d3` e `b06_d1`. Todos 8/8.
+> **67 avatares — 39 masculinos e 28 femininos.** A sessão 16 fechou **3**:
+> `b10_d2`, `b10_d1` e `b02_d3`. Todos 8/8.
 >
 > | linha | n | IMC medido |
 > |---|---:|---|
-> | `f d1` | 10 | 16,5 · 19,0 · 23,3 · 24,1 · 31,9 · **32,4** · 34,1 · 42,6 · 52,5 · 114,2 |
-> | `f d2` | 7 | 18,3 · 22,2 · 22,9 · 27,3 · 30,1 · 34,4 · 53,9 |
-> | **`f d3`** | **8** | **21,0 · 22,1 · 22,3 · 27,7 · 28,4 · 29,0 · 30,1 · 32,4** |
+> | `f d1` | 11 | 16,5 · 19,0 · 23,3 · 24,1 · 31,9 · 32,4 · 34,1 · 42,6 · 52,5 · **55,1** · 114,2 |
+> | `f d2` | 8 | 18,3 · 22,2 · 22,9 · 27,3 · 30,1 · 34,4 · **52,6** · 53,9 |
+> | **`f d3`** | **9** | **16,9** · 21,0 · 22,1 · 22,3 · 27,7 · 28,4 · 29,0 · 30,1 · 32,4 |
 >
-> ### 📋 A SESSÃO 15 EM UMA TABELA — 4 avatares, 4 previsões, 4 erros
+> ### 📋 A SESSÃO 16 EM UMA TABELA — 3 fechados, 5 folhas reprovadas
 >
-> | id | descritor | âncora | previsto | **medido** | erro |
-> |---|---|---:|---|---:|---:|
-> | `b07_d3` | atleta de **wellness** de competição | ~28,4 | — | **27,7** | — |
-> | `b06h_d3` | atleta de **bikini fitness** | 22,1 | 25 | **22,3** | −2,7 |
-> | `b08h_d3` | atleta de **CrossFit** de elite | 22,3 | 25–28 | **29,0** | +1,0 |
-> | `b06_d1` | peso normal alto, sem tônus | 24,1 | 27–31 | **32,4** | +1,4 |
+> | id | descritor | âncora **anexa** | previsto | **medido** |
+> |---|---|---|---|---:|
+> | `b10_d2` | powerlifter feminina / obesidade grau I | **nenhuma** | 40–42 | **52,6** |
+> | `b10_d1` | mulher no começo da obesidade | **nenhuma** | 38–42 | **55,1** |
+> | `b02_d3` | **corredora de maratona de elite** | 18,3 | 16,5–18,5 | **16,9** |
 >
-> **Nenhuma previsão caiu dentro** (§2.6). Narrativa completa da sessão 15 no
-> `docs/historico/diario-2026-07.md`; doutrinas em §2.2b, §2.2c e §3.3b.
+> O `b02_d3` **abriu o pé da linha `d3`**, que não tinha nada abaixo de 21,0. Foi
+> a única previsão que caiu dentro — e só depois de eu **corrigi-la pela medida da
+> folha**, não pelo descritor.
 >
-> ### 🔴 AS DUAS REGRAS QUE SAÍRAM DAQUI — usar já na próxima folha
+> ### 🔴 O ERRO DE PROCESSO DA SESSÃO — não repetir (§6.5b)
 >
-> **1. Categoria do mundo real, não adjetivo.** Descritor inerte não se conserta
-> com mais intensificador: troca-se o substantivo por uma **categoria que existe e
-> é julgada** ("wellness", "bikini fitness", "CrossFit de elite"). Escada medida,
-> feminina/ChatGPT: bikini fitness **22,3** · wellness **27,7** · fisiculturista
-> **28,4** · CrossFit **29,0** · fisiculturista pesada **30,1**.
+> **Eu escrevia o número da âncora e nunca mandava ANEXAR a folha.** Os dois
+> avatares pesados foram gerados sem imagem anexa nenhuma, e pousaram exatamente
+> no passo-sem-âncora da §2.4: **+18,2** e **+21,0**. O bloco de âncora tem duas
+> metades e as duas são obrigatórias: **continuidade** (mesma personagem) **e
+> direção** (*"gere um corpo MAIS PESADO que a anexa"*). Só continuidade → o
+> gerador copia a âncora, medido 2× no Gemini.
 >
-> **2. UM lever por folha.** Categoria governa **tamanho**, direção de volume
-> governa **forma**. Empilhados com negações dão **zero**: no `b06h_d3` três freios
-> juntos deram **+0,2**; tirando as negações, o mesmo lever deu **+6,7**.
-> ✅ Negação legítima nomeia o **atrator a evitar** (*"NÃO é obesa"*), nunca um
-> traço que o descritor pede.
+> **E: listar sempre os 3 arquivos de referência pelo nome ao mandar subir na
+> Meshy.** Cobrado por ele: *"subir qual? sempre fala o nome da reference."*
 >
-> ### ⚠️ DOIS VÃOS RESISTIRAM — e o remédio dos dois é a ÂNCORA
+> ### ⛔ VÃO SATURADO: `f d1` 34,1 → 42,6 — parar de gastar geração nele
 >
-> **`f d3` 22,3 → 27,7 (5,4)** — o vão é **mais estreito que o passo mínimo do
-> substantivo (~6,3)**, então a categoria pula por cima por construção, e não
-> existe nome de divisão entre "bikini fitness" e "CrossFit". **Manter "CrossFit"
-> e baixar a âncora para ~19–20**, mirando ~26.
+> **Cinco folhas, dois geradores, os dois falham em direções opostas** (§2.5b):
+> ChatGPT não tem corpo entre ~34 e ~52; Gemini com âncora baixa devolve a
+> âncora (Δ 0), mesmo com cláusula de direção gritada. **É caso de shape key no
+> híbrido, não de mais uma redação.** A única célula não testada é âncora
+> intermediária (~28–31) no Gemini.
 >
-> **`f d1` 24,1 → 31,9 (7,8)** — duas tentativas, as duas acima. A 2ª tinha
-> descritor deliberadamente contido e ainda pousou em **32,4**. **Amansar o
-> descritor não tira o corpo do poço** — baixar a âncora.
+> ### 📌 PARADO PARA O FIM, a pedido do Rogério: `f_b03_d2`
 >
-> ### ⚠️ `b08h_d3` nasceu `b06i_d3` e foi RECLASSIFICADO
+> Duas folhas reprovadas. A categoria **"bailarina clássica de companhia
+> profissional"** acerta a forma (`cintura/ombro` 0,587 → 0,549) mas pousa
+> **abaixo** da âncora de 18,3, e o `b03` precisa ser mais pesado que o `b02`.
+> **Ao retomar: mesma categoria, âncora `zen_f_b04_d2` (22,2)**, não a de 18,3.
 >
-> Pousou em 29,0, entre o `b08` (28,4) e o `b09h` (30,1) — o id mentia sobre a
-> ordem. Renomeado em todos os planos e no `library_metrics.json`.
-> ⚠️ Existe um `zen_m_b06i_d3` **masculino** intocado — conferir o prefixo de sexo
-> antes de qualquer renomeação em massa.
+> ### 🔴 AS REGRAS DE MIRA — ainda valem, agora com duas travas novas
 >
-> ### ⚠️ Rótulos fora de ordem na `f d1`, não consertados
+> **1. Categoria do mundo real, não adjetivo.** Escada medida, feminina/ChatGPT:
+> maratonista **16,9** · bikini fitness **22,3** · wellness **27,7** ·
+> fisiculturista **28,4** · CrossFit **29,0** · fisiculturista pesada **30,1** ·
+> powerlifter/obesidade **52,6**. ⚠️ Descritor da grade sem substantivo de
+> categoria é da safra velha e **não move corpo** — foi o que zerou o `b03_d2`.
 >
-> `b09_d1` mede **34,1** e `b08_d1` mede **42,6** — invertidos, de antes desta
-> sessão. E o `b06_d1` mede **32,4** contra os 31,9 do `b07_d1`. Não quebra o app
-> (o `nearest_id` usa IMC medido, não o nome), mas o **nome mente sobre a ordem**.
-> Decidir se vale reclassificar ou se o rótulo de banda é só histórico.
+> **2. UM lever por folha.** Categoria governa tamanho; direção de volume governa
+> forma. Negação legítima nomeia o **atrator a evitar**, nunca um traço que o
+> descritor pede. E **nunca descrever o tamanho do passo** — *"é um passo
+> pequeno"* entrega zero (§6.6b).
 >
-> ⚠️ **Busto no limite alto do "PEQUENO A MÉDIO" — 3 folhas seguidas** (`b09h_d3`,
-> `b07_d3`, `b06h_d3`). Não é acaso: **reforçar essa linha no slot do descritor**,
-> como já foi feito nas últimas duas (*"não aumentá-lo, ele é pequeno"*).
+> **3. ✅ Conferir as RAZÕES antes de aprovar folha (§1.4b e §1.4c).** Duas travas
+> baratas que nasceram nesta sessão e pegaram duas folhas ruins:
+> - `cintura/quadril` e `cintura/ombro` **parados** (< 0,005) = âncora
+>   reescalada, sairia duplicata. Movimento de referência: **0,030**.
+> - `cintura/quadril` **subindo** com o quadril absoluto **caindo** = a assinatura
+>   do `b09_d3` que lê masculino. Pega na folha, antes da Meshy.
+>
+> ### ⚠️ Rótulos fora de ordem na `f d1` e na `f d2`, não consertados
+>
+> `b09_d1` mede **34,1** e `b08_d1` mede **42,6** — invertidos. O `b06_d1` mede
+> 32,4 contra os 31,9 do `b07_d1`. E agora o `b10_d2` mede **52,6** contra os
+> 53,9 do `b09_d2`. Não quebra o app (o `nearest_id` usa IMC medido, não o nome),
+> mas o **nome mente sobre a ordem**. Decisão do Rogério pendente: reclassificar,
+> ou aceitar que o rótulo de banda é só histórico.
+>
+> ⚠️ **Busto no limite alto do "PEQUENO A MÉDIO"** — a linha de reforço
+> (*"não aumentá-lo, ele é pequeno"*) está em todos os prompts da sessão 16 e deve
+> continuar.
 >
 > ### ⚠️ O `b09_d3` masculino AINDA é servido acima de IMC 31,2
 >
@@ -127,17 +143,17 @@
 > Escada da `m d3` para planejar: 19,9 · 20,8 · 21,1 · 23,8 · 27,0 · 27,4 · 32,4 ·
 > 34,7 · 35,7 · 53,8.
 >
-> ### 🔴 FALTAM 13 SLOTS FEMININOS — a `f d2` é a linha mais atrasada
+> ### 🔴 FALTAM 10 SLOTS FEMININOS — a `f d2` é a linha mais atrasada
 >
-> **64 avatares; 25 femininos ocupando 19 dos 32 slots da grade.** Os outros 6 são
+> **67 avatares; 28 femininos ocupando 22 dos 32 slots da grade.** Os outros 6 são
 > inserções em slot já ocupado (`b04h_d1`, `b09h_d2`, `b09i_d2`, `b06h_d3`,
 > `b08h_d3`, `b09h_d3`).
 >
 > | linha | grade | slots | insrç. | faltam | quais |
 > |---|---:|---:|---:|---:|---|
-> | `f d1` | 12 (b01–b12) | 9 | 1 | **3** | b02 b05 b10 |
-> | **`f d2`** | 11 (b01–b11) | 5 | 2 | **6** | b01 b03 b07 b08 b10 b11 |
-> | `f d3` | 9 (**b02–b10**) | 5 | 3 | **4** | b02 b03 b04 b10 |
+> | `f d1` | 12 (b01–b12) | 10 | 1 | **2** | b02 b05 |
+> | **`f d2`** | 11 (b01–b11) | 6 | 2 | **5** | b01 b03 b07 b08 b11 |
+> | `f d3` | 9 (**b02–b10**) | 6 | 3 | **3** | b03 b04 b10 |
 >
 > ⚠️ **A grade da `d3` começa em `b02` e termina em `b10`** — não existe `b01_d3`.
 > Um script de contagem que assume `b01..b09` inventa um slot que não existe e
@@ -274,12 +290,9 @@ reclassificar ou inserir, nunca regerar.
   cortar mais começaria a tirar números que sustentam doutrina. Duas linhas novas
   na tabela da §1.1 (orientação frontal e resolução vs. identidade) também
   cresceram o arquivo de propósito.
-- 🔴 **A SESSÃO 15 ESTÁ SEM COMMIT.** 7 arquivos modificados: `library.json`,
-  `metrics/library_metrics.json`, `logs/process.log`, `state.md`, `CLAUDE.md`,
-  `docs/LICOES.md`, `docs/blocos/prompt_f.md`. **Ele pediu para commitar só quando
-  mandar** — perguntar no começo da sessão 16.
+- ✅ **COMMITADO no fim da sessão 16**, junto com o que ficara pendente da 15.
 
-  ⚠️ **Os 4 avatares novos NÃO entram em commit nenhum.** O `.gitignore` cobre
+  ⚠️ **Os avatares novos NÃO entram em commit nenhum.** O `.gitignore` cobre
   `00_input/`, `02_master/` e `03_dist/`, então **folha, master e GLB existem só
   no disco local do Rogério** — o git guarda apenas o índice, as medidas e a
   documentação. Consequência real: **não há backup dos assets**, e uma
