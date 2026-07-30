@@ -1,22 +1,177 @@
 # state.md — o presente
 
-Última atualização: **29/07/2026 (sessão 9)**
+Última atualização: **30/07/2026, madrugada (sessão 14)**
 
 > ## 🔴 ABRIR AQUI NA SESSÃO NOVA
 >
 > **O foco é FECHAR A BIBLIOTECA FEMININA INTEIRA. Decisão do Rogério, 29/07.**
-> Masculino não se toca até isso acabar — inclusive os dois vãos `high` dele,
-> que já têm conserto conhecido e **ficam anotados para depois**.
+> Masculino não se toca até isso acabar — os dois vãos `high` dele já têm
+> conserto conhecido e ficam anotados no fim deste arquivo.
 >
-> A cobertura de IMC da linha `f d2` está **resolvida**: 7 avatares, 18,3 a
-> 53,9, nenhum vão `high`. A **`f d1` foi ABERTA** (1 avatar, IMC 16,5) e agora
-> **não pode parar no meio** — ver "O próximo passo". A `f d3` segue vazia.
+> **59 avatares. A `f d3` — o eixo de MÚSCULO — foi ABERTA na sessão 13**, com 4
+> avatares num dia. Era a linha vazia que o Rogério cobrou ("quase não vi nenhum
+> avatar musculoso").
 >
-> Ordem: **terminar a `d1`, depois a `d3`** (`ARCHETYPES.md` §5).
+> | linha | n | IMC medido |
+> |---|---:|---|
+> | `f d1` | 9 | 16,5 · 19,0 · 23,3 · 24,1 · 31,9 · 34,1 · 42,6 · 52,5 · 114,2 |
+> | `f d2` | 7 | 18,3 · 22,2 · 22,9 · 27,3 · 30,1 · 34,4 · 53,9 |
+> | **`f d3`** | **4** | **21,0 · 22,1 · 28,4 · 32,4** |
 >
-> **A receita que funciona, medida hoje:** âncora ÚNICA em **IMC alvo − 7**,
-> substantivo de categoria positivo (sem negar o atrator), gerar no **Gemini**.
-> Registrar a previsão ANTES de gerar. Ver `LICOES.md` §2.4b.
+> ### 🔴🔴 RETOMAR AQUI: a folha do `zen_f_b09h_d3` ESTÁ EM DOWNLOADS, sem medir
+>
+> ```
+> C:\Users\VAIO\Downloads\ChatGPT Image 30 de jul. de 2026, 02_55_03.png
+> ```
+>
+> **Ela NÃO entrou no repositório e não foi medida** — o classificador de
+> segurança que autoriza execução de comando caiu na madrugada de 30/07 e
+> bloqueou `python`, `git commit` e `preview_start` (leitura e edição de arquivo
+> continuaram funcionando; `git status` passou por ser allowlistado). Nada foi
+> contornado à mão de propósito: reimplementar a régua ad-hoc divergiria da
+> validada (§1.3).
+>
+> **O PRIMEIRO comando da sessão, antes de qualquer outra coisa:**
+> ```
+> python scripts/sheet_qa.py "C:/Users/VAIO/Downloads/ChatGPT Image 30 de jul. de 2026, 02_55_03.png" 00_input/sheets/f/zen_f_b08_d3_sheet.png
+> ```
+>
+> **Como a folha foi gerada:** âncora única `zen_f_b08_d3_sheet.png` (IMC 28,4),
+> **ChatGPT**, descritor canônico `f_b09_d3` ("Fisiculturista pesada") **mais duas
+> cláusulas acrescentadas ao slot do descritor** (o bloco fixo ficou literal):
+>
+> 1. *"a definição já está no teto; o que cresce é somente VOLUME"* — o padrão da
+>    §2.2, o único que já tirou corpo de atrator. Existe porque "Fisiculturista
+>    **pesada**" é intensificador sobre o mesmo substantivo do `b08`
+>    ("Fisiculturista"), e §2.1 diz que intensificador não move corpo.
+> 2. **trava de identidade feminina** nomeando os três defeitos do `b09_d3` velho:
+>    busto mantido (peitoral cresce POR BAIXO), cintura afunilada em relação a
+>    ombros E quadril, quadril/glúteos largos.
+>
+> **Meu parecer a olho, comparando lado a lado com a âncora (não é medida):**
+> - **Geometria OK** no que a imagem reduzida deixa ver: 3 vistas, topos e pés
+>   alinhados, espaçamento uniforme, fundo liso, sem selo, perfil aparentando 90°.
+> - **A trava de identidade PEGOU** — há afunilamento de cintura, quadril com
+>   largura, glúteo com volume no perfil, e busto sob a faixa em vez de peitoral.
+>   É melhor que o `b09_d3` do Gemini.
+> - ⚠️ **Suspeita de ATRATOR: o corpo parece muito próximo da âncora.** Ombro um
+>   pouco mais largo, coxa um pouco mais espessa, quase nada além disso.
+>
+> **A suspeita NÃO está resolvida, e o olho não a resolve** — largura frontal
+> parada não prova passo zero (no `f_b04_d2` o ombro andou +0,17 pp enquanto a
+> profundidade caía 4–5%). Só o `sheet_qa` com o **perfil** separa as duas coisas.
+>
+> **Decisão que depende da medida:**
+> - largura **e** profundidade paradas → é atrator: **não gastar geração da
+>   Meshy**, regerar trocando o substantivo de categoria (§2.2).
+> - qualquer um dos dois eixos andou → seguir o fluxo: `probe_tonus_f` →
+>   `intake` → `crop` → Meshy.
+>
+> Previsão registrada antes de gerar: **33–42**, palpite declarado (§2.6).
+>
+> Slots `d3` que faltam depois dele: **b02 b03 b04 · b06 b07 b10**.
+>
+> ### ⚠️ `zen_f_b09_d3` — o asset FICA, mas ele lê MASCULINO
+>
+> IMC 32,4, 8/8, relevo ótimo. Mas peitoral em vez de busto, sem afunilamento de
+> cintura, quadril estreito, mandíbula masculina. Folha do **Gemini**, e o desvio
+> **estava visível na folha antes da Meshy** — o Claude Code viu, anotou
+> ("trapézio e pescoço lêem masculinos") e seguiu mesmo assim, passando a vigiar
+> resolução em vez de identidade. Erro de julgamento registrado.
+>
+> **Decisão do Rogério (30/07): mantém no repositório, gera um `b09` novo.**
+>
+> 🔴 **E ele foi explícito sobre o método de QA:** *"você é o especialista em corpo
+> humano, não tem como eu decidir algo no olho assim, a menos que seja uma
+> inconsistência grande ou defeito na pintura do short."* **Não pedir a ele
+> veredito de anatomia** — só de inconsistência grosseira e de short. Anatomia é
+> medida e julgada aqui.
+>
+> 🔴 **PENDÊNCIA DE PRODUTO ABERTA:** hoje esse corpo **é entregue** a qualquer
+> mulher `d3` de IMC perto de 32. O campo `approved` do `library.json` é **fixo em
+> `True`** no `build_index.py:164` e **nada o lê** — nem o `avatar_tester.html`.
+> Não existe mecanismo para manter o asset sem servi-lo. Não urgente (a biblioteca
+> feminina não está no app), e o conserto é `build_index.py` lendo uma lista de ids
+> reprovados, com o `nearest_id` ignorando-os.
+>
+> ### 🔴 O QUE NÃO SE FAZ MAIS: prever IMC pela folha
+>
+> **Cinco preditores construídos, cinco mortos** (`LICOES.md` §2.6c e §2.6d). A
+> folha 2D serve para (a) **reprovar geometria** — alinhamento, altura, figura
+> cortada, o uso que nunca falhou — e (b) **alarme ordinal**. Quem diz o número é
+> o `metrics.py`. **Registrar a previsão continua valendo**, porque é ela que
+> revela o erro, mas é palpite declarado e não deve gastar tempo de cálculo.
+>
+> ### ✅ O QUE FUNCIONA PARA MIRAR — medido na sessão 13
+>
+> **O substantivo de categoria é o único lever, e ele REPLICOU entre os sexos.**
+> "Fisiculturista de competição" moveu o corpo feminino **+6,3** (22,1 → 28,4),
+> contra o **+6,4** medido no masculino (§2.2). Foi a única previsão da sessão que
+> caiu dentro da faixa declarada.
+>
+> **Passo por banda seguinte é pequeno na `d3`:** 21,0 → 22,1 foi **+1,1**. A base
+> da `m d3` também é comprimida (19,9 · 20,8 · 21,1), então **não é atrator
+> travando o feminino** — as bandas `b02`–`b06` da `d3` têm pouca massa entre si
+> por natureza. Para andar, trocar o substantivo.
+>
+> ⚠️ **Não usar `b07_d3` para subir:** o descritor dela é *"Muito musculosa"*,
+> intensificador, e a §2.1 registra que adjetivo de intensidade não move o corpo.
+>
+> **Corpo feminino vem ~2,8 mais leve que o masculino no mesmo descritor `d3`.**
+> O `f_b05_d3` (21,0) caiu no nível do `m_b04_d3` (21,1), não do `m_b05_d3` (23,8).
+> Escada da `m d3` para planejar: 19,9 · 20,8 · 21,1 · 23,8 · 27,0 · 27,4 · 32,4 ·
+> 34,7 · 35,7 · 53,8.
+>
+> ### 🔴 FALTAM 17 SLOTS FEMININOS — 11 deles MUSCULOSOS
+>
+> **59 avatares; 20 femininos ocupando 17 dos 32 slots da grade.** Os outros 3 são
+> inserções em slot já ocupado (`b04h_d1`, `b09h_d2`, `b09i_d2`).
+>
+> ⚠️ *A redação anterior dizia "18 femininos ocupando 15 slots" com a tabela ao
+> lado somando 20 e 17 — contado à mão, e errado, o que é a §5.4 outra vez.
+> Conferido contra o `library.json`: 59 ids, 39 masculinos, 20 femininos.*
+>
+> | linha | grade | feitos | faltam | quais |
+> |---|---:|---:|---:|---|
+> | `f d1` | 12 | 8 | 4 | b02 b05 b06 b10 |
+> | `f d2` | 11 | 5 | 6 | b01 b03 b07 b08 b10 b11 |
+> | **`f d3`** | **9** | **4** | **5** | **b02 b03 b04 · b06 b07 b10** |
+>
+> **Contagem impressa pelo índice, não contada à mão (§5.4)** — `build_index.py`.
+> **⚠️ NÃO confundir com os vãos `high` de IMC**, que medem continuidade da escada
+> dentro das linhas que existem; estes medem completude da grade. Já troquei uma
+> coisa pela outra e respondi errado.
+>
+> ### O que a sessão 13 mediu, e mudou de doutrina
+>
+> Quatro avatares fechados, todos 8/8. Detalhe no `LICOES.md`:
+>
+> | id | previsto | medido | erro | gerador |
+> |---|---|---:|---:|---|
+> | `zen_f_b05_d3` | 22–26 | **21,0** | −1,0 | ChatGPT |
+> | `zen_f_b06_d3` | 23–27 | **22,1** | −0,9 | ChatGPT |
+> | `zen_f_b08_d3` | 26–34 | **28,4** | ✅ | ChatGPT |
+> | `zen_f_b09_d3` | 32–45 | **32,4** | ✅ | **Gemini** |
+>
+> - **§1.1 — o vazamento do `sheet_qa` NÃO é do Gemini, é do método.** Três folhas
+>   do ChatGPT deram a assinatura (`y=0`, 4–5% de variação) com geometria real de
+>   0,54–0,65%. A doutrina antiga teria **descartado três folhas boas** por violar
+>   a §3.3. Ao ver a assinatura: medir o topo em vários limiares, ou rodar o
+>   `crop.py`, que é o detector do caminho do produto.
+> - **§1.1 — a sonda de tônus AFIRMA, mas não NEGA.** Leu −1,1% num abdômen com
+>   gomos laterais e +24,4% / +30,7% em gomos centrais, porque amostra só a tira
+>   central (`meia_frac` 0,22). Silêncio dela não reprova folha `d3`.
+> - **§3.6 — meia resolução serve inclusive em `d3`.** A ressalva antiga era
+>   hipótese nunca medida, recomendada como se fosse regra. Testada: 718 px
+>   ampliados **1,67×** entregaram gomos e separação de quadríceps limpos.
+> - **§4.2c — o SLOT do Multi-View da Meshy não muda a malha.** Medido em 58
+>   masters: esquerdo 0,288 mm de média contra direito 0,334, e **por faixa de IMC
+>   o sinal troca de lado**. Quem governa é o tamanho do corpo (r = 0,544), e a
+>   tolerância é 5 mm. **Nenhuma trava valida orientação frontal** — isso é olho.
+> - **§3.5 confirmada na direção oposta.** A âncora move o IMC, o descritor move o
+>   tônus; agora medido nos dois sentidos.
+> - **§1.1 — `thigh` e circunferências de tronco não valem por avatar.** `at_frac`
+>   fixo contra virilha que se move; usar `volume_l`.
 
 > **Este arquivo só guarda o AGORA.** Doutrinas duráveis estão em
 > `docs/LICOES.md`; a narrativa de como cada uma foi descoberta está em
@@ -25,106 +180,38 @@
 
 ---
 
-## Onde estamos
+## ➡️ O fluxo, passo a passo
 
-**49 avatares no `library.json`.** Onda masculina ENCERRADA (39). Onda feminina
-EM PRODUÇÃO (10) — e **sem nenhum vão `high`**. Os dois que restam no índice
-são masculinos e estão parados por decisão do Rogério.
+> **Não listar render como pendência.** O Rogério avalia no app de testes e **não
+> dá veredito de anatomia**. Quem mede e decide se o avatar presta é o Claude Code.
 
-| linha | avatares | IMC medido |
-|---|---:|---|
-| m d1 | 17 | 16,1 – 147,7 |
-| m d2 | 12 | 19,7 – 111,7 |
-| m d3 | 10 | 19,9 – 53,8 |
-| **f d2** | **7** | **18,3 – 53,9** |
-| **f d1** | **3** | **16,5 · 19,0 · 23,3** |
+As duas primeiras linhas valem **só em folha do ChatGPT** (§1.1). A referência
+delas é a **âncora usada**, não a folha-mãe. Usar `--from` sempre que houver mais
+de uma folha em Downloads — não depender de qual é a mais recente.
 
-Os oito femininos, todos 8/8 em 60k:
-
-| id | IMC | banda nominal | onde caiu | gerador |
-|---|---:|---|---|---|
-| `zen_f_b01_d1` | 16,5 | < 18,5 | ✅ **previsto 16,3–16,7** | ChatGPT |
-| `zen_f_b03_d1` | 19,0 | 20,0–21,4 | ✅ **previsto 18,5–21,5** | **Gemini** |
-| `zen_f_b04_d1` | 23,3 | 21,5–22,9 | ✅ 0,4 acima (é `b05`) | ChatGPT |
-| `zen_f_b02_d2` | 18,3 | 18,5–19,9 | 0,2 abaixo (é `b01`) | ChatGPT |
-| `zen_f_b04_d2` | 22,2 | 21,5–22,9 | ✅ no meio | ChatGPT |
-| `zen_f_b05_d2` (mãe) | 22,9 | 23,0–24,4 | 0,1 abaixo | ChatGPT |
-| `zen_f_b06_d2` | 27,3 | 24,5–25,9 | ⚠️ 1,4 acima | ChatGPT |
-| `zen_f_b09i_d2` | 30,1 | — (inserção) | ✅ previsto 29–31 | **Gemini** |
-| `zen_f_b09h_d2` | 34,4 | — (inserção) | ✅ no alvo | **Gemini** |
-| `zen_f_b09_d2` | 53,9 | 29,0–30,9 | ⚠️ muito acima (é `b12`) | ChatGPT |
-
-**Tudo em `d2` de propósito, e não é rótulo errado por descuido.** O
-`build_index.py` lê o nível de definição do NOME, e o fallback `d3→d2→d1` só
-entra com a linha vazia — um avatar sozinho numa linha `f d1` seria entregue a
-qualquer mulher classificada `d1`, de qualquer IMC. Enquanto a biblioteca
-feminina for uma linha só, é onde tudo tem que ficar. Ver `LICOES.md` §5.2.
-
-O eixo feminino cobre **18,3 a 53,9**: 18,3 · 22,2 · 22,9 · 27,3 · 30,1 · 34,4
-· 53,9. Sobrou **um** vão, e ele é `low`: 34,4 → 53,9 (salto 19,5), na faixa de
-população mínima. Os dois saltos baixos (3,9 e 4,4) ficam abaixo do limiar do
-`build_index.py` e são menores que o passo do gerador.
-
----
-
-## ➡️ O próximo passo
-
-> **Não listar render como pendência.** O Rogério avalia no **app de testes**,
-> não em PNG de `qa/look/`. Quem tira medida e decide se o avatar presta é o
-> Claude Code, com `metrics.py` e as travas do `process.py`. Cobrado em 29/07.
-
-**Subir a `f d1` a partir de 23,3.** O trecho baixo está fechado (16,5 · 19,0 ·
-23,3, saltos de 2,5 e 4,3) e o que falta é de 23,3 para cima: sobrepeso,
-obesidade I, II e III sem tônus. **Daqui para cima o gerador é o Gemini**, com
-âncora em **alvo − 7** (subindo). O ChatGPT não tem corpo entre 27 e 54.
-
-A linha ainda é esparsa, e enquanto for, qualquer mulher classificada `d1`
-recebe o vizinho mais próximo dentro dela — degradação conhecida e **aceita**
-(a biblioteca feminina não está no app), mas que obriga a produzir a `d1` **em
-sequência, sem intercalar e sem parar no meio**. Se precisar parar pela metade,
-nomear as folhas restantes como `d2` até haver densidade.
-
-**Alvos que faltam**, mirando por escolha de âncora (`LICOES.md` §2.4b: âncora
-= alvo − 7 subindo, alvo + 4,3 descendo), nunca por adjetivo:
-
-| alvo | âncora | gerador |
-|---:|---|---|
-| ~30 | `b04_d1` (23,3) | Gemini |
-| ~37 | o corpo de ~30 | Gemini |
-| ~44 | o corpo de ~37 | Gemini |
-| ≥ 50 | o corpo de ~44 | Gemini |
-
-Acima de 40 o `build_index.py` marca vão como `low` (fora de 17–40), então
-dali para cima a densidade importa menos — o que fecha a linha é chegar até a
-obesidade III, não encher cada faixa.
-
-> ⚠️ **Não planejar contando com passo constante.** O do ChatGPT varia por um
-> fator de quase 4 (**+4,4 · +6,8 · −3,9 · −1,8**); só o do Gemini é apertado
-> (+7,1 · +7,2 subindo, −4,3 descendo). E **o ChatGPT não tem corpo entre 27 e
-> 54 no feminino** — daqui para cima ele não serve.
-
-**A âncora não precisa ser da mesma linha de definição** — foi assim que a `d1`
-abriu, ancorada numa folha `d2`. A âncora move o IMC, o descritor move o tônus,
-e eles não interferem (`LICOES.md` §3.5). Isso vale para abrir a `f d3` depois,
-sem produzir mãe nova.
-
-**Fluxo, quando voltar a produzir.** As duas primeiras linhas valem **só em
-folha do ChatGPT** — em folha do Gemini as duas réguas mentem (§1.1), e quem
-aprova geometria é o próprio `crop.py`. A referência delas é a **âncora usada**,
-não a mãe: é ela que responde "o corpo deu o passo?".
 ```
 python scripts/sheet_qa.py "<folha em Downloads>" 00_input/sheets/f/<ancora>_sheet.png
-cd qa/probe/sondas && python probe_tonus_f.py "<folha>" "<ancora>"   # tonus: a
-                                              # regua de largura nao ve relevo
-python scripts/intake.py  zen_f_bXX_d2
-python scripts/crop.py    zen_f_bXX_d2
-   (Meshy: Multi-View, Meshy 6 Padrao, densidade alta,
-    SEM textura, divisao automatica DESLIGADA)
-python scripts/process.py zen_f_bXX_d2      # 60k, 8/8
-python scripts/metrics.py zen_f_bXX_d2
-python scripts/build_index.py
-python scripts/restyle.py --preview zen_f_bXX_d2
+cd qa/probe/sondas && python probe_tonus_f.py "<ancora>" "<folha>"
+python scripts/intake.py  zen_f_bXX_d3 --from "<caminho da folha>"
+python scripts/crop.py    zen_f_bXX_d3
+   (Meshy: Multi-View, Meshy 6 Padrao, densidade alta, SEM textura,
+    divisao automatica DESLIGADA. O slot da lateral tanto faz - medido.)
+python scripts/process.py zen_f_bXX_d3      # 60k, 8/8
+python scripts/metrics.py zen_f_bXX_d3
+python scripts/build_index.py               # imprime os vaos
+python scripts/restyle.py --preview zen_f_bXX_d3
 ```
+
+O GLB do Downloads vira `01_raw/{id}_raw.glb` — **com o sufixo `_raw`**, senão o
+`process.py` diz que não existe.
+
+**Os passos que eu pulo são sempre os do FIM** (§6.2b): `probe_tonus_f` e
+`restyle --preview` não bloqueiam nada e por isso somem quando a sessão acelera.
+Reler este bloco linha a linha antes de dizer que um avatar acabou.
+
+**Ao olhar o preview, olhar DUAS coisas:** se o relevo sobreviveu ao 60k **e se a
+identidade do personagem se manteve**. Foi a segunda que falhou no `b09_d3`,
+enquanto eu vigiava a primeira.
 
 ---
 
@@ -142,17 +229,72 @@ pista dos 4 com bainha nunca medida estão no diário, sessão 6.
 O feminino ainda **não tem short pintado**, e quando a frente reabrir precisará
 de **duas** peças (faixa + short), as duas com borda em anel fechado.
 
+**Defeito de short É um dos dois vereditos que o Rogério dá no olho** — o outro é
+inconsistência grosseira. Quando a frente reabrir, é dele que se pergunta.
+
 ---
+
+## 👁️ QA visual — o que ele já aprovou
+
+**Sessão 12:** *"estão bons os avatares que abri no teste."* **Sessão 13:**
+*"avaliei e estão bons os avatares do ambiente de teste."* Nada a reclassificar
+por reprovação visual.
+
+Os 4 `d3` da sessão 13 ele ainda não abriu no testador, mas isso **não bloqueia**
+— o `b09_d3` já tem parecer meu (lê masculino) e a decisão dele já saiu.
+
+Servidor: `preview_start` na config `static` (`.claude/launch.json`, porta 8765)
+→ `http://localhost:8765/test/avatar_tester.html`. **Sempre por http; `file://`
+não serve** porque o testador lê o `library.json` por `fetch`.
+
+Não pedir opinião sobre PNG de `qa/look/`. E se ele reprovar algum: regra 5b,
+reclassificar ou inserir, nunca regerar.
 
 ## Pendências que não bloqueiam
 
+- ✅ **`LICOES.md` enxugado na sessão 14: 14k → 10,6k tokens (−24%).** Nenhuma
+  doutrina e nenhum número saíram; a narrativa foi para o diário. O que se fundiu:
+  as três versões encaixadas da lição do `sheet_qa` (a doutrina errada "é do
+  Gemini", a pré-condição e a correção) viraram **uma** seção com a doutrina certa;
+  §2.6, 2.6b, 2.6c e 2.6d viraram **uma** §2.6 com a tabela das quatro mortes;
+  §2.4 e §2.4b viraram uma tabela de passo por gerador e direção; os atratores
+  espalhados em cinco citações viraram **uma tabela** na §2.5. Entraram lições
+  novas que faltavam: §5.1 sobre o `approved` morto e §6.7 sobre quem dá veredito.
+  **Não bateu os 8–9k estimados** — a estimativa era minha e era otimista, porque
+  cortar mais começaria a tirar números que sustentam doutrina. Duas linhas novas
+  na tabela da §1.1 (orientação frontal e resolução vs. identidade) também
+  cresceram o arquivo de propósito.
+- ⏳ **COMMIT AINDA PENDENTE — o Rogério pediu na sessão 14 e eu NÃO consegui.**
+  `git commit` caiu no mesmo bloqueio do classificador. **É a primeira coisa a
+  fazer depois de medir a folha.** São 4 sessões sem commit (o último é `7c3e1b6`,
+  de 29/07 12:09): sessões 12, 13 e 14 estão só no diretório de trabalho —
+  incluindo os 6 masters novos, o `library.json` com 59, a reorganização da
+  documentação e o `docs/blocos/` que ainda está **untracked**.
+- **O testador não precisava de nada.** Ele lê o `library.json` por `fetch` desde
+  27/07 e não tem lista fixa; conferido que os 59 estão no índice, os 4 `d3` da
+  sessão 13 inclusive. Só faltou subir o servidor, que também caiu no bloqueio —
+  `preview_start` na config `static` quando voltar.
+- ✅ **Documentação reorganizada em 30/07, a pedido do Rogério** — ele apontou que
+  ela comia ~40% do contexto antes de qualquer trabalho. Medido: 35,6k tokens em
+  4 arquivos. Sessão de produção agora custa **24,7k (−31%)**, sem perder nada:
+  bloco fixo e 32 descritores extraídos para `docs/blocos/prompt_{f,m}.md` (fonte
+  única, verificada byte a byte), `CHARACTER_BIBLE` 11,3k → 6,9k, `state.md`
+  6,4k → 3,4k, e a coluna de tamanho do `CLAUDE.md` corrigida — ela dizia 3k para
+  um arquivo de 13,6k.
+- ✅ **DÍVIDA DE NARRATIVA PAGA: sessões 12 e 13 escritas no diário** na sessão 14,
+  reconstruídas do `logs/process.log`, do `git log` e do `state.md` da sessão 13.
+  O diário passou de 49k para **54k tokens** — número já corrigido no `CLAUDE.md`,
+  junto com o do `LICOES.md`.
+- **`approved` é campo morto no `library.json`** — ver o bloco do `b09_d3`.
+- **Conferir `git status` antes de mexer** — ver o item do commit pendente acima.
+- 🧹 **`state.md.cauda.tmp` está untracked na raiz**, sobra do enxugamento do
+  `state.md` na sessão 13. Conferir o conteúdo e apagar; não entrou em nenhum
+  commit, então não há histórico a preservar.
 - `render.py` (turntable) não existe — e pode não ser necessário: o GLB com
   auto-rotate no model-viewer foi aprovado no teste do app.
-- **Dois vãos `high` masculinos seguem abertos: d1 27,8→33,3 e d3 27,4→32,4 — e
-  a recomendação antiga ("aceitar e cobrir por shape keys") está SUPERADA.**
-  Ela foi escrita quando não havia método para mirar o meio de um vão. Hoje há,
-  e é medido: âncora única em **IMC alvo − 7** e gerar no **Gemini**. Para o
-  `m d1` isso dá âncora ~23,5 mirando ~30,5; para o `m d3`, âncora ~23 mirando
-  ~30. **Anotado a pedido do Rogério (29/07) para depois — não executar antes
-  de a biblioteca feminina fechar.**
+- **Dois vãos `high` masculinos seguem abertos: d1 27,8→33,3 e d3 27,4→32,4.**
+  Método medido: âncora única em **IMC alvo − 7** e gerar no **Gemini**. Para o
+  `m d1` dá âncora ~23,5 mirando ~30,5; para o `m d3`, âncora ~23 mirando ~30.
+  **Anotado a pedido do Rogério para depois — não executar antes de a biblioteca
+  feminina fechar.**
 - Lado do app Zenith (outro repositório): ver o fim do diário, seção 10.

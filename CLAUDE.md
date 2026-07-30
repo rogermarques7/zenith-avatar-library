@@ -11,11 +11,34 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 
 | quando a tarefa for… | ler ANTES de agir | tamanho |
 |---|---|---:|
-| montar prompt de folha, mexer em descritor ou no bloco fixo | `docs/CHARACTER_BIBLE.md` | 11k |
-| mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4k |
-| discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 4k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | 3k |
-| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-07.md` (**grep**, não ler inteiro) | 44k |
+| **montar prompt de folha** (o caso mais comum) | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 3,1k / 2,5k |
+| decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,9k |
+| mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,3k |
+| discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 4,1k |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **10,6k** |
+| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-07.md` (**grep**, não ler inteiro) | 54k |
+
+> ### ⚠️ Manter a coluna de TAMANHO honesta — o número errado já custou
+>
+> Ela dizia **3k** para o `LICOES.md` quando ele já estava em **13,6k**, e ficou
+> assim por várias sessões. O efeito não é cosmético: número desatualizado faz a
+> leitura *parecer barata* e destrói o critério de decidir se vale abrir. Em 30/07
+> o Rogério apontou que a documentação comia ~40% do contexto antes de qualquer
+> trabalho; medido, eram **35,6k tokens** em quatro arquivos. **Ao crescer um
+> destes arquivos, atualizar o número aqui na mesma edição.**
+
+> ### 📄 Por que o bloco de prompt saiu do CHARACTER_BIBLE (30/07)
+>
+> Montar um prompt exige o bloco fixo literal e **uma** linha de descritor: ~0,8k
+> tokens. O `CHARACTER_BIBLE` inteiro custava 11,3k, e o resto dele é a
+> **justificativa** de cada decisão — que se lê ao *decidir método*, não ao
+> *produzir*.
+>
+> `docs/blocos/prompt_{f,m}.md` é a **FONTE ÚNICA** do bloco fixo e das 32 linhas
+> de descritor. O `CHARACTER_BIBLE` aponta para lá e **não guarda segunda cópia**:
+> duas cópias do bloco fixo divergiriam, e divergência do bloco fixo é exatamente
+> o que a §1 daquele arquivo proíbe. A extração foi verificada byte a byte.
+> **Não recolar o bloco de volta no CHARACTER_BIBLE.**
 
 **As decisões nesses arquivos foram tomadas com base em testes reais e não devem
 ser revisitadas sem motivo novo.** Não adivinhar o conteúdo deles a partir deste

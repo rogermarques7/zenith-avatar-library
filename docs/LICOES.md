@@ -5,15 +5,16 @@ comprovou**, porque sem o número ela vira opinião e alguém a revoga na sessã
 seguinte.
 
 **Como usar:** ler o tema que interessa à tarefa da vez, não o arquivo inteiro.
-A narrativa completa de cada descoberta está em
-`docs/historico/diario-2026-07.md` — vir aqui primeiro, ir lá só se a lição não
-bastar.
+A narrativa de **como** cada uma foi descoberta está em
+`docs/historico/diario-2026-07.md` — vir aqui primeiro, ir lá só se a doutrina
+não bastar. Este arquivo foi enxugado em 30/07 (sessão 14): a narrativa saiu, a
+doutrina e o número ficaram.
 
 ---
 
 ## 1. Réguas — a família de erro mais cara do projeto
 
-Cinco vezes uma verificação passou porque **a pergunta que ela fazia não era a
+Seis vezes uma verificação passou porque **a pergunta que ela fazia não era a
 que importava**. É o padrão que mais custou aqui.
 
 ### 1.1 Perguntar sempre: o que esta régua NÃO mede?
@@ -26,36 +27,103 @@ que importava**. É o padrão que mais custou aqui.
 | `--report` do short | desvio contra a SÉRIE | série inteira errada | `b12_d1` passou com o cós 25 cm fora |
 | validação `tris` | resultado vs `TARGET_TRIS` | **o alvo estar errado** | avatar 42.000 tri abaixo da biblioteca, placar cheio |
 | sonda `probe_tonus_f` | relevo da superfície | **que a janela caiu dentro da ROUPA** | acusou "peitoral +27%" que era dobra de faixa |
-| `sheet_qa` em folha do **Gemini** | nada de útil | **que não sabe ler aquele gerador** | quase reprovei uma folha boa por "altura 4,42%" |
+| sonda `probe_tonus_f` | relevo da faixa **CENTRAL** do abdômen | **definição nos OBLÍQUOS e no andar de cima** | disse "−1,1%" numa folha com gomos e linha alba visíveis |
+| `sheet_qa` com a silhueta vazada | nada de útil | **que o próprio detector falhou** | quase reprovei duas folhas boas por "altura 4–5%" |
 | `coxa` do `sheet_qa` em corpo pesado | largura da coxa | **que o short desceu por cima do ponto de medida** | devolveu "coxa 2,10% da altura" |
+| alarme ordinal (`quadril +15,61 pp`) | que o corpo é **muito** maior | **quanto** maior — ele não tem TETO | previ 48–55, mediu **114,2** |
+| contagem de tri crua da Meshy | ordem de grandeza do volume, **só nos extremos** | a ordem no MEIO da linha | — (não usar como preditor) |
+| `circumferences_cm` do `metrics.py` | perímetro da seção naquela altura | **que o braço/a barriga entrou na seção** | `b12_d1` saiu com cintura marcada `*` e tronco inflado |
+| `thigh` do `metrics.py` | perímetro em `at_frac` **fixo** (0,460) | **que a virilha se move** | dispersa 53,1–63,0 cm entre corpos de IMC 23–24 |
+| as 8 travas do `process.py` | malha, altura, simetria, material | **orientação frontal** | nenhuma acusaria frente e costas trocadas |
+| resolução da folha | se o relevo vai sobreviver | **identidade do personagem** | `b09_d3` saiu 8/8 e lê masculino |
 
-> **A coxa do `sheet_qa` é amostrada numa fração FIXA da altura (~0,56), e o
-> short não é fixo.** Na folha-mãe o tecido termina em 0,535 e a medida cai na
-> pele; em corpo pesado o short desce até 0,571 e a medida cai **dentro do
-> tecido preto**, devolvendo número sem sentido (2,10%, com 14 linhas
-> descartadas). Acontece em toda folha pesada. Ignorar a linha `coxa` quando a
-> 2ª peça de roupa passar de ~0,56 — o próprio relatório imprime esse limite.
+> **O IMC não se contamina em corpo pesado; as circunferências de TRONCO sim.**
+> No `zen_f_b12_d1` (IMC 114,2) o `arm_split_frac` caiu para **0,606** contra
+> ~0,710 da âncora esquelética: o braço encostou no tronco e entrou na seção, e
+> a cintura saiu marcada com `*`. **Usar o IMC e ignorar cintura/quadril/coxa** —
+> o volume vem do teorema da divergência sobre a malha fechada, não de casco
+> convexo, então ele não se contamina.
 
-> **O `sheet_qa` só lê folha do ChatGPT.** Ele foi reescrito na sessão 8 e
-> calibrado em folha feminina do ChatGPT; a silhueta vem por *preenchimento a
-> partir do contorno*, e em folha do Gemini o preenchimento vaza — as figuras
-> saem começando em `y=0` e a altura vira o denominador errado de **todas** as
-> porcentagens. Diagnóstico definitivo: rodar na `zen_m_b05j_d1`, folha do
-> Gemini **já aprovada e produzida**, devolve a mesma patologia (4,39% de
-> variação, cabeças espalhadas 55 px).
+> ### ⚠️ Constante em fração FIXA contra referência que se MOVE
 >
-> **Quem decide se a folha do Gemini entra é o `crop.py`**, que usa limiar mais
-> tolerante e leu a mesma folha com os três topos no mesmo pixel e 0,66% de
-> variação. Na dúvida entre os dois detectores, o `crop.py` é o que importa —
-> é ele que está no caminho do produto.
+> Duas réguas, o mesmo defeito, mesma família do `SEAL_ISOLATION` (§4.2b) e do
+> `TARGET_TRIS` (§1.2):
 >
-> É a §5.5 aplicada a mim mesmo: a régua 2D não atravessa troca de gerador.
+> - **`thigh`** amostra em `at_frac` 0,460 e a **virilha não é fixa**. No
+>   `f_b06_d3` deu **+9,9 cm** sobre a âncora enquanto o volume subia só 3,3 L,
+>   porque 0,460 caiu **4,6 cm abaixo da virilha** daquele corpo
+>   (`leg_split_frac` 0,486), onde o afunilamento é mais íngreme. **Julgar avatar
+>   sozinho por `volume_l`.**
+> - **`coxa` do `sheet_qa`** amostra em ~0,56 e o **short não é fixo**: na mãe o
+>   tecido termina em 0,535 e a medida cai na pele; em corpo pesado desce a 0,571 e
+>   cai dentro do tecido. **Ignorar `coxa` quando a 2ª peça passar de ~0,56** — o
+>   relatório imprime esse limite.
+>
+> **Doutrina:** quando uma rota nova muda a resolução, a roupa ou o tamanho típico
+> do sujeito, **varrer as constantes absolutas e as frações fixas.**
 
-> **A sonda de tônus só vale no ABDÔMEN no feminino.** A janela `peitoral` dela
-> vai de 0,245 a 0,300 da altura, e a faixa de compressão ocupa ~0,240 a 0,315
-> — a janela cai **inteira dentro do tecido preto**. As regiões foram calibradas
-> no masculino, que é torso nu. Ler só a linha `abdomen`; `coxas` já devolve
-> "sem linha útil".
+> ### ⚠️ O vazamento da silhueta do `sheet_qa` — e a doutrina ERRADA que ele gerou
+>
+> **A assinatura:** as figuras saem começando em **`y=0`** e as alturas das três
+> vistas divergem (4–5%). A causa é o **preenchimento a partir do contorno**, que
+> escapa quando o contorno tem uma abertura. Como a altura da figura é o
+> denominador de todas as porcentagens, **todas** saem deflacionadas.
+>
+> **❌ Por duas sessões esta seção dizia "o `sheet_qa` não lê folha do Gemini". O
+> gerador nunca foi a variável.** A folha do `zen_f_b06_d3` é do **ChatGPT** e
+> vazou igual: alturas 971 · 927 · 922 (**5,05%**) e `ombro 10,50%` com
+> `cintura/ombro 1,245` — a tira de amostragem subiu ~36 px e foi medir o pescoço.
+> Remedida em três limiares (10 · 18 · 28) exigindo ≥3 px por linha: os três topos
+> em **`y=44`** e alturas 926 · 926 · 921 → **0,54%**. O `crop.py` confirmou
+> sozinho. Pela redação anterior eu teria **descartado três folhas boas** por
+> violar a §3.3.
+>
+> **E o erro simétrico já tinha custado caro:** no `zen_f_b08_d1` a folha veio
+> **sã** (figura em `y=36`, três vistas concordando em **0 px**) e eu invoquei "é
+> Gemini, ignorar" sobre as porcentagens. Elas diziam **quadril +7,10 pp**,
+> cintura +6,06 pp, ombro +3,92 pp — e a pose do Gemini é mais fechada, o que
+> *subestima* largura, então +7,10 pp era gritante. O corpo mediu **IMC 42,6**
+> mirando 27–31. O aviso estava na tela.
+>
+> **Operacional:** ler primeiro a seção de detecção — 3 figuras · `y` do topo > 0
+> · variação de altura < 1% · fundo ~200.
+> - **Passou** → as porcentagens valem como **alarme ordinal** ("esse passo é
+>   grande demais"), nunca como previsão de IMC (§2.6).
+> - **Reprovou** → **não descartar a folha.** Medir o topo à mão em limiares
+>   variados, ou rodar o `crop.py`, que é o detector do caminho do produto. Só
+>   depois decidir.
+>
+> **A lição de segundo nível é a que importa:** aplicar uma doutrina sem conferir
+> se a condição que a gerou está presente é o mesmo erro que a §1.1 inteira
+> combate — usar uma régua sem perguntar o que ela mede. Aqui eu atribuí uma
+> assinatura de defeito a um *gerador*, e depois a uma folha que não a tinha.
+
+> ### ⚠️ A sonda de tônus AFIRMA, mas não NEGA
+>
+> Ela lê só uma tira estreita em volta do eixo (`meia_frac` 0,22), então **vê
+> gomo central e não vê gomo lateral**. As quatro leituras femininas conhecidas:
+>
+> | folha | leitura | o corpo real |
+> |---|---:|---|
+> | `f_b05_d3` | **2,058** (−1,1% vs. mãe) | linha alba, gomos superiores, oblíquos separados |
+> | `f_b05_d2` (mãe) | 2,080 | abdômen liso, sem gomos, por descritor |
+> | `f_b01_d1` | **2,171** | corpo *sem nenhum tônus* — leu **acima** da mãe |
+> | `f_b06_d3` | **2,560** (+24,4%) | gomos centrais fortes |
+>
+> **Não está cega:** calibrada no par masculino aprovado, com o mesmo salto de
+> descritor (`m_b05_d2` "SEM gomos" → `m_b05_d3` "gomos evidentes"), lê **+15,7%**
+> (1,865 → 2,159). E o +24,4% do `f_b06_d3` supera essa calibração. Mas as três
+> primeiras leituras femininas (2,058 · 2,080 · 2,171) **não têm relação com a
+> definição real** — nessa linha ela nunca demonstrou ordenar tônus.
+>
+> **Operacional:** `abdomen` baixo **NÃO reprova folha `d3`**. Antes de decidir,
+> recortar a região 0,28–0,46 da vista frontal, ampliar 3× e olhar — resolveu em
+> 5 segundos. Subiu = veio relevo central; silêncio não é evidência de ausência.
+>
+> **E ela só vale no ABDÔMEN no feminino.** A janela `peitoral` vai de 0,245 a
+> 0,300 da altura e a faixa de compressão ocupa ~0,240 a 0,315: cai **inteira
+> dentro do tecido preto**. As regiões foram calibradas no masculino, que é torso
+> nu. `coxas` já devolve "sem linha útil".
 
 ### 1.2 Trava que confere o alvo contra ele mesmo não valida o alvo
 
@@ -86,20 +154,57 @@ folha nova (correta) "regredida".
 
 Estimei o IMC de uma folha por volume (~28) e pela regra aditiva (29,4), vi as
 duas baterem e escrevi que a regra estava confirmada no feminino. Medido:
-**27,3**. Eram dois palpites meus. Antes de escrever "confirmado", separar o que
-é **medida** do que é **estimativa minha**.
+**27,3**. Eram dois palpites meus, e palpites que partilham o método partilham o
+viés. Antes de escrever "confirmado", separar o que é **medida** do que é
+**estimativa minha**.
 
 ### 1.6 Calibrar régua nova rodando na peça já aprovada
 
 Os três defeitos do `sheet_qa` apareceram de uma vez ao rodar a versão nova na
 folha-mãe aprovada. Não é passo extra — é o método.
 
+### 1.7 ⚠️ NÃO dispensar um alarme ANTES de ele tocar
+
+Variante pior das anteriores: nas outras eu deixei de perguntar o que a régua
+media; aqui eu emiti **dispensa antecipada para um sinal que ainda não tinha
+visto**.
+
+Ao mandar o `zen_f_b12_d1` para a Meshy, escrevi: *"se este vier acima de
+188.310 tri, é normal e não é defeito"*. Veio com **245.594**, 30% acima do
+recorde da biblioteca, e a dispensa já estava dada. O corpo mediu **IMC 114,2**
+contra 48–55 previstos.
+
+**O gatilho é reconhecível:** toda vez que a frase começa com "se vier X, é
+normal", estou construindo a razão de ignorar a medida antes de ela existir — o
+espelho da §6.6, que proíbe explicar um desvio antes da medida. Lá eu inventava
+culpado cedo demais; aqui, inocência.
+
+**Regra:** avisar sobre a FAIXA esperada é legítimo; declarar de antemão que um
+valor fora dela não é defeito, não é.
+
+> **E o alarme ordinal não tem TETO.** O `sheet_qa` da mesma folha deu **`quadril
+> +15,61 pp`**, contra os +7,10 pp da folha que já tinha estourado em 42,6. Eu li
+> como *coerente com o pedido*, porque o pedido era mesmo um passo grande. A
+> leitura ordinal estava **correta** — e é por isso que ela não protege: "muito
+> maior que a âncora" é compatível com 55 e com 114. **O alarme ordinal distingue
+> direção e ordem de grandeza, nunca magnitude.** Quando o pedido já é "vá para o
+> extremo", ele concorda com qualquer resultado grande e perde todo o poder de
+> discriminar. **Ao mirar um extremo, nenhuma régua pré-Meshy informa nada** —
+> mirar por palavra de categoria (§2.2) e aceitar que o pouso é descoberta.
+
+> **A contagem de tri crua da Meshy é alarme ordinal, e SÓ nos extremos.** Ela
+> não ordena o meio da linha feminina: o `b07_d1` tem **153.859** tri e 96,6 L, o
+> `b08_d1` tem **142.410** e **129,0 L** — mais triângulos, menos corpo. Nos
+> extremos fala alto (245.594 → 346,4 L, contra o recorde anterior de 188.310 →
+> 163,6 L). **Não construir preditor com isso** — seria o quinto, e os quatro
+> anteriores morreram do mesmo jeito (§2.6).
+
 ---
 
 ## 2. Mirar um IMC — o que funciona e o que não funciona
 
 O gerador de imagem tem **atratores**: pontos para onde o corpo cai
-independentemente do que se pede.
+independentemente do que se pede. Mirar é escolher atrator, não ajustar número.
 
 ### 2.1 O que NÃO move o corpo
 
@@ -112,179 +217,182 @@ independentemente do que se pede.
 ### 2.2 O que move: o SUBSTANTIVO DE CATEGORIA
 
 Trocar "homem musculoso e seco de academia" por "FISICULTURISTA DE COMPETIÇÃO"
-moveu o pouso 6,4 pontos de IMC. **Um vão é o vazio entre dois atratores
-nomeáveis.** Se não existe palavra de categoria entre os dois, nenhuma âncora e
-nenhum adjetivo colocam corpo ali.
+moveu o pouso **6,4** pontos de IMC no masculino, e **+6,3** no feminino (22,1 →
+28,4, `f_b08_d3`) — **a única constante que replicou entre os sexos.**
+
+**Um vão é o vazio entre dois atratores nomeáveis.** Se não existe palavra de
+categoria entre os dois, nenhuma âncora e nenhum adjetivo colocam corpo ali.
 
 ⚠️ Cuidado com o inverso: **nomear o atrator e negar a saída** ("musculoso e
 seco, NÃO um fisiculturista") trava o passo — no `b06i_d3` o delta caiu de +6,5
-para +3,3.
+para +3,3, e no `f_b05_d3` o corpo veio em 21,0 contra 22–26 previstos.
 
-### 2.3 Bracketing — e seu limite
+⚠️ E **passo por banda seguinte é pequeno na `d3`**: 21,0 → 22,1 foi **+1,1**. A
+base da `m d3` também é comprimida (19,9 · 20,8 · 21,1), então não é atrator
+travando o feminino — as bandas `b02`–`b06` da `d3` têm pouca massa entre si por
+natureza. Para andar ali, trocar o substantivo.
+
+### 2.3 Bracketing — e seus três limites
 
 Anexar **duas** folhas consecutivas aprovadas e pedir "a próxima etapa, com um
 passo do MESMO TAMANHO". Entrega **~2× o passo pedido** (medido 1,9× · 2,0× ·
 2,2×).
 
 ⚠️ **Não funciona com âncoras coladas.** O modelo tem passo mínimo e ignora
-pedido menor que ele. Com par a **0,7 de IMC**, o bracketing vira ruído: pedi
-24,5–25,9 e recebi **27,3**.
+pedido menor que ele. Com par a **0,7 de IMC**, pedi 24,5–25,9 e recebi **27,3**.
 
 ⚠️ **O fator 2× só vale em espaço aberto.** Perto de um atrator forte o passo
-explode — medido 8×.
+explode — medido **8×** (`b05i_d1`: pediu passo 1,6 mirando ~31, entregou +12,9 e
+aterrissou em 40,7, acima do próprio vizinho superior do vão).
 
-### 2.4 A regra aditiva — e onde ela vale
+⚠️ **Para pares muito parecidos, não pedir identificação** — pedir "um corpo
+mais pesado que os DOIS anexos, com um passo do tamanho da diferença entre eles"
+dispensa a ordenação e a direção sai correta.
 
-`pouso ≈ âncora de topo + 6,5 de IMC`, quase independente do que se pede. Seis
-amostras masculinas: +6,2 · +7,2 · +8,1 · +8,3. Para mirar X, escolher o par
-cujo membro **superior** esteja em ~X−6,5, mesmo que fique bem abaixo do buraco.
+### 2.4 O passo é do GERADOR e tem SINAL — não é do sexo
 
-⚠️ **Medida SÓ no masculino.** As amostras femininas dão **passo ~4**, não 6,5.
-Não transferir sem remedir.
-
-**O passo tem tamanho, não sinal — vale para baixo também.** Primeira medida
-descendente do projeto (`f_b02`, 29/07): âncora única em 22,2, pouso **18,3**,
-delta **−3,9**. Contra +4,4 da única subida feminina. Uma amostra em cada
-direção: usar como ordem de grandeza, **não como constante** (§1.5).
-
-⚠️ **Consequência estrutural:** com passo ~4, os dois vãos femininos baixos —
-18,3→22,2 (3,9) e 22,9→27,3 (4,4) — são **do tamanho do passo ou menores**.
-Pedir corpo dentro deles é o caso do §2.3, onde o bracketing vira ruído.
-
-### 2.4b O passo é do GERADOR, não do sexo
-
-Escrevi "passo ~4 no feminino" pela manhã de 29/07 e estava errado: as duas
-amostras eram do **ChatGPT**. Medido no mesmo dia, na mesma linha feminina, no
-Gemini:
-
-| âncora única | pouso | passo | gerador |
-|---:|---:|---:|---|
-| 22,2 | 18,3 | −3,9 | ChatGPT |
-| 22,9 | 27,3 | +4,4 | ChatGPT |
-| 27,3 | 34,4 | +7,1 | **Gemini** |
-| 22,9 | 30,1 | +7,2 | **Gemini** |
-
-**O Gemini feminino dá +7,15, duas amostras a 0,1 uma da outra** — e bate com o
-+6,5 masculino do mesmo gerador. O que muda o passo é a ferramenta, não o sexo.
-
-**⚠️ MAS o passo tem sinal: DESCER move menos que subir, nos dois geradores.**
-O diário registrava isso com uma amostra de cada lado e mandava não decidir.
-Agora são seis:
+`pouso ≈ âncora de topo + passo do gerador`, quase independente do que se pede.
+**Fator multiplicativo não prevê nada** (as mesmas amostras dão de 1,9× a 8,0×);
+a regra que funciona é **aditiva**.
 
 | gerador | subindo | descendo |
 |---|---|---|
-| ChatGPT | +4,4 · +6,8 | −3,9 · −1,8 |
-| Gemini | +7,1 · +7,2 | **−4,3** |
+| ChatGPT | +4,4 · +6,8 · **+8,6** | −3,9 · −1,8 · **−7,8** |
+| Gemini | +7,1 · +7,2 · **+19,3 · +20,6** | **−4,3** |
+| masculino (Gemini) | +6,2 · +7,2 · +8,1 · +8,3 | — |
 
-**Consequência: a receita "âncora = alvo − 7 no Gemini" só vale SUBINDO.** Para
-mirar X descendo no Gemini, âncora em **X + 4,3**. Foi assim que o vão feminino
-16,5→23,3 fechou: âncora na folha de 23,3, previsão 18,5–21,5 registrada antes
-de gerar, medido **19,0**.
+**Escrevi "passo ~4 no feminino" e estava errado** — as duas amostras eram do
+ChatGPT. O Gemini feminino deu +7,1 e +7,2 (duas amostras a 0,1 uma da outra),
+que bate com o +6,5 masculino do mesmo gerador. **O que muda o passo é a
+ferramenta, não o sexo.**
 
-**Consequência operacional:** para mirar X no feminino, âncora em **X − 7** e
-gerar no Gemini. Foi assim que o vão 27,3→34,4 fechou: âncora na folha-mãe
-(22,9), previsão registrada de 29–31 **antes** de gerar, medido **30,1**. É a
-primeira vez no projeto que um alvo de IMC foi previsto e acertado.
+**Receita, e ela tem duas metades:**
+- **subindo no Gemini:** âncora em **alvo − 7**. Fechou o vão 27,3→34,4 com
+  previsão declarada de 29–31 e medido **30,1** — a primeira vez no projeto que
+  um alvo de IMC foi previsto e acertado.
+- **descendo no Gemini:** âncora em **alvo + 4,3**. Fechou o vão 16,5→23,3 com
+  previsão 18,5–21,5 e medido **19,0**.
 
-### 2.5 As lacunas são do GERADOR, não do problema
+⚠️ **Acima de ~30 o passo do Gemini feminino TRIPLICA**, e duas amostras
+concordam: `f_b08_d1` (âncora 23,3, previsto 27–31, medido **42,6**, +19,3) e
+`f_b11_d1` (âncora 31,9, previsto 36–45, medido **52,5**, +20,6). O +7,15 vale
+só nas bandas onde foi medido (22,9–27,3); acima disso, **prever faixa larga**.
 
-A faixa de IMC 28–38 na linha d1 resistiu a 3 tentativas no ChatGPT. O mesmo
-prompt no **Gemini** entrou nela de primeira. Nenhum gerador é melhor; eles têm
-atratores em lugares diferentes.
+⚠️ **A regra aditiva quebra em cima de um atrator**, igual ao fator
+multiplicativo: no `zen_m_b06i_d3` o delta foi **+3,3** em vez de +6,5, porque o
+descritor nomeava o atrator e negava a saída (§2.2). Antes de aplicar, conferir
+se o descritor não está apontando para um atrator conhecido.
 
-**Confirmado uma segunda vez, no feminino (29/07).** O ChatGPT mostrou três
-atratores femininos e nada entre eles — **~18 · ~22–27 · ~54** —, com uma folha
-mirando 31 pousando em **53,9**. A mesma âncora no Gemini deu **34,4**.
+⚠️ **Ao subir no Gemini, não repetir no parágrafo de âncora os traços que o
+descritor já nomeia** — reforço redundante de volume é candidato a causa do
+estouro do `f_b08_d1`. Usar o parágrafo só para direção e continuidade de
+personagem.
 
-**Terceira confirmação, e a primeira do lado MAGRO (29/07).** O vazio entre os
-atratores ~18 e ~22–27 do ChatGPT é real e simétrico: mirando 20–21,5, duas
-gerações caíram em **~17,0 e ~17,5** — e a única coisa que mudou entre elas e a
-folha que pousou em **23,3** foi o substantivo ("magra" contra "peso normal").
-Passo de +6,8 com um, +1,1 com o outro: **não existe palavra entre os dois.**
-O mesmo alvo no Gemini pousou em **19,0 de primeira**.
+### 2.5 As lacunas são do GERADOR — e são a falta de uma PALAVRA
 
-> Vale registrar que isto **não** era previsível pela direção: as duas
-> tentativas do ChatGPT subiam de 16,5 e a do Gemini descia de 23,3. O que
-> decidiu não foi a direção nem a âncora — foi onde cada ferramenta tem corpo.
+Nenhum gerador é melhor; eles têm atratores em lugares diferentes, então o vazio
+de um é coberto pelo outro. Os atratores medidos até 30/07:
 
-> **O atrator "OBESIDADE GRAU I" do Gemini fica em ~33–34, e é a única
-> constante que atravessou os dois sexos:** 33,3 e 34,0 no masculino, **34,4 no
-> feminino**. Vale registrar porque quase tudo mais aqui difere por sexo (o
-> passo é ~6,5 no masculino e ~4 no feminino). Quando o alvo for essa faixa, é
-> tiro de uma geração.
+**ChatGPT feminino — ~18 · ~22–27 · ~32–35 · ~54 · ~114:**
+
+| descritor | pousou |
+|---|---:|
+| "magra" (mirando 20–21,5) | ~17,0 · ~17,5 |
+| "peso normal" | 23,3 |
+| `f_b08_d3` "Físico de fisiculturista feminina" | 28,4 |
+| `f_b07_d1` "Sobrepeso leve" | **31,9** |
+| `f_b06_d1` "Peso normal alto" | **34,1** |
+| `f_b09_d2` "Corpo grande e forte" | 53,9 |
+| `f_b12_d1` "Obesidade grau III" | **114,2** |
+
+**Gemini feminino:** "Obesidade grau I" → 34,4 · "Sobrepeso" → 42,6 ·
+"Obesidade grau II" → 52,5 · `f_b09_d3` "Fisiculturista pesada" → 32,4.
+**Masculino (Gemini):** "OBESIDADE GRAU I" → 33,3 e 34,0 · "SOBREPESO, não
+obeso" → 26,9.
+
+**O mesmo substantivo pousa 10 pontos diferente em cada gerador** — `f_b07_d1`
+"Sobrepeso leve" dá 31,9 no ChatGPT e ~42 no Gemini. Atrator medido num gerador
+**não transfere**, do mesmo jeito que o passo não transfere. Ao trocar de
+gerador, a previsão volta a ser faixa larga.
+
+**A única constante que atravessou os dois sexos é "OBESIDADE GRAU I" no Gemini,
+em ~33–34** (33,3 · 34,0 masculinos, 34,4 feminino). Quando o alvo for essa
+faixa, é tiro de uma geração.
+
+**Os buracos medidos, e cada um é a falta de uma palavra:**
+
+- **ChatGPT feminino 27 → 32**, firme: dois substantivos diferentes, um deles
+  *nominalmente mais leve*, caíram no mesmo poço de ~32–35. **A ordem da tabela de
+  descritores NÃO é a ordem dos pousos** — não usar a numeração da banda como
+  escala de intensidade.
+- **Gemini feminino 34,1 → 42,6:** entre "obesidade grau I" (~34) e "grau II"
+  (~52) o gerador pula o 35–45 inteiro.
+- **ChatGPT feminino, lado magro, 16,5 → 23,3:** duas gerações mirando 20–21,5
+  caíram em ~17,0 e ~17,5; a única coisa que mudou até a folha que pousou em 23,3
+  foi o substantivo ("magra" contra "peso normal") — passo de +6,8 com um, +1,1
+  com o outro. O mesmo alvo no Gemini pousou em **19,0 de primeira**.
+- **Acima de ~54 não há palavra nenhuma:** um único degrau de categoria no topo
+  vale **+71,6**, quase 8× o maior passo já medido. Para um corpo em ~60–80, **não
+  pedir por palavra de categoria** — não há uma.
+
+⚠️ **Inverter a direção ATRAVESSA o poço, mas não mira.** O mesmo `f_b07_d1` que
+pousou em 31,9 subindo de 23,3 pousou em **24,1 descendo de 31,9**, mirando ~28.
+Provou que o poço é atravessável — o corpo saiu do outro lado —, não que ele
+para no meio. **Um vão ladeado por dois atratores devolve corpos nas MARGENS,
+seja qual for a direção do ataque.** Resultado prático daquela folha: ganhou-se
+um avatar e quase nenhuma cobertura.
 
 **Ordem quando um alvo não sai:** (1) bracketing · (2) trocar o substantivo de
-categoria · (3) **trocar de gerador** · (4) aceitar e cobrir por shape keys.
+categoria · (3) descer pelo lado de cima, sabendo que o pouso sai numa margem ·
+(4) trocar de gerador · (5) aceitar e cobrir por shape keys (os insumos,
+`circumferences_cm`, já viajam no `library.json`).
 
-### 2.6 Prever o IMC pela folha
+⚠️ **Aviso de método:** eu retirei a doutrina inteira do buraco 27→54 quando só
+o número de cima estava errado. "N tentativas falharam" prova que *aquelas N
+formulações* falharam — e **uma amostra que derruba um limite não derruba o
+fenômeno.** O buraco existia; só não ia até 54.
 
-`secção ≈ largura(frente) × profundidade(perfil)`; média das razões contra a
-referência; **multiplicar o delta por 0,5–0,6**; aplicar ao volume conhecido.
+### 2.6 ❌ A folha 2D NÃO prevê IMC — quatro preditores, quatro mortes
 
-| | estimado cru | medido | fator | ombro na folha |
-|---|---:|---:|---:|---|
-| `f_b04` (desceu) | −5,3% | −3,2% | ×0,60 | **parado** (+0,17 pp) |
-| `f_b06` (subiu) | +38,3% | +19,0% | ×0,50 | ganho concentrado no tronco |
-| `f_b02` (desceu) | −22,6% | −20,1% | **×0,89** | **moveu** (−1,12 pp), com coxa e braço |
-| `f_b09` (subiu) | +97,2% | +97,4% | **×1,00** | **moveu** (+5,71 pp), tudo junto |
-| `f_b01` (desceu) | −14,5% | −9,6% | **×0,66** | quase parado (−0,42 pp), queda no quadril/coxa |
+**Esta seção é um registro de erro, não uma receita. Não reconstruir nada do que
+ela descreve.**
 
-O desconto existe porque a conta trata o corpo como elipse e ignora que cabeça,
-braços, mãos e pés quase não mudam entre bandas. **Serve para dizer "vai passar
-da banda", não para dizer o decimal.**
+A conta era `secção ≈ largura(frente) × profundidade(perfil)`, média das razões
+contra a referência, um fator de desconto, aplicado ao volume conhecido. O
+desconto existe porque a conta trata o corpo como elipse e ignora que cabeça,
+braços, mãos e pés quase não mudam entre bandas.
 
-### 2.6b O desconto NÃO é constante — ele mede o quanto a mudança ficou no tronco
+**Nove amostras femininas, e o fator real vai de 0,50 a 1,62 sem estrutura que
+sobreviva a amostra nova** — não em função do tamanho do cru (que vai de −22,6% a
++97,2%), não em função do Δombro, não monotônico dentro de cada direção.
 
-Aplicar ×0,55 no `f_b02` previu 19,8–20,3 e o corpo mediu **18,3**: erro de ~2
-pontos, o maior da série. A causa está na própria justificativa do desconto —
-ele só existe porque os membros ficam parados. **Quando os membros também se
-movem, não há o que descontar.**
+**As quatro tentativas e como cada uma morreu — todas no mesmo roteiro: a
+estrutura aparece nas amostras que a geraram e some na primeira de fora.**
 
-Discriminador barato, direto do `sheet_qa`: **olhar o delta de OMBRO.**
+| preditor | morreu em | custo |
+|---|---|---|
+| fator fixo ×0,55 | `f_b02` | previ 19,8–20,3, mediu **18,3** |
+| reta em \|Δombro\| | `f_b04_d1` | reta mandava 1,00, real **0,64**; previ 25–27, mediu **23,3** |
+| monotonicidade no tamanho do cru | `f_b07_d1` | 46% deu fator **maior** que 64%; previ 28,7–29,8, mediu **31,9** |
+| limiar `\|cru\| < 15%` + duas âncoras | `f_b04h_d1` | as duas réguas concordaram em 27,1–28,8, mediu **24,1** |
 
-- ombro **parado** e só o tronco mexendo → desconto forte, **×0,5–0,6**
-- ombro mexendo junto com coxa e barriga → corpo inteiro mudou de escala,
-  **×0,9–1,0**, e quanto MAIOR a mudança, mais perto de 1,0
+O quarto é o mais instrutivo: eu o construí com **duas** amostras uma mensagem
+depois de escrever *"não construir preditor novo com 4–6 amostras"*, e as duas
+réguas que "confirmavam" uma à outra partilhavam o método, logo o viés (§1.5). O
+fator real foi **1,62**, fora dos 0,50–1,00 que os oito anteriores ocupavam.
 
-O extremo confirma o mecanismo: no `f_b09` (+97% cru) o desconto foi **zero** —
-a estimativa crua acertou o IMC medido na terceira casa. Em corpo desse tamanho
-nem pescoço (48,7 cm), nem rosto, nem mãos ficam parados, então **não sobra
-região fixa para descontar**. O desconto nunca foi uma constante do método: é a
-fração do corpo que não se mexeu.
+**A conclusão a manter é negativa, e é definitiva o bastante para parar de
+tentar.** A folha 2D serve para:
 
-Quatro amostras, todas femininas. Não é lei; é melhor que um fator fixo que
-errou 2 pontos para baixo e depois 3 para cima.
+- **(a) reprovar geometria** — alinhamento, altura, figuras cortadas. É o uso que
+  nunca falhou.
+- **(b) alarme ordinal** — "esse corpo é maior que aquele", "esse passo é grande
+  demais". Crua +89% na folha do `f_b08_d1` gritava "isso é muito mais que um
+  passo", e era.
 
-### 2.6c ⚠️ A interpolação por |Δombro| FALHOU no primeiro teste fora da amostra
-
-Escrevi em 29/07, com 4 amostras, que o fator saía de uma reta em |Δombro|
-(`0,60 + (|Δombro| − 0,17) × 0,305`, saturando em 1,0). Ela acertou o
-`f_b01_d1` — previu 0,68, o real foi 0,66. **Na amostra seguinte errou feio:**
-no `f_b04_d1` o ombro moveu **+1,58 pp**, a reta mandava usar **~1,00** e o
-fator real foi **0,64**. Previ IMC 25–27; o corpo mediu **23,3**.
-
-**Não usar a reta de |Δombro|.** As seis amostras, ordenadas pelo tamanho da
-estimativa crua:
-
-| folha | cru | fator real | Δombro |
-|---|---:|---:|---:|
-| `f_b04_d2` (desceu) | −5,3% | 0,60 | +0,17 |
-| `f_b01_d1` (desceu) | −14,5% | 0,66 | −0,42 |
-| `f_b02` (desceu) | −22,6% | 0,89 | −1,12 |
-| `f_b06` (subiu) | +38,3% | 0,50 | — |
-| `f_b04_d1` (subiu) | +64,2% | **0,64** | +1,58 |
-| `f_b09` (subiu) | +97,2% | 1,00 | +5,71 |
-
-O que sobrevive às seis é **monotonicidade no TAMANHO da mudança**, dentro de
-cada direção: subindo, 38→0,50 · 64→0,64 · 97→1,00; descendo, 5→0,60 ·
-14→0,66 · 23→0,89. Bate com a explicação de sempre (quanto maior a mudança,
-menos sobra de região parada para descontar) e **não precisa do ombro**.
-
-Três amostras por direção não são uma lei (§1.5). Usar como faixa: mudança
-pequena → 0,5–0,65 · mudança grande (|cru| > 60%) → 0,9–1,0. **E lembrar que
-esta conta serve para dizer "vai passar da banda", não o decimal** — no
-`f_b04_d1` a previsão pela folha ficou PIOR que o palpite feito só com o
-prompt (20,5–22,5, que errou por 0,8 contra os 1,7–3,7 da conta).
+Quem diz o número é o `metrics.py`, depois da Meshy (§5.5). **Registrar a
+previsão continua valendo**, porque é ela que revela o erro — mas é palpite
+declarado e não deve gastar tempo de cálculo.
 
 ---
 
@@ -292,42 +400,89 @@ prompt (20,5–22,5, que errou por 0,8 contra os 1,7–3,7 da conta).
 
 ### 3.1 Largar a folha-mãe no trecho magro
 
-A mãe é um corpo atlético. Quando o alvo é bem mais magro que ela, o modelo
-copia a musculatura dela e quebra a continuidade com o vizinho slim. Nesses
-casos, anexar **só o vizinho imediato**. Confirmado na produção (`b03_d2` e
-`b04_d2` só fecharam ao largar a mãe).
+A mãe é um corpo atlético. Quando o alvo é bem mais magro que ela, o modelo copia
+a musculatura dela e quebra a continuidade com o vizinho slim. Nesses casos,
+anexar **só o vizinho imediato**. Confirmado na produção (`b03_d2` e `b04_d2` só
+fecharam ao largar a mãe). A mãe volta a ser útil quando a banda-alvo se aproxima
+ou passa do corpo dela.
 
 ### 3.2 Identificar anexos por CONTEÚDO, nunca por ordem ou nome
 
-E, para pares muito parecidos, **não pedir identificação** — pedir "um corpo
-mais pesado que os DOIS anexos" dispensa a ordenação.
+Não dá para contar que o modelo veja o nome do arquivo, e a ordem de upload ele
+confunde. Escrever *"uma das folhas é visivelmente menos musculosa: essa é a
+etapa anterior"*. Custa uma linha e você vê o erro antes de gastar a geração.
 
 ### 3.3 Altura é o único erro que o pipeline não corrige
 
 Folha com altura diferente das anteriores: descartar sem tentar aproveitar.
+⚠️ Mas conferir antes se a altura divergente não é o vazamento do `sheet_qa`
+(§1.1) — foi por pouco que essa regra não descartou três folhas boas.
 
 ### 3.4 Marca d'água na folha é proibida
 
 Vira uma 4ª mancha sobre o fundo liso, quebra a detecção do `crop.py` e pode
-chegar na Meshy como geometria.
+chegar na Meshy como geometria. Para rótulo visível, rotular uma **cópia** fora
+de `00_input/sheets/`.
 
 ### 3.5 A ÂNCORA move o IMC; o DESCRITOR move o TÔNUS — e são independentes
 
 Abrir uma linha de definição nova **não exige folha-mãe própria daquela linha**.
-Medido ao abrir a `f d1` (29/07): a folha do `f_b01_d1` foi gerada com anexo
-único `zen_f_b02_d2` — uma folha `d2`, com tônus — e o descritor `d1` mandando
-"sem nenhum tônus, magreza por ausência de massa, sem gomo/serrátil/veia".
+Medido nas duas direções:
 
-Saiu volume **−9,6%** (18,3 → 16,5 de IMC) e relevo abdominal **2,171 contra
-2,113 da âncora** — ou seja, o corpo encolheu e o tônus **não veio junto**, ficou
-na mesma casa da folha-mãe (2,080). Os dois eixos responderam a comandos
-diferentes sem interferir um no outro.
+- **Abrindo a `f d1`:** anexo único `zen_f_b02_d2` (uma folha *com* tônus) e
+  descritor `d1` mandando "sem nenhum tônus". Volume **−9,6%** (18,3 → 16,5) e
+  relevo abdominal **2,171**, na mesma casa da mãe (2,080) — o corpo encolheu e o
+  tônus não veio junto.
+- **Abrindo a `f d3`:** âncora única na mãe `f_b05_d2` (22,9) e descritor `d3`
+  pedindo a queda de gordura de ~25% para ~18%. Mediu **21,0** (63,6 L), 8/8, e o
+  relevo **veio** (gomos e oblíquos legíveis já no GLB de 60k) — o descritor moveu
+  o tônus e o IMC quase não andou.
 
-**Consequência operacional:** para abrir a `f d3` não é preciso produzir uma mãe
-`d3` antes. Escolhe-se a âncora pelo IMC que se quer (§2.4b: alvo − passo do
-gerador) e deixa-se o tônus por conta do descritor. A trava é conferir o relevo
-com `qa/probe/sondas/probe_tonus_f.py` **antes** de subir na Meshy — a régua de
+Os dois eixos respondem a comandos diferentes sem interferir um no outro.
+
+**Consequência operacional:** escolher a âncora pelo IMC que se quer (§2.4) e
+deixar o tônus por conta do descritor. A trava é conferir o relevo com
+`qa/probe/sondas/probe_tonus_f.py` **antes** de subir na Meshy — a régua de
 largura não vê tônus (§1.1), e é justamente o eixo que o descritor está movendo.
+Lembrando que a sonda afirma e não nega (§1.1).
+
+### 3.6 O Gemini às vezes GRAVA um quadro incompleto do render
+
+A imagem aparece **completa e correta na conversa**, mas o arquivo baixado é um
+quadro intermediário — desenho borrado, membros dissolvidos, roupa faltando, e o
+conteúdo ocupando só parte da tela (**x até 74,4%**, **y até 89,6%** de um canvas
+2752×1536, o resto cinza vazio).
+
+**Baixar de novo NÃO resolve** — três downloads do mesmo item vieram byte a byte
+idênticos (SHA-256 igual): o asset armazenado é o quebrado. E **não é
+intermitente**: três *gerações distintas* (4,55 · 4,42 · 4,76 MB) saíram
+quebradas em 23 minutos. Screenshot também não serve (tela de 768 px, figura de
+folha boa tem ~1340 px).
+
+**✅ A saída é o botão "COMPARTILHAR IMAGEM"** — descoberto pelo Rogério, depois
+que a versão anterior desta lição ("a saída é regerar") custou 25 minutos e três
+gerações. Abrir a imagem → compartilhar → abrir o link em janela nova → baixar
+por lá. A cópia vem íntegra, em **metade da resolução** (1376×768).
+
+**Meia resolução é aceitável, inclusive em `d3`.** O `crop.py` normaliza toda
+vista para 1200 px de altura, então a Meshy recebe o mesmo canvas das outras
+folhas. A ressalva antiga (*"em `d3` com gomo abdominal, preferir regerar"*) era
+hipótese minha nunca medida, e **caiu**: o `zen_f_b09_d3` é exatamente esse pior
+caso — figura de **718 px ampliada 1,67×** — e saiu 8/8, com gomos, deltoide e
+separação de quadríceps todos legíveis. **Não gastar geração por causa disso.**
+
+> ⚠️ **Mas o mesmo avatar falhou no que eu NÃO vigiava:** saiu com **identidade
+> masculina** (peitoral em vez de busto, sem afunilamento de cintura, quadril
+> estreito), e o desvio estava visível na folha antes da Meshy. Eu declarei o
+> risco *errado* e depois comemorei que o risco declarado não aconteceu.
+> **Resolução não protege identidade** — ao olhar folha e preview, olhar as duas
+> coisas.
+
+**Como reconhecer folha quebrada em 5 segundos:** rodar o `sheet_qa.py` e ler
+**só** a seção de detecção. Folha quebrada devolve **"figuras detectadas: 1"** e
+fundo escuro (RGB ~139 em vez de ~200), porque a área cinza vazia domina a
+imagem. O `crop.py` também barra, mas o `sheet_qa` responde sem escrever nada no
+repositório.
 
 ---
 
@@ -346,6 +501,55 @@ glTF não transporta iluminação de forma portável. O app precisa carregar
 `03_dist/env/zenith_env.hdr` via `environment-image`, senão o avatar aparece
 cinza e sem identidade.
 
+### 4.2b O selo do Gemini passou: raio de isolamento em px absolutos
+
+O `find_seal` do `intake.py` rejeitou uma estrelinha 48×48 na folha do
+`zen_f_b11_d1`. Ela passava em tamanho, preenchimento e "mais clara que o fundo";
+caiu **só no isolamento** — exigia 20 px de fundo limpo em volta, e a perna da
+vista de costas passava a menos de 6 px. Corpo largo + meia resolução (a rota do
+§3.6, hoje padrão) = folga pequena **em pixels**.
+
+Banco de ensaio com 2 selos vistos a olho e 6 candidatos confirmados como corpo,
+medindo a fração do anel que é corpo: **só o raio de 3 px separa os grupos** (0,0%
+nos dois selos contra 1,4%…76,7% no corpo; a 6 px um selo já dá 1,1% e o grupo
+encosta em 1,1%; a 20 px o selo é rejeitado). `SEAL_ISOLATION` passou de 20 para
+**3**, e o detector corrigido acha os 2 selos reais nas 55 folhas com **zero falso
+positivo**.
+
+**A doutrina:** o critério sempre quis dizer *"não encosta no corpo"*; com 20 px
+ele media **quanto vazio havia em volta**, que depende do tamanho do corpo e da
+resolução da folha. Mesma família da §1.1 e do `TARGET_TRIS` (§1.2).
+
+> **Pendência:** a folha `zen_m_b06i_d3` tem selo remanescente. Masculina, avatar
+> já produzido — não se regera (§5.1). Anotado para quando a onda masculina
+> reabrir.
+
+### 4.2c O SLOT do Multi-View da Meshy não muda a malha — medido em 58 masters
+
+O Rogério subiu a vista de perfil no slot **esquerdo** nos 39 masculinos e no
+`zen_f_b08_d3`, e no slot **direito** nos outros femininos. O `logs/process.log`
+só guarda `PASS/FAIL` da trava de simetria, então o número foi remedido sobre os
+masters com `qa/probe/sondas/probe_simetria.py` (read-only, mesmo método
+`symmetry_dev` do `process.py`).
+
+| grupo | n | média | mediana | faixa |
+|---|---:|---:|---:|---|
+| slot esquerdo (39 m + `f_b08_d3`) | 40 | 0,288 mm | 0,247 | 0,133–0,633 |
+| slot direito (18 f) | 18 | 0,334 mm | 0,297 | 0,121–0,667 |
+
+**Sem efeito, e a prova é a estratificação:** por faixa de IMC o sinal troca de
+lado — 16–22 dá 0,260 contra **0,186**; 22–30 dá **0,228** contra 0,272; 30–60 dá
+**0,266** contra 0,423. Direção inconsistente entre estratos é ruído, não efeito.
+
+**O que governa a assimetria é o TAMANHO DO CORPO**, não o slot: correlação com
+IMC **r = 0,544** sobre 58 avatares. E a tolerância é 5 mm de média — a
+biblioteca inteira vive entre 0,12 e 0,67 mm, **7 a 40× dentro da trava**.
+
+⚠️ **O que essa régua NÃO decide: orientação frontal.** Se um slot invertesse
+frente e costas, o placar sairia 8/8. Conferido no render lateral do `f_b08_d3`
+(busto e barriga à frente, glúteo atrás): correto com o slot esquerdo. **Não
+existe trava para isso; é olho no preview.**
+
 ### 4.3 `crotch_override_zh` conserta a ÂNCORA, não a SEGMENTAÇÃO
 
 Quem usar override de virilha precisa conferir se `hem_peaks_zh` voltou vazio —
@@ -359,8 +563,8 @@ Quem usar override de virilha precisa conferir se `hem_peaks_zh` voltou vazio �
 
 ### 4.5 Topologia: anel fechado é o que o detector sabe achar
 
-A bainha dá a VOLTA no membro; sulco de músculo cobre um arco. Foi por isso que
-a roupa feminina virou **faixa reta** (borda em anel, como o cós) em vez de top
+A bainha dá a VOLTA no membro; sulco de músculo cobre um arco. Foi por isso que a
+roupa feminina virou **faixa reta** (borda em anel, como o cós) em vez de top
 nadador — que, além disso, cobria **60,7% do dorsal alto** num app de musculação.
 
 ---
@@ -374,10 +578,19 @@ rótulo vive no `library.json`) e **inserir** um novo onde faltar cobertura.
 Decisão do Rogério: *"quanto mais avatares tivermos, maior será nossa
 biblioteca"*.
 
+⚠️ **Mas manter o asset não é servi-lo, e hoje não há mecanismo para separar as
+duas coisas.** O campo `approved` do `library.json` é fixo em `True`
+(`build_index.py:164`) e **nada o lê** — nem o `avatar_tester.html`. O
+`zen_f_b09_d3`, que lê masculino, é entregue hoje a qualquer mulher `d3` de IMC
+perto de 32. Conserto conhecido: `build_index.py` lendo uma lista de ids
+reprovados, com o `nearest_id` ignorando-os.
+
 ### 5.2 O nome do arquivo registra a INTENÇÃO, não o resultado
 
 Desde o schema 3 quem ordena a biblioteca é o `measured_bmi`. Renomear um asset
-só moveria a inconsistência para o `logs/process.log`, que é append-only.
+só moveria a inconsistência para o `logs/process.log`, que é append-only. Por
+isso inserção em slot ocupado ganha sufixo (`h`/`i`/`j`/`k`/`m`), que marca a
+**intenção, não a posição**.
 
 **Consequência:** a folha de contato do QA deve ser ordenada por `measured_bmi`,
 não por nome.
@@ -387,12 +600,11 @@ extrai `d1|d2|d3` do próprio nome do arquivo (`ID_RE`, linha 66) — o
 `measured_bmi` conserta banda errada, mas **nada confere o `d`**. É declaração,
 não medida, e é a única parte do ID que o pipeline não audita.
 
-**Enquanto um sexo tiver uma linha de definição só, botar avatar em outra linha
-é pior que rotular errado.** O fallback `d3→d2→d1` só entra se a linha estiver
-**vazia**; com um único avatar dentro dela, `nearest_id` devolve esse avatar
-para qualquer IMC. Um corpo de IMC 50 sozinho numa linha `f d1` seria entregue
-a uma mulher de IMC 24. Por isso o `zen_f_b09_d2` (IMC medido bem acima da
-banda, e sem tônus no olho) **ficou em `d2`**: a linha feminina ainda é uma só.
+**Enquanto um sexo tiver uma linha de definição só, botar avatar em outra linha é
+pior que rotular errado.** O fallback `d3→d2→d1` só entra se a linha estiver
+**vazia**; com um único avatar dentro dela, `nearest_id` devolve esse avatar para
+qualquer IMC — um corpo de IMC 50 sozinho numa `f d1` seria entregue a uma mulher
+de IMC 24. Por isso o `zen_f_b09_d2` **ficou em `d2`**.
 
 ### 5.3 A meta é COBERTURA do eixo de IMC, não contagem
 
@@ -401,13 +613,19 @@ O número 32 nunca foi meta.
 ### 5.4 Contar vão à mão não cola
 
 Rodar `build_index.py`, que imprime. A redação anterior do `CLAUDE.md` dizia "um
-vão high" e "8 low"; o índice diz **dois** e **6**.
+vão high" e "8 low"; o índice diz **dois** e **6**. Reincidente: o `state.md` da
+sessão 13 dizia "18 femininos ocupando 15 slots" com a própria tabela ao lado
+somando **20 e 17**.
+
+⚠️ **E não confundir as duas contagens:** vão `high` de IMC mede continuidade da
+escada *dentro das linhas que existem*; slot faltando mede completude da grade.
+Já troquei uma pela outra e respondi errado.
 
 ### 5.5 A régua 2D não atravessa troca de gerador nem de pose
 
-O `measure.py` ordena folhas do MESMO gerador com a MESMA pose, e nada além.
-Quem decide onde um avatar caiu é sempre o `metrics.py`, sobre o master 3D.
-Errar isso já custou três previsões.
+O `measure.py` ordena folhas do MESMO gerador com a MESMA pose, e nada além. Quem
+decide onde um avatar caiu é sempre o `metrics.py`, sobre o master 3D. Errar isso
+já custou três previsões.
 
 ---
 
@@ -419,9 +637,24 @@ Sem o print do avatar da vez, não mexer nos outros — nem para procurar padrã
 
 ### 6.2 "Fechar o avatar" = GLB processado e medido
 
-Não adiantar o prompt da folha seguinte na aprovação da FOLHA. Cobrado duas
-vezes (25/07 e 29/07), e na segunda o Rogério identificou a causa: **contexto no
+Não adiantar o prompt da folha seguinte na aprovação da FOLHA. Cobrado duas vezes
+(25/07 e 29/07), e na segunda o Rogério identificou a causa: **contexto no
 teto**. Sintoma a vigiar — janela cheia me faz pular etapa.
+
+### 6.2b O fluxo é uma LISTA, e os passos que eu pulo são sempre os do FIM
+
+Cobrado com "já falamos sobre isso". O fluxo do `state.md` tem 8 passos; numa
+sessão eu rodei os do meio (`intake` → `crop` → `process` → `metrics` →
+`build_index`) e deixei cair o `probe_tonus_f.py` e o `restyle.py --preview`.
+
+O padrão não é aleatório: os passos do fim são os que não **bloqueiam** o
+próximo. `crop` sem `intake` falha na hora; `preview` faltando não avisa ninguém.
+**Verificação que não trava o pipeline é a primeira a sumir quando a sessão
+acelera** — e a aceleração vinha do próprio sucesso.
+
+**Trava:** ao fechar um avatar, reler o bloco de fluxo do `state.md` linha a
+linha antes de dizer que acabou. É o único jeito de pegar um passo que, por
+definição, não reclama de estar faltando.
 
 ### 6.3 Iterar barato antes de palpitar
 
@@ -431,8 +664,7 @@ continuar adivinhando. Foi o que destravou a sessão do short — parar de pagar
 
 ### 6.4 Job em segundo plano contamina o mapa
 
-Armadilha real de processo: conferir que nada está rodando antes de ler estado
-compartilhado.
+Conferir que nada está rodando antes de ler estado compartilhado.
 
 ### 6.5 Arquivo nenhum entra no repositório pela mão do humano
 
@@ -441,19 +673,23 @@ salvar, renomear ou apagar selo à mão é **regressão de fluxo**.
 
 ### 6.6 Não explicar um desvio antes de a MEDIDA confirmar que houve desvio
 
-No `f_b04_d1` (29/07) a conta sobre a folha deu IMC 25–27 contra os 20,5–22,5
-que eu tinha previsto. Anunciei o erro, achei a causa e escrevi o culpado: o
-parágrafo que eu tinha acrescentado ao descritor pedia *"as coxas encostam uma
-na outra"*, que é traço do `f_b08_d1` — logo eu teria misturado as bandas e
-empurrado o corpo para `b07`.
+No `f_b04_d1` a conta sobre a folha deu IMC 25–27 contra os 20,5–22,5 previstos.
+Anunciei o erro, achei a causa e escrevi o culpado: um parágrafo meu no descritor
+pedindo *"as coxas encostam uma na outra"*, traço do `f_b08_d1`, logo eu teria
+misturado as bandas.
 
-Era uma história inteira, coerente e **falsa**. O corpo mediu **23,3**: 0,4
-acima da banda `b04` que eu pedi. O prompt estava certo; errada estava a
-estimativa que me fez procurar culpado.
+Era uma história inteira, coerente e **falsa**. O corpo mediu **23,3**: 0,4 acima
+da banda que eu pedi. O prompt estava certo; errada estava a estimativa que me
+fez procurar culpado.
 
-**O gatilho é reconhecível:** a explicação nasceu de uma régua 2D e contradizia
-o que o pedido tinha feito. É a §5.5 outra vez — a folha não decide onde o
-corpo caiu, o `metrics.py` decide. Enquanto a medida não sai, o desvio é
-hipótese, e hipótese não tem culpado. Custo desta vez: só uma explicação
-retirada. Se eu tivesse "consertado" o método de escrever descritor em cima
-dela, teria estragado o que funciona.
+**O gatilho é reconhecível:** a explicação nasceu de uma régua 2D e contradizia o
+que o pedido tinha feito (§5.5). Enquanto a medida não sai, o desvio é hipótese,
+e hipótese não tem culpado. Se eu tivesse "consertado" o método de escrever
+descritor em cima dela, teria estragado o que funciona.
+
+### 6.7 O QA de anatomia é meu; o do Rogério é grosseria visível e short
+
+Palavras dele, 30/07: *"você é o especialista em corpo humano, não tem como eu
+decidir algo no olho assim, a menos que seja uma inconsistência grande ou defeito
+na pintura do short."* **Não pedir a ele veredito de anatomia**, e não pedir
+opinião sobre PNG de pasta de render — ele avalia no `avatar_tester.html`.
