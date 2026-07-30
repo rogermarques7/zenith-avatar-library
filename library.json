@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-07-30T13:17:08Z",
+  "generated_at": "2026-07-30T15:13:33Z",
   "cdn_base": "https://cdn.exemplo.com/avatars/",
   "reference_height_m": 1.75,
   "selection": {
@@ -52,18 +52,6 @@
       "priority": "high"
     },
     {
-      "sex": "f",
-      "definition": "d3",
-      "between": [
-        "zen_f_b06_d3",
-        "zen_f_b08_d3"
-      ],
-      "bmi_from": 22.1,
-      "bmi_to": 28.4,
-      "bmi_step": 6.3,
-      "priority": "high"
-    },
-    {
       "sex": "m",
       "definition": "d1",
       "between": [
@@ -73,6 +61,18 @@
       "bmi_from": 27.8,
       "bmi_to": 33.3,
       "bmi_step": 5.5,
+      "priority": "high"
+    },
+    {
+      "sex": "f",
+      "definition": "d3",
+      "between": [
+        "zen_f_b06h_d3",
+        "zen_f_b07_d3"
+      ],
+      "bmi_from": 22.3,
+      "bmi_to": 27.7,
+      "bmi_step": 5.4,
       "priority": "high"
     },
     {
@@ -382,6 +382,34 @@
         "wrist": 23.4,
         "thigh": 68.7,
         "calf": 49.0
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_f_b06_d1",
+      "sex": "f",
+      "definition": "d1",
+      "measured_bmi": 32.4,
+      "measured_mass_kg": 99.2,
+      "label": "cheia",
+      "waist_to_height": 0.598,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_f_b06_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 41.7,
+        "chest": 105.4,
+        "waist_navel": 104.6,
+        "waist_min": 86.7,
+        "hip": 129.5,
+        "forearm": 28.4,
+        "biceps": 31.4,
+        "wrist": 23.4,
+        "thigh": 69.8,
+        "calf": 48.7
       },
       "approved": true
     },
@@ -750,6 +778,62 @@
       "approved": true
     },
     {
+      "id": "zen_f_b06h_d3",
+      "sex": "f",
+      "definition": "d3",
+      "measured_bmi": 22.3,
+      "measured_mass_kg": 68.3,
+      "label": "magra",
+      "waist_to_height": 0.449,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_f_b06h_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 33.3,
+        "chest": 94.4,
+        "waist_navel": 78.5,
+        "waist_min": 63.8,
+        "hip": 109.2,
+        "forearm": 24.7,
+        "biceps": 26.7,
+        "wrist": 18.7,
+        "thigh": 61.5,
+        "calf": 39.2
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_f_b07_d3",
+      "sex": "f",
+      "definition": "d3",
+      "measured_bmi": 27.7,
+      "measured_mass_kg": 84.8,
+      "label": "media",
+      "waist_to_height": 0.506,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_f_b07_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 35.4,
+        "chest": 93.2,
+        "waist_navel": 88.5,
+        "waist_min": 64.3,
+        "hip": 122.7,
+        "forearm": 29.5,
+        "biceps": 31.1,
+        "wrist": 22.4,
+        "thigh": 74.1,
+        "calf": 48.8
+      },
+      "approved": true
+    },
+    {
       "id": "zen_f_b08_d3",
       "sex": "f",
       "definition": "d3",
@@ -774,6 +858,34 @@
         "wrist": 22.2,
         "thigh": 75.0,
         "calf": 48.5
+      },
+      "approved": true
+    },
+    {
+      "id": "zen_f_b08h_d3",
+      "sex": "f",
+      "definition": "d3",
+      "measured_bmi": 29.0,
+      "measured_mass_kg": 88.7,
+      "label": "magra",
+      "waist_to_height": 0.47,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_f_b08h_d3_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 38.1,
+        "chest": 106.0,
+        "waist_navel": 82.3,
+        "waist_min": 71.1,
+        "hip": 124.5,
+        "forearm": 30.1,
+        "biceps": 33.5,
+        "wrist": 20.1,
+        "thigh": 59.6,
+        "calf": 46.2
       },
       "approved": true
     },
