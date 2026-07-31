@@ -180,6 +180,42 @@ outra trava. **Rodar esta conferência em toda folha feminina**, e não confundi
 com a 1.4b: lá a razão parada reprova, aqui é a razão subindo *com quadril
 caindo* que reprova.
 
+⚠️ **Esta trava dá FALSO POSITIVO em passo descendente** — descoberto na sessão
+17. Quando o corpo inteiro encolhe, o quadril cai em absoluto por construção, e
+`cintura/quadril` sobe em quase toda folha mais leve. As três descidas aprovadas
+da sessão 17 disparam esta assinatura e **as três geraram corpo feminino
+limpo**. Ao ver o padrão numa folha mais leve que a âncora, não reprovar por ele
+— usar a §1.4d, que é a régua que separou os casos de verdade.
+
+### 1.4d ✅ A régua que PEGA a leitura masculina: `ombro/quadril` na folha 2D
+
+Construída na sessão 17 medindo as **dez folhas `d3` que já viraram avatar**, e
+comparando com o parecer de anatomia de cada corpo. As seis que geraram corpo
+feminino ficam num cluster estreito:
+
+| folha | `ombro/quadril` | lê |
+|---|---:|---|
+| `b07_d3` · `b08h_d3` · `b06h_d3` · `b05_d3` · `b04_d3` · `b08_d3` | **0,940 a 1,050** | feminino |
+| `b09_d3` | **1,212** | **masculino** |
+
+Duas folhas medem 0,462 e 0,148 — é a régua do ombro quebrando (ver abaixo), não
+corpo. **Descartar leitura de ombro fora de 0,9–1,3.**
+
+Isso reprovou duas folhas do `b03_d3` antes da Meshy (**1,103** e **1,104**) e
+aprovou a terceira (**1,059**) e o `b02_d1` (**1,029**), que vieram femininos.
+
+⚠️ **O que ela NÃO pega.** O par 3D `quadril/peito` só acusa o caso extremo: na
+biblioteca feminina inteira o único fora do cluster é o `b10_d3` em **0,879** (a
+caricatura), enquanto o `b09_d3` — que também lê masculino — dá **1,142**, no
+meio do pelotão. Ou seja: **proporção pega estrutura de tronco, e não pega busto
+virado peitoral nem mandíbula.** Esses dois continuam sendo olho no preview.
+
+⚠️ **A leitura do ombro quebra sozinha.** O `sheet_qa` mede a `at_frac` fixa
+0,194, e num corpo de proporção diferente essa linha cai fora do deltoide: já deu
+`cintura/ombro` **1,543** (ombro mais estreito que a cintura, o que não existe) e
+70 px contra 189 px da âncora. É a mesma família da pegadinha do `thigh`.
+**Descartar a medida e resolver pela imagem quando ela sair dessa faixa.**
+
 ### 1.5 Duas estimativas concordando não são uma confirmação
 
 Estimei o IMC de uma folha por volume (~28) e pela regra aditiva (29,4), vi as
@@ -382,6 +418,57 @@ se o descritor não está apontando para um atrator conhecido.
 descritor já nomeia** — reforço redundante de volume é candidato a causa do
 estouro do `f_b08_d1`. Usar o parágrafo só para direção e continuidade de
 personagem.
+
+#### 2.4c 🔴 O SINAL domina o TAMANHO: subindo estoura, descendo é fino
+
+Sete gerações da sessão 17, todas no ChatGPT feminino, todas com âncora anexa e
+cláusula de direção. **A assimetria é de uma ordem de grandeza:**
+
+| direção | avatar | âncora | previsto | medido | passo |
+|---|---|---:|---|---:|---:|
+| ⬆️ | `f_b11_d2` | 34,4 | 42–46 | 59,7 | **+25,3** |
+| ⬆️ | `f_b05_d1` | 24,1 | 28–31 | 44,4 | **+20,3** |
+| ⬆️ | `f_b10_d3` | 30,1 | 36–42 | 45,1 | **+15,0** |
+| ⬆️ | `f_b04_d3` | 22,3 | ~25 | 29,9 | **+7,6** |
+| ⬇️ | `f_b03_d3` | 21,0 | ~19 | 16,1 | **−4,9** |
+| ⬇️ | `f_b02_d1` | 19,0 | 17,5–18,5 | 16,4 | **−2,6** |
+| ⬇️ | `f_b01_d2` | 18,3 | 16–17 | **17,2 ✅** | **−1,1** |
+
+**Subindo, o menor passo medido foi +7,6** — e veio da categoria mais moderada
+que existe (Figure, uma divisão entre duas já medidas). **Descendo, o maior foi
+−4,9.** As quatro subidas estouraram a faixa declarada; a única previsão que caiu
+dentro em toda a sessão foi uma descida.
+
+**Consequência prática: vão estreito só se fecha DESCENDO.** Ancorar acima do
+alvo e pedir corpo mais leve. Ancorar abaixo e pedir mais pesado atravessa o vão
+inteiro e pousa do outro lado — foi o que enterrou o `f d1` 24,1→31,9 (pousou em
+44,4) e o `f d2` 34,4→52,6 (pousou em 59,7).
+
+**A causa é empilhamento de lever, e é a §2.2c aplicada à direção.** Âncora com
+cláusula de direção **é um lever**; categoria mais pesada que a da âncora **é
+outro**. Os dois apontando para o mesmo lado somam. Descendo eu usei categoria
+moderada e o passo ficou fino; subindo eu usei categoria extrema *e* direção, e
+estourou. **Um lever por folha vale para a direção também.**
+
+#### 2.4d ❌ NEGAÇÃO NÃO VENCE ATRATOR — três medidas na mesma sessão
+
+Cláusula de negação explícita, literal, em maiúsculas, falhou **três vezes em
+sete folhas** — sempre quando o atrator do gerador estava do outro lado:
+
+| negação escrita no prompt | o que saiu |
+|---|---|
+| *"Ela NÃO É OBESA: sem dobras, sem avental"* | IMC **44,4** — obesidade grau III |
+| *"ELA É UMA MULHER… NÃO tem peitoral masculino"* | `f_b10_d3`, fisiculturista **masculino caricato** |
+| *"os OMBROS DELA SÃO ESTREITOS"* | ombro **alargou**, `ombro/quadril` 1,030 → 1,103 |
+
+A §2.2 já dizia que adjetivo de intensidade não move corpo. Isto é mais forte:
+**a negação não é lever nenhum quando o atrator é forte.** Ela só funciona onde
+o corpo pedido já está perto do que sairia de qualquer jeito — nos dois acertos
+da sessão (`b01_d2` e `b02_d1`) a mesma cláusula de quadril pegou, porque ali não
+havia atrator puxando contra.
+
+**O que fazer no lugar:** trocar o gerador, ou trocar o alvo. Redação nova sobre
+o mesmo atrator é a definição de gastar geração (§2.5b).
 
 ### 2.5 As lacunas são do GERADOR — e são a falta de uma PALAVRA
 
@@ -626,6 +713,20 @@ que a versão anterior desta lição ("a saída é regerar") custou 25 minutos e
 gerações. Abrir a imagem → compartilhar → abrir o link em janela nova → baixar
 por lá. A cópia vem íntegra, em **metade da resolução** (1376×768).
 
+⚠️ **A saída do "compartilhar" também falha — medido na sessão 17.** Duas folhas
+do Gemini chegaram inúteis naquela noite, e por dois motivos diferentes: uma veio
+**byte a byte idêntica à âncora anexada** (SHA-256 igual ao
+`zen_f_b05_d3_sheet.png` — o download trouxe o anexo de volta, não a geração), e
+a outra veio com **terço direito cinza vazio, faixa marrom no rodapé, fundo de
+ruído 187** (contra ~10 numa folha sã) e os braços dissolvidos. O `crop.py` acha
+1 vista em vez de 3.
+
+**Conferir SHA-256 da folha contra a âncora antes de medir** — é barato e evita
+medir a própria referência achando que se está medindo uma folha nova. E
+**nenhuma dessas duas falhas é evidência sobre o Gemini como gerador**: as duas
+são do caminho de entrega, e confundi-las com atrator de gerador desperdiça a
+única alternativa que existe quando o ChatGPT satura.
+
 **Meia resolução é aceitável, inclusive em `d3`.** O `crop.py` normaliza toda
 vista para 1200 px de altura, então a Meshy recebe o mesmo canvas das outras
 folhas. A ressalva antiga (*"em `d3` com gomo abdominal, preferir regerar"*) era
@@ -782,6 +883,15 @@ somando **20 e 17**.
 ⚠️ **E não confundir as duas contagens:** vão `high` de IMC mede continuidade da
 escada *dentro das linhas que existem*; slot faltando mede completude da grade.
 Já troquei uma pela outra e respondi errado.
+
+✅ **Cada uma tem seu script, e nenhuma se faz a mão:**
+- vão de IMC → `python scripts/build_index.py`
+- slot de grade → `python scripts/contagem_slots_f.py` (nasceu na sessão 17)
+
+O contador de slots existe porque a grade `d3` **começa em `b02` e termina em
+`b10`**: um range `b01..b09` inventa um slot que não existe *e* esconde o `b10`.
+As faixas da grade vivem no `docs/blocos/prompt_f.md`, que é a fonte dos
+descritores — se elas mudarem, mudar o `GRADE` do script na mesma edição.
 
 ### 5.5 A régua 2D não atravessa troca de gerador nem de pose
 

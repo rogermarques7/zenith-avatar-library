@@ -11,12 +11,17 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 
 | quando a tarefa for… | ler ANTES de agir | tamanho |
 |---|---|---:|
-| **montar prompt de folha** (o caso mais comum) | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 4,4k / 2,5k |
-| decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,9k |
-| mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,3k |
-| discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 4,1k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **13,7k** |
-| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-07.md` (**grep**, não ler inteiro) | 55,3k |
+| **montar prompt de folha** (o caso mais comum) | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 4,8k / 2,4k |
+| decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,7k |
+| mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,2k |
+| discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 4,0k |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **14,9k** |
+| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-07.md` (**grep**, não ler inteiro) | 57,7k |
+
+> Leitura padrão: `CLAUDE.md` **4,6k** + `state.md` **6,1k** = **10,7k** antes de
+> qualquer trabalho. O `state.md` subiu de 3,4k para 6,1k na sessão 17 e **é o
+> próximo candidato a enxugamento** — o bloco da sessão 16 já pode descer para o
+> diário.
 
 > ### ⚠️ Manter a coluna de TAMANHO honesta — o número errado já custou
 >
