@@ -95,18 +95,68 @@ ARMPIT_FRAC  = 0.710
 # so numero medido no MESMO lugar em todos os avatares e comparavel entre si.
 # Procurar "o maximo da faixa" parecia mais esperto e estava errado: num obeso
 # o maximo da faixa do peito e a BARRIGA, e o b11_d1 mediu 246 cm de peito.
-CHEST_FRAC   = 0.720       # linha do mamilo
+#
+# ONDE AS BANDAS FORAM CALIBRADAS (01/08, sessao 20)
+#     O app Zenith desenha, em cada tela do guia de medidas, o anel roxo na
+#     altura exata onde manda passar a fita. Isolando esse anel por pixel e
+#     dividindo pela estatura da figura, sai um at_frac COMPARAVEL com o daqui
+#     - e ele e regua EXTERNA, porque nasceu no outro repositorio, sem
+#     combinacao. Ele bate em 0,001 no quadril (0,507 x 0,507) e na cintura
+#     minima (0,645 x 0,644), o que calibra a leitura; e por isso as
+#     divergencias dele valem alguma coisa. Ver docs/INTEGRACAO_ZENITH.md.
 NAVEL_FRAC   = 0.600       # cintura de fita
 NECK_BAND    = (0.830, 0.900)   # pescoco: o ponto mais ESTREITO (definicao correta)
 WAIST_BAND   = (0.550, 0.680)   # cintura natural: o ponto mais estreito do tronco
 HIP_BAND     = (0.470, 0.550)   # quadril: o ponto mais LARGO (e o que a fita busca)
 CHEST_PAD_M  = 0.010       # recuo quando o peito precisa descer ate os bracos
 
+# PEITO: continua FIXO, e agora isso esta MEDIDO, nao herdado.
+#     O INTEGRACAO_ZENITH.md secao 6.2 mandava trocar por "maximo numa banda".
+#     Testado em 01/08 com CHEST_BAND = (0,715, 0,775): no b01_d1 o maximo subiu
+#     para 0,764 e o peito foi de 78,2 para 86,2 cm. Os +8 cm nao sao peito - o
+#     maximo FOGE PARA A AXILA, onde dorsal e deltoide entram no casco convexo.
+#     O comentario de cima avisava do risco pela barriga; o risco real e o
+#     oposto, e so aparece em corpo magro (no obeso o arm_split ja corta antes).
+#     Peito de fita e LANDMARK (linha do mamilo), nao extremo. Banda descartada.
+CHEST_FRAC   = 0.720       # linha do mamilo
+
+# OMBRO: coluna NOVA (01/08). O app coleta shoulder_cm e ate agora a biblioteca
+#     nao tinha o que responder. E CIRCUNFERENCIA, nao largura - decisao tomada
+#     no INTEGRACAO_ZENITH.md secao 8c (largura de deltoide a deltoide e
+#     inviavel de auto-medir: fita reta, horizontal, com as duas pontas fora do
+#     campo de visao). O render do app ja e um anel, e a altura dele e a fonte
+#     deste numero: 0,795 da estatura.
+#     Tambem foi tentado como maximo de banda (0,760-0,825) e tambem foi
+#     descartado pelo mesmo motivo do peito: em 2 dos 3 avatares de teste o
+#     maximo desceu ate o piso da banda, ou seja, fugiu para o TORAX. Ombro de
+#     fita tambem e landmark.
+#     A fatia fica ACIMA da axila DE PROPOSITO: os deltoides estao fundidos ao
+#     tronco, a secao e um laco fechado unico e o casco convexo dele e
+#     exatamente o que a fita mede. Por isso a coluna passa check_arms=False -
+#     "bracos fundidos" e a definicao da medida, nao um defeito dela.
+SHOULDER_FRAC = 0.795
+
 ARM_PAD_M    = 0.020       # afasta a medida de biceps da zona de fusao do deltoide
 THIGH_BAND_M = 0.060       # coxa: maximo nos 6 cm abaixo da virilha
-CALF_BAND    = (0.180, 0.320)   # fracao da estatura
 
-COLUMNS = ["neck", "chest", "waist_navel", "waist_min", "hip",
+# PANTURRILHA: o teto era 0,320 e ESTAVA MEDINDO O JOELHO.
+#     Medido em 01/08: 50 dos 76 avatares (35 dos 51 na faixa de usuario)
+#     travavam o maximo em 0,320 exato - a borda da propria banda. Maximo que
+#     pousa na borda em 2/3 dos casos nao e maximo, e corte: a 0,320 da estatura
+#     (56 cm do chao) a fatia pega a base da coxa, porque a linha do joelho fica
+#     em ~0,285. Os 16 que escapavam achavam o pico em 0,206-0,223, que e onde o
+#     app desenha o anel (0,214) e onde o ventre da panturrilha realmente esta.
+#     A coluna media DUAS PARTES DO CORPO sob o mesmo nome.
+#     O teto novo fica abaixo da linha do joelho, entao o joelho sai do alcance.
+CALF_BAND    = (0.170, 0.265)   # fracao da estatura
+
+# Quanto o pico pode encostar na borda da banda antes de ser DENUNCIADO.
+# Existe por causa do defeito da panturrilha acima: ele sobreviveu a producao
+# inteira porque nada olhava ONDE o maximo tinha caido, so QUANTO ele valia.
+# Uma banda cujo extremo vive na borda esta cortando a medida, nao achando-a.
+BAND_EDGE_TOL_FRAC = 0.004
+
+COLUMNS = ["neck", "shoulder", "chest", "waist_navel", "waist_min", "hip",
            "biceps", "forearm", "wrist", "thigh", "calf"]
 
 # Densidade corporal media. Varia ~1,07 (muito magro) a ~1,00 (obeso); usar um
@@ -549,43 +599,76 @@ def worker_main():
 
         m = {}
 
-        def put(name, per, z, check_arms=True):
+        def band_edge(z, band):
+            """'hi'/'lo' se o extremo escolhido encostou na borda da banda.
+
+            Banda cujo maximo cai na borda nao achou o maximo: ela foi CORTADA
+            antes dele. Foi assim que a panturrilha passou a producao inteira
+            medindo o joelho - 50 dos 76 travados em 0,320 exato, e nenhuma
+            trava olhava para isso porque todas olhavam so o centimetro.
+            """
+            if z is None or band is None:
+                return None
+            f = (z - base) / height
+            if f <= (band[0] - base) / height + BAND_EDGE_TOL_FRAC:
+                return "lo"
+            if f >= (band[1] - base) / height - BAND_EDGE_TOL_FRAC:
+                return "hi"
+            return None
+
+        def put(name, per, z, check_arms=True, band=None):
             """Registra a medida, marcando se os bracos estavam fundidos ao tronco.
 
             Acima de arm_split o casco convexo do tronco engloba os bracos e o
             numero fica inflado. Melhor entregar marcado do que limpo e errado.
-            O pescoco passa check_arms=False: fica acima dos ombros, os bracos
-            nem aparecem na fatia.
+            O pescoco e o ombro passam check_arms=False: no pescoco os bracos
+            nem aparecem na fatia, e no ombro a fusao E a medida.
             """
             entry = {"cm": round(per * 100, 1) if per else None,
                      "at_frac": round((z - base) / height, 3) if z is not None else None}
             if per and z is not None and check_arms and arm_split is not None and z > arm_split:
                 entry["arms_merged"] = True
+            edge = band_edge(z, band) if per else None
+            if edge:
+                entry["at_band_edge"] = edge
             m[name] = entry
 
         # --- tronco -------------------------------------------------------
-        put("neck", *torso_extreme(mesh, base + NECK_BAND[0] * height,
-                                   base + NECK_BAND[1] * height, "min"),
-            check_arms=False)
+        neck_band = (base + NECK_BAND[0] * height, base + NECK_BAND[1] * height)
+        put("neck", *torso_extreme(mesh, neck_band[0], neck_band[1], "min"),
+            check_arms=False, band=neck_band)
+
+        # Ombro: circunferencia na linha dos deltoides, ACIMA da axila de
+        # proposito (ver SHOULDER_FRAC). Nao ha o que cortar pela fusao dos
+        # bracos - a fusao e o que se quer medir.
+        shoulder_z = base + SHOULDER_FRAC * height
+        put("shoulder", torso_at(mesh, shoulder_z), shoulder_z, check_arms=False)
 
         # Peito na linha do mamilo. Se os bracos fundem abaixo disso, desce ate
         # logo abaixo da fusao - poucos cm de diferenca e um numero utilizavel,
         # em vez de um valor inflado pelos bracos.
         chest_z = base + CHEST_FRAC * height
         if arm_split is not None and arm_split < chest_z:
+            # Aqui o numero deixa de ser peito e tende a barriga. Antes isso
+            # saia limpo: o b12_d1 publicava 202,7 cm em 'chest' e em
+            # 'waist_navel' - o MESMO z, sem nada avisando. Agora vai marcado.
             chest_z = arm_split - CHEST_PAD_M
-        put("chest", torso_at(mesh, chest_z), chest_z)
+            put("chest", torso_at(mesh, chest_z), chest_z)
+            m["chest"]["below_band"] = True
+        else:
+            put("chest", torso_at(mesh, chest_z), chest_z)
 
         navel_z = base + NAVEL_FRAC * height
         put("waist_navel", torso_at(mesh, navel_z), navel_z)
 
-        put("waist_min", *torso_extreme(mesh, base + WAIST_BAND[0] * height,
-                                        base + WAIST_BAND[1] * height, "min"))
-        put("hip", *torso_extreme(mesh, base + HIP_BAND[0] * height,
-                                  base + HIP_BAND[1] * height, "max"))
+        waist_band = (base + WAIST_BAND[0] * height, base + WAIST_BAND[1] * height)
+        put("waist_min", *torso_extreme(mesh, waist_band[0], waist_band[1], "min"),
+            band=waist_band)
+        hip_band = (base + HIP_BAND[0] * height, base + HIP_BAND[1] * height)
+        put("hip", *torso_extreme(mesh, hip_band[0], hip_band[1], "max"), band=hip_band)
 
         # --- membros ------------------------------------------------------
-        def put_pair(name, got):
+        def put_pair(name, got, band=None):
             if got is None:
                 m[name] = {"cm": None, "at_frac": None}
                 return
@@ -593,6 +676,9 @@ def worker_main():
             m[name] = {"cm": round(avg * 100, 1), "left_cm": round(left * 100, 1),
                        "right_cm": round(right * 100, 1),
                        "at_frac": round((z - base) / height, 3)}
+            edge = band_edge(z, band)
+            if edge:
+                m[name]["at_band_edge"] = edge
 
         # O braco so e mensuravel onde ainda e um laco proprio. Em corpo magro
         # isso vai ate a axila; em obeso o braco encosta antes e o teto cai.
@@ -612,10 +698,15 @@ def worker_main():
         # Coxa: so mensuravel abaixo de onde as coxas se tocam. Num obeso esse
         # teto fica bem abaixo da virilha e a medida deixa de ser "coxa".
         thigh_top = crotch if leg_split is None else min(crotch, leg_split)
-        put_pair("thigh", pair_extreme(mesh, thigh_top - THIGH_BAND_M,
-                                       thigh_top - SCAN_STEP_M, False, "max"))
-        put_pair("calf", pair_extreme(mesh, base + CALF_BAND[0] * height,
-                                      base + CALF_BAND[1] * height, False, "max"))
+        thigh_band = (thigh_top - THIGH_BAND_M, thigh_top - SCAN_STEP_M)
+        # 'at_band_edge: hi' na coxa e ESPERADO e nao e defeito: a coxa e mais
+        # larga colada na virilha, entao o maximo cai no teto por anatomia, nao
+        # por corte. Na panturrilha o mesmo sinal significava o oposto.
+        put_pair("thigh", pair_extreme(mesh, thigh_band[0], thigh_band[1], False, "max"),
+                 band=thigh_band)
+        calf_band = (base + CALF_BAND[0] * height, base + CALF_BAND[1] * height)
+        put_pair("calf", pair_extreme(mesh, calf_band[0], calf_band[1], False, "max"),
+                 band=calf_band)
 
         # A razao e o invariante: os masters tem altura fixa e o app escala por
         # altura do usuario. E a razao que se compara com uma pessoa real.
@@ -649,11 +740,31 @@ def worker_main():
         for c in cols:
             v = m[c]["cm"]
             mark = "*" if m[c].get("arms_merged") else ""
+            # '^'/'v': o extremo encostou na borda da banda. Na coxa e normal;
+            # em qualquer outra coluna quer dizer que a banda cortou a medida.
+            edge = m[c].get("at_band_edge")
+            if edge and c != "thigh":
+                mark += "^" if edge == "hi" else "v"
+            if m[c].get("below_band"):
+                mark += "!"
             line += "{:>11}".format("--" if v is None else "{:.1f}{}".format(v, mark))
         print(line)
     if any(e.get("arms_merged") for _, m in rows for e in m.values()):
         print("\n* medido acima da altura em que os bracos encostam no tronco:"
               "\n  o casco convexo engloba os bracos e o valor esta INFLADO.")
+    edged = [(aid, c) for aid, m in rows for c in cols
+             if c != "thigh" and m[c].get("at_band_edge")]
+    if edged:
+        print("\n^/v o extremo caiu na BORDA da banda em {} medida(s): a banda"
+              "\n  cortou antes do pico, entao o numero nao e o que a coluna promete."
+              .format(len(edged)))
+        for aid, c in edged[:10]:
+            print("    {} {}".format(aid, c))
+    below = [(aid, c) for aid, m in rows for c in cols if m[c].get("below_band")]
+    if below:
+        print("\n! medido ABAIXO da banda (bracos fundem cedo demais): {} caso(s)."
+              "\n  Nesses o 'peito' tende ao valor da barriga - nao comparar com os outros."
+              .format(len(below)))
     print("\nJSON: {}".format(json_path))
 
     if args.csv:

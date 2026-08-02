@@ -23,12 +23,17 @@ use_raw = "--raw" in argv
 torso = "--torso" in argv
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(REPO, "scripts"))
+import zenith_paths as zp                                          # noqa: E402
+
 if use_raw:
     glb = os.path.join(REPO, "01_raw", f"{avatar_id}_raw.glb")
 else:
-    glb = os.path.join(REPO, "03_dist", "glb", f"{avatar_id}_v1.glb")
-if not os.path.exists(glb):
-    raise SystemExit(f"nao encontrei {glb}")
+    # a versao MAIS ALTA, nunca _v1 fixo: QA que renderiza a versao aposentada
+    # aprova o arquivo que o app nao serve mais
+    _, glb = zp.dist_glb_current(REPO, avatar_id)
+if not glb or not os.path.exists(glb):
+    raise SystemExit(f"nao encontrei o GLB de {avatar_id}")
 
 prefix = ("raw_" if use_raw else "") + ("torso_" if torso else "")
 outdir = os.path.join(REPO, "qa", "inspect", avatar_id)

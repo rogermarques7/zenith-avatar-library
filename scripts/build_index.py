@@ -123,10 +123,34 @@ def main():
         metrics = json.load(f)["avatars"]
 
     avatars = []
-    orphans = []
+    orphans = []      # ficaram FORA do indice
+    stale = []        # entraram, mas tem sobra de versao antiga no disco
+
+    # Um id pode ter mais de uma versao no disco - o escritor aposenta a
+    # anterior, mas um arquivo copiado a mao ou um export interrompido deixa
+    # sobra. Servir as duas colocaria o MESMO id duas vezes no indice, com o
+    # nearest_id escolhendo a que calhasse. Aqui vale a versao MAIS ALTA, e a
+    # sobra e denunciada em vez de ignorada em silencio.
+    newest = {}
     for path in sorted(glob.glob(os.path.join(root, "03_dist", "glb", "*_v*.glb"))):
         fname = os.path.basename(path)
         aid, version = fname[:-4].rsplit("_v", 1)
+        if not version.isdigit():
+            orphans.append(fname + " (versao nao numerica)")
+            continue
+        version = int(version)
+        if aid not in newest or version > newest[aid]:
+            newest[aid] = version
+
+    for aid, version in sorted(newest.items()):
+        fname = "{}_v{}.glb".format(aid, version)
+        older = [v for v in range(1, version)
+                 if os.path.isfile(os.path.join(root, "03_dist", "glb",
+                                                "{}_v{}.glb".format(aid, v)))]
+        if older:
+            stale.append("{}: servindo v{}, mas sobrou no disco {}"
+                         .format(aid, version,
+                                 ", ".join("v{}".format(v) for v in older)))
 
         m = ID_RE.match(aid)
         if not m:
@@ -154,7 +178,7 @@ def main():
                                 if info["circumferences_cm"].get("waist_navel", {}).get("cm")
                                 else None),
             "body_shape": "medium",
-            "version": int(version),
+            "version": version,
             "assets": {
                 "glb": fname,
                 "turntable": os.path.basename(turntable) if os.path.isfile(turntable) else None,
@@ -227,6 +251,10 @@ def main():
         print("\nFORA DO INDICE ({}):".format(len(orphans)))
         for o in orphans:
             print("  " + o)
+    if stale:
+        print("\nSOBRA DE VERSAO ({}) - conferir antes de subir ao CDN:".format(len(stale)))
+        for s in stale:
+            print("  " + s)
     if gaps:
         print("\nBuracos de cobertura (candidatos a insercao):")
         for g in gaps[:8]:

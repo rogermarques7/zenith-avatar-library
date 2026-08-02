@@ -275,7 +275,11 @@ def worker_main():
 
     raw_path = os.path.join(root, "01_raw", aid + "_raw.glb")
     master_path = os.path.join(root, "02_master", aid + "_master.glb")
-    dist_path = os.path.join(root, "03_dist", "glb", aid + "_v1.glb")
+    # Versao NOVA, nunca por cima: o dist e URL de CDN (zenith_paths.py). Num
+    # avatar inedito isso da v1; num reprocessamento, da a seguinte - e e ai
+    # que importa, porque e o unico caso em que ja existe alguem com o arquivo
+    # velho em cache.
+    dist_version, dist_path = _zp.dist_glb_next(root, aid)
     log_path = os.path.join(root, "logs", "process.log")
 
     for d in (os.path.dirname(master_path), os.path.dirname(dist_path), os.path.dirname(log_path)):
@@ -690,8 +694,12 @@ def worker_main():
             export_draco_normal_quantization=14,
         )
 
+        gone = _zp.dist_glb_retire(root, aid, keep=dist_version)
+
         print("\nmaster: {}".format(master_path))
-        print("dist  : {}".format(dist_path))
+        print("dist  : {}{}".format(
+            dist_path,
+            "   (aposentou {})".format(", ".join(gone)) if gone else ""))
 
         # 14. log
         _write_log(log_path, aid, raw_tris=raw_tris, out_tris=out_tris,

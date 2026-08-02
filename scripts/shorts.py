@@ -185,6 +185,32 @@ WAIST_MEDIAN            = 7      # termos da mediana circular (era 5)
 HEM_BELOW_CROTCH   = (0.015, 0.065)
 WAIST_ABOVE_CROTCH = (0.090, 0.230)
 
+# --- o RECUO da bainha quando nao ha anel -----------------------------------
+# Metade das femininas nao tem vinco de bainha em perna nenhuma, entao este
+# numero nao e um caso de borda: e o que sai na maioria. Mesmo assim ele nunca
+# tinha sido medido - 0.035 era um valor de partida.
+#
+# Medido na folha (regua externa) nos 24 avatares de virilha confiavel, a
+# distancia virilha -> bainha e 0.0193 com desvio 0.0057. Varrido em
+# qa/probe/sondas/_varre_bainha.py, com o erro contado nos 24 e o chute
+# incluido, que e o que de fato sai:
+#
+#   janela 0.015..0.065  recuo 0.035   rms 0.0105  |max| 0.0239  1 fora de 0.02
+#   janela 0.015..0.065  recuo 0.019   rms 0.0060  |max| 0.0123  0 fora de 0.02
+#   janela 0.005..0.045  recuo 0.019   rms 0.0078  |max| 0.0155  0 fora de 0.02
+#
+# A JANELA NAO MUDA, e esse e o resultado que surpreende: alargar para achar
+# mais anel (10 chutes -> 2) PIORA o rms, porque os aneis a mais sao os errados.
+# O defeito nunca foi onde se procurava, era o que se respondia ao nao achar.
+# Um recuo errado nao se denuncia: ele sai com a mesma cara de uma medida.
+#
+# So o feminino, e nao por anatomia: e que o masculino nao tem banco de anel
+# cru e 39 avatares dele estao aprovados e entregues. Trocar constante de quem
+# ja passou, sem a regua correspondente, e o erro que apagou os 39 shorts em
+# 31/07. Medir o lado masculino esta pendente.
+HEM_RECUO   = 0.035
+HEM_RECUO_F = 0.019
+
 # --- e uma segunda janela do cos, esta ABSOLUTA ------------------------------
 # Abrir o teto acima era necessario para os IMC 107+, mas sozinho ele QUEBROU o
 # b08_d1: com mais espaco, o anel agarrou um pico falso (dobra da barriga) em
@@ -206,6 +232,112 @@ WAIST_ABOVE_CROTCH = (0.090, 0.230)
 #   teto 0.230 sozinho                 2 sem anel   rms 0.0144   (b08_d1 +0.069)
 #   teto 0.230 + absoluta 0.48..0.60   2 sem anel   rms 0.0090
 WAIST_ABS_RANGE = (0.48, 0.60)
+
+# --- ...e ela e MASCULINA. O short feminino e de cintura alta ----------------
+# Os numeros acima saem das 39 folhas masculinas. Medida a mesma coisa nas 37
+# femininas (qa/probe/sondas/faixa_ref.py), a distribuicao esta deslocada para
+# cima: mediana 0.587 contra ~0.573, maximo 0.612, e ONZE das 37 em 0.59 ou
+# acima. O teto de 0.60 cortava a propria populacao que devia cobrir - em tres
+# avatares ele descartou um anel forte por um ou dois bins (b10_d3 tinha 0.253
+# em 0.602, o b11_d2 tinha 0.171 em 0.594), que e a assinatura de "quem decidiu
+# foi a janela, nao o sinal" (LICOES 1.8).
+#
+# Varrido sobre o banco de anel cru (qa/probe/sondas/_varre_janela.py), com a
+# virilha ja corrigida e medindo o erro nos 37 - inclusive quem cai no chute,
+# porque o chute e o que sai:
+#
+#   teto 0.600   9 sem anel   rms 0.0095   2 fora de 0.02
+#   teto 0.610   4 sem anel   rms 0.0079   0 fora de 0.02   <--
+#   teto 0.620   1 sem anel   rms 0.0084   1 fora de 0.02   (b09_d3 +0.023)
+#
+# 0.620 acha mais aneis e acerta menos: e o "janela larga troca o marco
+# anatomico por outro" do bloco acima, agora do lado feminino. Entre um chute
+# que se denuncia (waist_ring_found=False) e um pico errado que passa calado, o
+# chute e preferivel.
+WAIST_ABS_RANGE_F = (0.48, 0.61)
+
+# Onde acaba o braco e comeca o tronco, na altura da faixa: a coluna de x cuja
+# profundidade passa desta fracao da profundidade da fatia. Ver w_arm_wide.
+PROF_FRAC = 0.60
+
+# A ordem das pecas no w_field(partes=True): 0 short, 1 faixa. So a faixa pode
+# sair legitimamente partida em duas (braco tapando o lado do torax).
+FAIXA_PECA = 1
+# Fracao da altura da banda que uma ilha precisa cobrir para contar como pedaco
+# de faixa, e nao como franja do corte. O vazio medido vai de 7% a 60%.
+FAIXA_PECA_ALT_MIN = 0.30
+
+
+# --- A SEGUNDA PECA: a FAIXA do peito (feminino, 01/08) ----------------------
+# A roupa feminina e faixa reta + short (CHARACTER_BIBLE 5), e a faixa foi
+# escolhida justamente porque a borda dela e ANEL FECHADO - a mesma topologia do
+# cos e da bainha, que e a unica que este detector sabe achar.
+#
+# As janelas aqui NAO sao ancoradas na virilha, e a diferenca em relacao ao short
+# e medida, nao estilistica: o short se move com a proporcao do corpo (a virilha
+# de um IMC 148 esta em 0.297 e a de um IMC 16 em 0.38), enquanto a faixa mora no
+# torax de um personagem que tem sempre a mesma altura. Medido na folha de
+# referencia das 37 (qa/probe/sondas/faixa_ref.py, regua EXTERNA):
+#
+#   topo da faixa : 0.705 .. 0.735   (37 de 37)
+#   base da faixa : 0.654 .. 0.686   (37 de 37)
+#
+# 0.030 de dispersao contra os 0.083 do cos - e sem depender de a virilha estar
+# certa. Entao aqui a ancora absoluta nao e a segunda regua, e a primeira.
+FAIXA_BASE_RANGE = (0.635, 0.700)
+
+# --- O TOPO NAO E UMA SEGUNDA MEDIDA: E A BASE MAIS A ALTURA DA PECA ---------
+# A primeira versao procurou as duas bordas como se fossem independentes, cada
+# uma com sua janela absoluta, e o topo errou ate 0.034 contra a folha (uns 6 cm
+# de tecido) - em cinco avatares o anel do topo nem existia e valia um chute.
+#
+# A folha explica por que: medida a altura da faixa nas costas nas 37 folhas, ela
+# da 0.0504 com desvio de 0.0037. E a MESMA PECA em todo mundo. A base, essa sim,
+# varia com o corpo: 0.654 .. 0.685, desvio 0.0080. Ou seja, havia UMA incognita
+# e o detector procurava duas - e a segunda tinha o sinal mais fraco, porque o
+# sulco inframamario e um vinco de verdade e a borda de cima e so tecido.
+#
+# Entao o topo passa a ser ancorado em base + FAIXA_ALTURA_ZH, e o anel das
+# costas so tem licenca para ajustar dentro de FAIXA_ALTURA_TOL (3 desvios da
+# folha). Medido nas 37 contra a folha, sem abrir o Blender (varre_faixa.py
+# novo): erro medio do topo caiu de "ate 0.034 e cinco chutes" para 0.0075, com
+# maximo 0.027 em dois avatares que ja erram na base pelo mesmo tanto.
+FAIXA_BASE_MEDIANA = 0.672    # mediana da base nas 37 folhas
+FAIXA_BASE_SIGMA = 0.030      # prior largo: a base desce mesmo com o IMC
+FAIXA_ALTURA_ZH = 0.050       # altura da peca nas costas (folha: 0.0504 ± 0.0037)
+FAIXA_ALTURA_TOL = 0.012      # licenca do anel para corrigir a ancora
+FAIXA_PICO_MIN = 0.012        # abaixo disso nao e vinco, e a borda da janela
+
+# --- e a borda de cima E CURVA, pelo motivo oposto ao do cos -----------------
+# O cos e curva porque a barriga CAI POR CIMA dele. A borda de cima da faixa e
+# curva porque o BUSTO A EMPURRA PARA CIMA. Nos dois casos a peca sobe onde o
+# corpo tem volume, e nos dois a curva mora so na FRENTE.
+#
+# Isto quase passou batido: com a borda tratada como escalar, o render da frente
+# do zen_f_b05_d2 mostrou o terco de cima da faixa MODELADA sem pintura, e o
+# render das costas ficou perfeito. Medido nas duas vistas da folha das 37
+# (faixa_ref.py):
+#
+#   topo nas costas : 0.705 .. 0.735
+#   topo na frente  : 0.750 .. 0.776     delta +0.031 a +0.060
+#
+# A ancora, por isso, so pode ser medida NAS COSTAS E NOS LADOS - a mesma
+# mascara que o cos usa (w_back_side_mask), e pelo mesmo motivo: o quantil baixo
+# sobre TODOS os setores nao ve o anel das costas, porque na frente aquela altura
+# esta no meio do tecido e nao tem vinco nenhum. Com a mascara, o anel das costas
+# aparece onde a folha diz (b05_d2: 0.723 contra 0.719; b09_d1: 0.727 contra
+# 0.730).
+FAIXA_TOPO_UP_FRONT = 0.070   # o busto empurra a borda para cima (folha: ate 0.060)
+FAIXA_TOPO_BACK_ZH = 0.025    # costas e lados: so o jogo do proprio elastico
+
+
+def tem_faixa(aid):
+    """A peca de cima e propriedade da COLECAO, nao do corpo.
+
+    Sexo e colecao separada (CLAUDE.md), e a roupa e parte da colecao: todo
+    avatar feminino tem faixa + short, todo masculino tem so short. Nao ha caso
+    intermediario para detectar, entao a pergunta se responde pelo id."""
+    return aid.startswith("zen_f_")
 
 
 def repo_root():
@@ -343,6 +475,115 @@ def _trace_flags(e):
     return out
 
 
+def _hem_flags(e, gap):
+    """Travas da BAINHA - e a primeira delas denuncia o CHUTE.
+
+    Ate 01/08 a bainha so tinha a trava de faixa (v-b dentro de
+    HEM_BELOW_CROTCH), e ela e cega para o defeito que mais custou nesta frente:
+    quando w_peaks volta VAZIO, w_fit grava `virilha - 0.035` e segue em frente.
+    O chute cai dentro da faixa por construcao - a faixa E ancorada na virilha -
+    entao ele passa limpo, para sempre. Cinco avatares viveram assim, e os
+    QUATRO maiores erros de bainha da biblioteca eram exatamente eles
+    (-0.041 a -0.048 contra a folha, ou uns 8 cm de perna preta a mais).
+
+    E a mesma familia do `at_band_edge` do metrics.py (LICOES.md 1.8): as travas
+    olhavam QUANTO a bainha valia e nenhuma olhava se ela tinha sido MEDIDA.
+
+      BAINHA-CHUTE  hem_peaks_zh vazio nas DUAS pernas e ninguem corrigiu
+      chute:1perna  vazio em UMA perna - a outra sustenta a altura, entao e
+                    nota e nao reprovacao (b01_d2 e b04_d3, os dois com erro
+                    normal contra a folha: -0.012 e -0.011)
+      BAINHA        medida, mas fora da faixa da serie
+
+    E quando a bainha vem do resgate por anel (hem_fonte), a faixa v-b DEIXA DE
+    VALER, de proposito: ela mede a distancia ate a `virilha` do w_limbs, que
+    nesses corpos nao e a virilha anatomica e sim a altura em que as coxas param
+    de se tocar - nos IMC 100+ isso fica ABAIXO da bainha real, e v-b sai
+    negativo. A regua que vale ali e a externa (shorts_ref.py), e ela concorda:
+    b08_d3 -0.003, b09_d1 +0.004, b11_d1 +0.015, b11_d2 -0.003 contra a folha."""
+    diag = e.get("diag", {})
+    pk = diag.get("hem_peaks_zh", [[], []])
+    vazias = sum(1 for p in pk if not p) if isinstance(pk, list) else 0
+    na_faixa = HEM_BELOW_CROTCH[0] <= gap <= HEM_BELOW_CROTCH[1]
+    if e.get("hem_fonte"):
+        return [] if na_faixa else ["v-b:fusao"]
+    if vazias == 2:
+        return ["BAINHA-CHUTE"]
+    out = ["chute:1perna"] if vazias == 1 else []
+    if not na_faixa:
+        out.append("BAINHA")
+    return out
+
+
+FAIXA_MIN_ALTURA_ZH = 0.030   # folha: 0.045 nas costas; abaixo disso ja e tira
+
+
+def _faixa_flags(e):
+    """Travas da FAIXA. Escritas junto com a peca, e nao depois dela, porque a
+    licao do cos foi essa: o tracado errado passou 39 vezes por nao ter pergunta
+    que olhasse para o CAMINHO.
+
+      FAIXA-CHUTE   o anel de uma das bordas nao foi achado e valeu a mediana da
+                    folha. Cai dentro da janela por construcao, entao nenhuma
+                    trava de valor pega - so esta (mesma familia do BAINHA-CHUTE)
+      BORDA-BASE    o pico encostou no limite da janela de busca: a janela e que
+                    decidiu, nao o vinco. Doutrina do at_band_edge (LICOES 1.8)
+      FRENTEv       setor da frente ABAIXO do anel das costas - o busto so pode
+                    empurrar o tecido para CIMA; descer e sulco de musculo
+      DEGRAU-F      salto entre setores vizinhos maior que tecido nenhum faz
+      TIRA          topo e base perto demais: a faixa fechou
+
+    NAO EXISTE BORDA-TOPO, E ISSO E DE PROPOSITO. Cheguei a escrever uma, e ela
+    nao podia falar coisa alguma: o topo das costas e `base + FAIXA_ALTURA_ZH`
+    com licenca de +-FAIXA_ALTURA_TOL, ou seja a janela toda tem ~6 bins e a
+    maior correcao possivel sao 2. Uma trava ali perguntaria ao topo se ele bate
+    com o alvo que o proprio codigo lhe deu - e a regra 3 do CLAUDE.md ja diz
+    que trava que confere o alvo contra ele mesmo nao valida o alvo. Quem julga
+    a ancora e regua EXTERNA: a coluna 3D-folha do faixa_ref.py, que le a folha
+    de referencia. O delta continua no diag (faixa_topo_alvo_zh contra
+    faixa_topo_anel_zh) para quem quiser olhar, mas nao vira reprovacao."""
+    hi = e.get("faixa_hi_zh")
+    if hi is None:
+        return []
+    hi = list(hi) if isinstance(hi, (list, tuple)) else [hi]
+    lo = e["faixa_lo_zh"]
+    diag = e.get("diag", {})
+    out = []
+
+    # SO A BASE REPROVA. Chutar a base e grave: cai numa mediana global que
+    # ignora o corpo. Chutar o topo nao e a mesma coisa desde que ele virou
+    # ancora - o "chute" ali e `base + altura da folha`, que continua sendo um
+    # numero DAQUELE corpo, e e o caso NORMAL: o anel das costas so refina.
+    # Reprovar os dois junto marcava 17 das 37 e transformava a trava em ruido.
+    if not diag.get("faixa_anel_base", True):
+        out.append("FAIXA-CHUTE")
+    elif not diag.get("faixa_anel_topo", True):
+        out.append("topo:ancora")
+
+    passo = 1.0 / Z_BINS
+    if min(abs(lo - FAIXA_BASE_RANGE[0]), abs(lo - FAIXA_BASE_RANGE[1])) <= passo:
+        out.append("BORDA-BASE")
+
+    anel = diag.get("faixa_topo_anel_zh")
+    if anel is not None:
+        n = len(hi)
+        front = n // 4
+        half = max(1, n // 6)
+        abaixo = [d for d in range(-half, half + 1)
+                  if hi[(front + d) % n] < anel - 1e-6]
+        if abaixo:
+            out.append("FRENTEv{}".format(len(abaixo)))
+
+    if len(hi) > 1:
+        salto = max(abs(hi[i] - hi[(i + 1) % len(hi)]) for i in range(len(hi)))
+        if salto > WAIST_STEP_MAX_ZH:
+            out.append("DEGRAU-F{:.3f}".format(salto))
+
+    if min(hi) - lo < FAIXA_MIN_ALTURA_ZH:
+        out.append("TIRA{:.3f}".format(min(hi) - lo))
+    return out
+
+
 def report(root):
     """Tabela de coerencia ANATOMICA do mapa. Nao abre o Blender: le so o
     shorts_map.json, entao roda em um piscar e da para conferir a cada mudanca.
@@ -367,9 +608,10 @@ def report(root):
     def _one(v):
         return v[0] if isinstance(v, (list, tuple)) else v
 
-    print("{:<15} {:>6}  {:>7} {:>7} {:>8}  {:>7} {:>8}  {}".format(
-        "id", "imc", "virilha", "bainha", "v-b", "cos-topo", "topo-v", "obs"))
-    print("-" * 88)
+    print("{:<15} {:>6}  {:>7} {:>7} {:>8}  {:>7} {:>8}  {:>13}  {}".format(
+        "id", "imc", "virilha", "bainha", "v-b", "cos-topo", "topo-v",
+        "faixa b/t/fre", "obs"))
+    print("-" * 104)
     fora = []
     for aid in sorted(smap, key=lambda k: bmi.get(k, 0)):
         e = smap[aid]
@@ -380,20 +622,38 @@ def report(root):
         w = e["waist_zh"]
         wmax = max(w) if isinstance(w, (list, tuple)) else w
         gap, rise = c - hem, wmax - c
-        obs = []
-        if not (HEM_BELOW_CROTCH[0] <= gap <= HEM_BELOW_CROTCH[1]):
-            obs.append("BAINHA")
+        obs, notas = [], []
+        for f in _hem_flags(e, gap):
+            (notas if f.islower() else obs).append(f)
         if not (WAIST_ABOVE_CROTCH[0] <= rise <= WAIST_ABOVE_CROTCH[1] + 0.06):
             obs.append("COS")
         obs += _trace_flags(e)
-        if e.get("islands", 1) > 1:
-            obs.append("{}ILHAS".format(e["islands"]))
+        for f in _faixa_flags(e):
+            (notas if f.islower() else obs).append(f)
+        pp = e.get("por_peca") or [e.get("islands", 1)]
+        # ZERO ilha nao e "menos defeito que duas", e a peca faltando. O
+        # max(pp)>1 sozinho passava batido no zen_f_b05_d3, que saiu [1, 0]:
+        # o --apply recusava (vazias -> suspect) mas o RELATORIO dizia que
+        # estava tudo bem, e o relatorio e por onde eu decido.
+        if min(pp) < 1:
+            obs.append("PECA-VAZIA{}".format(pp))
+        if max(pp) > 1:
+            obs.append("ILHAS{}".format(pp))
         if obs:
             fora.append(aid)
-        print("{:<15} {:>6.1f}  {:>7.3f} {:>7.3f} {:>+8.3f}  {:>7.3f} {:>+8.3f}  {} {}".format(
-            aid, bmi.get(aid, 0), c, hem, gap, wmax, rise,
-            " ".join(obs), "<<" if obs else ""))
-    print("-" * 88)
+        fx = "{:>13}".format("-")
+        hi = e.get("faixa_hi_zh")
+        if hi is not None:
+            hi = list(hi) if isinstance(hi, (list, tuple)) else [hi]
+            n = len(hi)
+            fx = "{:.3f}/{:.3f}/{:.3f}".format(
+                e["faixa_lo_zh"],
+                e.get("diag", {}).get("faixa_topo_anel_zh", max(hi)),
+                hi[n // 4])
+        print("{:<15} {:>6.1f}  {:>7.3f} {:>7.3f} {:>+8.3f}  {:>7.3f} {:>+8.3f}  {}  {} {}".format(
+            aid, bmi.get(aid, 0), c, hem, gap, wmax, rise, fx,
+            " ".join(obs + notas), "<<" if obs else ""))
+    print("-" * 104)
     print("faixas da serie: v-b {} .. {}   topo-v {} .. {}".format(*HEM_BELOW_CROTCH,
                                                                   *WAIST_ABOVE_CROTCH))
     print("{}/{} dentro da faixa".format(len(smap) - len(fora), len(smap)))
@@ -680,14 +940,207 @@ def w_limbs(me, np, co, H):
         leg_id[np.array(small, dtype=np.int64)] = 0
         other = np.array(big, dtype=np.int64)
         leg_id[other[z[other] <= cz]] = 1
-        # eventos grandes seguintes cujo lado menor NAO encosta no chao = bracos
-        for ez, sm, _bg in events[1:3]:
+        # Eventos grandes seguintes cujo lado menor NAO encosta no chao = bracos.
+        #
+        # Varre TODOS os eventos, e nao events[1:3] como ate 01/08. A janela fixa
+        # supoe que os dois bracos sao os dois proximos eventos grandes depois da
+        # virilha, e no zen_f_b01_d1 um evento intruso entrou no meio: sobrou UM
+        # braco na mascara (3700 vertices contra 5900-7100 nas vizinhas) e o outro
+        # saiu pintado de preto inteiro, do deltoide ao pulso. A trava de ilha
+        # pegou - e essa e a prova de que ela vale -, mas a mascara nao podia ter
+        # deixado passar.
+        #
+        # O teto de 0.85 H existe para o caso oposto: se os dois bracos se fundirem
+        # num evento so, o "segundo braco" que a varredura acharia seria o pescoco
+        # ou o cabelo. Braco nenhum se funde no tronco tao alto.
+        # A EXTENSAO minima tambem e nova, e pelo mesmo avatar: o primeiro evento
+        # que ele oferecia depois da virilha era um blob de 489 vertices entre
+        # zh 0.554 e 0.582 - a MAO encostada na coxa. Ele nao e braco, e gastava
+        # uma das duas vagas. O que separa os dois nao e o TAMANHO (um braco do
+        # b12_d1 tem 1340 vertices, menos que tres blobs desses) e sim o quanto
+        # ele se estende na vertical: braco vai do pulso a axila, uns 0.34 da
+        # altura; o blob tem 0.03.
+        #
+        # O QUARTO teste, o LATERAL, entrou em 01/08 e e ele que de fato separa
+        # braco de blob - os outros tres so ordenavam. Medido nos 76
+        # (qa/probe/sondas/_varre_braco.py, sobre o banco de eventos):
+        #
+        #   afastamento lateral   braco aceito   0.196 .. 0.339   (150 eventos)
+        #   |x - centro| / H      recusado       0.009 .. 0.031   ( 14 eventos)
+        #
+        # Sao 6x de folga, contra 2x do `ext` (blob de 0.073 x braco de 0.147), e
+        # a razao e anatomica: braco fica na lateral, e mao na coxa, pescoco e
+        # cabelo ficam no meio. O `ext` era uma PROXY disso.
+        #
+        # Por isso o `ext` pode cair de 0.15 para 0.10 sem afrouxar nada: o filtro
+        # passa a ter duas margens em vez de uma, e fica mais forte que antes. O
+        # que ele custava era o zen_f_b12_d1 - em IMC 114 a mao funde na coxa
+        # cedo, o componente do braco so comeca no antebraco e mede 0.1466 de
+        # extensao, reprovando por 0.004. Os dois bracos saiam pintados de preto
+        # do deltoide ao pulso, com a faixa atravessando os dois, e ele era o
+        # unico dos 76 com arm_verts = 0.
+        #
+        # A trava de ilha nao pega esse caso: com os bracos colados no tronco, a
+        # faixa errada continua sendo UMA peca conexa. Trava de ilha ve peca
+        # partida, nao peca conectada no lugar errado.
+        #
+        # Conferido antes de mexer: com ext>=0.10 e lat>=0.10 a mascara dos outros
+        # 75 sai IDENTICA a de hoje, e os 76 passam a achar os dois bracos. Mudar
+        # so o b12_d1 era o criterio - 39 masculinos aprovados atravessam aqui.
+        cx = np.median(co[:, 0])
+        achados = []
+        for ez, sm, _bg in events[1:]:
             sm = np.array(sm, dtype=np.int64)
-            if z[sm].min() > 0.20 * H:
-                is_arm[sm] = True
+            if (z[sm].min() > 0.20 * H and ez < 0.85 * H
+                    and ez - z[sm].min() >= 0.10 * H
+                    and np.median(np.abs(co[sm, 0] - cx)) >= 0.10 * H):
+                achados.append(sm)
+                if len(achados) == 2:
+                    break
+        for sm in achados:
+            is_arm[sm] = True
+
+        if len(achados) == 1:
+            is_arm |= w_mirror_arm(np, co, H, achados[0])
 
     leg_id[is_arm] = -1
     return crotch_z, leg_id, is_arm
+
+
+def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh):
+    """O braco na ALTURA DA FAIXA, que a mascara topologica nao alcanca.
+
+    O w_limbs devolve o braco ate onde ele FUNDE no tronco. Em corpo magro a
+    fusao e a axila e fica acima da faixa, entao a mascara cobre tudo e o
+    resultado sai limpo. Em corpo pesado a gordura do braco encosta na do tronco
+    bem antes da axila anatomica - em 30 dos 37 femininos a fusao cai ABAIXO do
+    topo da faixa -, e o pedaco de braco que sobra acima dela nao esta marcado.
+    Como o campo da roupa so olha altura, a faixa sai pintada ATRAVESSANDO os
+    dois bracos, com a borda serrilhada. Visto no b08_d1, no b10_d1 e no b12_d1;
+    e defeito da colecao inteira, nao daquele avatar.
+
+    Acima da fusao NAO EXISTE fronteira topologica: por cima o deltoide entra no
+    trapezio numa superficie lisa, sem vinco nenhum. Qualquer mascara ali e
+    ESCOLHA, nao deteccao - e por isso este corte e explicito e mora numa funcao
+    so dele, em vez de virar mais um caso dentro do w_limbs.
+
+    TRES CANDIDATOS FORAM MEDIDOS E DESCARTADOS, e cada um por um motivo que vale
+    guardar (sondas em qa/probe/sondas/):
+
+      _braco_lateral   union-find varrendo |x| de fora para dentro, esperando que
+                       a superficie do braco virasse componente propria ate o
+                       vinco. Nao vira: EM CORPO PESADO O TRONCO E MAIS LARGO QUE
+                       O BRACO (b12_d1: peito a 0.245 da altura, braco a 0.180),
+                       entao de fora para dentro quem aparece primeiro e o tronco.
+      _braco_vinco     inundacao pela malha barrada em vertice concavo. Vaza ate
+                       o alto da cabeca em limiar frouxo e nao corta nada em
+                       limiar apertado, porque a cerca do vinco e ABERTA em cima.
+      ajuste de elipse no anel: a meia-largura lateral do tronco e justamente o
+                       que o braco ocluta, entao ela nao esta no sinal.
+
+    O QUE FUNCIONA e a PROFUNDIDADE. O braco e um tubo raso e o tronco e fundo, e
+    varrendo x de fora para dentro o degrau entre os dois e limpo:
+
+      b10_d1 zh 0.72   braco 0.055 0.081 0.087 0.087 | tronco 0.142 .. 0.201
+      b12_d1 zh 0.72   braco 0.066 0.126 0.145 0.151 | tronco 0.218 .. 0.280
+      b01_d1 zh 0.72   braco 0.034 0.040 0.040 0.019 | tronco 0.075 .. 0.122
+
+    O corte e a primeira coluna que passa de PROF_FRAC da profundidade maxima da
+    fatia - fracao, e nao valor absoluto, porque a escala muda 3x entre um IMC 18
+    e um IMC 114. Conferido a mao em 6 secoes de 3 corpos e acerta nas 6,
+    inclusive no magro, onde a coluna do meio le 0.000 (ha vao de verdade).
+
+    Roda so na FAIXA. Fora dela nao ha razao para cortar largura - o short mora
+    no quadril, onde nao ha braco -, e restringir assim e o que garante que
+    avatar sem faixa (os 39 masculinos) nao muda um vertice.
+
+    E roda so ACIMA DA FUSAO, que e a segunda metade da mesma ideia. Abaixo dela
+    o w_limbs mediu o braco de verdade, pela topologia, e essa medida e melhor
+    que qualquer corte por profundidade; acima nao ha o que medir. A primeira
+    versao ignorava isso e rodava na banda inteira - o zen_f_b01_d1, que e magro
+    e cuja fusao (0.7588) ja fica ACIMA do topo da faixa (0.756), voltou com a
+    borda de baixo serrilhada: nao faltava nada nele e o corte so comeu tronco.
+    Nos magros a funcao agora nao processa fatia nenhuma, que e o certo."""
+    z = co[:, 2]
+    zh = (z - z.min()) / H
+    cx = np.median(co[:, 0])
+    out = np.zeros(len(co), dtype=bool)
+    passo = 0.005
+    if is_arm.any():
+        lo_zh = max(lo_zh, float(zh[is_arm].max()))
+    for k in range(int(np.floor(lo_zh / passo)), int(np.ceil(hi_zh / passo)) + 1):
+        fatia = np.where((zh >= k * passo) & (zh < (k + 1) * passo))[0]
+        if len(fatia) < 40:
+            continue
+        y = co[fatia, 1]
+        fundo = y.max() - y.min()
+        if fundo <= 0:
+            continue
+        x = co[fatia, 0] - cx
+        for sinal in (-1.0, 1.0):
+            lado = np.where(np.sign(x) == sinal)[0]
+            if len(lado) < 20:
+                continue
+            xl = x[lado] * sinal                       # sempre positivo
+            corte = None
+            for b in np.arange(xl.max(), 0.0, -0.008 * H):
+                col = (xl <= b) & (xl > b - 0.008 * H)
+                if col.sum() < 3:
+                    continue
+                yc = y[lado][col]
+                if yc.max() - yc.min() >= PROF_FRAC * fundo:
+                    corte = b
+                    break
+            # SEGURANCA: se o corte cair perto do eixo, quem foi achado nao era o
+            # vinco e marcar aquilo comeria metade do tronco. Melhor nao marcar
+            # nada - a faixa atravessando o braco e feio, faixa com buraco no meio
+            # do peito e outra categoria de erro.
+            if corte is None or corte < 0.35 * xl.max():
+                continue
+            out[fatia[lado[xl > corte]]] = True
+    return out & ~is_arm
+
+
+def w_mirror_arm(np, co, H, sm):
+    """O OUTRO braco, quando a malha nao o oferece como evento.
+
+    No zen_f_b01_d1 a mao esquerda encosta na coxa, entao aquele braco ja esta
+    fundido ao tronco quando a varredura chega nele: ele nunca vira evento, e o
+    union-find nao tem como o achar - nao e limiar mal escolhido, e informacao
+    que nao existe naquele sinal. O resultado foi um braco preto do deltoide ao
+    pulso no --render.
+
+    O que existe e SIMETRIA: a folha e desenhada simetrica e a Meshy a respeita
+    de perto. Entao o braco achado vira MOLDE do que falta - espelha-se em x e
+    marca-se quem cair perto. Se o espelho render menos de metade do molde, a
+    simetria nao valia para este corpo e nao se marca nada: a trava de ilha
+    denuncia depois, que e melhor do que pintar por adivinhacao."""
+    from mathutils import Vector
+    from mathutils.kdtree import KDTree
+
+    out = np.zeros(len(co), dtype=bool)
+    lado = 1.0 if co[sm, 0].mean() > 0 else -1.0
+    zlo, zhi = co[sm, 2].min(), co[sm, 2].max()
+
+    kd = KDTree(len(sm))
+    for i, v in enumerate(sm):
+        kd.insert(Vector(co[v]), i)
+    kd.balance()
+
+    tol = 0.02 * H
+    cand = np.where((np.sign(co[:, 0]) == -lado) &
+                    (co[:, 2] >= zlo - tol) & (co[:, 2] <= zhi + tol))[0]
+    achou = []
+    for v in cand:
+        p = Vector((-co[v, 0], co[v, 1], co[v, 2]))
+        _co, _idx, d = kd.find(p)
+        if d is not None and d < tol:
+            achou.append(v)
+
+    if len(achou) < 0.5 * len(sm):
+        return out
+    out[np.array(achou, dtype=np.int64)] = True
+    return out
 
 
 def w_back_side_mask(np, az_bins):
@@ -804,6 +1257,26 @@ def w_peaks(np, ring, lo_b, hi_b, floor=0.0):
     return out
 
 
+def w_pico_prior(np, ring, lo_zh, hi_zh, centro_zh, sigma_zh, smin=0.0):
+    """Pico do anel pesado por um PRIOR, e nunca um pico de forca zero.
+
+    O argmax puro pega o vinco mais FUNDO da janela, que nem sempre e a borda da
+    peca: nos IMC 30-54 ele pousava num sulco 0.03 acima do inframamario. E o
+    w_peaks, sem piso, devolve tambem maximos de forca 0.000 - numero que ninguem
+    consegue distinguir de uma medida, e foi assim que o b04_d2 ganhou base 0.702
+    contra 0.667 da folha.
+
+    Devolve (bin, score, picos) com bin=None quando nao ha pico que preste."""
+    pk = [(s, b) for s, b in w_peaks(np, ring, lo_zh * Z_BINS, hi_zh * Z_BINS)
+          if s >= smin][:12]
+    lista = [[round(s, 3), round((b + 0.5) / Z_BINS, 4)] for s, b in pk[:3]]
+    if not pk:
+        return None, 0.0, lista
+    c, sg = centro_zh * Z_BINS, max(sigma_zh * Z_BINS, 1e-6)
+    s, b = max(pk, key=lambda sb: sb[0] * np.exp(-0.5 * ((sb[1] - c) / sg) ** 2))
+    return b, s, lista
+
+
 def w_interp_circ(np, vals, az):
     """Interpola circularmente uma curva dada por setor de azimute."""
     import math
@@ -890,8 +1363,140 @@ def w_waist_curve(np, A, center_b, floor_b, az_bins, front_mask):
             for j in range(az_bins)]
 
 
+def w_faixa(np, co, kn, H, is_arm, crotch, base_override=None, topo_reto=False):
+    """A FAIXA do peito: base ESCALAR e topo CURVO por azimute.
+
+    A assimetria entre as duas bordas nao e estetica, e medida na folha nas duas
+    vistas: a borda de baixo passa sob o busto e fica na mesma altura na frente e
+    nas costas (delta +0.015 em media, dentro do ruido da propria medida),
+    enquanto a de cima passa POR CIMA do busto e sobe +0.031 a +0.060. Ver
+    FAIXA_TOPO_UP_FRONT.
+
+    O sinal e o mesmo ring_score do resto do arquivo: a borda de baixo cai no
+    sulco inframamario e e o pico mais forte do torax em quase toda a serie.
+    Devolve (base_zh, topo_por_setor_zh, diagnostico)."""
+    z = co[:, 2]
+    tronco = np.where((~is_arm) & (z >= crotch))[0]
+    back_side = w_back_side_mask(np, WAIST_AZ_BINS)
+    A, ring, occ = w_ring_map(np, co, kn, tronco, H, "axis", WAIST_AZ_BINS)
+    _A2, ring_bs, _o2 = w_ring_map(np, co, kn, tronco, H, "axis", WAIST_AZ_BINS,
+                                   az_mask=back_side)
+
+    # A BASE e a unica deteccao de verdade. O chute, quando ela falha, e a
+    # MEDIANA da folha e nao o meio da janela (LICOES.md 4.3 - chute que nao se
+    # anuncia foi o defeito da bainha, entao ele se anuncia no diag).
+    base_b, _sb, pk_b = w_pico_prior(np, ring, FAIXA_BASE_RANGE[0],
+                                     FAIXA_BASE_RANGE[1], FAIXA_BASE_MEDIANA,
+                                     FAIXA_BASE_SIGMA, FAIXA_PICO_MIN)
+    chute_b = base_b is None
+    if chute_b:
+        base_b = int(FAIXA_BASE_MEDIANA * Z_BINS)
+
+    # ANCORA DA FAIXA corrigida a mao. Terceiro da familia do crotch_override_zh
+    # e do waist_ring_override_zh, e pelo mesmo motivo: a base e a ancora da
+    # peca INTEIRA - o topo e o proprio contorno saem dela -, entao um numero so
+    # conserta tudo. O que NAO serve e editar faixa_lo_zh e faixa_hi_zh no mapa
+    # a mao: aquilo fossiliza uma curva que foi tracada a partir da ancora
+    # errada, e no b04_d3 essa curva e justamente a que desabou (FRENTEv9).
+    # Aqui a curva e RETRACADA a partir da ancora nova.
+    manual = base_override is not None
+    if manual:
+        base_b = int(round(base_override * Z_BINS - 0.5))
+
+    # O TOPO NAO E UMA SEGUNDA MEDIDA: e a base mais a ALTURA DA PECA. A folha
+    # da 0.0504 +- 0.0037 nas 37 - a faixa e a mesma roupa em todo mundo - contra
+    # base 0.6712 +- 0.0080, que varia com o corpo. Havia UMA incognita e o
+    # detector procurava duas, e a segunda era a de sinal fraco: o topo errava
+    # ate 0.034 e chutava em cinco. Ancorado, o anel das costas so tem licenca de
+    # +-FAIXA_ALTURA_TOL para corrigir, e o erro cai para 0.0075 medio.
+    alvo = (base_b + 0.5) / Z_BINS + FAIXA_ALTURA_ZH
+    topo_b, _st, pk_t = w_pico_prior(np, ring_bs, alvo - FAIXA_ALTURA_TOL,
+                                     alvo + FAIXA_ALTURA_TOL, alvo,
+                                     FAIXA_ALTURA_TOL, FAIXA_PICO_MIN)
+    chute_t = topo_b is None
+    if chute_t:
+        topo_b = int(round(alvo * Z_BINS - 0.5))
+
+    A_f = w_fill_holes(np, A, occ)
+    curva = w_faixa_curve(np, A_f, topo_b, base_b, WAIST_AZ_BINS, ~back_side,
+                          reto=topo_reto)
+
+    diag = {"faixa_peaks_base": pk_b, "faixa_peaks_topo": pk_t,
+            "faixa_anel_base": manual or not chute_b,
+            "faixa_anel_topo": not chute_t,
+            "faixa_base_fonte": "manual" if manual else "anel",
+            "faixa_topo_fonte": "reto" if topo_reto else "curva",
+            "faixa_topo_alvo_zh": round(alvo, 4),
+            "faixa_topo_anel_zh": round((topo_b + 0.5) / Z_BINS, 4)}
+    return ((base_b + 0.5) / Z_BINS,
+            [(b + 0.5) / Z_BINS for b in curva], diag)
+
+
+def w_faixa_curve(np, A, center_b, floor_b, az_bins, front_mask, reto=False):
+    """A borda de CIMA da faixa, setor a setor. Espelho do w_waist_curve, com a
+    assimetria invertida: aqui e a FRENTE que SOBE (o busto empurra o tecido) e
+    nunca desce abaixo do anel das costas.
+
+    As duas travas do cos valem pelos mesmos motivos e sao herdadas sem mudanca:
+    prior gaussiano (senao o sulco entre os seios, que e vertical e forte em toda
+    a janela, deixa o argmax pousar em qualquer altura e sai um pico no meio da
+    faixa) e mediana circular de 7 termos (nenhum setor destoa dos vizinhos).
+
+    ------------------------------------------------------------------------
+    QUANTO ISTO AQUI MEDE DE VERDADE, medido em 01/08 (_topo_piso.py)
+    ------------------------------------------------------------------------
+    Pouco, e quem for mexer aqui precisa saber disso antes. Contando os setores
+    da FRENTE em que a concavidade na ancora e nula - ou seja, em que nao ha aro
+    nenhum para o argmax seguir -, os 37 femininos dao de QUATRO A NOVE em nove.
+    Nao ha um so avatar com a frente inteira medida. O volume do busto (ou do
+    peitoral) apaga o vinco justamente onde a borda deveria subir.
+
+    Onde nao ha aro, o argmax pega ruido de decimacao e a mediana de 7 alisa
+    aquilo num tracado plausivel. E a MESMA patologia ja registrada no docstring
+    do w_fit para a passada fina da bainha - "com sinal fraco, o argmax dentro da
+    janela encontra ruido, nao tecido" -, um andar acima.
+
+    NAO adianta piso sobre a forca do pico: foi a primeira tentativa e o
+    _topo_piso.py mediu que qualquer piso reescreve de 9 a 24 setores de TODO
+    avatar, inclusive dos 36 que estao certos. Setor sem aro e a norma aqui, nao
+    a anomalia - o b08_d3, que e o unico visivelmente torto, esta entre os
+    MELHORES nessa conta (4 de 9). O conserto de verdade nao e limiar: e parar
+    de procurar a segunda incognita e MODELAR a subida, como ja se fez com o
+    topo escalar ("O TOPO NAO E UMA SEGUNDA MEDIDA", acima). Isso muda os 37 e
+    nao existe regua externa para o tracado por setor - a folha da a altura da
+    peca, nao a curva -, entao fica para o Rogerio decidir.
+
+    Ate la, `reto` e a valvula: onde o ruido virou defeito visivel, a borda de
+    cima e a propria ancora nos 24 setores. Nao fossiliza nada, porque continua
+    sendo RETRACADA da ancora a cada --fit."""
+    if reto:
+        return [center_b] * az_bins
+    out = []
+    for j in range(az_bins):
+        if front_mask[j]:
+            lo_f = center_b
+            hi_f = center_b + FAIXA_TOPO_UP_FRONT * Z_BINS
+        else:
+            lo_f = center_b - FAIXA_TOPO_BACK_ZH * Z_BINS
+            hi_f = center_b + FAIXA_TOPO_BACK_ZH * Z_BINS
+        lo = int(max(0, floor_b + 1, round(lo_f)))
+        hi = int(min(Z_BINS - 1, round(hi_f)))
+        if hi < lo:
+            out.append(center_b)
+            continue
+        zz = np.arange(lo, hi + 1, dtype=np.float64)
+        sigma = max((hi - center_b) * WAIST_PRIOR_SIGMA, 1.0)
+        w = A[j, lo:hi + 1] * np.exp(-0.5 * ((zz - center_b) / sigma) ** 2)
+        out.append(lo + int(w.argmax()) if w.size and w.max() > 0 else center_b)
+
+    k = WAIST_MEDIAN // 2
+    return [int(sorted([out[(j + d) % az_bins] for d in range(-k, k + 1)])[k])
+            for j in range(az_bins)]
+
+
 def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
-          waist_override=None):
+          waist_override=None, faixa=False, faixa_base_override=None,
+          faixa_topo_reto=False):
     """Devolve (cfg em metros, diagnostico).
 
     A bainha sai como ESCALAR por perna e o cos como curva de 24 setores.
@@ -930,6 +1535,11 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
     kn = np.clip(k / max(float(np.percentile(k, 99.0)), 1e-9), 0.0, 1.0)
     z = co[:, 2]
 
+    # Duas constantes do short sao por COLECAO, e o `faixa` e que diz qual e -
+    # ele vem de tem_faixa(), que e o teste de id feminino. Nao ha terceiro caso.
+    abs_range = WAIST_ABS_RANGE_F if faixa else WAIST_ABS_RANGE
+    recuo = HEM_RECUO_F if faixa else HEM_RECUO
+
     # A VIRILHA e a ancora de todas as janelas, entao ela e o unico numero que
     # vale a pena poder corrigir a mao. w_limbs devolve "onde as pernas param de
     # se tocar", que na maioria dos corpos E a virilha - mas nao num IMC 148, em
@@ -964,7 +1574,7 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
                      crotch_b - HEM_BELOW_CROTCH[1] * Z_BINS,
                      crotch_b - HEM_BELOW_CROTCH[0] * Z_BINS)
         hem_peaks_d.append([[round(s, 3), round((b + 0.5) / Z_BINS, 4)] for s, b in pk[:4]])
-        hb = pk[0][1] if pk else int(crotch_b - 0.035 * Z_BINS)
+        hb = pk[0][1] if pk else int(crotch_b - recuo * Z_BINS)
 
         # centro da perna na altura da bainha. Nao e usado pelo ajuste
         # automatico (que grava a bainha como ESCALAR), e sim para permitir
@@ -986,9 +1596,9 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
     # intersecao das duas janelas: a ancorada na virilha e a absoluta
     waist_peaks = w_peaks(np, ring_t,
                           max(crotch_b + WAIST_ABOVE_CROTCH[0] * Z_BINS,
-                              WAIST_ABS_RANGE[0] * Z_BINS),
+                              abs_range[0] * Z_BINS),
                           min(crotch_b + WAIST_ABOVE_CROTCH[1] * Z_BINS,
-                              WAIST_ABS_RANGE[1] * Z_BINS))
+                              abs_range[1] * Z_BINS))
     waist_b = waist_peaks[0][1] if waist_peaks else int(crotch_b + 0.12 * Z_BINS)
 
     # ANCORA DO COS corrigida a mao, se houver. Mesmo padrao - e mesmo motivo -
@@ -1032,21 +1642,39 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
         "waist_ring_zh": round((waist_b + 0.5) / Z_BINS, 4),
         "waist_ring_found": bool(waist_peaks),
     }
+
+    if faixa:
+        fb, ft, fdiag = w_faixa(np, co, kn, H, is_arm, crotch,
+                                base_override=faixa_base_override,
+                                topo_reto=faixa_topo_reto)
+        cfg["faixa_lo"] = fb * H
+        cfg["faixa_hi"] = [v * H for v in ft]
+        diag.update(fdiag)
+
     return cfg, diag
 
 
-def w_field(np, co, cfg):
-    """Campo escalar com sinal: >0 dentro do short, 0 exatamente na borda.
+def w_field(np, co, cfg, partes=False):
+    """Campo escalar com sinal: >0 dentro da roupa, 0 exatamente na borda.
 
-    d = min(cos(azimute) - z, z - bainha(azimute da perna))
+    d_short = min(cos(azimute) - z, z - bainha(azimute da perna))
+    d_faixa = min(topo - z, z - base)                    (so no feminino)
+    d       = max(d_short, d_faixa)
 
     Existir como CAMPO CONTINUO, e nao como teste booleano, e o que permite
-    cortar a malha exatamente na linha (w_cut_boundary).
+    cortar a malha exatamente na linha (w_cut_boundary). O MAXIMO das duas pecas
+    preserva essa propriedade: as duas regioes sao disjuntas por construcao (uma
+    acaba no cos, a outra comeca acima do umbigo), entao perto da borda de uma o
+    campo da outra e fortemente negativo e nao mexe no cruzamento de zero.
 
-    Cada curva aceita ESCALAR ou LISTA. O ajuste automatico sempre grava lista
-    (48 setores); um escalar escrito a mao no shorts_map.json vale como altura
-    constante. E o que mantem a correcao manual barata: para consertar um
-    avatar basta escrever "waist": 0.57, sem editar 48 numeros."""
+    Cada curva aceita ESCALAR ou LISTA. O ajuste automatico grava lista no cos e
+    escalar no resto; um escalar escrito a mao no shorts_map.json vale como
+    altura constante. E o que mantem a correcao manual barata: para consertar um
+    avatar basta escrever "waist": 0.57, sem editar 48 numeros.
+
+    partes=True devolve a lista de campos por peca, na ordem (short, faixa) -
+    e o que permite exigir que CADA peca seja conexa, em vez de exigir que o
+    conjunto todo seja."""
     z = co[:, 2]
     az_body = np.arctan2(co[:, 1], co[:, 0])
     waist = w_interp_circ(np, np.atleast_1d(cfg["waist"]), az_body)
@@ -1063,7 +1691,18 @@ def w_field(np, co, cfg):
             az_leg = np.arctan2(co[side, 1] - cy, co[side, 0] - cx)
             hem[side] = w_interp_circ(np, vals, az_leg)
 
-    return np.minimum(waist - z, z - hem)
+    campos = [np.minimum(waist - z, z - hem)]
+    if cfg.get("faixa_lo") is not None:
+        base = w_interp_circ(np, np.atleast_1d(cfg["faixa_lo"]), az_body)
+        topo = w_interp_circ(np, np.atleast_1d(cfg["faixa_hi"]), az_body)
+        campos.append(np.minimum(topo - z, z - base))
+
+    if partes:
+        return campos
+    out = campos[0]
+    for c in campos[1:]:
+        out = np.maximum(out, c)
+    return out
 
 
 def w_cut_boundary(bm, np, bmesh, field_of, is_arm_of):
@@ -1118,6 +1757,7 @@ def worker_main():
     import numpy as np
     import math
     from mathutils import Vector
+    from mathutils.bvhtree import BVHTree
 
     argv = sys.argv[sys.argv.index("--") + 1:]
     ap = argparse.ArgumentParser()
@@ -1129,6 +1769,7 @@ def worker_main():
 
     sys.path.insert(0, os.path.join(a.root, "scripts"))
     import zenith_material as zm
+    import zenith_paths as zp
 
     master = os.path.join(a.root, "02_master", a.id + "_master.glb")
     bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -1168,8 +1809,11 @@ def worker_main():
         _e = load_map(a.root).get(a.id, {})
         ov = _e.get("crotch_override_zh")
         wov = _e.get("waist_ring_override_zh")
+        fov = _e.get("faixa_base_override_zh")
+        fret = bool(_e.get("faixa_topo_reto"))
         cfg, diag = w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=ov,
-                          waist_override=wov)
+                          waist_override=wov, faixa=tem_faixa(a.id),
+                          faixa_base_override=fov, faixa_topo_reto=fret)
         entry = {
             # gravado em FRACAO DA ALTURA, nao em metros: assim um numero copiado
             # de um avatar para outro continua querendo dizer a mesma coisa
@@ -1180,10 +1824,17 @@ def worker_main():
             "waist_zh": _round(cfg["waist"], 1.0 / H),
             "diag": diag,
         }
+        if "faixa_lo" in cfg:
+            entry["faixa_lo_zh"] = _round(cfg["faixa_lo"], 1.0 / H)
+            entry["faixa_hi_zh"] = _round(cfg["faixa_hi"], 1.0 / H)
         if ov:
             entry["crotch_override_zh"] = ov
         if wov:
             entry["waist_ring_override_zh"] = wov
+        if fov:
+            entry["faixa_base_override_zh"] = fov
+        if fret:
+            entry["faixa_topo_reto"] = True
     else:
         smap = load_map(a.root)
         entry = smap[a.id]
@@ -1195,6 +1846,9 @@ def worker_main():
         "hem_center_r": entry.get("hem_center_r", [0.0, 0.0]),
         "waist": _scale(entry["waist_zh"], H),
     }
+    if "faixa_lo_zh" in entry:
+        cfg["faixa_lo"] = _scale(entry["faixa_lo_zh"], H)
+        cfg["faixa_hi"] = _scale(entry["faixa_hi_zh"], H)
 
     tris_master = sum(len(p.vertices) - 2 for p in me.polygons)
     field = w_field(np, co, cfg)
@@ -1213,15 +1867,30 @@ def worker_main():
     me.materials.append(zm.make_body_material(bpy))
     me.materials.append(zm.make_shorts_material(bpy))
 
+    # A mascara de PINTURA nao e a mascara de DETECCAO, e a separacao e o que
+    # torna esta mudanca conferivel. O w_arm_wide corta o braco na altura da
+    # faixa, e se ele entrasse no `is_arm` mudaria o conjunto `tronco` de onde
+    # saem os aneis - ou seja, mexeria em cos, bainha e nas duas bordas da faixa
+    # dos 76 de uma vez, e nenhuma regua separaria o que melhorou do que piorou.
+    # Aqui ele entra depois de tudo medido: os numeros do mapa ficam identicos e
+    # a unica diferenca e QUAL FACE recebe preto. Avatar sem faixa nao chama a
+    # funcao, entao os 39 masculinos nao mudam um vertice por construcao.
+    is_paint = is_arm
+    if cfg.get("faixa_lo") is not None:
+        lo = float(np.min(np.atleast_1d(cfg["faixa_lo"]))) / H
+        hi = float(np.max(np.atleast_1d(cfg["faixa_hi"]))) / H
+        z0h = float(co[:, 2].min()) / H
+        is_paint = is_arm | w_arm_wide(np, co, H, is_arm, lo - z0h, hi - z0h)
+
     bm = bmesh.new()
     bm.from_mesh(me)
     lay = bm.verts.layers.float.new("arm")
     bm.verts.ensure_lookup_table()
     bm.verts.index_update()
     for v in bm.verts:
-        v[lay] = 1.0 if is_arm[v.index] else 0.0
+        v[lay] = 1.0 if is_paint[v.index] else 0.0
 
-    added = w_cut_boundary(bm, np, bmesh, field, is_arm)
+    added = w_cut_boundary(bm, np, bmesh, field, is_paint)
 
     # Partir uma aresta transforma o triangulo vizinho em QUAD, e connect_verts
     # nem sempre tem o que ligar dentro dele. Sobra malha mista. O exportador
@@ -1237,41 +1906,111 @@ def worker_main():
     bm.faces.ensure_lookup_table()
     cent = np.array([tuple(f.calc_center_median()) for f in bm.faces],
                     dtype=np.float64)
-    fld = w_field(np, cent, cfg)
-    n_short = 0
+    campos = w_field(np, cent, cfg, partes=True)
+    pilha = np.vstack(campos)
+    qual = pilha.argmax(axis=0)          # de QUAL peca esta face e
+    fld = pilha.max(axis=0)
+    peca = np.full(len(cent), -1, dtype=np.int64)
     for i, f in enumerate(bm.faces):
         is_s = bool(fld[i] > 0.0) and not any(v[lay] > 0.5 for v in f.verts)
         f.material_index = 1 if is_s else 0
-        n_short += 1 if is_s else 0
+        if is_s:
+            peca[i] = qual[i]
     nf = len(bm.faces)
 
-    # ---- TRAVA: o short tem que ser UMA PECA SO -------------------------
-    # Quadril + duas coxas formam uma peca unica, ligada pela virilha. Uma mao
-    # ou um antebraco pintado por engano fica numa ILHA separada, porque nao ha
-    # caminho pela superficie entre a mao e o short. Entao exigir conexidade
-    # pega exatamente a falha que da medo: mascara de braco errada.
+    # ---- TRAVA: CADA PECA tem que ser UMA REGIAO CONEXA ------------------
+    # Quadril + duas coxas formam uma peca unica, ligada pela virilha; a faixa
+    # e um tubo em volta do torax, tambem uma so. Uma mao ou um antebraco
+    # pintado por engano fica numa ILHA separada, porque nao ha caminho pela
+    # superficie entre a mao e a roupa. Entao exigir conexidade pega exatamente
+    # a falha que da medo: mascara de braco errada.
     #
     # A mascara de braco vem de w_limbs (eventos de fusao do union-find). Ela
     # acerta nos corpos normais, mas nao ha garantia num corpo obeso em que o
     # braco encosta no tronco e a malha funde os dois. Sem esta trava isso sairia
-    # calado - um avatar de mao preta no meio de 39.
-    seen = [False] * nf
-    groups = []
-    for f0 in bm.faces:
-        if f0.material_index != 1 or seen[f0.index]:
-            continue
-        stack, members = [f0], []
-        seen[f0.index] = True
-        while stack:
-            f = stack.pop()
-            members.append(f)
-            for e in f.edges:
-                for g in e.link_faces:
-                    if g.material_index == 1 and not seen[g.index]:
-                        seen[g.index] = True
-                        stack.append(g)
-        groups.append(members)
-    groups.sort(key=len, reverse=True)
+    # calado - um avatar de mao preta no meio de 76.
+    #
+    # ⚠️ A conta e POR PECA desde que a faixa existe (01/08). A versao anterior
+    # perguntava "a maior ilha e 97% do pintado?", e com duas pecas legitimas a
+    # maior e ~60% - a trava reprovaria justamente o resultado certo. Afrouxar o
+    # limiar para caber duas pecas teria destruido a trava: 0.60 aceita tambem
+    # uma mao preta do tamanho de um short. A pergunta certa nao e quantas ilhas
+    # ha no total, e sim se CADA peca esperada e uma ilha so.
+    def _componentes(sel_peca):
+        seen = [False] * nf
+        gs = []
+        for f0 in bm.faces:
+            if peca[f0.index] != sel_peca or seen[f0.index]:
+                continue
+            stack, members = [f0], []
+            seen[f0.index] = True
+            while stack:
+                f = stack.pop()
+                members.append(f)
+                for e in f.edges:
+                    for g in e.link_faces:
+                        if peca[g.index] == sel_peca and not seen[g.index]:
+                            seen[g.index] = True
+                            stack.append(g)
+            gs.append(members)
+        gs.sort(key=len, reverse=True)
+        return gs
+
+    # ---- ILHA ESCONDIDA NAO E DEFEITO: ela nao aparece -------------------
+    # A faixa do primeiro avatar feminino saiu em 4 ilhas com os dois renders
+    # CERTOS. As tres ilhas extras nao eram mascara de braco falhando (a
+    # fronteira delas com o braco e ZERO): sao superficie INTERNA da malha da
+    # Meshy - o bolso da axila e a pele atras do cabelo, que ficam dentro do
+    # corpo. Medido com raio pela normal: a ilha visivel da 6% de oclusao e as
+    # tres escondidas dao 99-100%. Nao ha limiar a escolher, ha um abismo.
+    #
+    # Elas continuam PINTADAS de propria vontade - despintar deixaria pele
+    # clara espiando por dentro da axila -, mas saem da conta de conexidade.
+    # A trava nao perde forca: mao preta e visivel POR DEFINICAO, entao ela
+    # continua contando como ilha. A pergunta certa nao e "quantas ilhas ha",
+    # e sim "quantas ilhas alguem VE".
+    #
+    # O LIMIAR ESTA NO MEIO DE UM VAZIO MEDIDO, e ja errei os dois lados dele.
+    #
+    # 0.5 custou uma peca inteira: no zen_f_b05_d3 a faixa - 7152 faces - caiu
+    # no balde de escondida e a peca saiu com ZERO ilha, ou seja um top que o
+    # detector jurava nao existir. Aquela faixa mede 42% de livre, e o que
+    # bloqueia os outros 58% esta a 4 mm dela: a Meshy modelou o tecido como
+    # CASCA SOBRE A PELE, a regiao pega as duas camadas e a de baixo conta como
+    # tapada. Uma peca 42% a vista esta a vista.
+    #
+    # 0.10 errou para o outro lado. Com ele, b01_d2 e b03_d2 passaram a acusar
+    # ilha extra na faixa, e a sonda _ilhas_vis.py mostrou que aquelas ilhas sao
+    # a mesma familia dos bolsos de axila do b01_d1. Os dois grupos, medidos:
+    #
+    #   interna    0.0%   7.4%  10.0%  10.7%
+    #   a vista   42.0%  81.7%  86.4%  91.0%  92.2%
+    #
+    # O vazio vai de 0.11 a 0.42 e o limiar vai no meio dele. Antes de mexer
+    # neste numero de novo, rodar a sonda e olhar os dois grupos - o erro das
+    # duas vezes foi escolher limiar por raciocinio em vez de por medida.
+    #
+    # TENTATIVA DESCARTADA - raio para os dois lados. Antes de medir, apostei em
+    # normal invertida e passei a aceitar quem escapasse por +n OU -n. Nao mudou
+    # nada e a medida diz por que: o avesso da 0% de livre em TODAS as pecas de
+    # todos os avatares. Nao ha normal invertida aqui, e o teste extra so dobra
+    # o custo de raycast.
+    VISIVEL_MIN = 0.25
+    bvh = BVHTree.FromBMesh(bm)
+
+    def _visivel(g):
+        """Fracao da ilha que e a superficie mais externa no seu proprio lugar."""
+        passo = max(1, len(g) // 200)
+        am = g[::passo]
+        livre = 0
+        for f in am:
+            p = f.calc_center_median()
+            d = f.normal.copy()
+            if d.length < 1e-9:
+                continue
+            if bvh.ray_cast(p + d * 0.002, d, 1.0)[0] is None:
+                livre += 1
+        return livre / float(len(am))
 
     # Lasca solta e defeito, nao ambiguidade: sao poucos triangulos pretos
     # perdidos no corpo, que o campo pegou de rasparem na linha. Some com elas
@@ -1280,18 +2019,85 @@ def worker_main():
     # uma divisao de verdade (barriga descendo abaixo da bainha), e essa vale
     # ser reportada.
     slivers = 0
-    if groups:
-        keep = max(1, int(len(groups[0]) * 0.05))
-        for g in groups[1:]:
-            if len(g) < keep:
-                slivers += len(g)
-                for f in g:
-                    f.material_index = 0
-        groups = [g for g in groups[:1] + groups[1:] if len(g) >= keep]
+    escondidas = 0
+    comps, por_peca, partida_ok = [], [], []
+    for ip in range(len(campos)):
+        gs = _componentes(ip)
+        if gs:
+            keep = max(1, int(len(gs[0]) * 0.05))
+            for g in gs[1:]:
+                if len(g) < keep:
+                    slivers += len(g)
+                    for f in g:
+                        f.material_index = 0
+                        peca[f.index] = -1
+            gs = [g for g in gs if len(g) >= keep]
 
-    comps = [len(g) for g in groups]
-    n_short = sum(comps)
-    biggest = comps[0] / float(n_short) if comps else 0.0
+            # ---- A FAIXA PODE SAIR EM DUAS, e isso passou a ser CERTO ------
+            # Desde que o w_arm_wide corta o braco na altura da banda, num corpo
+            # pesado o braco TAPA o lado do torax e a faixa aparece em dois
+            # pedacos - frente e costas. E o que se ve num corpo de verdade, e
+            # nao ha nada a consertar: exigir uma ilha so aqui reprovaria
+            # justamente o resultado que se acabou de acertar.
+            #
+            # O que separa peca legitima de lasca de braco e o PLANO SAGITAL.
+            # Frente e costas cruzam o meio do corpo por construcao - a banda da
+            # a volta -, enquanto o que sobra encostado na axila fica inteiro de
+            # um lado. E o mesmo raciocinio das ilhas escondidas: nao afrouxar o
+            # limiar, e sim perguntar outra coisa. Afrouxar aceitaria mao preta.
+            # SAO DOIS TESTES porque sao dois defeitos diferentes, e nenhum dos
+            # dois sozinho serve. Medido no b10_d1 e no b12_d1 (_ilhas_vis.py):
+            #
+            #   frente / costas   60..100% da altura da banda   cruza o meio
+            #   franja no meio     2..  7%                      cruza o meio
+            #   franja na axila      0.4%                       so de um lado
+            #
+            # A ALTURA pega a franja - fita de duas fatias que o corte deixou
+            # solta na borda de cima ou de baixo. Sozinha ela nao serve: um
+            # antebraco pintado por falha da mascara e VERTICAL e passaria no
+            # teste de altura sem esforco.
+            # O SAGITAL pega o antebraco, porque a banda da a volta e cruza o
+            # meio do corpo por construcao, e braco nenhum faz isso. Sozinho ele
+            # nao serve: as franjas do meio tambem cruzam.
+            if ip == FAIXA_PECA and len(gs) > 1:
+                cxm = float(np.median(co[:, 0]))
+                alt = (float(np.max(np.atleast_1d(cfg["faixa_hi"])))
+                       - float(np.min(np.atleast_1d(cfg["faixa_lo"]))))
+                pecas, restos = [], []
+                for g in gs:
+                    c = [f.calc_center_median() for f in g]
+                    xs = [p.x - cxm for p in c]
+                    zs = [p.z for p in c]
+                    ok = (min(xs) < 0 < max(xs)
+                          and max(zs) - min(zs) >= FAIXA_PECA_ALT_MIN * alt)
+                    (pecas if ok else restos).append(g)
+                for g in restos:
+                    slivers += len(g)
+                    for f in g:
+                        f.material_index = 0
+                        peca[f.index] = -1
+                gs = pecas
+
+            visiveis = []
+            for g in gs:
+                if _visivel(g) >= VISIVEL_MIN:
+                    visiveis.append(g)
+                else:
+                    escondidas += len(g)
+            gs = visiveis
+        tam = [len(g) for g in gs]
+        por_peca.append(tam)
+        comps += tam
+        # Frente + costas com o braco no meio conta como peca inteira. Tres ja
+        # nao: uma banda tem dois lados, e o terceiro pedaco e outra coisa.
+        partida_ok.append(ip == FAIXA_PECA and 1 <= len(tam) <= 2)
+
+    n_short = sum(comps) + escondidas   # a escondida continua pintada
+    # "biggest" continua sendo a fracao da MAIOR ilha DENTRO DA SUA PECA, e o
+    # placar do avatar e a pior das pecas. Com uma peca so, e o numero de antes.
+    biggest = min([1.0 if (t and ok) else ((t[0] / float(sum(t))) if t else 0.0)
+                   for t, ok in zip(por_peca, partida_ok)], default=0.0)
+    vazias = [i for i, t in enumerate(por_peca) if not t]
 
     bm.to_mesh(me)
     bm.free()
@@ -1307,13 +2113,14 @@ def worker_main():
     # avatar mais dificil da biblioteca, que e justamente o que se quer guardar
     # para corrigir a mao. Entao aqui so marca; quem se recusa a gravar o GLB e
     # o --apply, mais abaixo.
-    suspect = biggest < 0.97
+    suspect = biggest < 0.97 or bool(vazias)
     if suspect:
         sys.stderr.write(
-            "[AVISO] short em {} ilhas ({} faces, maior = {:.1%}). Ilha solta e "
+            "[AVISO] pecas em {} ilhas ({}, pior peca = {:.1%}{}). Ilha solta e "
             "quase sempre mao/antebraco pintado por falha da mascara de braco - "
             "conferir o render antes de aplicar.\n"
-            .format(len(comps), comps[:6], biggest))
+            .format(len(comps), por_peca, biggest,
+                    ", peca(s) {} VAZIA(S)".format(vazias) if vazias else ""))
 
     me.update()
 
@@ -1321,8 +2128,8 @@ def worker_main():
         # so as travas, sem render: varrer a biblioteca inteira custa minutos
         # em vez de meia hora, entao da para conferir de novo a cada mudanca
         print("RESULT " + json.dumps({
-            "summary": "{}: short {:.1%}, {} peca(s), maior {:.1%}, +{} costura{}".format(
-                a.id, frac, len(comps), biggest, added,
+            "summary": "{}: roupa {:.1%}, ilhas {}, pior peca {:.1%}, +{} costura{}".format(
+                a.id, frac, por_peca, biggest, added,
                 "   << CONFERIR" if suspect else "")}))
         sys.exit(0)
 
@@ -1330,11 +2137,22 @@ def worker_main():
         # Ultimo portao antes do asset que o app consome.
         if suspect and not entry.get("allow_islands"):
             sys.stderr.write(
-                "recusado: regiao em {} ilhas (maior {:.1%}). Se as ilhas forem "
+                "recusado: pecas em {} ilhas ({}, pior {:.1%}). Se as ilhas forem "
                 "legitimas para este corpo, marque \"allow_islands\": true no "
-                "shorts_map.json.\n".format(len(comps), biggest))
+                "shorts_map.json.\n".format(len(comps), por_peca, biggest))
             sys.exit(1)
-        dist = os.path.join(a.root, "03_dist", "glb", a.id + "_v1.glb")
+        # Versao NOVA, nunca por cima: o dist e URL de CDN (zenith_paths.py).
+        # Aqui isso vale dobrado - o short e a correcao que o usuario ja viu
+        # errada, entao entregar por baixo do cache e nao corrigir nada.
+        version, dist = zp.dist_glb_next(a.root, a.id)
+
+        def reject(msg):
+            """Desfaz o arquivo novo e deixa a versao anterior servindo."""
+            if os.path.isfile(dist):
+                os.remove(dist)
+            sys.stderr.write(msg)
+            sys.exit(1)
+
         tris_before = nf
         bpy.ops.object.select_all(action="DESELECT")
         obj.select_set(True)
@@ -1352,24 +2170,38 @@ def worker_main():
         back = [o for o in bpy.context.scene.objects if o.type == "MESH"]
         tris_after = sum(len(p.vertices) - 2 for o in back for p in o.data.polygons)
         if tris_after != tris_before:
-            sys.stderr.write("geometria mudou no export: {} -> {}\n".format(
+            reject("geometria mudou no export: {} -> {}\n".format(
                 tris_before, tris_after))
-            sys.exit(1)
         # O corte da costura ACRESCENTA triangulos - e a unica mudanca de
         # geometria permitida aqui, e so na borda do short. Um crescimento
         # grande significaria que o campo cruzou zero onde nao devia.
-        growth = (tris_before - tris_master) / float(tris_master)
-        if growth > 0.06:
-            sys.stderr.write("costura grande demais: {} -> {} ({:+.1%})\n".format(
-                tris_master, tris_before, growth))
-            sys.exit(1)
+        #
+        # DIVIDIDO POR `frac`, E NAO PELO TOTAL DE TRIANGULOS (01/08). A costura
+        # e uma CURVA: o custo dela cresce com o COMPRIMENTO da borda da roupa.
+        # O total de triangulos e grandeza de AREA. A razao antiga misturava as
+        # duas, entao corpo com mais roupa pagava mais sem estar errado - a
+        # trava foi calibrada no acervo masculino de UMA peca (max 3,60%, folga
+        # de 67%) e nao sobreviveu a corpo feminino de DUAS. O zen_f_b11_d1
+        # reprovou em +6,2% estando ABAIXO da mediana feminina uma vez
+        # normalizado (_costura.py: fem p50 0,198, mas p50 0,185, max do acervo
+        # 0,265 e MASCULINO aprovado). A razao nova tambem serve melhor ao que
+        # a trava diz vigiar: costura perdida acrescenta comprimento sem
+        # acrescentar roupa, entao sobe aqui - na razao velha ela sumia num
+        # corpo grande. Limiar 0,40 = mesma folga de ~50% sobre o maximo medido.
+        costura = (tris_before - tris_master) / float(tris_master)
+        por_frac = costura / max(frac, 1e-9)
+        if por_frac > 0.40:
+            reject("costura grande demais: {} -> {} ({:+.1%} para roupa de "
+                   "{:.1%} = {:.3f} por frac, teto 0.40)\n".format(
+                       tris_master, tris_before, costura, frac, por_frac))
         names = [m.name for m in back[0].data.materials]
         if names != [zm.MATERIAL_NAME, zm.SHORTS_MATERIAL_NAME]:
-            sys.stderr.write("materiais inesperados no dist: {}\n".format(names))
-            sys.exit(1)
+            reject("materiais inesperados no dist: {}\n".format(names))
+        gone = zp.dist_glb_retire(a.root, a.id, keep=version)
         print("RESULT " + json.dumps({
-            "summary": "{}: {} tri ({:+d} costura), short {:.1%}".format(
-                a.id, tris_after, tris_after - tris_master, frac)}))
+            "summary": "{}: {} tri ({:+d} costura), short {:.1%}, v{}{}".format(
+                a.id, tris_after, tris_after - tris_master, frac, version,
+                " (aposentou {})".format(", ".join(gone)) if gone else "")}))
         sys.exit(0)
 
     # ------------------------------------------------------------ render QA
@@ -1435,12 +2267,19 @@ def worker_main():
         return "{:.3f}..{:.3f}".format(min(v), max(v))
 
     entry["frac"] = round(frac, 4)
+    # POR PECA, nao o total: com duas pecas o total certo e 2, e um `islands > 1`
+    # no relatorio acusaria a biblioteca feminina inteira. O `islands` continua
+    # gravado para nao quebrar os 39 mapas masculinos que ja existem.
     entry["islands"] = len(comps)
+    entry["por_peca"] = [len(t) for t in por_peca]
+    entry["escondidas"] = escondidas
     entry["slivers"] = slivers
-    entry["summary"] = "{}: short {:.1%} (+{} costura, -{} lasca)  bainha {} / {}  cos {}{}".format(
+    entry["summary"] = "{}: roupa {:.1%} (+{} costura, -{} lasca)  bainha {} / {}  cos {}{}{}".format(
         a.id, frac, added, slivers, _rng(entry["hem_l_zh"]), _rng(entry["hem_r_zh"]),
         _rng(entry["waist_zh"]),
-        "  << {} ILHAS, maior {:.0%}".format(len(comps), biggest) if suspect else "")
+        "  faixa {} / {}".format(_rng(entry["faixa_lo_zh"]), _rng(entry["faixa_hi_zh"]))
+        if "faixa_lo_zh" in entry else "",
+        "  << ILHAS {}, pior {:.0%}".format(por_peca, biggest) if suspect else "")
     print("RESULT " + json.dumps(entry))
     sys.exit(0)
 

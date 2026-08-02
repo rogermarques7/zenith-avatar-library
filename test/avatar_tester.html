@@ -25,9 +25,26 @@
   .badge { display:inline-block; font-size:11px; padding:2px 8px; border-radius:99px; margin-left:8px; vertical-align:middle; }
   .badge.ok { background:#1f3d29; color:#6ee7a0; }
   .badge.no { background:#3d2029; color:#f0a; }
-  .viewer { width:320px; }
+  /* 300 do card + 24 de padding do painel + 2 de borda. A largura e ajustada
+     pelo JS ao trocar o card: fixa em 320px, o card de 500px transbordava e
+     passava POR BAIXO da coluna de avatares. */
+  .viewer { width:326px; }
   model-viewer { width:300px; height:400px; background:#0d0d12; border-radius:12px; border:1px solid var(--line); }
-  .quick { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  /* Coluna propria para a fileira de avatares (31/07, a pedido do Rogerio):
+     com 39+37 avatares a lista empurrava tudo para baixo e trocar de avatar
+     exigia rolar a pagina inteira, perdendo o viewer de vista. Agora ela e
+     sticky e rola DENTRO de si mesma, entao o corpo fica sempre visivel
+     enquanto se percorre a escada de IMC - que e justamente o teste de
+     continuidade do QA. */
+  .listcol { width:252px; position:sticky; top:24px;
+             max-height:calc(100vh - 48px); overflow-y:auto; }
+  .listcol .sub { margin:0 0 12px; position:sticky; top:0; background:var(--panel);
+                  padding-bottom:8px; z-index:1; }
+  .listcol::-webkit-scrollbar { width:10px; }
+  .listcol::-webkit-scrollbar-thumb { background:#2f2f3d; border-radius:99px; }
+  .listcol::-webkit-scrollbar-track { background:transparent; }
+  .quick { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; }
+  .quick button { width:100%; text-align:center; font-variant-numeric:tabular-nums; }
   .quick button, .opt button { background:#20202b; color:var(--text); border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:12px; cursor:pointer; }
   .quick button:hover, .opt button:hover { border-color:var(--accent); }
   .quick button.active { background:var(--accent); border-color:var(--accent); }
@@ -82,13 +99,16 @@
            o model-viewer ilumina por IBL. Gerado por scripts/make_env.py.
            skybox-image fica de fora de proposito: queremos a LUZ, nao o fundo.
            tone-mapping neutral para nao dessaturar o roxo do rim. -->
+      <!-- loading="eager": o padrao do model-viewer e lazy por IntersectionObserver,
+           e ele BAILA se o elemento estiver fora da viewport na hora do
+           setAvatar. Em janela estreita o .wrap quebra e o viewer cai abaixo da
+           dobra - o avatar ficava em branco ate rolar ate ele, e uma troca de
+           avatar feita fora de tela nao carregava nunca. Um testador com UM
+           viewer nao ganha nada com lazy. Medido no preview, nao suposto. -->
       <model-viewer id="mv" auto-rotate rotation-per-second="30deg" interaction-prompt="none"
                     disable-zoom camera-orbit="0deg 90deg auto" exposure="1" shadow-intensity="0"
                     environment-image="../03_dist/env/zenith_env.hdr"
-                    tone-mapping="neutral"></model-viewer>
-      <div class="sub" id="count" style="margin:10px 0 4px">carregando library.json…</div>
-      <div class="quick" id="quick"></div>
-      <div class="empty" id="empty" style="display:none"></div>
+                    loading="eager" tone-mapping="neutral"></model-viewer>
       <div class="opt">
         <span>Card:</span>
         <button data-w="300" data-h="400" class="active">300px (app)</button>
@@ -102,7 +122,41 @@
         <button data-bg="#e9e9ee">claro</button>
         <button data-bg="#8346c6">roxo</button>
       </div>
+
+      <!-- BANCO DE ENSAIO DE LOOK - adicionado a pedido do Rogerio (31/07).
+           Ele mexe SO na exibicao: nada aqui grava GLB nem toca no
+           zenith_material.py. Quando um look for escolhido, quem aplica de
+           verdade e o restyle.py, que le os masters e regrava 03_dist/glb/. -->
+      <div class="opt">
+        <span>Luz:</span>
+        <button data-env="zenith" class="active">Zenith (HDR)</button>
+        <button data-env="neutral">neutra</button>
+        <button data-env="none">nenhuma</button>
+      </div>
+      <div class="opt">
+        <span>Cor:</span>
+        <button data-color="#B9BCC2" class="active">alumínio</button>
+        <button data-color="#6D737B">titânio</button>
+        <button data-color="#3A3F47">grafite</button>
+        <button data-color="#8C6A45">bronze</button>
+        <button data-color="#4A5A72">azul-aço</button>
+        <button data-color="#7A4FB5">roxo (antigo)</button>
+      </div>
+      <div class="opt">
+        <span>Acabamento:</span>
+        <button data-mr="0.25,0.45" class="active">semifosco</button>
+        <button data-mr="0.50,0.35">metálico</button>
+        <button data-mr="0.90,0.18">polido</button>
+        <button data-mr="0.00,0.65">fosco (sem metal)</button>
+      </div>
+      <div class="sub" id="lookNote" style="margin:10px 0 0; line-height:1.6"></div>
     </div>
+  </div>
+
+  <div class="panel listcol">
+    <div class="sub" id="count">carregando library.json…</div>
+    <div class="quick" id="quick"></div>
+    <div class="empty" id="empty" style="display:none"></div>
   </div>
 </div>
 
@@ -194,7 +248,13 @@ const mv=document.getElementById("mv");
 let curId="zen_m_b05_d2";
 
 function srcFor(id){
-  return "../03_dist/glb/"+id+"_v1.glb?t="+Date.now();
+  // O NOME DO ARQUIVO VEM DO INDICE, nunca montado com "_v1" fixo: o dist
+  // carrega a versao no nome (zenith_paths.py) e ela sobe a cada regravacao.
+  // Montar aqui faria o testador abrir a versao aposentada - ou seja, aprovar
+  // no olho um arquivo que o app nao serve mais.
+  const a = LIB && LIB.avatars.find(x => x.id === id);
+  const f = (a && a.assets && a.assets.glb) || (id + "_v1.glb");
+  return "../03_dist/glb/"+f+"?t="+Date.now();
 }
 function setAvatar(id){
   curId=id;
@@ -279,6 +339,10 @@ const quick=document.getElementById("quick");
 function renderQuick(){
   const avatares=LIB.avatars.filter(a=>a.sex===SEX).sort((a,b)=>a.measured_bmi-b.measured_bmi);
   quick.innerHTML="";
+  // A coluna rola por dentro: sem isto, trocar de sexo mantinha o scroll da
+  // lista anterior e a nova abria no meio da escada, nao no corpo mais leve.
+  const col = document.querySelector(".listcol");
+  if(col) col.scrollTop = 0;
   for(const a of avatares){
     const b=document.createElement("button");
     b.textContent=a.id.replace(/^zen_[mf]_/,"")+" · "+a.measured_bmi.toFixed(1);
@@ -327,6 +391,10 @@ fetch("../library.json?t="+Date.now()).then(r=>r.json()).then(lib=>{
 document.querySelectorAll(".opt button[data-w]").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".opt button[data-w]").forEach(x=>x.classList.remove("active"));
   b.classList.add("active"); mv.style.width=b.dataset.w+"px"; mv.style.height=b.dataset.h+"px";
+  // A COLUNA tem de crescer junto com o card, senao o model-viewer transborda
+  // do .viewer (que tinha largura fixa) e fica POR BAIXO da lista de avatares.
+  // +26 = padding 12px de cada lado do painel + 1px de borda de cada lado.
+  document.querySelector(".viewer").style.width = (+b.dataset.w + 26) + "px";
 });
 document.querySelectorAll(".opt button[data-bg]").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".opt button[data-bg]").forEach(x=>x.classList.remove("active"));
@@ -335,6 +403,70 @@ document.querySelectorAll(".opt button[data-bg]").forEach(b=>b.onclick=()=>{
 document.getElementById("orbit").addEventListener("change",e=>{
   if(e.target.checked) mv.setAttribute("camera-controls",""); else mv.removeAttribute("camera-controls");
 });
+
+// ---- banco de ensaio de LOOK (31/07) ----
+//
+// POR QUE "remover a iluminacao" NAO revela a cor do corpo: o material Zenith e
+// metallic 0.50, e metal no PBR nao tem componente difusa - ele so mostra o que
+// REFLETE do ambiente. Sem environment-image o corpo vai a quase preto, nao a
+// "cor pura". Por isso existem tres modos e nao um toggle: quem serve para
+// julgar COR e o ambiente NEUTRO (estudio branco embutido no model-viewer), e
+// quem mostra a cor crua e o acabamento FOSCO (metallic 0), onde a difusa passa
+// a existir. O modo "nenhuma" fica disponivel de proposito, para ver o efeito.
+//
+// O estado vive aqui e e REAPLICADO no evento `load`: cada setAvatar troca o
+// src (com ?t= para furar cache), e o GLB novo chega com o material original.
+// Sem reaplicar, trocar de avatar desfazia o ensaio silenciosamente.
+// Default = o que o zenith_material.py grava nos GLBs (aluminio semifosco,
+// escolhido em 31/07). Os dois TEM de concordar: se divergirem, o testador
+// mente sobre o que o app vai mostrar.
+const LOOK = { env:"zenith", color:"#B9BCC2", metallic:0.25, roughness:0.45 };
+const ENV_SRC = { zenith:"../03_dist/env/zenith_env.hdr", neutral:"neutral", none:null };
+const lookNote = document.getElementById("lookNote");
+
+function applyLook(){
+  // Ambiente. "neutral" e um preset do proprio model-viewer; null remove o IBL.
+  const src = ENV_SRC[LOOK.env];
+  if(src) mv.setAttribute("environment-image", src);
+  else    mv.removeAttribute("environment-image");
+
+  // Material. mv.model so existe depois do load - fora disso, sai calado e a
+  // reaplicacao no evento `load` cobre.
+  const mat = mv.model && mv.model.materials && mv.model.materials[0];
+  if(mat){
+    const p = mat.pbrMetallicRoughness;
+    p.setBaseColorFactor(LOOK.color);
+    p.setMetallicFactor(LOOK.metallic);
+    p.setRoughnessFactor(LOOK.roughness);
+  }
+
+  const avisos = [];
+  if(LOOK.env === "none" && LOOK.metallic > 0.05)
+    avisos.push("⚠ sem ambiente E com metal: o corpo escurece porque metal só reflete o entorno. Para ver a cor crua, use <b>fosco</b>.");
+  if(LOOK.env === "zenith")
+    avisos.push("O HDR Zenith tinge de roxo/azul — <b>não julgue cor aqui</b>, use a luz <b>neutra</b>.");
+  if(LOOK.metallic < 0.05)
+    avisos.push("Sem metal a cor fica fiel, mas o <b>relevo muscular perde o brilho especular</b> que o desenha.");
+  avisos.push(`atual: <code>${LOOK.color}</code> · metallic ${LOOK.metallic.toFixed(2)} · roughness ${LOOK.roughness.toFixed(2)} · luz ${LOOK.env}`);
+  lookNote.innerHTML = avisos.join("<br>");
+}
+
+function bindLook(sel, fn){
+  document.querySelectorAll(sel).forEach(b=>b.onclick=()=>{
+    document.querySelectorAll(sel).forEach(x=>x.classList.remove("active"));
+    b.classList.add("active"); fn(b); applyLook();
+  });
+}
+bindLook(".opt button[data-env]",   b=>{ LOOK.env = b.dataset.env; });
+bindLook(".opt button[data-color]", b=>{ LOOK.color = b.dataset.color; });
+bindLook(".opt button[data-mr]",    b=>{
+  const [m,r] = b.dataset.mr.split(",").map(Number);
+  LOOK.metallic = m; LOOK.roughness = r;
+});
+
+// Cada troca de avatar recarrega o GLB com o material de fabrica - reaplicar.
+mv.addEventListener("load", applyLook);
+applyLook();
 
 // update() e chamado pelo fetch acima, quando AVAILABLE ja estiver preenchido.
 </script>

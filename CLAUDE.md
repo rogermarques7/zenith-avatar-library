@@ -11,17 +11,30 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 
 | quando a tarefa for… | ler ANTES de agir | tamanho |
 |---|---|---:|
-| **montar prompt de folha** (o caso mais comum) | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 4,8k / 2,4k |
-| decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,7k |
-| mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,2k |
-| discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 4,0k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **14,9k** |
-| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-07.md` (**grep**, não ler inteiro) | 57,7k |
+| **QUALQUER COISA que toque o app Zenith** — medida, seleção, objetivo, contrato | `docs/INTEGRACAO_ZENITH.md` | **4,7k** |
+| **montar prompt de folha** | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 5,2k / 2,4k |
+| decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,5k |
+| mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |
+| discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
+| **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **22,5k** |
+| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-08.md` (7,4k) · `diario-2026-07.md` (**grep**) | 57,2k |
+| o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
 
-> Leitura padrão: `CLAUDE.md` **4,6k** + `state.md` **6,1k** = **10,7k** antes de
-> qualquer trabalho. O `state.md` subiu de 3,4k para 6,1k na sessão 17 e **é o
-> próximo candidato a enxugamento** — o bloco da sessão 16 já pode descer para o
-> diário.
+> Leitura padrão: `CLAUDE.md` **5,6k** + `state.md` **10,0k** = **15,6k** antes de
+> qualquer trabalho. O `LICOES.md` seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
+> **22,5k**).
+>
+> 🔴 **O corte do `state.md` foi FEITO na sessão 22 e não bastou.** O bloco da
+> sessão 20 foi mandado para o `INTEGRACAO_ZENITH.md` §1b como estava planejado —
+> e o arquivo ainda assim subiu de 9,4k para **10,0k**, porque na mesma sessão
+> entrou mais coisa do que saiu. **Enxugar não vence escrita nova**; o próximo
+> corte tem que ser maior que o que se pretende acrescentar, ou não é corte.
+>
+> **Toda a coluna foi remedida na sessão 18** com um divisor único de 3,6
+> chars/token, calibrado contra os números que já estavam certos (`prompt_m.md`
+> declarava 2,4k e mediu 2,4k). Para remedir qualquer um:
+> `(Get-Content <arquivo> -Raw -Encoding UTF8).Length / 3.6 / 1000`.
 
 > ### ⚠️ Manter a coluna de TAMANHO honesta — o número errado já custou
 >
@@ -68,8 +81,10 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
 3b. **O short é lido da MALHA, um avatar por vez — nunca da imagem.** Em 60k a bainha e o cós existem como geometria de verdade. Achá-los projetando a imagem frontal (o que o `process.py` fazia, e por isso `SHORTS_ENABLED=False`) **não sobrevive a corpo obeso**: a barriga cai por cima do cós, e aí imagem e malha discordam sobre onde o tecido começa. O `scripts/shorts.py` detecta pelo vinco, **corta a malha na linha exata** e grava dois materiais. Os números de cada avatar vivem em `config/shorts_map.json` — **o mapa é o produto; o detector só propõe.** Ver `state.md`.
 
 4. **A textura da Meshy nunca é usada** — gerar sem textura no site. O visual é aplicado aqui e, desde 27/07, tem **duas metades**:
-   - **material** — `scripts/zenith_material.py`: titânio cinza `#6D737B`, metallic 0.50, roughness 0.35. Fonte única, lida pelo `process.py` *e* pelo `restyle.py`.
+   - **material** — `scripts/zenith_material.py`: alumínio claro `#B9BCC2`, metallic **0.25**, roughness **0.45** (revisto em 31/07; era titânio `#6D737B` / 0.50 / 0.35). Fonte única, lida pelo `process.py` *e* pelo `restyle.py`.
    - **iluminação** — `scripts/make_env.py` → `03_dist/env/zenith_env.hdr`: rim roxo + key fria + kicker traseiro.
+
+   ⚠️ **Mudar a constante NÃO muda os GLBs** — é preciso `python scripts/restyle.py --all`, e depois conferir com `blender -b -P qa/probe/sondas/probe_material_dist.py`, que lê os 76 arquivos do disco e compara com a fonte única. O restyle valida o próprio export; a sonda é a régua externa. **Ela também cobra a PEÇA** desde 01/08: quem tem entrada no `config/shorts_map.json` precisa sair com `[Zenith_Body, Zenith_Shorts]` — é a régua que teria acusado o apagão dos 39 shorts.
 
    **O corpo NÃO é mais roxo.** O roxo saturado achatava o relevo muscular, que é o foco do app. A identidade Zenith virou **luz**, não cor de corpo. Consequência que o app precisa saber: **metade do visual mora fora do GLB.** glTF não transporta iluminação de forma portável — o model-viewer ilumina por IBL (`environment-image`). Sem carregar o HDR, o avatar aparece cinza e sem identidade.
 5. **A diferença entre arquétipos é largura e volume, nunca altura.**
@@ -77,6 +92,8 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
 5b. **Nunca regerar nem descartar um avatar já produzido.** Se ele não corresponde ao que o nome promete, o conserto é **reclassificar** (o rótulo é dado, vive no `library.json`) e **inserir** um novo onde faltar cobertura — nunca substituir. Decisão do Rogério, cobrada em 26/07: "quanto mais avatares tivermos, maior será nossa biblioteca".
 6. Todo processamento roda em **Blender headless** via script, nunca à mão na interface.
 7. Nenhum script sobrescreve arquivo em `02_master/` sem confirmação — refazer a normalização de um avatar já aprovado exige QA de novo.
+8. **Nada sobrescreve arquivo em `03_dist/glb/` — a versão vai no NOME** (`{id}_v{n}.glb`, desde 01/08). Aquele caminho é URL de CDN, e URL de CDN fica em cache: regravar o mesmo nome entrega o conteúdo VELHO para quem já baixou, para sempre — a correção fica invisível justamente para quem já usa o app. Todo escritor passa por `zenith_paths.dist_glb_next()` e a versão anterior só é aposentada **depois** que a nova passa nas travas. **Não criar flag `--bump`**: flag se esquece, e esquecê-la reintroduz o bug em silêncio. Ver `docs/LICOES.md` §4.2g.
+9. **`restyle.py` e `shorts.py` gravam o MESMO destino, e o `restyle` apaga o short.** Ele lê o master, que não tem peça. Em 31/07 um `restyle --all` zerou os 39 shorts masculinos sem avisar. Hoje o `restyle` **recusa** avatar com entrada no `config/shorts_map.json` e manda rodar `shorts.py --apply`, que aplica material e short juntos. Ver `docs/LICOES.md` §4.2f.
 
 ## Divisão do trabalho
 
@@ -94,13 +111,19 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
 2. `process.py` — Blender headless: normaliza, decima, aplica material Zenith, valida
 3. `measure.py` — mede a **folha 2D** (barriga/ombros em % da altura): régua rápida para julgar folha antes da Meshy
 4. `qa_render.py` — renders de QA (`--raw --torso` para inspecionar o cru antes de processar)
-5. `metrics.py` — mede o **master 3D**: circunferências em cm e IMC real por volume da malha. É a régua de verdade, e a base da classificação
+5. `metrics.py` — mede o **master 3D**: circunferências em cm e IMC real por volume da malha. É a régua de verdade, e a base da classificação. **São 11 colunas, e `shoulder` entrou em 01/08** para fechar o contrato com o app em 9 de 9.
+
+    ⚠️ **Medida de fita é LANDMARK, não extremo.** `chest` (0,720) e `shoulder` (0,795) são fração fixa **de propósito** — os dois foram testados como "máximo numa banda" e os dois falharam: o peito foge para a **axila** (+8 cm) e o ombro desce para o **tórax**. Máximo ao longo do eixo vertical sempre acha uma junção, porque é lá que dois volumes se somam. **Não reabrir** — `LICOES.md` §1.8b.
+
+    ⚠️ **Quem procura extremo numa banda tem que denunciar a borda.** Toda medida de extremo grava `at_band_edge: hi|lo` quando o pico encosta no limite da faixa. Isso existe porque a `CALF_BAND` media o **joelho** em 50 dos 76 avatares sem nada acusar: o máximo travava em 0,320 exato, a própria borda. **Exceção: na coxa o `hi` é anatomia, não defeito** (ela é mais larga colada na virilha) — por isso está fora do aviso. `LICOES.md` §1.8
 6. `build_index.py` — monta o `library.json` a partir das medidas
 7. `render.py` — gera os frames de turntable (ainda não escrito)
 8. `zenith_material.py` — **não é executável**: é a fonte única do material (cor/metallic/roughness), importada pelo `process.py` e pelo `restyle.py`
 9. `make_env.py` — gera o ambiente de iluminação (`03_dist/env/zenith_env.hdr`). A identidade Zenith mora aqui
 10. `restyle.py` — reaplica o material nos 39 `03_dist/glb/` **lendo os masters, sem re-decimar e sem tocar em `02_master/`**. É o jeito de mexer em cor sem refazer QA. `--preview {id}` renderiza 4 vistas com o ambiente em `qa/look/{id}/`
-11. `shorts.py` — segmenta e pinta o short, **um avatar por vez**, lendo o vinco da malha. `--fit` propõe e renderiza QA · `--report` confere contra a série · `--check` roda só as travas · `--apply` grava em `03_dist/glb/`
+11. `shorts.py` — segmenta e pinta as peças, **um avatar por vez**, lendo o vinco da malha: short no masculino, **short + faixa** no feminino desde 01/08. `--fit` propõe e renderiza QA · `--report` confere contra a série · `--check` roda só as travas · `--apply` grava em `03_dist/glb/`
+
+    ⚠️ **A borda de CIMA da faixa não é medida de verdade em avatar nenhum** — de 4 a 9 dos 9 setores da frente não têm aro (o busto apaga o vinco) e o traçado sai de ruído alisado. Piso sobre o pico foi **testado e refutado**: reescreve os 37, inclusive os certos. Válvula declarada: `"faixa_topo_reto": true` no mapa. Antes de mexer nisso, `LICOES.md` §4.5b — o conserto muda os 37 e **não tem régua externa**.
 12. `sheet_qa.py` — mede a folha **ainda em Downloads**, antes de ela entrar no repositório: alinhamento das 3 vistas, espaçamento, **largura do tronco na frente** (ombro/cintura/quadril/coxa, com o braço fora da conta), **profundidade no perfil** (barriga/glúteo/coxa) e extensão do tecido. Aceita uma 2ª folha como referência e imprime o delta. O `measure.py` só roda depois do `crop.py`, e não se grava folha que pode reprovar. **Passo padrão antes de aprovar qualquer folha, dos dois geradores.**
 
     ⚠️ **O critério é a ASSINATURA DE VAZAMENTO, não o gerador — este parágrafo já ensinou o contrário e estava errado.** Até 30/07 ele dizia "em folha do Gemini ele não mede nada", e o `LICOES.md` §1.1 já tinha derrubado isso: **o gerador nunca foi a variável.** A folha do `zen_f_b06_d3` é do **ChatGPT** e vazou (5,05% de variação, `cintura/ombro 1,245`), enquanto a folha do Gemini medida em 30/07 leu **sã** — 0,14% de variação, 0 px nos pés, `cintura/ombro 0,554` — e a leitura dela decidiu uma escolha entre duas folhas. Pela redação antiga eu teria jogado fora uma medida válida.
@@ -114,7 +137,7 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     **O `measure.py` NÃO precisa da mesma correção** — ele usa os *extremos* da linha (buraco no meio não move extremo) e mede barriga na vista de **perfil**, onde não há braço aberto. Não propagar a mudança por analogia.
 
     **O que ele NÃO mede é TÔNUS** — largura e profundidade não veem relevo de superfície, que foi como duas folhas com abdomens diferentes passaram como "o mesmo corpo" na sessão 7. Para isso, `qa/probe/sondas/probe_tonus_f.py`.
-13. `zenith_paths.py` — **não é executável**: fonte única do layout de `00_input/`, que desde 28/07 é **separado por sexo** (`sheets/{m,f}/`, `references/{m,f}/`). Importado por `intake.py`, `crop.py`, `measure.py`, `process.py` e `shorts_ref.py`. **Não montar esses caminhos à mão em script novo** — `01_raw/`, `02_master/` e `03_dist/glb/` seguem planos de propósito (ver README §3)
+13. `zenith_paths.py` — **não é executável**: fonte única de **duas** coisas. (a) o layout de `00_input/`, **separado por sexo** desde 28/07 (`sheets/{m,f}/`, `references/{m,f}/`); (b) desde 01/08, o **nome versionado** do entregue em `03_dist/glb/` — `dist_glb_current` (para quem lê), `dist_glb_next` (para quem grava), `dist_glb_retire` (aposenta a anterior). Importado por `intake.py`, `crop.py`, `measure.py`, `process.py`, `restyle.py`, `shorts.py`, `qa_render.py` e `shorts_ref.py`. **Não montar esses caminhos à mão em script novo, e nunca escrever `_v1` literal** — `01_raw/`, `02_master/` e `03_dist/glb/` seguem planos de propósito (ver README §3)
 14. `shorts_ref.py` — **régua externa**: mede o short na folha de referência (preto sobre cinza) e compara com o 3D. Existe porque o `--report` compara cada avatar com a SÉRIE, e uma série pode estar inteira errada — foi assim que o `b12_d1` passou com o cós 25 cm fora do lugar
 
 O contrato entre o humano e o pipeline é o **nome do arquivo**: o script extrai o ID do arquétipo do nome do GLB em `01_raw/`. Nome errado = avatar errado na biblioteca.

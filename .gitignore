@@ -2,7 +2,21 @@
 01_raw/
 02_master/
 03_dist/
-qa/
+
+# `qa/` guarda DUAS coisas diferentes e so uma e descartavel: os renders (PNG),
+# os mapas (.npz) e os logs se refazem rodando de novo - mas as SONDAS sao
+# codigo, e o state.md manda rodar o probe_tonus_f.py no fluxo padrao de todo
+# avatar. Elas ficaram sem versionamento e sem backup ate 31/07.
+# Regra: ignora qa/ inteiro, reabre SO os .py. Cada nivel precisa ser
+# reaberto antes de excluir o conteudo dele - o git nao entra em diretorio
+# excluido, entao `!qa/probe/sondas/*.py` sozinho nao funciona.
+qa/*
+!qa/probe/
+qa/probe/*
+!qa/probe/*.py
+!qa/probe/sondas/
+qa/probe/sondas/*
+!qa/probe/sondas/*.py
 
 # Backup dos masters 18k, tirado em 27/07 antes de reprocessar a biblioteca em
 # 60k. Existe para comparar/voltar sem re-rodar o pipeline; apagar quando o

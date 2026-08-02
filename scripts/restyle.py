@@ -31,6 +31,7 @@ Se divergir, o export mexeu na malha e o dist nao serve.
 
 import argparse
 import glob
+import json
 import os
 import sys
 
@@ -99,6 +100,18 @@ def composite_previews(paths, bg_hex):
         flat.convert("RGB").save(p)
 
 
+def _ids_com_short(root):
+    """Ids que tem peca pintada no config/shorts_map.json.
+
+    Fonte unica de quem 'esta vestido' - o dist nao serve para responder isso,
+    porque um dist sem short pode ser justamente o que este script apagou."""
+    p = os.path.join(root, "config", "shorts_map.json")
+    if not os.path.isfile(p):
+        return set()
+    with open(p, "r", encoding="utf-8") as f:
+        return set(json.load(f).keys())
+
+
 def driver_main():
     ap = argparse.ArgumentParser(
         description="Aplica o material Zenith atual sobre os masters, regravando 03_dist/glb/.")
@@ -125,6 +138,7 @@ def driver_main():
 
     sys.path.insert(0, os.path.join(root, "scripts"))
     import zenith_material as zm
+    import zenith_paths as zp
 
     print("Blender : {}".format(blender))
     print("Modo    : {}".format(mode))
@@ -133,7 +147,10 @@ def driver_main():
     print("IDs     : {}".format(", ".join(ids)))
     print("-" * 70)
 
+    dressed = _ids_com_short(root)
+
     failures = []
+    skipped_dressed = []
     for aid in ids:
         master = os.path.join(root, "02_master", aid + "_master.glb")
         if not os.path.isfile(master):
@@ -141,16 +158,43 @@ def driver_main():
             failures.append(aid)
             continue
 
+        # 🔴 O RESTYLE APAGAVA O SHORT, e em silencio. Ele le o MASTER, que nao
+        # tem peca pintada, e regrava o dist; o shorts.py le o master MAIS o
+        # mapa e regrava o MESMO arquivo. Quem roda por ultimo vence - e em
+        # 31/07 o `--all` venceu e zerou os 39 shorts masculinos de uma vez,
+        # sem um aviso sequer (medido: os 76 dist estavam com 1 material).
+        #
+        # Recusar, e nao reaplicar sozinho: reaplicar em lote poria o DETECTOR
+        # no caminho do material, e o mapa existe justamente porque o detector
+        # erra (CLAUDE.md regra 3b - o mapa e o produto). O shorts.py --apply
+        # ja aplica o material corrente junto do short, entao ele nao e um
+        # remendo: e o comando completo para quem tem peca.
+        if mode == "restyle" and aid in dressed:
+            skipped_dressed.append(aid)
+            continue
+
         cmd = [blender, "--background", "--python", os.path.abspath(__file__), "--",
                "--worker", "--mode", mode, "--id", aid, "--root", root]
         import subprocess
-        rc = subprocess.call(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT) \
-            if mode == "restyle" else subprocess.call(cmd)
+        proc = None
+        if mode == "restyle":
+            proc = subprocess.run(cmd, stdout=subprocess.PIPE,
+                                  stderr=subprocess.STDOUT, text=True)
+            rc = proc.returncode
+        else:
+            rc = subprocess.call(cmd)
         if rc != 0:
             print("[FAIL] {} (codigo {})".format(aid, rc))
+            # LICOES 4.2d: a mensagem do worker JA EXISTIA e era descartada
+            # aqui - 76 falhas apareceram como "codigo 1" e custaram uma sessao
+            # de diagnostico. Trava que detecta e nao conta o porque nao serve.
+            for line in ((proc.stdout or "").strip().splitlines()[-6:] if proc else []):
+                print("       | " + line)
             failures.append(aid)
         else:
-            print("[ok]   {}".format(aid))
+            # a versao vem do DISCO, nao do que o worker disse ter feito
+            v, _ = zp.dist_glb_current(root, aid)
+            print("[ok]   {}  -> v{}".format(aid, v))
 
     if mode == "preview":
         look = os.path.join(root, "qa", "look", ids[0])
@@ -161,7 +205,14 @@ def driver_main():
                 os.path.relpath(look, root), len(pngs), BG_HEX))
 
     print("-" * 70)
-    print("{}/{} ok".format(len(ids) - len(failures), len(ids)))
+    feitos = len(ids) - len(failures) - len(skipped_dressed)
+    print("{}/{} ok".format(feitos, len(ids) - len(skipped_dressed)))
+    if skipped_dressed:
+        print("\n[NAO TOCADOS] {} avatar(es) tem peca pintada, e o restyle apagaria "
+              "o short.\nO shorts.py aplica o material corrente JUNTO do short - "
+              "rode nestes:".format(len(skipped_dressed)))
+        for aid in skipped_dressed:
+            print("  python scripts/shorts.py --apply {}".format(aid))
     if failures:
         print("falharam: {}".format(", ".join(failures)))
         return 1
@@ -186,9 +237,9 @@ def worker_main():
 
     sys.path.insert(0, os.path.join(a.root, "scripts"))
     import zenith_material as zm
+    import zenith_paths as zp
 
     master = os.path.join(a.root, "02_master", a.id + "_master.glb")
-    dist = os.path.join(a.root, "03_dist", "glb", a.id + "_v1.glb")
 
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.ops.import_scene.gltf(filepath=master)
@@ -200,12 +251,34 @@ def worker_main():
     obj = meshes[0]
 
     obj.data.materials.clear()
+    # clear() esvazia o SLOT do objeto, mas NAO apaga o datablock que veio do
+    # master - ele fica em bpy.data.materials com 0 usuarios, ainda ocupando o
+    # nome "Zenith_Body". O material novo entao nasce como "Zenith_Body.001" e a
+    # trava de nome la embaixo derruba o avatar inteiro.
+    #
+    # Nao aparecia antes porque na fase roxa o master trazia "Zenith_Purple":
+    # nome diferente, sem colisao. Quando os masters passaram a ter
+    # "Zenith_Body", o restyle passou a colidir COM ELE MESMO - e o efeito so
+    # apareceu em 31/07, ao mudar a cor, com 0/76 avatares processados.
+    for m in list(bpy.data.materials):
+        if m.users == 0:
+            bpy.data.materials.remove(m)
     obj.data.materials.append(zm.make_body_material(bpy))
     for p in obj.data.polygons:
         p.material_index = 0
 
     if a.mode == "restyle":
         tris_before = sum(len(p.vertices) - 2 for p in obj.data.polygons)
+
+        # Versao NOVA, nunca por cima: o dist e URL de CDN (zenith_paths.py).
+        version, dist = zp.dist_glb_next(a.root, a.id)
+
+        def reject(msg):
+            """Desfaz o arquivo novo e deixa a versao anterior servindo."""
+            if os.path.isfile(dist):
+                os.remove(dist)
+            sys.stderr.write(msg)
+            sys.exit(1)
 
         bpy.ops.object.select_all(action="DESELECT")
         obj.select_set(True)
@@ -227,15 +300,16 @@ def worker_main():
         back = [o for o in bpy.context.scene.objects if o.type == "MESH"]
         tris_after = sum(len(p.vertices) - 2 for o in back for p in o.data.polygons)
         if tris_after != tris_before:
-            sys.stderr.write("geometria mudou no export: {} -> {} triangulos\n".format(
+            reject("geometria mudou no export: {} -> {} triangulos\n".format(
                 tris_before, tris_after))
-            sys.exit(1)
         names = [m.name for m in back[0].data.materials]
         if names != [zm.MATERIAL_NAME]:
-            sys.stderr.write("materiais inesperados no dist: {}\n".format(names))
-            sys.exit(1)
+            reject("materiais inesperados no dist: {}\n".format(names))
 
-        print("{}: {} tri, material {}".format(a.id, tris_after, zm.MATERIAL_NAME))
+        gone = zp.dist_glb_retire(a.root, a.id, keep=version)
+        print("{}: {} tri, material {}, v{}{}".format(
+            a.id, tris_after, zm.MATERIAL_NAME, version,
+            " (aposentou {})".format(", ".join(gone)) if gone else ""))
         sys.exit(0)
 
     # ---------------------------------------------------------------- preview

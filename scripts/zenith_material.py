@@ -60,10 +60,28 @@ EMISSIVE 0    - o rim NAO e assado no material. Fresnel depende do angulo de
                 ficaria colado no lugar errado meia volta depois.
 """
 
-# Corpo. Cor de marca (#8346C6) NAO e mais cor de corpo - virou luz.
-ZENITH_BASE_HEX    = "#6D737B"     # titanio escuro
-ZENITH_METALLIC    = 0.50
-ZENITH_ROUGHNESS   = 0.35
+# --------------------------------------------------------------------------
+# REVISTO EM 31/07/2026 (sessao 18) - titanio escuro -> aluminio semifosco
+# --------------------------------------------------------------------------
+# Escolhido pelo Rogerio no banco de ensaio do avatar_tester.html, que passou a
+# permitir trocar cor/acabamento/luz em tempo real sobre o GLB real. Ou seja:
+# decidido OLHANDO os 76 corpos sob o HDR de producao, nao por argumento.
+#
+# O que mudou e por que os numeros antigos (#6D737B / 0.50 / 0.35) ficam
+# registrados acima: o raciocinio deles continua valendo - foi a MEDIDA da
+# varredura 3x3 que os elegeu, sobre um corpo 18k e material escuro. Com 60k e
+# base clara o compromisso e outro: o albedo claro devolve difusa suficiente
+# para o corpo nao depender tanto do ambiente, e o metallic mais baixo protege
+# o avatar de sumir se o app esquecer de carregar o environment-image - risco
+# real, porque metade do visual mora fora do GLB (ver acima).
+#
+# ATENCAO: mexer aqui NAO altera os GLBs sozinho. Depois de mudar, rodar
+#   python scripts/restyle.py --all
+# que le os masters e regrava 03_dist/glb/ sem re-decimar e sem tocar em
+# 02_master/. Sem isso, avatar novo sai diferente dos que ja existem.
+ZENITH_BASE_HEX    = "#B9BCC2"     # aluminio claro
+ZENITH_METALLIC    = 0.25
+ZENITH_ROUGHNESS   = 0.45
 
 # Short - ainda desligado no pipeline (SHORTS_ENABLED=False em process.py).
 # Quando religar, o short e o unico lugar onde faz sentido preto puro: ele
