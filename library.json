@@ -1,26 +1,238 @@
 {
-  "schema_version": 3,
-  "generated_at": "2026-08-01T22:08:52Z",
-  "cdn_base": "https://cdn.exemplo.com/avatars/",
+  "schema_version": 4,
+  "generated_at": "2026-08-06T14:39:31Z",
+  "cdn_base": "https://nhloypjtpgyndmjtcpcf.supabase.co/storage/v1/object/public/avatars/",
   "reference_height_m": 1.75,
   "selection": {
-    "rule": "nearest_measured_bmi_within_definition",
-    "target_bmi_formula": "bmi_usuario * (reference_height_m / altura_usuario_m)",
-    "definition_thresholds_bodyfat_pct": {
-      "m": {
-        "d3_below": 13.0,
-        "d2_below": 20.0
-      },
+    "rule": "weighted_measure_distance",
+    "columns": [
+      "neck",
+      "shoulder",
+      "chest",
+      "waist_min",
+      "hip",
+      "biceps",
+      "forearm",
+      "thigh",
+      "calf"
+    ],
+    "app_field_map": {
+      "neck_cm": "neck",
+      "shoulder_cm": "shoulder",
+      "chest_cm": "chest",
+      "waist_cm": "waist_min",
+      "hip_cm": "hip",
+      "arm_cm": "biceps",
+      "forearm_cm": "forearm",
+      "thigh_cm": "thigh",
+      "calf_cm": "calf"
+    },
+    "weights": {
+      "waist_min": 3.0,
+      "hip": 2.0,
+      "chest": 2.0,
+      "shoulder": 2.0,
+      "neck": 0.3,
+      "biceps": 0.3,
+      "forearm": 0.3,
+      "thigh": 0.3,
+      "calf": 0.3
+    },
+    "scale_cm": {
       "f": {
-        "d3_below": 21.0,
-        "d2_below": 29.0
+        "neck": 3.9,
+        "shoulder": 10.3,
+        "chest": 6.7,
+        "waist_min": 9.5,
+        "hip": 11.0,
+        "biceps": 5.2,
+        "forearm": 4.3,
+        "thigh": 10.0,
+        "calf": 5.7
+      },
+      "m": {
+        "neck": 5.0,
+        "shoulder": 12.4,
+        "chest": 10.8,
+        "waist_min": 15.6,
+        "hip": 11.5,
+        "biceps": 6.4,
+        "forearm": 4.7,
+        "thigh": 6.9,
+        "calf": 5.5
       }
     },
-    "definition_fallback": [
-      "d3",
-      "d2",
-      "d1"
+    "z_cap": 1.5,
+    "plausible_range_cm": {
+      "f": {
+        "neck": [
+          28.8,
+          60.4
+        ],
+        "shoulder": [
+          89.2,
+          162.3
+        ],
+        "chest": [
+          80.0,
+          202.7
+        ],
+        "waist_min": [
+          59.5,
+          199.5
+        ],
+        "hip": [
+          91.8,
+          237.4
+        ],
+        "biceps": [
+          19.5,
+          43.7
+        ],
+        "forearm": [
+          19.0,
+          41.3
+        ],
+        "thigh": [
+          43.5,
+          110.4
+        ],
+        "calf": [
+          28.7,
+          92.5
+        ]
+      },
+      "m": {
+        "neck": [
+          34.7,
+          74.0
+        ],
+        "shoulder": [
+          103.0,
+          200.2
+        ],
+        "chest": [
+          78.2,
+          244.6
+        ],
+        "waist_min": [
+          65.8,
+          250.4
+        ],
+        "hip": [
+          85.1,
+          257.0
+        ],
+        "biceps": [
+          20.7,
+          62.2
+        ],
+        "forearm": [
+          20.4,
+          53.5
+        ],
+        "thigh": [
+          45.5,
+          117.9
+        ],
+        "calf": [
+          29.0,
+          102.4
+        ]
+      }
+    },
+    "user_scale_formula": "medida_ref = medida_usuario * (reference_height_m / altura_usuario_m)",
+    "distance_formula": "sqrt( soma_i( w_i * ((u_i - a_i) / s_i)^2 ) / soma_i( w_i ) ), i sobre as colunas presentes no usuario e ausentes de avatar.unreliable_columns; u_i ja escalado para a altura de referencia; s_i = scale_cm[sexo][i]",
+    "unreliable_column_weight": 0.0,
+    "min_columns": 3,
+    "tie_break": "menor id em ordem alfabetica",
+    "sex_is_collection": true,
+    "fallback": {
+      "rule": "nearest_measured_bmi",
+      "when": "menos de min_columns colunas comparaveis",
+      "definition": "d2",
+      "target_bmi_formula": "bmi_usuario * (reference_height_m / altura_usuario_m)"
+    },
+    "retired": [
+      "definition_thresholds_bodyfat_pct",
+      "definition_fallback"
     ]
+  },
+  "goal": {
+    "vectors": {
+      "lose_weight": {
+        "has_target_body": true,
+        "summary": "Reduzir gordura mantendo massa magra",
+        "direction": {
+          "waist_min": -1.0,
+          "hip": -0.5,
+          "chest": -0.25,
+          "shoulder": -0.25,
+          "neck": 0.0,
+          "biceps": 0.0,
+          "forearm": 0.0,
+          "thigh": 0.0,
+          "calf": 0.0
+        }
+      },
+      "gain_muscle": {
+        "has_target_body": true,
+        "summary": "Ganhar massa muscular",
+        "direction": {
+          "waist_min": 0.0,
+          "hip": 0.0,
+          "chest": 0.5,
+          "shoulder": 0.5,
+          "neck": 0.0,
+          "biceps": 1.0,
+          "forearm": 1.0,
+          "thigh": 1.0,
+          "calf": 1.0
+        }
+      },
+      "recomp": {
+        "has_target_body": true,
+        "summary": "Recomposicao: perder gordura e ganhar musculo ao mesmo tempo",
+        "direction": {
+          "waist_min": -0.5,
+          "hip": -0.25,
+          "chest": 0.5,
+          "shoulder": 0.5,
+          "neck": 0.0,
+          "biceps": 0.5,
+          "forearm": 0.5,
+          "thigh": 0.5,
+          "calf": 0.5
+        }
+      },
+      "maintain": {
+        "has_target_body": false,
+        "summary": "Manter o corpo atual",
+        "direction": null
+      },
+      "improve_health": {
+        "has_target_body": false,
+        "summary": "Melhorar indicadores de saude",
+        "direction": null
+      },
+      "performance": {
+        "has_target_body": false,
+        "summary": "Performance esportiva",
+        "direction": null
+      }
+    },
+    "default_step": 1.0,
+    "step_unit": "desvios-padrao da coluna (selection.scale_cm)",
+    "origin": "avatar_atual",
+    "target_formula": "alvo_i = atual_i + passo * direction_i * selection.scale_cm[sexo][i], sobre as colunas i ausentes de atual.unreliable_columns",
+    "then": "o avatar da meta e o mais proximo do ponto alvo, pela mesma distancia da selection",
+    "guards": {
+      "must_differ_from_current": true,
+      "must_move_along_direction": "a projecao de (candidato - atual) sobre a direcao tem que ser positiva"
+    },
+    "known_limitation": "em 29 dos 51 corpos da faixa de usuario a meta de 'gain_muscle' vem com a cintura mais cheia (mediana +5,8 cm), porque nao ha vizinho mais musculoso de cintura igual. E buraco de COBERTURA, nao erro de selecao",
+    "reports_drift": true,
+    "progress_source": "medidas, nunca XP"
   },
   "default": {
     "m": "zen_m_b04_d2",
@@ -276,7 +488,7 @@
       "measured_bmi": 16.4,
       "measured_mass_kg": 50.3,
       "label": "muito magra",
-      "waist_to_height": 0.397,
+      "waist_to_height": 0.344,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -296,6 +508,7 @@
         "thigh": 52.2,
         "calf": 29.6
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -305,7 +518,7 @@
       "measured_bmi": 16.5,
       "measured_mass_kg": 50.6,
       "label": "muito magra",
-      "waist_to_height": 0.401,
+      "waist_to_height": 0.34,
       "body_shape": "medium",
       "version": 3,
       "assets": {
@@ -325,6 +538,7 @@
         "thigh": 46.1,
         "calf": 31.0
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -334,7 +548,7 @@
       "measured_bmi": 19.0,
       "measured_mass_kg": 58.3,
       "label": "muito magra",
-      "waist_to_height": 0.407,
+      "waist_to_height": 0.37,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -354,6 +568,7 @@
         "thigh": 46.3,
         "calf": 32.4
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -363,7 +578,7 @@
       "measured_bmi": 23.3,
       "measured_mass_kg": 71.5,
       "label": "media",
-      "waist_to_height": 0.505,
+      "waist_to_height": 0.425,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -383,6 +598,7 @@
         "thigh": 63.0,
         "calf": 37.7
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -392,7 +608,7 @@
       "measured_bmi": 24.1,
       "measured_mass_kg": 73.7,
       "label": "media",
-      "waist_to_height": 0.51,
+      "waist_to_height": 0.427,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -412,6 +628,7 @@
         "thigh": 53.1,
         "calf": 38.9
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -421,7 +638,7 @@
       "measured_bmi": 26.5,
       "measured_mass_kg": 81.3,
       "label": "cheia",
-      "waist_to_height": 0.561,
+      "waist_to_height": 0.466,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -441,6 +658,7 @@
         "thigh": 64.4,
         "calf": 40.1
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -450,7 +668,7 @@
       "measured_bmi": 31.9,
       "measured_mass_kg": 97.6,
       "label": "cheia",
-      "waist_to_height": 0.605,
+      "waist_to_height": 0.506,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -470,6 +688,9 @@
         "thigh": 68.7,
         "calf": 44.0
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -479,7 +700,7 @@
       "measured_bmi": 32.4,
       "measured_mass_kg": 99.2,
       "label": "cheia",
-      "waist_to_height": 0.598,
+      "waist_to_height": 0.495,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -499,6 +720,9 @@
         "thigh": 69.8,
         "calf": 43.1
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -508,7 +732,7 @@
       "measured_bmi": 34.1,
       "measured_mass_kg": 104.3,
       "label": "muito cheia",
-      "waist_to_height": 0.648,
+      "waist_to_height": 0.515,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -528,6 +752,7 @@
         "thigh": 75.1,
         "calf": 45.0
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -537,7 +762,7 @@
       "measured_bmi": 42.6,
       "measured_mass_kg": 130.3,
       "label": "muito cheia",
-      "waist_to_height": 0.715,
+      "waist_to_height": 0.637,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -557,6 +782,9 @@
         "thigh": 76.6,
         "calf": 45.9
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -566,7 +794,7 @@
       "measured_bmi": 44.4,
       "measured_mass_kg": 135.9,
       "label": "muito cheia",
-      "waist_to_height": 0.71,
+      "waist_to_height": 0.624,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -586,6 +814,11 @@
         "thigh": 80.8,
         "calf": 49.6
       },
+      "unreliable_columns": [
+        "chest",
+        "hip",
+        "calf"
+      ],
       "approved": true
     },
     {
@@ -595,7 +828,7 @@
       "measured_bmi": 52.5,
       "measured_mass_kg": 160.7,
       "label": "extremo",
-      "waist_to_height": 0.807,
+      "waist_to_height": 0.701,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -615,6 +848,10 @@
         "thigh": 87.3,
         "calf": 51.3
       },
+      "unreliable_columns": [
+        "chest",
+        "calf"
+      ],
       "approved": true
     },
     {
@@ -624,7 +861,7 @@
       "measured_bmi": 55.1,
       "measured_mass_kg": 168.9,
       "label": "extremo",
-      "waist_to_height": 0.866,
+      "waist_to_height": 0.702,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -644,6 +881,10 @@
         "thigh": 78.9,
         "calf": 59.0
       },
+      "unreliable_columns": [
+        "chest",
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -653,7 +894,7 @@
       "measured_bmi": 114.2,
       "measured_mass_kg": 349.9,
       "label": "extremo",
-      "waist_to_height": 1.158,
+      "waist_to_height": 1.14,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -673,6 +914,10 @@
         "thigh": 110.4,
         "calf": 92.5
       },
+      "unreliable_columns": [
+        "chest",
+        "calf"
+      ],
       "approved": true
     },
     {
@@ -682,7 +927,7 @@
       "measured_bmi": 17.2,
       "measured_mass_kg": 52.7,
       "label": "muito magra",
-      "waist_to_height": 0.417,
+      "waist_to_height": 0.353,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -702,6 +947,7 @@
         "thigh": 50.9,
         "calf": 30.1
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -711,7 +957,7 @@
       "measured_bmi": 18.3,
       "measured_mass_kg": 56.0,
       "label": "muito magra",
-      "waist_to_height": 0.42,
+      "waist_to_height": 0.358,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -731,6 +977,7 @@
         "thigh": 46.6,
         "calf": 33.1
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -740,7 +987,7 @@
       "measured_bmi": 19.8,
       "measured_mass_kg": 60.6,
       "label": "muito magra",
-      "waist_to_height": 0.407,
+      "waist_to_height": 0.348,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -760,6 +1007,9 @@
         "thigh": 59.0,
         "calf": 36.5
       },
+      "unreliable_columns": [
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -769,7 +1019,7 @@
       "measured_bmi": 22.2,
       "measured_mass_kg": 68.0,
       "label": "magra",
-      "waist_to_height": 0.451,
+      "waist_to_height": 0.407,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -789,6 +1039,7 @@
         "thigh": 56.6,
         "calf": 38.6
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -798,7 +1049,7 @@
       "measured_bmi": 22.9,
       "measured_mass_kg": 70.2,
       "label": "magra",
-      "waist_to_height": 0.463,
+      "waist_to_height": 0.403,
       "body_shape": "medium",
       "version": 3,
       "assets": {
@@ -818,6 +1069,7 @@
         "thigh": 55.5,
         "calf": 38.2
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -827,7 +1079,7 @@
       "measured_bmi": 27.3,
       "measured_mass_kg": 83.6,
       "label": "media",
-      "waist_to_height": 0.526,
+      "waist_to_height": 0.455,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -847,6 +1099,9 @@
         "thigh": 73.3,
         "calf": 43.3
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -856,7 +1111,7 @@
       "measured_bmi": 30.1,
       "measured_mass_kg": 92.2,
       "label": "cheia",
-      "waist_to_height": 0.587,
+      "waist_to_height": 0.498,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -876,6 +1131,9 @@
         "thigh": 73.6,
         "calf": 43.5
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -885,7 +1143,7 @@
       "measured_bmi": 34.4,
       "measured_mass_kg": 105.2,
       "label": "cheia",
-      "waist_to_height": 0.609,
+      "waist_to_height": 0.521,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -905,6 +1163,9 @@
         "thigh": 79.2,
         "calf": 47.3
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -914,7 +1175,7 @@
       "measured_bmi": 52.6,
       "measured_mass_kg": 161.2,
       "label": "extremo",
-      "waist_to_height": 0.803,
+      "waist_to_height": 0.654,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -934,6 +1195,9 @@
         "thigh": 80.0,
         "calf": 60.1
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -943,7 +1207,7 @@
       "measured_bmi": 53.9,
       "measured_mass_kg": 165.2,
       "label": "extremo",
-      "waist_to_height": 0.845,
+      "waist_to_height": 0.673,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -963,6 +1227,9 @@
         "thigh": 86.8,
         "calf": 57.7
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -972,7 +1239,7 @@
       "measured_bmi": 59.7,
       "measured_mass_kg": 182.9,
       "label": "extremo",
-      "waist_to_height": 0.855,
+      "waist_to_height": 0.695,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -992,6 +1259,11 @@
         "thigh": 90.0,
         "calf": 56.8
       },
+      "unreliable_columns": [
+        "chest",
+        "waist_min",
+        "calf"
+      ],
       "approved": true
     },
     {
@@ -1001,7 +1273,7 @@
       "measured_bmi": 16.1,
       "measured_mass_kg": 49.4,
       "label": "muito magra",
-      "waist_to_height": 0.406,
+      "waist_to_height": 0.347,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1021,6 +1293,7 @@
         "thigh": 43.5,
         "calf": 28.7
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1030,7 +1303,7 @@
       "measured_bmi": 16.9,
       "measured_mass_kg": 51.7,
       "label": "muito magra",
-      "waist_to_height": 0.405,
+      "waist_to_height": 0.343,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1050,6 +1323,7 @@
         "thigh": 47.5,
         "calf": 31.9
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1059,7 +1333,7 @@
       "measured_bmi": 21.0,
       "measured_mass_kg": 64.3,
       "label": "magra",
-      "waist_to_height": 0.43,
+      "waist_to_height": 0.371,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1079,6 +1353,7 @@
         "thigh": 49.5,
         "calf": 37.7
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1088,7 +1363,7 @@
       "measured_bmi": 22.1,
       "measured_mass_kg": 67.6,
       "label": "magra",
-      "waist_to_height": 0.445,
+      "waist_to_height": 0.375,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1108,6 +1383,7 @@
         "thigh": 59.4,
         "calf": 40.1
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1117,7 +1393,7 @@
       "measured_bmi": 22.3,
       "measured_mass_kg": 68.3,
       "label": "magra",
-      "waist_to_height": 0.449,
+      "waist_to_height": 0.365,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1137,6 +1413,7 @@
         "thigh": 61.5,
         "calf": 39.3
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1146,7 +1423,7 @@
       "measured_bmi": 27.7,
       "measured_mass_kg": 84.8,
       "label": "media",
-      "waist_to_height": 0.506,
+      "waist_to_height": 0.367,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1166,6 +1443,7 @@
         "thigh": 74.1,
         "calf": 48.8
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1175,7 +1453,7 @@
       "measured_bmi": 28.4,
       "measured_mass_kg": 87.0,
       "label": "magra",
-      "waist_to_height": 0.477,
+      "waist_to_height": 0.391,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1195,6 +1473,7 @@
         "thigh": 75.0,
         "calf": 48.8
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1204,7 +1483,7 @@
       "measured_bmi": 29.0,
       "measured_mass_kg": 88.7,
       "label": "magra",
-      "waist_to_height": 0.47,
+      "waist_to_height": 0.406,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1224,6 +1503,7 @@
         "thigh": 59.6,
         "calf": 46.1
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1233,7 +1513,7 @@
       "measured_bmi": 29.9,
       "measured_mass_kg": 91.5,
       "label": "magra",
-      "waist_to_height": 0.482,
+      "waist_to_height": 0.414,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1253,6 +1533,7 @@
         "thigh": 72.6,
         "calf": 50.2
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1262,7 +1543,7 @@
       "measured_bmi": 30.1,
       "measured_mass_kg": 92.2,
       "label": "media",
-      "waist_to_height": 0.517,
+      "waist_to_height": 0.393,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1282,6 +1563,7 @@
         "thigh": 75.3,
         "calf": 50.3
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1291,7 +1573,7 @@
       "measured_bmi": 32.4,
       "measured_mass_kg": 99.2,
       "label": "media",
-      "waist_to_height": 0.506,
+      "waist_to_height": 0.43,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1311,6 +1593,9 @@
         "thigh": 71.4,
         "calf": 50.5
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -1320,7 +1605,7 @@
       "measured_bmi": 45.1,
       "measured_mass_kg": 138.2,
       "label": "cheia",
-      "waist_to_height": 0.584,
+      "waist_to_height": 0.483,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1340,6 +1625,9 @@
         "thigh": 85.2,
         "calf": 63.5
       },
+      "unreliable_columns": [
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -1349,7 +1637,7 @@
       "measured_bmi": 16.1,
       "measured_mass_kg": 49.4,
       "label": "muito magro",
-      "waist_to_height": 0.405,
+      "waist_to_height": 0.376,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1369,6 +1657,7 @@
         "thigh": 45.5,
         "calf": 29.0
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1378,7 +1667,7 @@
       "measured_bmi": 18.0,
       "measured_mass_kg": 55.3,
       "label": "muito magro",
-      "waist_to_height": 0.41,
+      "waist_to_height": 0.386,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1398,6 +1687,7 @@
         "thigh": 51.5,
         "calf": 29.4
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1407,7 +1697,7 @@
       "measured_bmi": 20.4,
       "measured_mass_kg": 62.5,
       "label": "magro",
-      "waist_to_height": 0.434,
+      "waist_to_height": 0.418,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1427,6 +1717,7 @@
         "thigh": 55.6,
         "calf": 32.8
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1436,7 +1727,7 @@
       "measured_bmi": 24.4,
       "measured_mass_kg": 74.9,
       "label": "magro",
-      "waist_to_height": 0.494,
+      "waist_to_height": 0.482,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1456,6 +1747,7 @@
         "thigh": 58.4,
         "calf": 34.0
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1465,7 +1757,7 @@
       "measured_bmi": 26.2,
       "measured_mass_kg": 80.3,
       "label": "medio",
-      "waist_to_height": 0.53,
+      "waist_to_height": 0.515,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1485,6 +1777,7 @@
         "thigh": 63.7,
         "calf": 36.5
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1494,7 +1787,7 @@
       "measured_bmi": 27.0,
       "measured_mass_kg": 82.5,
       "label": "medio",
-      "waist_to_height": 0.538,
+      "waist_to_height": 0.522,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1514,6 +1807,9 @@
         "thigh": 62.6,
         "calf": 37.1
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -1523,7 +1819,7 @@
       "measured_bmi": 27.8,
       "measured_mass_kg": 85.1,
       "label": "cheio",
-      "waist_to_height": 0.551,
+      "waist_to_height": 0.527,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1543,6 +1839,9 @@
         "thigh": 63.3,
         "calf": 37.7
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -1552,7 +1851,7 @@
       "measured_bmi": 33.3,
       "measured_mass_kg": 102.1,
       "label": "muito cheio",
-      "waist_to_height": 0.637,
+      "waist_to_height": 0.603,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1572,6 +1871,9 @@
         "thigh": 67.1,
         "calf": 42.2
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -1581,7 +1883,7 @@
       "measured_bmi": 34.0,
       "measured_mass_kg": 104.2,
       "label": "muito cheio",
-      "waist_to_height": 0.631,
+      "waist_to_height": 0.602,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1601,6 +1903,9 @@
         "thigh": 70.5,
         "calf": 42.4
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -1610,7 +1915,7 @@
       "measured_bmi": 38.9,
       "measured_mass_kg": 119.2,
       "label": "extremo",
-      "waist_to_height": 0.759,
+      "waist_to_height": 0.682,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1630,6 +1935,10 @@
         "thigh": 72.7,
         "calf": 42.3
       },
+      "unreliable_columns": [
+        "chest",
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -1639,7 +1948,7 @@
       "measured_bmi": 39.9,
       "measured_mass_kg": 122.2,
       "label": "muito cheio",
-      "waist_to_height": 0.739,
+      "waist_to_height": 0.663,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1659,6 +1968,9 @@
         "thigh": 71.9,
         "calf": 44.6
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -1668,7 +1980,7 @@
       "measured_bmi": 40.8,
       "measured_mass_kg": 124.9,
       "label": "extremo",
-      "waist_to_height": 0.754,
+      "waist_to_height": 0.683,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1688,6 +2000,9 @@
         "thigh": 75.6,
         "calf": 45.1
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -1697,7 +2012,7 @@
       "measured_bmi": 48.1,
       "measured_mass_kg": 147.3,
       "label": "extremo",
-      "waist_to_height": 0.821,
+      "waist_to_height": 0.758,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1717,6 +2032,9 @@
         "thigh": 80.7,
         "calf": 45.1
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -1726,7 +2044,7 @@
       "measured_bmi": 63.2,
       "measured_mass_kg": 193.6,
       "label": "extremo",
-      "waist_to_height": 0.934,
+      "waist_to_height": 0.85,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1746,6 +2064,10 @@
         "thigh": 88.7,
         "calf": 56.5
       },
+      "unreliable_columns": [
+        "neck",
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -1755,7 +2077,7 @@
       "measured_bmi": 83.6,
       "measured_mass_kg": 256.0,
       "label": "extremo",
-      "waist_to_height": 1.08,
+      "waist_to_height": 0.991,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1775,6 +2097,10 @@
         "thigh": 104.6,
         "calf": 66.5
       },
+      "unreliable_columns": [
+        "neck",
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -1784,7 +2110,7 @@
       "measured_bmi": 107.3,
       "measured_mass_kg": 328.5,
       "label": "extremo",
-      "waist_to_height": 1.191,
+      "waist_to_height": 1.111,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1804,6 +2130,11 @@
         "thigh": 109.8,
         "calf": 76.1
       },
+      "unreliable_columns": [
+        "neck",
+        "chest",
+        "calf"
+      ],
       "approved": true
     },
     {
@@ -1813,7 +2144,7 @@
       "measured_bmi": 147.7,
       "measured_mass_kg": 452.4,
       "label": "extremo",
-      "waist_to_height": 1.611,
+      "waist_to_height": 1.431,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1833,6 +2164,11 @@
         "thigh": 117.9,
         "calf": 102.4
       },
+      "unreliable_columns": [
+        "neck",
+        "hip",
+        "calf"
+      ],
       "approved": true
     },
     {
@@ -1842,7 +2178,7 @@
       "measured_bmi": 19.7,
       "measured_mass_kg": 60.3,
       "label": "muito magro",
-      "waist_to_height": 0.415,
+      "waist_to_height": 0.398,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1862,6 +2198,7 @@
         "thigh": 54.1,
         "calf": 30.7
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1871,7 +2208,7 @@
       "measured_bmi": 20.4,
       "measured_mass_kg": 62.6,
       "label": "muito magro",
-      "waist_to_height": 0.415,
+      "waist_to_height": 0.411,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1891,6 +2228,7 @@
         "thigh": 53.5,
         "calf": 33.8
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1900,7 +2238,7 @@
       "measured_bmi": 20.8,
       "measured_mass_kg": 63.9,
       "label": "muito magro",
-      "waist_to_height": 0.418,
+      "waist_to_height": 0.404,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1920,6 +2258,7 @@
         "thigh": 54.6,
         "calf": 33.3
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1929,7 +2268,7 @@
       "measured_bmi": 22.5,
       "measured_mass_kg": 69.0,
       "label": "magro",
-      "waist_to_height": 0.449,
+      "waist_to_height": 0.443,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1949,6 +2288,7 @@
         "thigh": 55.5,
         "calf": 34.6
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -1958,7 +2298,7 @@
       "measured_bmi": 26.8,
       "measured_mass_kg": 82.0,
       "label": "magro",
-      "waist_to_height": 0.482,
+      "waist_to_height": 0.475,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -1978,6 +2318,10 @@
         "thigh": 63.4,
         "calf": 39.1
       },
+      "unreliable_columns": [
+        "chest",
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -1987,11 +2331,11 @@
       "measured_bmi": 30.6,
       "measured_mass_kg": 93.8,
       "label": "cheio",
-      "waist_to_height": 0.587,
+      "waist_to_height": 0.579,
       "body_shape": "medium",
-      "version": 2,
+      "version": 8,
       "assets": {
-        "glb": "zen_m_b05h_d2_v2.glb",
+        "glb": "zen_m_b05h_d2_v8.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2007,6 +2351,9 @@
         "thigh": 65.3,
         "calf": 40.2
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -2016,7 +2363,7 @@
       "measured_bmi": 35.0,
       "measured_mass_kg": 107.2,
       "label": "cheio",
-      "waist_to_height": 0.581,
+      "waist_to_height": 0.569,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2036,6 +2383,10 @@
         "thigh": 70.5,
         "calf": 43.6
       },
+      "unreliable_columns": [
+        "chest",
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -2045,7 +2396,7 @@
       "measured_bmi": 38.4,
       "measured_mass_kg": 117.7,
       "label": "muito cheio",
-      "waist_to_height": 0.638,
+      "waist_to_height": 0.635,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2065,6 +2416,9 @@
         "thigh": 72.8,
         "calf": 45.9
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -2074,7 +2428,7 @@
       "measured_bmi": 53.6,
       "measured_mass_kg": 164.1,
       "label": "extremo",
-      "waist_to_height": 0.802,
+      "waist_to_height": 0.76,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2094,6 +2448,10 @@
         "thigh": 86.2,
         "calf": 56.0
       },
+      "unreliable_columns": [
+        "chest",
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -2103,7 +2461,7 @@
       "measured_bmi": 74.4,
       "measured_mass_kg": 227.8,
       "label": "extremo",
-      "waist_to_height": 0.993,
+      "waist_to_height": 0.892,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2123,6 +2481,11 @@
         "thigh": 98.9,
         "calf": 66.7
       },
+      "unreliable_columns": [
+        "neck",
+        "chest",
+        "waist_min"
+      ],
       "approved": true
     },
     {
@@ -2132,7 +2495,7 @@
       "measured_bmi": 84.8,
       "measured_mass_kg": 259.7,
       "label": "extremo",
-      "waist_to_height": 1.058,
+      "waist_to_height": 0.983,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2152,6 +2515,10 @@
         "thigh": 105.0,
         "calf": 67.0
       },
+      "unreliable_columns": [
+        "neck",
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -2161,7 +2528,7 @@
       "measured_bmi": 111.7,
       "measured_mass_kg": 342.2,
       "label": "extremo",
-      "waist_to_height": 1.256,
+      "waist_to_height": 1.173,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2181,6 +2548,11 @@
         "thigh": 111.7,
         "calf": 77.3
       },
+      "unreliable_columns": [
+        "neck",
+        "chest",
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -2190,7 +2562,7 @@
       "measured_bmi": 19.9,
       "measured_mass_kg": 61.1,
       "label": "muito magro",
-      "waist_to_height": 0.409,
+      "waist_to_height": 0.398,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2210,6 +2582,9 @@
         "thigh": 54.5,
         "calf": 32.6
       },
+      "unreliable_columns": [
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -2219,7 +2594,7 @@
       "measured_bmi": 20.8,
       "measured_mass_kg": 63.6,
       "label": "muito magro",
-      "waist_to_height": 0.408,
+      "waist_to_height": 0.389,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2239,6 +2614,9 @@
         "thigh": 50.7,
         "calf": 34.9
       },
+      "unreliable_columns": [
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -2248,7 +2626,7 @@
       "measured_bmi": 21.1,
       "measured_mass_kg": 64.7,
       "label": "muito magro",
-      "waist_to_height": 0.394,
+      "waist_to_height": 0.382,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2268,6 +2646,7 @@
         "thigh": 52.4,
         "calf": 35.1
       },
+      "unreliable_columns": [],
       "approved": true
     },
     {
@@ -2277,7 +2656,7 @@
       "measured_bmi": 23.8,
       "measured_mass_kg": 72.8,
       "label": "muito magro",
-      "waist_to_height": 0.423,
+      "waist_to_height": 0.404,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2297,6 +2676,9 @@
         "thigh": 60.6,
         "calf": 37.1
       },
+      "unreliable_columns": [
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -2306,7 +2688,7 @@
       "measured_bmi": 27.0,
       "measured_mass_kg": 82.8,
       "label": "magro",
-      "waist_to_height": 0.455,
+      "waist_to_height": 0.428,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2326,6 +2708,9 @@
         "thigh": 62.5,
         "calf": 42.4
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -2335,7 +2720,7 @@
       "measured_bmi": 27.4,
       "measured_mass_kg": 83.9,
       "label": "magro",
-      "waist_to_height": 0.475,
+      "waist_to_height": 0.451,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2355,6 +2740,9 @@
         "thigh": 56.5,
         "calf": 41.1
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -2364,7 +2752,7 @@
       "measured_bmi": 32.4,
       "measured_mass_kg": 99.2,
       "label": "magro",
-      "waist_to_height": 0.498,
+      "waist_to_height": 0.491,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2384,6 +2772,10 @@
         "thigh": 68.5,
         "calf": 45.4
       },
+      "unreliable_columns": [
+        "chest",
+        "hip"
+      ],
       "approved": true
     },
     {
@@ -2393,7 +2785,7 @@
       "measured_bmi": 34.7,
       "measured_mass_kg": 106.2,
       "label": "medio",
-      "waist_to_height": 0.5,
+      "waist_to_height": 0.481,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2413,6 +2805,9 @@
         "thigh": 65.7,
         "calf": 49.8
       },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -2422,7 +2817,7 @@
       "measured_bmi": 35.7,
       "measured_mass_kg": 109.4,
       "label": "magro",
-      "waist_to_height": 0.488,
+      "waist_to_height": 0.483,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2442,6 +2837,10 @@
         "thigh": 64.5,
         "calf": 50.2
       },
+      "unreliable_columns": [
+        "neck",
+        "chest"
+      ],
       "approved": true
     },
     {
@@ -2451,7 +2850,7 @@
       "measured_bmi": 53.8,
       "measured_mass_kg": 164.7,
       "label": "cheio",
-      "waist_to_height": 0.594,
+      "waist_to_height": 0.574,
       "body_shape": "medium",
       "version": 2,
       "assets": {
@@ -2471,6 +2870,11 @@
         "thigh": 85.9,
         "calf": 62.2
       },
+      "unreliable_columns": [
+        "neck",
+        "chest",
+        "hip"
+      ],
       "approved": true
     }
   ]

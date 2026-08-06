@@ -1525,3 +1525,434 @@ Palavras dele, 30/07: *"você é o especialista em corpo humano, não tem como e
 decidir algo no olho assim, a menos que seja uma inconsistência grande ou defeito
 na pintura do short."* **Não pedir a ele veredito de anatomia**, e não pedir
 opinião sobre PNG de pasta de render — ele avalia no `avatar_tester.html`.
+
+---
+
+## 7. Seleção e morph (sessão 23, 03–04/08/2026)
+
+### 7.1 🔴 A distância soma QUADRADOS — uma medida errada decide o avatar sozinha
+
+O caso: o Rogério digitou **28 cm de panturrilha** quando o valor certo era 36.
+Uma coluna em nove, errada em 8 cm.
+
+Consequência medida: aquela coluna respondeu por **46% da distância**, e o avatar
+escolhido veio com **16 cm de erro de CINTURA**. As outras oito colunas, todas
+corretas, não conseguiram compensar — porque o termo é `((u−a)/s)²` e um desvio
+de 1,6 dp vale 2,6 vezes mais que um de 1,0.
+
+E quebrou **em silêncio**: o corpo entregue continua plausível na tela. Não há
+como o usuário — nem eu — perceber pela imagem que a escolha foi corrompida.
+
+**Duas defesas, e a primeira sozinha NÃO bastou:**
+
+1. **Teto por coluna** (`z_cap = 1,5 dp`). O número foi medido, não escolhido:
+   entre um corpo e seu vizinho mais próximo, o resíduo por coluna dá p50 0,21 ·
+   p90 0,64 · **p99 1,49** dp. Resíduo legítimo passa de 1,5 em 0,9% dos casos.
+2. **Fora da faixa da biblioteca → a coluna NÃO VOTA.** O teto sozinho reprovou
+   no caso de teste: uma coluna capada ainda favorece quem estiver por acaso mais
+   perto do número errado. Se o valor está fora do que a coleção inteira cobre,
+   nenhum corpo o representa e ele é quase certamente fita no lugar errado.
+
+As duas voltam em `suspect_columns`, para a tela pedir conferência em vez de
+escolher calado. Trava: o caso `outlier/*` no `selection_cases.json`.
+
+> **Regra geral:** distância euclidiana sobre entrada humana precisa de defesa
+> contra outlier. Não é refinamento — é o que separa "escolheu o corpo certo" de
+> "escolheu um corpo".
+
+### 7.2 A biblioteca só tem corpos PROPORCIONAIS — e o usuário típico não é
+
+Medido na coleção masculina, faixa de usuário: a cintura correlaciona com coxa
+**r=0,90**, glúteo **0,94**, pescoço **0,78**, panturrilha **0,61**.
+
+E o teste direto: **nenhum masculino tem cintura > 100 cm e panturrilha < 40 cm.**
+
+A causa é o próprio pipeline: cada avatar nasce de UMA folha desenhada, e um
+desenho coerente produz um corpo coerente. Desproporção nunca entra.
+
+Só que o corpo do Rogério — cintura 106, panturrilha 36, antebraço 27 — é
+exatamente isso: **tronco grande com membros finos**, gordura central. É o
+fenótipo mais comum de quem começa num app de treino. A distância dele ao melhor
+avatar deu **0,79 contra 0,26 de mediana** entre vizinhos: três vezes mais longe.
+
+Consequência: **cobertura não é só resolução ao longo do IMC.** Faltam TIPOS de
+corpo, e esses o gerador não produz sozinho. É o argumento mais forte a favor do
+morph — ele fabrica a desproporção que a folha nunca desenha.
+
+### 7.3 O tronco escolhe o avatar; os membros são absorvidos pelo morph
+
+Enquanto não havia morph, pesar as nove colunas igualmente era o certo. Depois
+que ele passou a existir, virou desperdício: a escolha discreta gasta precisão
+tentando acertar o que uma shape key resolve, e paga isso onde a shape key NÃO
+resolve.
+
+Medido no corpo real:
+
+| pesos | avatar | erro de cintura |
+|---|---|---|
+| nove colunas iguais | `b05_d1` | **+14,1 cm** (morph nenhum cobre) |
+| tronco mandando | `b05h_d2` | **+5,0 cm** (peito −0,9 · ombro +1,9) |
+
+Pesos hoje: `waist_min` 3,0 · `hip`/`chest`/`shoulder` 2,0 · membros 0,3.
+**São provisórios**: a regra final é `peso ~ 1/(faixa do morph)²`, e as faixas
+ainda estão sendo medidas.
+
+### 7.4 O resíduo depois da seleção mora no TRONCO, não nos membros
+
+Contraintuitivo num app de musculação. Leave-one-out nos 51 da faixa de usuário,
+resíduo mediano por coluna: peitoral **2,3** · ombro **2,3** · glúteo 2,2 · coxa
+2,2 · cintura 1,9 · pescoço 1,2 · bíceps **1,0** · antebraço **0,8** ·
+panturrilha **0,6** cm.
+
+Bíceps, antebraço e panturrilha já saem dentro do **erro da própria fita**.
+Morfar ali corrige ruído. A razão: as colunas do tronco variam muito mais entre
+corpos (cintura dp 15,6 cm contra bíceps 6,4), então o mesmo acerto relativo dá
+erro absoluto maior.
+
+### 7.5 🔴 Sonda numérica NÃO substitui a foto — repeti o erro que o engine já documentou
+
+O `zenith_avatar_engine` tem isto escrito em três lugares (*"métrica certa não
+substitui foto"*, v83 e v84). Eu montei sondas numéricas — normais invertidas e
+raio mínimo — para varrer amplitudes sem renderizar cada passo. Elas aprovaram
+o pescoço em **−11,8 cm**.
+
+A foto mostrou **queixo e boca deformados** naquele mesmo ponto.
+
+Se eu tivesse reportado a faixa pela sonda, teria entregue −11,8 cm como seguro,
+e o defeito apareceria no device — exatamente a sequência que reprovou o v84 lá.
+
+**E errei uma segunda vez no mesmo teste, do outro lado:** a trava que criei para
+proteger o rosto classificava como "rosto" tudo acima do queixo — incluindo a
+**nuca**, que deve reduzir mesmo. Ela acusou 114 vértices de defeito onde não
+havia.
+
+> **Sonda diz ONDE olhar. A foto diz SE está bom.** E trava mal definida é pior
+> que trava nenhuma: gera alarme falso e ensina a ignorar o alarme.
+
+### 7.6 O que o morph aguenta, medido (avatar `b05h_d2`, sem `morph_bmi`)
+
+| morph | faixa limpa | onde quebra |
+|---|---|---|
+| cintura | **−9,3 a +21,7 cm** | −12,4 (sonda e foto concordam) |
+| peitoral | **+6 cm** testado | fecha o vão da axila só 0,11 cm |
+| ombro | **+6 cm** testado (e +12 no estresse) | não quebrou |
+| bíceps | **+4 cm** testado (+8 no estresse) | não quebrou |
+| pescoço | **−5 a −6 cm** | rosto (resolvido) → base do pescoço |
+
+**A axila não deu sinal em nenhum teste** — a região que matou o engine cinco
+vezes (v23, v77, v83, v84, v91). O mecanismo que explica: lá a **gordura inflava
+o TRONCO em direção ao braço**, duas superfícies indo uma contra a outra. O morph
+de músculo empurra **para fora, afastando do vão**. Sinal contrário.
+
+No estresse (máscara de ombro descida para dentro da axila, amplitude dobrada), o
+vão **abriu** de 1,94 para 2,62 cm.
+
+> Sem `morph_bmi` a colisão não é reduzida — ela **sai da equação**. Foi a
+> hipótese do Rogério, e ela se sustentou inclusive no peitoral, que é medido
+> em cima da linha da axila e onde eu apostei que falharia.
+
+### 7.7 Identidade de vértice se decide na malha BASE, nunca na deformada
+
+Primeira versão do morph de bíceps selecionava os vértices do braço por
+`distância ao eixo < 7,5 cm` sobre as posições **já morfadas**: ao empurrar para
+fora, o vértice saía do próprio filtro, a medida sumia e a busca de amplitude
+divergiu para 10 cm de deslocamento.
+
+É a mesma família do *gate de propriedade* do engine (v84). **Quem é braço, quem
+é rosto, quem é tronco — decide-se uma vez, na base, e não se recalcula.**
+
+### 7.8 O avatar escolhido NÃO é persistido
+
+O app recalcula a escolha a cada abertura, a partir da última medida. Nada é
+gravado — nem o id.
+
+Consequências: mudar peso, escala ou biblioteca **reescreve o passado** (o avatar
+de março passa a ser outro), e não existe histórico de qual corpo o usuário era
+em cada medição. Para a tela de evolução por avatar, esse histórico é o produto.
+
+Pendência: gravar o id junto de cada linha de `body_measurements`.
+
+### 7.9 🔴 A máscara tem que estar CHEIA na altura em que a régua lê
+
+Quatro dos nove morphs saíram errados pelo mesmo motivo, e o sintoma era
+diferente em cada um:
+
+| morph | o que a régua faz | o que a máscara fazia | resultado |
+|---|---|---|---|
+| cintura | mínimo em 0,550–0,680 | começava em **0,560** | delta travado em **+2,5 cm** para qualquer amplitude, inclusive 6 cm |
+| coxa | máximo nos 6 cm sob a virilha | platô 2 cm abaixo | precisou de **2,4 cm** de empurrão e dobrou a malha |
+| bíceps | máximo entre o meio e a axila | platô abaixo do máximo | **+0,1 cm** em influence 0,5 e **+4,3** em 1,0 |
+| antebraço | idem | idem | +0,8 onde devia dar +1,3 |
+
+O mecanismo é sempre o mesmo: **régua de extremo dentro de banda**. Inflar o
+meio da banda não move o extremo enquanto ele não for ultrapassado, e se a
+borda da banda estiver fora da máscara o extremo simplesmente **foge para
+lá** — a medida satura e mais amplitude só deforma o corpo.
+
+É a mesma família do defeito que fez a `CALF_BAND` medir joelho em 50 dos 76
+(§1.8): *extremo que pousa na borda não é extremo, é corte*. Aqui a borda é da
+máscara em vez da banda, mas a conclusão é idêntica.
+
+> **Regra:** máscara de morph cobre a **banda inteira da régua**, com platô, e
+> só depois desce. Quem calibra sobre o ponto onde o extremo está *hoje*
+> calibra sobre algo que o próprio morph vai mudar.
+
+### 7.10 🔴 Ler o dist direto quebra a régua — a costura do short é uma ilha
+
+O `metrics.py` separa medida por **topologia**. O GLB entregue quebra primitiva
+por material, então corpo e short viajam separados e a costura chega com os
+vértices **duplicados** (32.151 no disco contra 25.914 + 6.237). Para o
+contador de laços isso é uma ilha a mais: na faixa de altura do short a fatia
+devolve laços extras, o `r[1:]` que descarta o tronco descarta a peça errada, e
+o número sai de outro lugar do corpo.
+
+Medido, lendo o dist cru: **antebraço 48,3 cm** onde o `library_metrics.json`
+diz 29,8, e **cintura 86,2** onde ele diz 101,3. Nenhuma trava acusaria — os
+dois são valores plausíveis para *alguma* parte de *algum* corpo.
+
+O conserto é medir numa cópia **soldada** (`remove_doubles`, 0,3 mm — as duas
+primitivas são quantizadas pelo Draco em caixas diferentes e a costura não
+volta bit a bit) e tratar a deformação como **função da posição**, avaliada na
+cópia soldada para calibrar e na malha real para gravar o shape key. Os dois
+lados da costura recebem o mesmo deslocamento e ela não abre.
+
+> **A trava disso é externa e é barata: a régua sobre a base tem que reproduzir
+> o `library_metrics.json`.** Aquele arquivo foi medido no master, por outro
+> caminho de código, antes deste script existir. Hoje bate em **9 de 9** (pior
+> desvio 0,1 cm no antebraço). Régua que não reproduz a medida publicada não
+> calibra morph nenhum — e sem esse confronto eu teria publicado morph de
+> cintura calibrado sobre 86,2 cm.
+
+### 7.11 Fronteira de máscara não pode ser booleano — e a mão não é perna
+
+Os três defeitos da máscara da coxa, na ordem em que apareceram, todos
+denunciados pela mesma sonda de normais invertidas:
+
+1. **538 triângulos invertidos em |x| ≈ 43 cm.** `na_perna` era só "abaixo da
+   virilha", e em **A-pose a mão pousa em z/H 0,44–0,47** — dentro da faixa da
+   coxa. Ela entrava no centroide da perna *e* recebia o empurrão radial. Pelo
+   mesmo motivo a máscara do quadril precisou do gate de braço: a banda
+   0,470–0,550 é onde o antebraço passa.
+2. **177 invertidos, todos em z/H 0,459–0,461.** Era o corte `Z < leg_top`: o
+   vértice logo abaixo andava e o logo acima ficava parado, e o triângulo entre
+   os dois virava do avesso. Fronteira de máscara é **rampa**, nunca booleano.
+3. **1 invertido em x = 0,0 exato.** O campo radial da perna vem de **dois
+   centros**, e escolher a perna por sinal de X é outro corte duro: o vértice
+   em x = +0,3 mm andava 2,3 mm e o de x = −0,2 mm andava 0,4 mm. Conserto:
+   **misturar os dois campos** numa faixa de 2 cm em torno da linha do meio —
+   que é justamente onde as coxas se tocam.
+
+Depois dos três, a coxa passou de "quebrada em toda amplitude" para faixa limpa
+de **−5,9 a +6,0 cm**, com linearidade 1,00.
+
+> A sonda de normais invertidas **pagou sozinha o custo de existir**. Mas ela só
+> presta com **piso de área**: sem ignorar triângulo lasca (< 2% da área
+> mediana), um único sliver condenava a faixa inteira de um morph.
+
+### 7.12 Sonda aprova o que a foto reprova — de novo, e agora do lado do excesso
+
+Em influence −2,0 as sondas numéricas devolvem **zero** normal invertida no
+ombro, no bíceps e no antebraço. A foto mostra **braço cordão, degrau no
+deltoide e vinco na junção do trapézio**.
+
+Por isso o teto publicado é **±1,0 em toda coluna**, e ele é um número de foto,
+não de sonda. Ele não custa cobertura: em ±1,0 o morph vale de 3 a 10 cm por
+coluna, e o resíduo que sobra depois da seleção (§7.4) é de 0,6 a 2,3 cm.
+
+É a terceira vez que a §7.5 se repete neste projeto. **Sonda diz ONDE olhar.**
+
+### 7.13 O peso do morph mora na NORMAL, não na posição
+
+Exportado com `export_morph_normal=True`, o GLB foi de **210 KB para 4.364 KB** —
+fora do orçamento de 1–3 MB do `CLAUDE.md`. A conta é direta e está no arquivo:
+
+- **POSITION** vai em accessor **esparso** — só os 884 a 5.889 vértices que cada
+  máscara toca: **459 KB** somando os nove.
+- **NORMAL** sai **densa** — os 32.151 vértices em todos os nove morphs:
+  **3.391 KB**.
+
+Sem elas o arquivo fecha em **970 KB** e o three.js usa a normal da base. Para
+um deslocamento de poucos centímetros, 3,4 MB de normal é o lado errado da
+troca. **A trava de tamanho entrou no script** (reprova acima de 3 MB), porque
+o número só aparece depois do export e ninguém olha KB de arquivo à mão.
+
+### 7.14 Um script que lê o próprio destino tem que ser recalculável
+
+O `morph.py` lê o **dist**, não o master — senão apagaria o short, que é a regra
+9 do `CLAUDE.md`. Só que depois do primeiro `--apply` o dist corrente é o que
+ele mesmo gravou: a segunda rodada empilhou **18 targets** com nomes `.001`.
+
+Duas coisas consertaram, e as duas valem para qualquer script assim:
+
+1. **Limpar antes de recalcular.** Os shape keys saem na entrada; os vértices da
+   malha já são a base, porque todo key está em value 0.
+2. **`--remap`**, que reescreve só o `config/morph_map.json` contra o GLB que já
+   está no disco, conferindo que o deslocamento recalculado bate com o gravado
+   (0,000 mm). Revisar faixa depois de olhar a foto é o caso normal, e sem isso
+   cada revisão gastaria uma versão de CDN por nada.
+
+E quem pegou o empilhamento foi a trava que lê o **JSON do glTF**, não o
+importador: o Blender **funde as primitivas num objeto só**, então "o objeto tem
+shape key" não responde se o **short** tem — e é o short que ficaria parado no app.
+
+### 7.15 🔴 Teto de amplitude é POR REGIÃO — generalizar veredito visual custa metade da faixa
+
+O teto de influence nasceu **±1,0 para tudo**, e o número veio da foto do
+**braço**: em −2,0 o ombro e o bíceps rendem braço cordão e degrau no deltoide,
+com as sondas numéricas passando limpas.
+
+Aplicá-lo à panturrilha estava errado, e o custo foi medido: a panturrilha é um
+cilindro isolado, varreu de −2,0 a +2,0 com **zero** normal invertida em todos os
+passos, e as duas fotos (±6 cm) saíram limpas. O teto único cortava **metade da
+faixa dela** — justo numa das duas colunas que sobravam no corpo do Rogério
+(precisava −4,4 e recebia −3,0).
+
+> **Veredito visual vale para a REGIÃO em que a foto foi tirada.** O teto virou
+> `INFLUENCE_CAP` por morph, com padrão 1,0 — e a regra que acompanha é:
+> **todo valor acima de 1,0 exige render olhado naquele extremo.** Quando o
+> pescoço ficou sem foto em +1,5, ele voltou para 1,0 em vez de ficar na tabela.
+
+### 7.16 Morph com um lado SATURADO tem que ser calibrado pelo outro
+
+O `morph_neck` é um **mínimo de banda travado pelo queixo**: crescer empurra o
+mínimo para a borda e satura em **+2,2 cm**, por mais amplitude que se dê.
+Reduzir responde normalmente.
+
+Calibrando pelo lado que satura, a busca de amplitude foge: ela procurava os
++6 cm alvo, batia no teto de **0,060 m** — e nesse tamanho o lado negativo virava
+**−19 cm com 206 triângulos invertidos**. O morph ficava inutilizável nos dois
+sentidos por causa da direção de calibração.
+
+Conserto: `cal_sign` na tabela dos morphs. Quem tem lado saturado calibra pelo
+outro, e a curva publicada carrega a assimetria (o pescoço sai −6,0 / +1,8).
+
+> Sintoma para reconhecer: `linearidade em 0,5` muito acima de 1 **e** a curva
+> achatando no fim. O pescoço marca 1,86.
+
+### 7.17 A máscara tem que estar cheia onde a régua lê — inclusive quando não há espaço
+
+Terceira aparição da §7.9, e a mais instrutiva: no `b05h_d2` o ponto mais estreito
+do pescoço fica **a 0,4% da estatura do queixo**. Com o recuo de 1,2 cm que a
+máscara usava para proteger o rosto, a frente estava **zerada exatamente na
+altura em que o `metrics.py` mede** — o morph só apertava nuca e lados, e era
+isso que saturava o centímetro, não a anatomia.
+
+Recuo de 1,2 → 0,5 cm, e a redução foi de −5,7 para −6,0 cm com a mesma trava de
+rosto valendo.
+
+**E o defeito que apareceu junto:** o teto da máscara é INCLINADO (fecha embaixo
+na frente, sobe até o occipital atrás) e essa inclinação vale 7,5 cm. Com a
+mistura frente/costas em 6 cm e a descida em 3,5 cm, em z/H 0,860 a máscara valia
+**0,04 na frente e 0,96 nas costas** — 0,92 de diferença em poucos centímetros de
+circunferência. Em −1,5 isso dobrava 22 triângulos, **todos nas costas**, na faixa
+exata da transição. Mistura para 11 cm, descida para 5,5.
+
+> **Rampa de máscara se mede contra o DESNÍVEL que ela precisa vencer**, não
+> contra o tamanho da região. Teto que sobe 7,5 cm precisa de rampa maior que
+> teto plano.
+
+### 7.18 Coluna que a seleção descartou não pode morfar
+
+O Rogério digitou panturrilha **28**. A seleção marcou `suspect` (fora da faixa
+que a biblioteca inteira cobre), escolheu o avatar **sem ela** — e o morph
+encolheu a panturrilha 3 cm assim mesmo, porque olhava só "o campo está
+preenchido".
+
+É a mesma doutrina da §7.1 aplicada um passo adiante: valor fora da faixa é quase
+certamente fita no lugar errado. **Se ele não vota em qual corpo, não pode
+esculpir o corpo** — e esculpir é pior que votar, porque fica na tela.
+
+Vale igual para `unreliable_columns`, que é a medida que a biblioteca denuncia
+naquele avatar (o `chest` em A-pose): comparar aquilo é comparar ruído, morfar
+por aquilo é imprimir ruído no corpo.
+
+> Implementado no testador; **o app precisa da mesma trava** quando implementar
+> morph. `INTEGRACAO_ZENITH.md` §12.
+
+### 7.19 🔴 A biblioteca inteira é desproporcional na mesma direção — medido em 5 colunas
+
+A §7.2 dizia "a biblioteca só tem corpos proporcionais". Com a fita do Rogério
+(176 cm, 94 kg, IMC 30,3) dá para dizer **quanto**, em razão com a cintura, contra
+os 27 masculinos da faixa de usuário:
+
+| coluna | ele | menor da coleção | mediana | mais finos que ele |
+|---|---:|---:|---:|:---:|
+| pescoço | 0,372 | 0,389 | 0,513 | **0 de 27** |
+| panturrilha | 0,335 | 0,354 | 0,446 | **0 de 27** |
+| antebraço | 0,251 | 0,261 | 0,341 | **0 de 27** |
+| coxa | 0,577 | 0,609 | 0,744 | **0 de 27** |
+| bíceps | 0,353 | 0,273 | 0,368 | 8 de 27 |
+
+Em quatro colunas de cinco, **nenhum avatar da faixa é tão fino quanto ele em
+relação à cintura**. Não é um arquétipo de pescoço grosso: é a biblioteca inteira
+desenhada em proporção "atlético pesado".
+
+**A consequência decide estratégia:** avatar novo **não conserta isso**, porque
+sairia do mesmo gerador com o mesmo viés. É vão de PROPORÇÃO, e a conta de
+"falta 1 avatar" foi validada no eixo da CINTURA — justamente a coluna que o
+morph resolve melhor (−5,0 a +10,0 medido, contra os ±3 que a conta supunha). A
+conclusão "a biblioteca quase não precisa crescer" sobrevive; o motivo é que ela
+**não cresceria na direção que falta**.
+
+> O único lever é o morph. Confirmado no corpo real: RMS de **4,49 cm antes** para
+> **1,14 cm depois**, com 8 das 9 colunas fechando exatas.
+
+### 7.20 Script que lê o próprio destino: `--remap` é o que separa revisão de churn
+
+Revisar a FAIXA depois de olhar a foto é o caso normal — aconteceu três vezes
+nesta sessão. Sem separar "recalibrar a geometria" de "reescrever o mapa", cada
+revisão gastaria uma versão de GLB e um upload ao Storage por nada.
+
+`--remap` reescreve só o `config/morph_map.json` contra o arquivo que já está no
+disco, **conferindo que o deslocamento recalculado bate com o gravado** (0,000 mm
+nas três vezes). Se não bater, ele recusa e manda usar `--apply` — porque aí a
+geometria mudou de verdade e a versão tem que subir.
+
+### 7.21 O Storage responde 409 dentro de um HTTP 400
+
+O `publish_avatars.py` classificava "já existe" por `status == 409`. O Supabase
+Storage devolve **HTTP 400** com o 409 no corpo:
+
+```
+400  {"statusCode":"409","error":"Duplicate","code":"KeyAlreadyExists"}
+```
+
+Como o nome carrega a versão, uma publicação rotineira tem 76 de 77 arquivos já
+existentes **de propósito** — e ela saía como **"falharam 77"**, com exit 1. Numa
+tela dessas ninguém acha o único upload que importava.
+
+> Alarme que sempre grita é alarme que se aprende a ignorar. Conferir o CORPO da
+> resposta quando o serviço tem status próprio, não só o código HTTP.
+
+
+### 7.22 🔴 Fechar o centímetro não é parecer com a pessoa
+
+O `morph_waist` isotrópico fez exatamente o que foi mandado: fechou os +5,6 cm de
+perímetro que separavam o avatar do corpo do Rogério. E ele olhou e disse que
+**sem shape key estava mais parecido**.
+
+Estava certo, e a medida mostra por quê — seção da cintura:
+
+| | perímetro | largura | **profundidade** | X/Y |
+|---|---:|---:|---:|---:|
+| ele | 107,5 | 40,1 | **27,8** | **1,44** |
+| avatar base | 101,3 | 33,4 | 29,7 | 1,12 |
+| morph isotrópico | 106,7 | 35,2 | **31,4** | 1,12 |
+
+**Perímetro é o que a fita mede; profundidade é o que o olho vê.** Otimizar o
+primeiro piorou o segundo: o erro de barriga funda foi de 1,9 para **3,6 cm**. A
+seleção e o morph inteiro estavam minimizando um erro que o usuário não julga.
+
+Conserto: `morph_waist_flatten`, uma chave de FORMA separada da de tamanho,
+acoplada só no crescimento, calibrada para devolver a profundidade da base.
+
+> **A generalização:** quando a régua e o olho discordam, é porque a régua está
+> medindo uma projeção do que o olho julga. Circunferência é uma projeção de
+> seção — perde a forma. Toda coluna do índice tem esse ponto cego, e a cintura
+> foi só onde ele apareceu primeiro (é a maior massa da silhueta).
+
+⚠️ **E há um limite honesto que fica registrado:** não se mirou a forma DELE
+(1,44), porque a fita do usuário não observa seção. Fazer isso seria embutir *um
+corpo* como padrão de todos, com **exatamente um corpo real medido** no projeto.
+O default escolhido não aposta em nenhuma hipótese: ele só impede que o morph
+piore o eixo visível.

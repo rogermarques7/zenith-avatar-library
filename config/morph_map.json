@@ -1,0 +1,357 @@
+{
+  "zen_m_b05h_d2": {
+    "glb_version": 8,
+    "calibrated_at": "2026-08-06T14:37:46Z",
+    "note": "influence = interp(usuario_cm - avatar_cm, curve[cm], curve[influence]), ja limitada por construcao a [influence_min, influence_max]. NAO usar cm_at_full x influence: a relacao nao e linear em todo morph (ver linearity_at_half). Morph com kind=flatten NAO tem coluna: ele e acoplado - influence = max(0, influence do morph em `couple`) quando couple_when=positive. O GLB tem 2 primitivas (corpo e short): setar morphTargetInfluences em TODAS.",
+    "morphs": [
+      {
+        "key": "morph_neck",
+        "column": "neck",
+        "base_cm": 49.2,
+        "cm_at_full": 1.85,
+        "amplitude_m": 0.02151,
+        "verts": 2069,
+        "influence_min": -1.0,
+        "influence_max": 1.0,
+        "cm_min": -6.0,
+        "cm_max": 1.85,
+        "linearity_at_half": 1.86,
+        "curve": [
+          [
+            -1.0,
+            -6.0
+          ],
+          [
+            -0.5,
+            -2.76
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.5,
+            1.71
+          ],
+          [
+            1.0,
+            1.85
+          ]
+        ]
+      },
+      {
+        "key": "morph_shoulder",
+        "column": "shoulder",
+        "base_cm": 120.7,
+        "cm_at_full": 6.0,
+        "amplitude_m": 0.0157,
+        "verts": 1438,
+        "influence_min": -1.0,
+        "influence_max": 1.0,
+        "cm_min": -5.89,
+        "cm_max": 6.0,
+        "linearity_at_half": 1.0,
+        "curve": [
+          [
+            -1.0,
+            -5.89
+          ],
+          [
+            -0.5,
+            -2.96
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.5,
+            2.99
+          ],
+          [
+            1.0,
+            6.0
+          ]
+        ]
+      },
+      {
+        "key": "morph_chest",
+        "column": "chest",
+        "base_cm": 109.7,
+        "cm_at_full": 6.0,
+        "amplitude_m": 0.01262,
+        "verts": 2622,
+        "influence_min": -0.5,
+        "influence_max": 1.0,
+        "cm_min": -2.68,
+        "cm_max": 6.0,
+        "linearity_at_half": 0.96,
+        "curve": [
+          [
+            -0.5,
+            -2.68
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.5,
+            2.89
+          ],
+          [
+            1.0,
+            6.0
+          ]
+        ]
+      },
+      {
+        "key": "morph_waist",
+        "column": "waist_min",
+        "base_cm": 101.3,
+        "cm_at_full": 10.0,
+        "amplitude_m": 0.01632,
+        "verts": 4785,
+        "influence_min": -0.5,
+        "influence_max": 1.0,
+        "cm_min": -4.99,
+        "cm_max": 10.82,
+        "linearity_at_half": 1.0,
+        "curve": [
+          [
+            -0.5,
+            -4.99
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.5,
+            5.35
+          ],
+          [
+            1.0,
+            10.82
+          ]
+        ]
+      },
+      {
+        "key": "morph_hip",
+        "column": "hip",
+        "base_cm": 108.5,
+        "cm_at_full": 8.0,
+        "amplitude_m": 0.01354,
+        "verts": 5045,
+        "influence_min": -0.5,
+        "influence_max": 1.0,
+        "cm_min": -3.83,
+        "cm_max": 8.0,
+        "linearity_at_half": 1.0,
+        "curve": [
+          [
+            -0.5,
+            -3.83
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.5,
+            3.98
+          ],
+          [
+            1.0,
+            8.0
+          ]
+        ]
+      },
+      {
+        "key": "morph_biceps",
+        "column": "biceps",
+        "base_cm": 36.0,
+        "cm_at_full": 4.0,
+        "amplitude_m": 0.00843,
+        "verts": 1521,
+        "influence_min": -1.0,
+        "influence_max": 1.0,
+        "cm_min": -3.49,
+        "cm_max": 4.0,
+        "linearity_at_half": 1.17,
+        "curve": [
+          [
+            -1.0,
+            -3.49
+          ],
+          [
+            -0.5,
+            -1.63
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.5,
+            2.33
+          ],
+          [
+            1.0,
+            4.0
+          ]
+        ]
+      },
+      {
+        "key": "morph_forearm",
+        "column": "forearm",
+        "base_cm": 29.7,
+        "cm_at_full": 3.12,
+        "amplitude_m": 0.00527,
+        "verts": 1705,
+        "influence_min": -1.0,
+        "influence_max": 1.0,
+        "cm_min": -3.08,
+        "cm_max": 3.12,
+        "linearity_at_half": 1.03,
+        "curve": [
+          [
+            -1.0,
+            -3.08
+          ],
+          [
+            -0.5,
+            -1.7
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.5,
+            1.61
+          ],
+          [
+            1.0,
+            3.12
+          ]
+        ]
+      },
+      {
+        "key": "morph_thigh",
+        "column": "thigh",
+        "base_cm": 65.3,
+        "cm_at_full": 6.0,
+        "amplitude_m": 0.01242,
+        "verts": 5889,
+        "influence_min": -1.0,
+        "influence_max": 1.0,
+        "cm_min": -5.87,
+        "cm_max": 6.0,
+        "linearity_at_half": 1.0,
+        "curve": [
+          [
+            -1.0,
+            -5.87
+          ],
+          [
+            -0.5,
+            -2.95
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.5,
+            2.99
+          ],
+          [
+            1.0,
+            6.0
+          ]
+        ]
+      },
+      {
+        "key": "morph_calf",
+        "column": "calf",
+        "base_cm": 40.2,
+        "cm_at_full": 3.0,
+        "amplitude_m": 0.00493,
+        "verts": 1979,
+        "influence_min": -2.0,
+        "influence_max": 2.0,
+        "cm_min": -6.0,
+        "cm_max": 6.0,
+        "linearity_at_half": 1.0,
+        "curve": [
+          [
+            -2.0,
+            -6.0
+          ],
+          [
+            -1.5,
+            -4.5
+          ],
+          [
+            -1.0,
+            -3.0
+          ],
+          [
+            -0.5,
+            -1.5
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.5,
+            1.5
+          ],
+          [
+            1.0,
+            3.0
+          ],
+          [
+            1.5,
+            4.5
+          ],
+          [
+            2.0,
+            6.0
+          ]
+        ]
+      },
+      {
+        "key": "morph_waist_flatten",
+        "column": null,
+        "base_cm": 29.6,
+        "cm_at_full": 0.0,
+        "amplitude_m": 0.01699,
+        "verts": 4785,
+        "influence_min": 0.0,
+        "influence_max": 1.0,
+        "cm_min": 0.0,
+        "cm_max": 0.0,
+        "linearity_at_half": null,
+        "curve": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0
+          ]
+        ],
+        "kind": "flatten",
+        "couple": "morph_waist",
+        "couple_when": "positive",
+        "depth_base_cm": 29.6,
+        "depth_without_cm": 32.6,
+        "depth_with_cm": 29.6
+      }
+    ]
+  }
+}

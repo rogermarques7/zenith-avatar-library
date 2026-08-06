@@ -1,10 +1,203 @@
 ﻿# state.md — o presente
 
-Última atualização: **01/08/2026, fim da sessão 22**
+Última atualização: **06/08/2026, fim da sessão 24**
+
+> ## 🔀 OS DOIS REPOSITÓRIOS VIRARAM SESSÕES SEPARADAS (06/08)
+>
+> Decisão do Rogério. **Abriu a `zenith-avatar-library`** → o trabalho é o desta
+> lista: shape keys nos 75 que faltam e correção de short/faixa. **Abriu o
+> `zenith`** → é implementação do app, e a primeira é a tela de objetivo.
+>
+> O que atravessa os dois é o **contrato**, e ele mora em
+> `docs/INTEGRACAO_ZENITH.md` §11 e §12. A cada lote fechado aqui, a biblioteca
+> sobe para o app:
+>
+> ```
+> python scripts/build_index.py          # o nome do GLB muda a cada versão
+> python scripts/select.py --check       # 34/34
+> cp library.json          ../zenith/assets/avatars/library.json
+> cp config/morph_map.json ../zenith/assets/avatars/morph_map.json
+> cp test/selection_cases.json ../zenith/test/fixtures/selection_cases.json
+> cd ../zenith && python scripts/publish_avatars.py
+> ```
+>
+> 🔴 **ÍNDICE PRIMEIRO, UPLOAD DEPOIS.** O `publish_avatars.py` recusa rodar se o
+> índice do app promete um GLB que não está no disco daqui — e depois de um
+> `morph.py --apply` a versão anterior não está mais. Ordem invertida = ele
+> aborta (o que é o comportamento certo, mas custa tempo).
 
 > ## 🔴 ABRIR AQUI NA SESSÃO NOVA
 >
-> ### 📋 A PRIMEIRA COISA DESTA SESSÃO É RECEBER A LISTA DELE
+> ### ✅ A INTEGRAÇÃO COM O APP ESTÁ NO AR — o avatar 3D aparece na home
+>
+> Os passos §6.3, §6.4 e §6.5 do `INTEGRACAO_ZENITH.md` foram fechados na sessão
+> 23, e o app **está rodando com avatar 3D no device**. O que existe hoje:
+>
+> - **`library.json` schema 4** — seleção por MEDIDAS, não mais por IMC dentro de
+>   linha de definição. `definition_thresholds_bodyfat_pct` aposentado (o app não
+>   estima gordura). Publica escala por sexo, `unreliable_columns` por avatar,
+>   `z_cap`, `plausible_range_cm`, pesos e vetor de objetivo.
+> - **`scripts/select.py`** — a regra em Python, que é a implementação de
+>   REFERÊNCIA. As outras duas (Dart no app, JS no tester) se ajustam a ela.
+> - **`test/selection_cases.json`** — 34 casos. Rodam nas três linguagens.
+>   **Ao mexer na regra: muda no Python, `--cases`, e copia os DOIS arquivos para
+>   o app** (`assets/avatars/library.json` e `test/fixtures/selection_cases.json`).
+> - **76 GLBs + o HDR no Supabase Storage**, bucket público `avatars`. O
+>   `cdn_base` do índice aponta para lá. Sobe com
+>   `python scripts/publish_avatars.py` (mora no repo do APP).
+>
+> ### 🧬 MORPH: APROVADO NO OLHO DELE, E É A RECEITA PARA OS OUTROS 75
+>
+> **`03_dist/glb/zen_m_b05h_d2_v7.glb`, 981 KB** — 9 shape keys, um por coluna de
+> medida. Testado e **aprovado pelo Rogério no testador em 06/08**. É o corpo que
+> a seleção escolhe para ele, e é o único com morph até agora.
+>
+> **A receita, que é o trabalho a repetir nos outros 75:**
+>
+> ```
+> python scripts/morph.py {id} --fit      # calibra e sonda, nao grava
+>   -> conferir: a regua na base bate com o library_metrics.json (9 de 9)
+>   -> conferir: linearidade em 0,5 perto de 1,00 em cada morph
+> renderizar os extremos e OLHAR  (qa/probe/sondas/morph_render_ab.py)
+> python scripts/morph.py {id} --apply    # grava o dist v(n+1) + o mapa
+> python scripts/morph.py {id} --remap    # se a FOTO mudar a faixa, so o mapa
+> ```
+>
+> ⚠️ **`--fit` primeiro, sempre.** Nesta sessão ele achou seis defeitos que nenhuma
+> trava anterior pegava, e três deles eram invisíveis no número: a mão entrando na
+> máscara da coxa, o corte duro na virilha e a máscara fraca onde a régua lê.
+>
+> ⚠️ **A FOTO decide a faixa, não a sonda.** Três vezes nesta sessão as sondas
+> passaram limpas e o render reprovou (§7.5, §7.15). E uma vez o contrário: no
+> pescoço em −1,5 as duas reprovaram juntas, o que é o caso confortável.
+>
+> **Faixas medidas neste avatar** (as dos outros vão diferir — anatomia diferente):
+>
+> | morph | faixa (cm) | | morph | faixa (cm) |
+> |---|---|---|---|---|
+> | cintura | **−5,0 a +10,0** | | pescoço | −6,0 a +1,8 |
+> | ombro | −5,9 a +6,0 | | bíceps | −3,5 a +4,0 |
+> | coxa | −5,9 a +6,0 | | antebraço | −3,1 a +3,1 |
+> | quadril | −3,8 a +8,0 | | panturrilha | **−6,0 a +6,0** |
+> | peito | −2,7 a +6,0 | | | |
+>
+> **Resultado no corpo real dele** (176 cm, 94 kg, IMC 30,3 · avatar 30,6):
+> erro RMS **4,49 → 1,14 cm**, com 8 das 9 colunas fechando exatas. Sobra o
+> pescoço (−3,4), e o motivo é estrutural: `LICOES.md` §7.19.
+>
+> **➡️ O contrato com o app está no `INTEGRACAO_ZENITH.md` §12.** Os três pontos
+> que quebram em silêncio: usar `interp(Δcm, curve)` e **nunca** `Δ/cm_at_full`
+> (o pescoço erra 68% assim); setar `morphTargetInfluences` em **todas** as
+> primitivas (são duas — corpo e short); e **não morfar coluna que a seleção
+> descartou** (§7.18).
+>
+> ✅ **Medido no navegador antes do device** (`test/morph_probe.html`, three.js
+> puro): os 9 targets chegam nas duas primitivas em WebGL2, influence **negativa
+> renderiza**, e depois de 7 s de laço os valores continuam aplicados — **o
+> enforcer não se reproduziu**. Segue em aberto só para o `model_viewer_plus`: se
+> o morph não aparecer no device, é aí que se olha primeiro.
+>
+> 🎚️ **O testador tem painel de morph** (`test/avatar_tester.html`). O padrão é
+> **automático das medidas digitadas**, que é o que o app fará — slider é bancada,
+> não produto. Avatar com shape key vem marcado com **◈**.
+>
+> ### ✅ O MORPH DE CINTURA ERA ISOTRÓPICO E ENGORDAVA — CONSERTADO EM 06/08
+>
+> Reclamação do Rogério, medida e **confirmada**: com os shape keys o avatar fica
+> mais gordo do que sem. Não é impressão, e não é a cintura estar errada.
+>
+> Seção da cintura, na altura em que a régua mede:
+>
+> | | perímetro | largura X | profundidade Y | **X/Y** |
+> |---|---:|---:|---:|---:|
+> | **ele** (fita + foto de perfil) | 107,5 | 40,1 | **27,8** | **1,44** |
+> | avatar base | 101,3 | 33,4 | **29,7** | 1,12 |
+> | avatar com o morph dele (+5,6) | 106,7 | 35,2 | **31,4** | 1,12 |
+>
+> Duas coisas, e as duas importam:
+>
+> 1. **A barriga do avatar já era mais funda que a dele ANTES do morph** — 29,7
+>    contra 27,8. Ele é mais largo e mais raso; o avatar é mais estreito e mais
+>    fundo.
+> 2. **O morph é radial uniforme, então preserva a forma errada**: X/Y fica em
+>    1,12 nos dois estados. Fechar os +5,6 cm de perímetro custou **+1,7 cm de
+>    profundidade** — e profundidade é exatamente o que se vê de perfil e de 3/4.
+>    O morph piorou o eixo em que o avatar já estava errado.
+>
+> **Não é só deste avatar.** Na faixa de usuário o X/Y da coleção vai de **1,02 a
+> 1,45, mediana 1,31** — e ele correlaciona com IMC: os gerados gordos são
+> ROLIÇOS (b07_d1, IMC 39,9 → 1,02) e os magros são achatados (b03_d3, IMC 20,8 →
+> 1,44). O Rogério tem IMC 30,3 e X/Y 1,44: ele carrega peso **em largura**, e a
+> biblioteca só oferece profundidade nessa faixa. É a §7.19 de novo, num eixo que
+> a seleção **nem mede** — circunferência é cega para forma, e duas cinturas de
+> 101 cm podem ser redonda ou chata.
+>
+> ✅ **CONSERTADO: `morph_waist_flatten`, a 10ª shape key.** Ela muda a forma da
+> seção (largura contra profundidade) a perímetro ~constante, e é **acoplada**:
+> o app aplica `influence = max(0, influence do morph_waist)`. Só no
+> crescimento — reduzir cintura tem que perder profundidade, que é o que
+> emagrecer faz.
+>
+> **Calibração — o default conservador:** a amplitude é a que devolve a
+> profundidade da BASE quando a cintura está em +1,0. Medido: base **29,6 cm** ·
+> só tamanho **32,6** · com forma **29,6**. O morph deixou de piorar o eixo
+> visível, sem apostar em nenhuma forma de corpo.
+>
+> ⚠️ **A curva publicada do `morph_waist` foi REFEITA acoplada**, porque é isso
+> que o app vai produzir: +10,8 cm em influence 1,0 contra +10,0 solta. Publicar
+> a curva solta seria publicar um número que ninguém gera.
+>
+> 🔴 **Não se mirou a forma DELE (X/Y 1,44), e o motivo é doutrina:** a fita dá
+> perímetro, não seção. Mirar 1,44 seria embutir *um corpo* como padrão de todo
+> mundo, com **um único corpo real medido** no projeto inteiro. Quando houver
+> entrada de forma — ou mais corpos medidos — a chave já existe para receber.
+>
+> **Falta o mesmo para QUADRIL e PEITORAL**, pelo mesmo raciocínio. Não feito.
+>
+> ⚠️ A medida da profundidade dele saiu da foto de perfil calibrada pela fita de
+> 1,5 m; a largura é DERIVADA pelo modelo de elipse a partir do perímetro da fita.
+> A elipse subestima seção achatada, então o 1,44 dele é **piso**, não teto. A
+> direção não depende disso: 1,44 contra 1,12 sobrevive a qualquer erro de ±4%.
+>
+> ### 🔴 A LISTA DO QUE FALTA AQUI — é esta a pauta das sessões da biblioteca
+>
+> **1. O morph isotrópico da cintura** — o bloco acima. É o único item com defeito CONFIRMADO no olho dele.
+>
+> **2. Shape keys nos 75 avatares restantes.** Mecânico, mas não automático: cada
+> um exige `--fit`, render olhado e `--apply`, e **gasta uma versão de GLB + um
+> upload**. Sugestão de ordem: os da **faixa de usuário primeiro** (IMC 17–40, 27
+> masculinos e 24 femininos) — os extremos quase não são servidos.
+>
+> ⚠️ **Os femininos nunca passaram pelo `morph.py`.** Duas peças (short **e**
+> faixa) em vez de uma, então o GLB tem **três** primitivas e não duas — a trava
+> do round-trip já confere isso, mas a máscara do peito vai encontrar geometria
+> que o masculino não tem. **Rodar o primeiro feminino com atenção redobrada.**
+>
+> **3. As peças.** A fila de short masculina e o defeito de faixa feminino — ver
+> os dois blocos abaixo. **A lista dele nunca chegou** e é a primeira coisa a
+> pedir quando a frente voltar.
+>
+> **4. Não existe banco de casos para o MORPH.** A regra de morph já tem duas
+> implementações (JS no testador, e a de referência que é o próprio
+> `morph_map.json` + a curva) e vai virar três com o Dart. É exatamente o
+> problema que o `selection_cases.json` resolveu para a seleção, e ele vai
+> reaparecer: o que diverge em silêncio é **qual corpo o usuário vê**.
+>
+> **5. `approved` continua campo morto** — `build_index.py:164` grava `True` fixo
+> e nada lê. O `b09_d3` (32,4) e o `b10_d3` (45,1) lêem masculinos e são servidos.
+>
+> **6. O backup está 78 arquivos atrás e no mesmo disco.**
+>
+> ### 📋 A FILA DE CORREÇÃO DOS SHORTS CONTINUA CONGELADA
+>
+> Ele revisou os 76 no testador em 02/08 e mandou congelar a frente de shorts
+> para retomar a integração. **A lista dele nunca chegou** — quando a sessão de
+> shorts voltar, é ela a primeira coisa. Regra §6.1: não adiantar, não varrer os
+> 37 procurando defeito de faixa.
+>
+> ### 📋 O bloco abaixo é da sessão 22 e está mantido por contexto
+>
+> ### 📋 A PRIMEIRA COISA DAQUELA SESSÃO ERA RECEBER A LISTA DELE
 >
 > Ele revisou **os 76 no testador em 02/08** e o veredito foi de aprovação geral —
 > mas com fila de correção, e **ele disse que manda a lista na sessão seguinte,
@@ -258,19 +451,6 @@
 > receita de SUBIDA, escrita antes da §2.4c. **Reescrever para descida antes de
 > gastar crédito nela:** ancorar em 52,6 e pedir mais leve.
 >
-> ### 📋 A SESSÃO 18 EM UMA TABELA — 2 fechados, 0 folhas reprovadas
->
-> | id | lever | âncora | previsto | **medido** | passo |
-> |---|---|---:|---|---:|---:|
-> | `b03_d2` | categoria: bailarina clássica de companhia | 22,2 | ~20 | **19,8 ✅** | −2,4 |
-> | `b04i_d1` | âncora-com-direção (sem trocar categoria) | 31,9 | 27–29 | **26,5** | **−5,4** |
->
-> | linha | n | IMC medido |
-> |---|---:|---|
-> | `f d1` | 14 | 16,4 · 16,5 · 19,0 · 23,3 · 24,1 · **26,5** · 31,9 · 32,4 · 34,1 · 42,6 · 44,4 · 52,5 · 55,1 · 114,2 |
-> | `f d2` | 11 | 17,2 · 18,3 · **19,8** · 22,2 · 22,9 · 27,3 · 30,1 · 34,4 · 52,6 · 53,9 · 59,7 |
-> | `f d3` | 12 | 16,1 · 16,9 · 21,0 · 22,1 · 22,3 · 27,7 · 28,4 · 29,0 · 29,9 · 30,1 · 32,4 · 45,1 |
->
 > ### 🔴 O SINAL do passo domina o TAMANHO (§2.4c) — e o envelope de descida SUBIU
 >
 > **Subindo, o menor passo medido foi +7,6. Descendo, o maior agora é −5,4** — era
@@ -375,18 +555,6 @@
 > o `metrics.py`. **Registrar a previsão continua valendo**, porque é ela que
 > revela o erro, mas é palpite declarado e não deve gastar tempo de cálculo.
 >
-> ### 📊 Escada de categorias medida — feminina/ChatGPT, use para MIRAR
->
-> salto em altura **16,1** · maratonista **16,9** · corredora de rua franzina
-> **17,2** · **bailarina clássica de companhia 19,8** · bikini fitness **22,3** ·
-> wellness **27,7** · fisiculturista **28,4** ·
-> CrossFit **29,0** · Figure **29,9** · fisiculturista pesada **30,1** · peso normal
-> alto sem tônus **32,4** · sedentária no sobrepeso **44,4** · open bodybuilding
-> **45,1** · powerlifter **52,6** · rugby primeira linha **59,7**.
->
-> ⚠️ Descritor de grade **sem substantivo de categoria** é da safra velha e não
-> move corpo. E **a ordem da tabela não é a ordem das bandas** (§2.5).
->
 > ### 🔧 Cinco pegadinhas de régua que se pagam caro — em `LICOES.md` §1.1 e §1.4d
 >
 > - **O `sheet_qa` vazou em 5 das 10 folhas medidas nesta sessão** — leu figura a
@@ -400,15 +568,6 @@
 > - **`thigh` e circunferências de tronco não valem por avatar** — `at_frac` fixo
 >   contra virilha que se move. Usar `volume_l`.
 > - **Nenhuma trava valida orientação frontal** (§4.2c) — isso é olho, no preview.
->
-> ### ⚠️ As duas folhas do Gemini da sessão 17 falharam na ENTREGA, não na geração
->
-> Uma veio **byte a byte idêntica à âncora anexada** (SHA-256 igual ao
-> `zen_f_b05_d3_sheet.png`); a outra veio com terço direito cinza vazio, faixa
-> marrom no rodapé, fundo de **ruído 187** e braços dissolvidos. **Conferir
-> SHA-256 da folha contra a âncora antes de medir.** Isso **não é evidência sobre
-> o Gemini como gerador** — e confundir as duas coisas desperdiça a única
-> alternativa que existe quando o ChatGPT satura.
 >
 > ### ✅ Corpo feminino vem ~2,8 mais leve que o masculino no mesmo descritor `d3`
 >
@@ -609,11 +768,12 @@ reclassificar ou inserir, nunca regerar.
   O `b09_d3` (32,4) e o `b10_d3` (45,1) lêem masculinos e **são servidos**.
   Conserto: `build_index.py` lendo uma lista de ids reprovados, com o
   `nearest_id` ignorando-os.
-- 🔴 **A leitura padrão passou de 15,5k:** `CLAUDE.md` 5,6k + este **10,0k** antes
-  de qualquer trabalho. **O corte planejado foi feito na sessão 22** (bloco da
-  sessão 20 → `INTEGRACAO_ZENITH.md` §1b) **e o arquivo subiu mesmo assim**, de
-  9,4k para 10,0k, porque entrou mais do que saiu. O `LICOES.md` está em
-  **22,5k**. Remedir com
+- 🔴 **A leitura padrão passou de 17,5k:** `CLAUDE.md` 6,4k + este **11,2k** antes
+  de qualquer trabalho, e o `LICOES.md` está em **26,3k**. O corte da sessão 22
+  não bastou e a 24 acrescentou de novo (bloco de morph aqui, §12 no
+  `INTEGRACAO_ZENITH.md`, §7.9–§7.14 nas lições). **Enxugar não vence escrita
+  nova.** O candidato óbvio a descer para o diário é o bloco da sessão 18 (a
+  tabela de 2 avatares e a escada de categorias), que é história. Remedir com
   `(Get-Content <arquivo> -Raw -Encoding UTF8).Length / 3.6 / 1000`.
 - ⚠️ **Backup feito, mas no MESMO disco** (`_backup_zenith/zenith_assets_2026-07-31.zip`,
   448 MB). Protege contra apagão e reclassificação errada, **não** contra falha de

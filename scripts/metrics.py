@@ -780,7 +780,14 @@ def worker_main():
         print("CSV : {}".format(csv_path))
 
 
-if IN_BLENDER and "--worker" in sys.argv:
-    worker_main()
-elif not IN_BLENDER:
-    driver_main()
+# O guarda de __main__ existe para o metrics.py poder ser IMPORTADO como
+# modulo (o morph.py calibra os shape keys contra a regua daqui, e regua
+# reimplementada e regua que diverge). Sem ele, `import metrics` ja rodava o
+# driver e saia com erro de argumento. Nada muda para quem executa o arquivo:
+# tanto `python scripts/metrics.py` quanto `blender -b -P scripts/metrics.py`
+# entram com __name__ == "__main__" (conferido nos dois).
+if __name__ == "__main__":
+    if IN_BLENDER and "--worker" in sys.argv:
+        worker_main()
+    elif not IN_BLENDER:
+        driver_main()

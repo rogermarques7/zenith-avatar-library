@@ -52,7 +52,7 @@
   .missing { font-size:12px; color:#f0a; margin-top:8px; min-height:16px; }
   .fallback-note { color:#e0b055; }
   /* Chave de sexo: dois conjuntos que NAO se misturam. Trocar aqui troca a
-     colecao inteira (botoes, selecao, limiares de gordura, default). */
+     colecao inteira (botoes, escala das colunas, default). */
   .sexsw { display:flex; gap:8px; margin:0 0 18px; }
   .sexsw button { flex:1; display:flex; align-items:center; justify-content:center; gap:8px;
     background:#20202b; color:var(--muted); border:1px solid var(--line); border-radius:10px;
@@ -63,13 +63,40 @@
   .sexsw button .n { font-weight:400; opacity:.75; font-size:11px; }
   .empty { margin-top:14px; padding:14px; border:1px dashed var(--line); border-radius:10px;
     color:var(--muted); font-size:12px; line-height:1.6; }
+  /* Grade das 9 circunferencias - a MESMA ordem do guia de medidas do app
+     (Pescoco → Ombros → Peitoral → Biceps → Antebraco → Cintura → Gluteo →
+     Coxa → Panturrilha), para conferir lado a lado sem traduzir na cabeca. */
+  .medidas { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:2px 0 4px; }
+  .medidas label { display:flex; flex-direction:column; gap:2px; margin:0;
+    font-size:10px; color:var(--muted); text-transform:none; letter-spacing:0; }
+  .medidas input { background:#16161f; color:var(--fg); border:1px solid var(--line);
+    border-radius:8px; padding:6px 8px; font-size:13px; width:100%; box-sizing:border-box; }
+  .medidas input:focus { outline:none; border-color:var(--accent); }
+  .medidas input.marcada { border-color:#8a6d3b; }
+  .colcount { font-size:11px; color:var(--muted); }
+  /* Painel de morph. Uma linha por shape key: rotulo, slider e o CENTIMETRO -
+     porque o contrato com o app e em cm, nao em influence. */
+  .morphbox { margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
+  .mline { display:grid; grid-template-columns:74px 1fr 108px; align-items:center;
+    gap:8px; margin:3px 0; font-size:11px; }
+  .mline .nome { color:var(--muted); }
+  .mline input[type=range] { width:100%; margin:0; }
+  .mline .cm { text-align:right; font-variant-numeric:tabular-nums; }
+  .mline .cm b { color:var(--fg); }
+  /* Fora da faixa medida: o slider nao passa daqui, entao isto marca o pedido
+     que a faixa NAO cobre - o resto vai para a distancia da selecao. */
+  .mline.sobra .cm b { color:#e0a33e; }
+  /* Coluna que a selecao descartou: ela nao morfa, e isso tem de ficar VISIVEL
+     - senao o slider parado parece defeito do morph. */
+  .mline.ignorada { opacity:.45; }
+  .mline.ignorada .cm { font-style:italic; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="panel controls">
     <h1>Testador de Avatares Zenith</h1>
-    <p class="sub">Sliders → qual avatar o app escolhe (lógica do ARCHETYPES.md). Os botões vêm do <code>library.json</code>, ordenados por <b>IMC medido</b> — clique em sequência para ver a escada de corpos (é o teste de continuidade do QA).</p>
+    <p class="sub">As medidas que o usuário digita → qual avatar o app escolhe (regra do <code>selection</code> no índice, schema 4). Os botões vêm do <code>library.json</code>, ordenados por <b>IMC medido</b> — clique em sequência para ver a escada de corpos (é o teste de continuidade do QA).</p>
 
     <div class="sexsw" id="sexsw">
       <button data-sex="m"><span class="ico">♂</span> Masculino <span class="n" id="nM"></span></button>
@@ -82,13 +109,45 @@
     <label>Altura <span class="val" id="alturaV">175 cm</span></label>
     <div class="row"><input type="range" id="altura" min="150" max="205" step="1" value="175"></div>
 
-    <label>% Gordura corporal <span class="val" id="gorduraV">18%</span></label>
-    <div class="row"><input type="range" id="gordura" min="4" max="45" step="0.5" value="18"></div>
+    <!-- O SLIDER DE % DE GORDURA SAIU EM 03/08, e nao volta.
+         Ele simulava uma entrada que o app NAO TEM: procurado no repositorio
+         inteiro, nao existe formula de gordura corporal - o campo so e
+         preenchido se o usuario digitar ou se vier de balanca inteligente. E
+         mesmo quando existe, o limiar nao fechava: os 12 avatares 'f d3' medem
+         de 22,7% a 52,6% contra o 'd3_below: 21,0' que o indice publicava.
+         Um testador alimentado por um dado que o app nunca tera nao testa o
+         app. As 9 circunferencias abaixo sao as MESMAS colunas da tabela
+         body_measurements. Deixe em branco para simular campo nao preenchido -
+         a distancia so usa as colunas que existem dos dois lados. -->
+    <label>Circunferências <span class="val" id="medidasV">0 preenchidas</span></label>
+    <div class="medidas" id="medidas"></div>
+    <div class="opt" style="margin-top:6px">
+      <button id="preencherDoAvatar" title="copia as medidas do avatar em exibição">preencher com o avatar atual</button>
+      <button id="limparMedidas">limpar</button>
+    </div>
 
     <div class="result">
       <div><span class="pickid" id="pickId">—</span><span class="badge" id="existBadge"></span></div>
       <div class="reason" id="reason"></div>
       <div class="missing" id="missing"></div>
+      <!-- Placar dos casos: esta pagina e a TERCEIRA implementacao da regra
+           (Python é a referência, Dart é o app). Vermelho aqui = o que o
+           testador mostra deixou de ser o que o app faz. -->
+      <div class="colcount" id="casos" style="margin-top:10px"></div>
+    </div>
+
+    <!-- MORPH. O padrao é AUTOMÁTICO: as influences saem das medidas digitadas,
+         que é o que o app vai fazer - ele recebe medida e escolhe, ninguém
+         arrasta slider no produto. Os sliders existem para BANCADA: sentir o
+         que cada morph faz e onde ele começa a ficar feio. -->
+    <div class="morphbox" id="morphbox" style="display:none">
+      <label>Morph <span class="val" id="morphV"></span></label>
+      <div class="opt" style="margin:2px 0 6px">
+        <label style="margin:0"><input type="checkbox" id="morphAuto" checked> das medidas (como no app)</label>
+        <button id="morphZero">zerar</button>
+      </div>
+      <div id="morphSliders"></div>
+      <div class="sub" id="morphNota" style="margin-top:6px; line-height:1.5"></div>
     </div>
   </div>
 
@@ -161,9 +220,26 @@
 </div>
 
 <script>
-// ---- selecao de avatar: schema 3 (ARCHETYPES.md §5) ----
+// ---- selecao de avatar: schema 4, POR MEDIDAS (03/08) ----
 //
-// ATE 27/07 ESTE ARQUIVO SIMULAVA A REGRA ERRADA. Ele montava o id colando
+// O QUE MUDOU E POR QUE. Ate o schema 3 a escolha era: % de gordura define a
+// linha de definicao, e dentro dela vence o menor |measured_bmi - IMC_alvo|.
+// Levantado no repositorio do app: ele NAO ESTIMA GORDURA - nao existe formula,
+// o campo so e preenchido se o usuario digitar ou se vier de balanca. A regra
+// pedia uma entrada que o usuario tipico nunca tem. E nem quando tem ela
+// fechava: os 12 avatares 'f d3' medem de 22,7% a 52,6% contra o 'd3_below:
+// 21,0' que o proprio indice publicava.
+//
+// Agora a selecao sai das 9 circunferencias que os DOIS lados medem - o
+// contrato fechou em 9 de 9. 'definition' (d1/d2/d3) segue no indice como
+// METADADO e nao filtra mais nada.
+//
+// A prova de que a troca vale: dois corpos de IMC 29,0, um fisiculturista
+// (cintura 84, ombro 132) e um sedentario (cintura 106, ombro 116), escolhem
+// avatares DIFERENTES. Na regra velha o IMC nao os separava - e essa e a
+// populacao inteira deste app.
+//
+// ATE 27/07 ESTE ARQUIVO SIMULAVA OUTRA REGRA ERRADA. Ele montava o id colando
 // faixa nominal + definicao ("zen_m_" + b07 + "_d2") e usava a tabela BANDS de
 // 12 faixas de IMC. Isso e a logica anterior ao schema 3, revogada em 26/07
 // quando o metrics.py mostrou que o corpo produzido nao corresponde a faixa
@@ -175,9 +251,9 @@
 //   - a correcao de altura nao existia (ver abaixo), entao o testador dava um
 //     resultado que o app nao vai dar.
 //
-// Agora vale a regra do indice: DEFINICAO pelo % de gordura, e dentro dela o
-// avatar de menor |measured_bmi - IMC_alvo|. Nao existe mais "combinacao
-// inexistente" - sempre ha um mais proximo.
+// Aquele conserto trocou a grade nominal pela regra do indice, e desde entao
+// nao existe mais "combinacao inexistente" - sempre ha um mais proximo. A
+// entrada e que mudou de novo em 03/08, de % de gordura para as 9 medidas.
 //
 // ⚠️ ESCALA UNIFORME NAO PRESERVA IMC. Ao escalar por s, o volume vai com s³ e
 // a altura com s², entao o IMC representado vai com s. O mesmo avatar exibido
@@ -187,8 +263,10 @@
 // selection.target_bmi_formula.
 //
 // ⚠️ SEXO NAO E FILTRO DE EXIBICAO, E COLECAO SEPARADA. Trocar a chave ♂/♀ troca
-// tambem os LIMIARES DE GORDURA (21/29% no feminino contra 13/20% no masculino,
-// ARCHETYPES.md §5 passo 2) e o `default` do indice. Mostrar os dois conjuntos
+// tambem a ESCALA de cada coluna (o desvio-padrao com que a distancia divide os
+// centimetros: cintura 15,6 no masculino contra 9,5 no feminino) e o `default`
+// do indice. Ate 03/08 o que trocava eram os limiares de gordura - foram
+// aposentados junto com a regra velha. Mostrar os dois conjuntos
 // juntos e ordenados por IMC seria pior que inutil: a escada de corpos do teste
 // de continuidade so faz sentido dentro de um sexo, porque no mesmo IMC os dois
 // corpos sao formas diferentes, nao etapas da mesma progressao.
@@ -197,7 +275,6 @@
 // (zen_m_ / zen_f_) e o library.json carrega o campo `sex`. Separar em pastas
 // fisicas obrigaria a mexer no caminho de process.py, restyle.py, shorts.py,
 // build_index.py e no CDN, sem ganho nenhum.
-const DEF_LABEL = {d1:"Baixa",d2:"Média",d3:"Alta"};
 const SEX_LABEL = {m:"masculino", f:"feminino"};   // concorda com "avatar"
 const SEX_LABEL_A = {m:"masculina", f:"feminina"}; // concorda com "biblioteca"
 let SEX = "m";
@@ -209,35 +286,95 @@ let SEX = "m";
 const AVAILABLE = new Set();
 let LIB = null;          // library.json, carregado no fim do arquivo
 
-function defFor(g, thr){ if(g < thr.d3_below) return "d3"; if(g < thr.d2_below) return "d2"; return "d1"; }
+// ---- A REGRA, terceira copia -----------------------------------------------
+//
+// ⚠️ ESTA MESMA REGRA VIVE EM TRES LINGUAGENS: scripts/select.py (REFERENCIA),
+// este bloco, e lib/core/utils/avatar_selector.dart no app. O que diverge entre
+// elas e QUAL CORPO O USUARIO VE - e divergiria calado, porque toda resposta
+// errada ainda e um avatar plausivel na tela.
+//
+// A defesa e test/selection_cases.json. O botao "rodar os casos" no fim do
+// painel roda os 32 aqui dentro; se esta copia se afastar, ele fica vermelho.
+// Mexeu na regra? Muda no PYTHON primeiro, regera os casos, e ajusta as outras
+// duas ate passarem.
+function arred(v, casas){ const f = Math.pow(10, casas); return Math.round(v*f)/f; }
 
-function classify(peso, alturaCm, gordura){
-  const altura = alturaCm/100;
-  const imc = peso/(altura*altura);
-  const imcAlvo = imc * (LIB.reference_height_m / altura);
+// Desempate DECLARADO: menor distancia; empatada na 9a casa, menor id em ordem
+// alfabetica. Sem criterio, cada linguagem devolveria o que a ordenacao interna
+// dela calhasse de por primeiro.
+function ganha(dist, id, melhorDist, melhorId){
+  const a = arred(dist,9), b = arred(melhorDist,9);
+  if(a !== b) return a < b;
+  return id < melhorId;
+}
+
+function selecionar(sex, alturaM, pesoKg, medidas){
   const sel = LIB.selection;
-  const def0 = defFor(gordura, sel.definition_thresholds_bodyfat_pct[SEX]);
+  const escalas = sel.scale_cm[sex] || {};
+  const pool = LIB.avatars.filter(a => a.sex === sex && a.approved);
+  if(!pool.length || alturaM <= 0) return null;
 
-  // Fallback de definicao: so entra se a LINHA INTEIRA estiver vazia (hoje,
-  // todo o feminino). Ordem vem do indice, nao hardcoded.
-  const ordem = sel.definition_fallback;
-  const steps = [];
-  let def = def0, candidatos = [];
-  for(let d = ordem.indexOf(def0); d < ordem.length; d++){
-    def = ordem[d];
-    candidatos = LIB.avatars.filter(a => a.sex === SEX && a.definition === def);
-    if(candidatos.length) break;
-    steps.push(def);
+  // 1. O usuario vai para a estatura de referencia ANTES de qualquer conta: os
+  //    masters sao todos normalizados para 1,75 m, e circunferencia escala
+  //    linear com a altura.
+  const k = LIB.reference_height_m / alturaM;
+  const user = {};
+  for(const [campo, col] of Object.entries(sel.app_field_map)){
+    const v = medidas[campo];
+    if(v != null && v > 0) user[col] = v * k;
   }
-  if(!candidatos.length){
-    // Sem nenhum avatar do sexo: o indice manda usar o default, que tambem pode
-    // ser null enquanto a colecao nao existir. Nao inventar o do outro sexo.
-    return {imc, imcAlvo, def0, def:null, id:LIB.default[SEX], fallback:true, steps, escolhido:null};
+  const imcAlvo = (pesoKg/(alturaM*alturaM)) * k;
+
+  // DUAS DEFESAS contra UMA medida errada (04/08). A distancia soma QUADRADOS,
+  // entao um valor fora domina os outros oito: uma panturrilha digitada 28 em
+  // vez de 36 respondeu por 46% da decisao e trouxe 16 cm de erro de CINTURA.
+  //  (1) fora da faixa que a biblioteca cobre -> nao vota (ninguem a representa);
+  //  (2) dentro da faixa -> vota com teto de z_cap desvios-padrao.
+  const faixas = (sel.plausible_range_cm || {})[sex] || {};
+  const suspeitas = new Set();
+  for(const [col, u] of Object.entries(user)){
+    const f = faixas[col];
+    if(f && (u < f[0] || u > f[1])) suspeitas.add(col);
   }
-  const escolhido = candidatos.reduce((melhor,a) =>
-    Math.abs(a.measured_bmi-imcAlvo) < Math.abs(melhor.measured_bmi-imcAlvo) ? a : melhor);
-  return {imc, imcAlvo, def0, def, id:escolhido.id,
-          fallback:def!==def0, steps, escolhido};
+  const zcap = sel.z_cap;
+
+  let melhor = null;
+  for(const a of pool){
+    const ruins = new Set(a.unreliable_columns || []);
+    let num = 0, den = 0; const usadas = [];
+    for(const [col, u] of Object.entries(user)){
+      // 2. Coluna denunciada NESTE avatar sai da conta - comparar aquele numero
+      //    e comparar ruido.
+      if(ruins.has(col) || suspeitas.has(col)) continue;
+      const av = (a.circumferences_cm||{})[col], s = escalas[col];
+      if(av == null || !s) continue;
+      const w = sel.weights[col] != null ? sel.weights[col] : 1;
+      if(w <= 0) continue;
+      let d = (u-av)/s;
+      if(zcap) d = Math.max(-zcap, Math.min(zcap, d));
+      num += w*d*d; den += w; usadas.push(col);
+    }
+    if(usadas.length < sel.min_columns) continue;
+    // 3. Dividir pelo PESO SOMADO: quem preencheu 4 campos e quem preencheu 9
+    //    saem na mesma escala.
+    const dist = Math.sqrt(num/den);
+    if(!melhor || ganha(dist, a.id, melhor.dist, melhor.a.id)) melhor = {dist, a, usadas:usadas.slice().sort()};
+  }
+  if(melhor) return {id:melhor.a.id, dist:arred(melhor.dist,4), usadas:melhor.usadas,
+                     regra:sel.rule, imcAlvo, escolhido:melhor.a};
+
+  // 4. Fallback por IMC. Ele nao separa musculo de gordura - e por isso que e
+  //    fallback e nao regra.
+  let linha = pool.filter(a => a.definition === sel.fallback.definition);
+  if(!linha.length) linha = pool;
+  let pick = null, melhorDif = Infinity;
+  for(const a of linha){
+    const dif = Math.abs(a.measured_bmi - imcAlvo);
+    if(!pick || ganha(dif, a.id, melhorDif, pick.id)){ pick = a; melhorDif = dif; }
+  }
+  if(!pick) return null;
+  return {id:pick.id, dist:arred(melhorDif,4), usadas:[], regra:sel.fallback.rule,
+          imcAlvo, escolhido:pick};
 }
 
 const mv=document.getElementById("mv");
@@ -283,40 +420,308 @@ function setAvatar(id){
   }
 }
 
-function update(){
-  const peso=+peso_.value, altura=+altura_.value, gordura=+gordura_.value;
-  pesoV.textContent=peso.toFixed(1).replace(/\.0$/,"")+" kg";
-  alturaV.textContent=altura+" cm";
-  gorduraV.textContent=gordura.toFixed(1).replace(/\.0$/,"")+"%";
-  const r=classify(peso,altura,gordura);
-  pickId.textContent=r.id || "—";
-  const exists=AVAILABLE.has(r.id);
-  const badge=document.getElementById("existBadge");
-  badge.className="badge "+(exists?"ok":"no");
-  badge.textContent=exists?"existe":(r.id?"não produzido":"biblioteca "+SEX_LABEL_A[SEX]+" vazia");
+// Os 9 campos, na ORDEM DO GUIA DE MEDIDAS DO APP - a mesma sequencia em que o
+// usuario mede e digita. Rotulo igual ao do app, chave igual a da tabela
+// body_measurements; a traducao para as colunas da biblioteca sai do
+// app_field_map do indice, nunca escrita aqui.
+const CAMPOS = [
+  ["neck_cm","Pescoço"], ["shoulder_cm","Ombro"], ["chest_cm","Peitoral"],
+  ["arm_cm","Bíceps"], ["forearm_cm","Antebraço"], ["waist_cm","Cintura"],
+  ["hip_cm","Glúteo"], ["thigh_cm","Coxa"], ["calf_cm","Panturrilha"],
+];
 
-  const corrigido = Math.abs(r.imcAlvo-r.imc) >= 0.05;
-  let reason=`IMC <b>${r.imc.toFixed(1)}</b>`;
-  reason += corrigido
-    ? ` → corrigido para a altura: <b>${r.imcAlvo.toFixed(1)}</b> `+
-      `<span style="opacity:.65">(×${(LIB.reference_height_m/(altura/100)).toFixed(3)}, escala uniforme não preserva IMC)</span>`
-    : ` <span style="opacity:.65">(altura de referência, sem correção)</span>`;
-  const thr = LIB.selection.definition_thresholds_bodyfat_pct[SEX];
-  reason += `<br>%gordura <b>${gordura}%</b> → definição <b>${r.def0}</b> (${DEF_LABEL[r.def0]})`+
-    ` <span style="opacity:.65">(cortes ${SEX_LABEL[SEX]}s: d3 &lt;${thr.d3_below}% · d2 &lt;${thr.d2_below}%)</span>`;
-  if(r.escolhido){
-    const d = Math.abs(r.escolhido.measured_bmi-r.imcAlvo);
-    reason += `<br>mais próximo na linha <b>${r.def}</b>: IMC medido <b>${r.escolhido.measured_bmi}</b>`+
-      ` <span style="opacity:.65">(distância ${d.toFixed(1)})</span> · ${r.escolhido.label}`;
-    if(d > 2.5) reason += `<br><span class="fallback-note">⚠ vizinho a ${d.toFixed(1)} de IMC — vão de cobertura nesta região</span>`;
+function montarCampos(){
+  const box = document.getElementById("medidas");
+  box.innerHTML = "";
+  for(const [campo, rotulo] of CAMPOS){
+    const l = document.createElement("label");
+    l.innerHTML = `${rotulo}<input type="number" step="0.1" min="0" data-campo="${campo}" placeholder="—">`;
+    box.appendChild(l);
   }
-  if(r.fallback) reason+=`<br><span class="fallback-note">fallback de definição: ${r.steps.join(" → ")} sem avatares, usou ${r.def||"o default do índice"}</span>`;
-  document.getElementById("reason").innerHTML=reason;
-  setAvatar(r.id);
+  box.querySelectorAll("input").forEach(i => i.addEventListener("input", update));
 }
 
-const peso_=document.getElementById("peso"), altura_=document.getElementById("altura"), gordura_=document.getElementById("gordura");
-[peso_,altura_,gordura_].forEach(s=>s.addEventListener("input",update));
+function medidasAtuais(){
+  const m = {};
+  document.querySelectorAll("#medidas input").forEach(i => {
+    const v = parseFloat(i.value);
+    if(!isNaN(v) && v > 0) m[i.dataset.campo] = v;
+  });
+  return m;
+}
+
+function update(){
+  const peso=+peso_.value, alturaCm=+altura_.value, altura=alturaCm/100;
+  pesoV.textContent=peso.toFixed(1).replace(/\.0$/,"")+" kg";
+  alturaV.textContent=alturaCm+" cm";
+  const medidas = medidasAtuais();
+  const n = Object.keys(medidas).length;
+  document.getElementById("medidasV").textContent =
+    n + (n===1 ? " preenchida" : " preenchidas");
+
+  const r = selecionar(SEX, altura, peso, medidas);
+  pickId.textContent = (r && r.id) || "—";
+  const exists = r && AVAILABLE.has(r.id);
+  const badge=document.getElementById("existBadge");
+  badge.className="badge "+(exists?"ok":"no");
+  badge.textContent = exists ? "existe"
+    : (r && r.id ? "não produzido" : "biblioteca "+SEX_LABEL_A[SEX]+" vazia");
+
+  if(!r){ document.getElementById("reason").innerHTML=""; setAvatar(null); return; }
+
+  const imc = peso/(altura*altura);
+  const corrigido = Math.abs(r.imcAlvo-imc) >= 0.05;
+  let reason = `IMC <b>${imc.toFixed(1)}</b>`;
+  reason += corrigido
+    ? ` → corrigido para a altura: <b>${r.imcAlvo.toFixed(1)}</b> `+
+      `<span style="opacity:.65">(×${(LIB.reference_height_m/altura).toFixed(3)}, escala uniforme não preserva IMC)</span>`
+    : ` <span style="opacity:.65">(altura de referência, sem correção)</span>`;
+
+  if(r.regra === LIB.selection.rule){
+    reason += `<br>distância <b>${r.dist}</b> em <b>${r.usadas.length}</b> coluna(s):`+
+      ` <span style="opacity:.65">${r.usadas.join(", ")}</span>`;
+    // As colunas que o usuario preencheu mas o avatar escolhido DENUNCIA. Sem
+    // dizer isso, o testador parece ignorar um campo digitado sem motivo.
+    const ruins = (r.escolhido.unreliable_columns||[])
+      .filter(c => Object.values(LIB.selection.app_field_map).includes(c))
+      .filter(c => r.usadas.indexOf(c) < 0);
+    if(ruins.length) reason += `<br><span class="fallback-note">peso zero em ${ruins.join(", ")}`+
+      ` — a biblioteca marcou essa medida como não confiável NESTE avatar</span>`;
+    reason += `<br>${r.escolhido.label} · IMC medido <b>${r.escolhido.measured_bmi}</b>`+
+      ` · cintura/altura ${r.escolhido.waist_to_height}`;
+  } else {
+    reason += `<br><span class="fallback-note">fallback por IMC: menos de `+
+      `${LIB.selection.min_columns} colunas comparáveis. O IMC não separa músculo `+
+      `de gordura — preencha ao menos ${LIB.selection.min_columns} medidas para a `+
+      `regra de verdade</span>`;
+    reason += `<br>mais próximo na linha <b>${LIB.selection.fallback.definition}</b>:`+
+      ` IMC medido <b>${r.escolhido.measured_bmi}</b>`+
+      ` <span style="opacity:.65">(distância ${r.dist})</span> · ${r.escolhido.label}`;
+  }
+  document.getElementById("reason").innerHTML=reason;
+  // As colunas que a REGRA aceitou. Fora da regra de distancia (fallback por
+  // IMC) nao ha coluna nenhuma validada, entao nada morfa.
+  COLUNAS_USADAS = (r.regra === LIB.selection.rule) ? r.usadas : [];
+  setAvatar(r.id);
+  montarMorph();
+}
+
+// ==========================================================================
+//  MORPH - o ajuste fino depois que a selecao ja escolheu o corpo
+// ==========================================================================
+// Contrato completo em docs/INTEGRACAO_ZENITH.md secao 12. Os dois pontos que
+// quebram calado estao implementados aqui e valem para o Dart tambem.
+let MORPHS = null;
+fetch("../config/morph_map.json?t="+Date.now())
+  .then(r => r.ok ? r.json() : null)
+  .then(j => { MORPHS = j; montarMorph(); if(LIB) renderQuick(); })
+  .catch(() => { MORPHS = null; });
+
+// O model-viewer nao expoe a cena do three.js na API publica. Em vez de casar o
+// NOME do simbolo interno (que muda de versao para versao), procura-se a
+// propriedade de simbolo cujo valor E um Object3D - isso sobrevive a renomeacao.
+function cenaDoViewer(){
+  for(const s of Object.getOwnPropertySymbols(mv)){
+    const v = mv[s];
+    if(v && v.isObject3D) return v;
+  }
+  return null;
+}
+function malhasComMorph(){
+  const cena = cenaDoViewer(), out = [];
+  // ⚠️ TODAS as malhas, nao a primeira. O GLB tem DUAS primitivas (corpo e
+  // short sao materiais diferentes, e glTF quebra primitiva por material), e
+  // cada uma vira um THREE.Mesh com o SEU proprio morphTargetInfluences. Quem
+  // setar so na primeira morfa o corpo e deixa o short parado.
+  if(cena) cena.traverse(o => { if(o.isMesh && o.morphTargetInfluences) out.push(o); });
+  return out;
+}
+
+// ⚠️ A CURVA, nunca `cm / cm_at_full`. A relacao nao e linear em todo morph: o
+// morph_neck entrega +3,2 cm em influence 0,5 e so +3,8 em 1,0, porque ele e um
+// MINIMO de banda e crescer o meio empurra o minimo para a borda travada pelo
+// queixo. Multiplicar erra 68% ali. A curva ja vem limitada a faixa segura.
+function influenceDaCurva(curva, cm){
+  const inf = curva.map(p => p[0]), cms = curva.map(p => p[1]);
+  if(cm <= cms[0]) return inf[0];
+  for(let i=1;i<cms.length;i++){
+    if(cm <= cms[i]){
+      const t = (cm - cms[i-1]) / (cms[i] - cms[i-1]);
+      return inf[i-1] + t*(inf[i] - inf[i-1]);
+    }
+  }
+  return inf[inf.length-1];
+}
+
+// O quanto o usuario pede daquela coluna, JA na estatura de referencia: os
+// masters sao normalizados para 1,75 m e o morph vive no espaco deles. E a
+// mesma escala que a selecao usa - se divergisse, o morph corrigiria para um
+// alvo diferente do que decidiu a escolha.
+// 🔴 COLUNA QUE A SELECAO NAO USOU NAO MORFA. Descoberto em 05/08 com o corpo
+// do Rogerio: ele digitou panturrilha 28, a selecao marcou como `suspect` (fora
+// da faixa que a biblioteca inteira cobre) e escolheu o avatar SEM ela - e o
+// morph, que olhava so o campo preenchido, encolheu a panturrilha 3 cm assim
+// mesmo. E o mesmo numero que a §7.1 do LICOES.md ja documentou como digitado
+// errado, e a mesma doutrina: valor fora da faixa e quase certamente fita no
+// lugar errado. Se ele nao vota em QUAL corpo, nao pode esculpir o corpo.
+// Vale igual para `unreliable_columns`, que e a medida que a BIBLIOTECA
+// denuncia naquele avatar (o chest em A-pose): comparar aquilo e comparar
+// ruido, e morfar por ruido e pior, porque fica na tela.
+let COLUNAS_USADAS = null;
+
+function pedidoEmCm(m){
+  if(COLUNAS_USADAS && COLUNAS_USADAS.indexOf(m.column) < 0) return null;
+  const medidas = medidasAtuais();
+  const inv = {};
+  for(const [campo, col] of Object.entries(LIB.selection.app_field_map)) inv[col] = campo;
+  const v = medidas[inv[m.column]];
+  if(v == null || !(v > 0)) return null;
+  const k = LIB.reference_height_m / (+altura_.value/100);
+  return v*k - m.base_cm;
+}
+
+function aplicarMorph(){
+  const ent = MORPHS && MORPHS[curId];
+  const malhas = malhasComMorph();
+  if(!ent || !malhas.length) return;
+  const auto = document.getElementById("morphAuto").checked;
+  // 1ª passada: os morphs de TAMANHO, que saem das medidas.
+  // ⚠️ O de FORMA (`kind: "flatten"`) não tem coluna e não sai de medida
+  // nenhuma - ele é ACOPLADO, e só no crescimento. Existe porque fechar o
+  // perímetro isotropicamente engorda a barriga em profundidade: no corpo do
+  // Rogério o erro de profundidade ia de 1,9 para 3,6 cm. Reduzir cintura
+  // continua isotrópico, que é o que emagrecer faz.
+  const infs = {};
+  for(const m of ent.morphs){
+    if(m.kind === "flatten") continue;
+    const sl = document.querySelector(`#morphSliders input[data-key="${m.key}"]`);
+    if(auto){
+      const p = pedidoEmCm(m);
+      infs[m.key] = p == null ? 0 : influenceDaCurva(m.curve, p);
+    } else {
+      infs[m.key] = sl ? +sl.value : 0;
+    }
+  }
+  for(const m of ent.morphs){
+    if(m.kind !== "flatten") continue;
+    const base = infs[m.couple] || 0;
+    infs[m.key] = (m.couple_when === "positive") ? Math.max(0, base) : base;
+  }
+
+  for(const m of ent.morphs){
+    const sl = document.querySelector(`#morphSliders input[data-key="${m.key}"]`);
+    let inf = infs[m.key] || 0;
+    if(m.kind !== "flatten" && !auto) inf = sl ? +sl.value : 0;
+    if(auto && sl) sl.value = inf;
+    for(const malha of malhas){
+      const i = malha.morphTargetDictionary[m.key];
+      if(i != null) malha.morphTargetInfluences[i] = inf;
+    }
+    const linha = sl && sl.closest(".mline");
+    if(linha && m.kind === "flatten"){
+      linha.querySelector(".cm").innerHTML =
+        `<span title="acoplado ao morph de cintura; corrige a FORMA da seção, não o perímetro">forma ${inf.toFixed(2)}</span>`;
+    } else if(linha){
+      const cm = cmDaInfluence(m.curve, inf);
+      const pedido = auto ? pedidoEmCm(m) : null;
+      const fora = auto && COLUNAS_USADAS && COLUNAS_USADAS.indexOf(m.column) < 0;
+      const sobra = (pedido != null) ? (pedido - cm) : 0;
+      linha.classList.toggle("sobra", Math.abs(sobra) > 0.3);
+      linha.classList.toggle("ignorada", !!fora);
+      linha.querySelector(".cm").innerHTML = fora
+        ? `<span title="a seleção descartou esta coluna, então ela não morfa">descartada</span>`
+        : `<b>${cm >= 0 ? "+" : ""}${cm.toFixed(1)} cm</b>` +
+          (Math.abs(sobra) > 0.3 ? ` <span title="fora da faixa medida">(${sobra>0?"+":""}${sobra.toFixed(1)} sobra)</span>` : "");
+    }
+  }
+  // O model-viewer so redesenha quando algo o invalida. Com auto-rotate ligado
+  // ele ja gira, mas sem isso o morph so apareceria no proximo evento.
+  const cena = cenaDoViewer();
+  if(cena && typeof cena.queueRender === "function") cena.queueRender();
+}
+function cmDaInfluence(curva, inf){
+  const xs = curva.map(p => p[0]), ys = curva.map(p => p[1]);
+  if(inf <= xs[0]) return ys[0];
+  for(let i=1;i<xs.length;i++){
+    if(inf <= xs[i]){
+      const t = (inf - xs[i-1]) / (xs[i] - xs[i-1]);
+      return ys[i-1] + t*(ys[i] - ys[i-1]);
+    }
+  }
+  return ys[ys.length-1];
+}
+
+function montarMorph(){
+  const box = document.getElementById("morphbox");
+  const ent = MORPHS && MORPHS[curId];
+  if(!ent){
+    box.style.display = "none";
+    return;
+  }
+  box.style.display = "block";
+  document.getElementById("morphV").textContent =
+    ent.morphs.length + " shape keys · GLB v" + ent.glb_version;
+  const alvo = document.getElementById("morphSliders");
+  if(alvo.dataset.id !== curId){
+    alvo.dataset.id = curId;
+    alvo.innerHTML = "";
+    for(const m of ent.morphs){
+      const d = document.createElement("div");
+      d.className = "mline";
+      d.innerHTML = `<span class="nome">${m.column || "forma"}</span>`+
+        `<input type="range" data-key="${m.key}" min="${m.influence_min}" `+
+        `max="${m.influence_max}" step="0.02" value="0">`+
+        `<span class="cm"></span>`;
+      alvo.appendChild(d);
+    }
+    alvo.querySelectorAll("input").forEach(i => i.addEventListener("input", () => {
+      document.getElementById("morphAuto").checked = false;
+      aplicarMorph();
+    }));
+  }
+  document.getElementById("morphNota").innerHTML =
+    `faixa de cada slider = o que foi <b>medido como limpo</b> neste avatar `+
+    `(teto de ±1,0 vindo da foto, não das sondas). O que o pedido passar disso `+
+    `aparece como <b>sobra</b> — e sobra é resíduo que a seleção teria que ter `+
+    `resolvido escolhendo outro corpo.`;
+  aplicarMorph();
+}
+
+// O morph tem que ser reaplicado a cada carga: trocar de avatar recria a cena,
+// e as influences de um GLB nao sobrevivem ao outro.
+mv.addEventListener("load", () => { montarMorph(); });
+document.getElementById("morphAuto").addEventListener("change", aplicarMorph);
+document.getElementById("morphZero").addEventListener("click", () => {
+  document.getElementById("morphAuto").checked = false;
+  document.querySelectorAll("#morphSliders input").forEach(i => i.value = 0);
+  aplicarMorph();
+});
+
+const peso_=document.getElementById("peso"), altura_=document.getElementById("altura");
+[peso_,altura_].forEach(s=>s.addEventListener("input",update));
+
+// "preencher com o avatar atual" e o teste de IDENTIDADE a mao: alimentado com
+// as proprias medidas de um avatar, o resultado tem que ser ele mesmo. Se
+// nao for, ha erro de escala, de divisor ou de mapeamento de campo.
+document.getElementById("preencherDoAvatar").addEventListener("click", () => {
+  const a = LIB.avatars.find(x => x.id === curId);
+  if(!a) return;
+  const k = (+altura_.value/100) / LIB.reference_height_m;   // inverso da escala
+  const inv = {};
+  for(const [campo, col] of Object.entries(LIB.selection.app_field_map)) inv[col] = campo;
+  document.querySelectorAll("#medidas input").forEach(i => i.value = "");
+  for(const [col, cm] of Object.entries(a.circumferences_cm||{})){
+    const campo = inv[col];
+    if(!campo || cm == null) continue;
+    const el = document.querySelector(`#medidas input[data-campo="${campo}"]`);
+    if(el) el.value = (cm*k).toFixed(1);
+  }
+  update();
+});
+document.getElementById("limparMedidas").addEventListener("click", () => {
+  document.querySelectorAll("#medidas input").forEach(i => i.value = "");
+  update();
+});
 
 // Botoes de avatar, lidos do library.json.
 //
@@ -345,9 +750,13 @@ function renderQuick(){
   if(col) col.scrollTop = 0;
   for(const a of avatares){
     const b=document.createElement("button");
-    b.textContent=a.id.replace(/^zen_[mf]_/,"")+" · "+a.measured_bmi.toFixed(1);
+    // O ◈ marca quem tem shape key. Hoje e UM em 76, e sem a marca nao ha como
+    // achar o avatar de teste de morph no meio da escada.
+    const temMorph = MORPHS && MORPHS[a.id];
+    b.textContent=(temMorph?"◈ ":"")+a.id.replace(/^zen_[mf]_/,"")+" · "+a.measured_bmi.toFixed(1);
     b.dataset.id=a.id;
-    b.title=`${a.definition} · IMC ${a.measured_bmi} · ${a.label} · cintura/altura ${a.waist_to_height}`;
+    b.title=`${a.definition} · IMC ${a.measured_bmi} · ${a.label} · cintura/altura ${a.waist_to_height}`
+      + (temMorph ? ` · ${temMorph.morphs.length} shape keys` : "");
     b.onclick=()=>setAvatar(a.id);
     quick.appendChild(b);
   }
@@ -372,9 +781,42 @@ document.querySelectorAll("#sexsw button").forEach(b=>b.onclick=()=>{
   update();
 });
 
+// ---- os casos, rodados nesta copia da regra --------------------------------
+//
+// Este e o unico jeito de saber que o JS daqui nao se afastou do Python. Roda
+// sozinho no load: se ficar vermelho, a regra desta pagina divergiu e o que ela
+// mostra deixou de ser o que o app faz.
+function rodarCasos(){
+  const box = document.getElementById("casos");
+  fetch("./selection_cases.json?t="+Date.now()).then(r=>r.json()).then(banco=>{
+    if(banco.generated_from.generated_at !== LIB.generated_at){
+      box.innerHTML = "<span class='fallback-note'>casos gerados de outro índice "+
+        "— rode <code>python scripts/select.py --cases</code></span>";
+      return;
+    }
+    const falhas = [];
+    for(const c of banco.cases){
+      const i = c.input;
+      const got = selecionar(i.sex, i.height_cm/100, i.weight_kg, i.measures);
+      if(!got || got.id !== c.expect_id || got.regra !== c.expect_rule)
+        falhas.push(`${c.name}: esperado ${c.expect_id}, veio ${got && got.id}`);
+    }
+    const n = banco.cases.length;
+    box.innerHTML = falhas.length
+      ? `<span class='fallback-note'>${falhas.length} de ${n} casos FALHARAM:<br>`+
+        falhas.join("<br>")+"</span>"
+      : `<span style="color:#5bd18a">${n}/${n} casos da referência passaram</span>`+
+        `<span style="opacity:.6"> · os casos de objetivo rodam no Python e no app</span>`;
+  }).catch(err => {
+    box.innerHTML = "<span class='fallback-note'>não li selection_cases.json ("+err+")</span>";
+  });
+}
+
 fetch("../library.json?t="+Date.now()).then(r=>r.json()).then(lib=>{
   LIB = lib;
   for(const a of lib.avatars) AVAILABLE.add(a.id);
+  montarCampos();
+  rodarCasos();
   const n = s => lib.avatars.filter(a=>a.sex===s).length;
   document.getElementById("nM").textContent="("+n("m")+")";
   document.getElementById("nF").textContent="("+n("f")+")";

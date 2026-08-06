@@ -1,0 +1,791 @@
+{
+  "generated_from": {
+    "schema_version": 4,
+    "generated_at": "2026-08-05T19:56:23Z",
+    "avatars": 76
+  },
+  "tolerance": {
+    "distance": 0.001,
+    "note": "id e rule tem que bater EXATO; a distancia tolera erro de ponto flutuante entre linguagens. Divergencia de id com distancia igual e empate mal desempatado - conferir o criterio de desempate antes de mexer na regra."
+  },
+  "cases": [
+    {
+      "name": "identidade/zen_f_b01_d2",
+      "why": "as proprias medidas do avatar tem que devolver ele mesmo",
+      "input": {
+        "sex": "f",
+        "height_cm": 175.0,
+        "weight_kg": 52.7,
+        "measures": {
+          "neck_cm": 30.5,
+          "shoulder_cm": 95.4,
+          "chest_cm": 81.8,
+          "waist_cm": 61.7,
+          "hip_cm": 94.4,
+          "arm_cm": 20.8,
+          "forearm_cm": 21.0,
+          "thigh_cm": 50.9,
+          "calf_cm": 30.1
+        }
+      },
+      "expect_id": "zen_f_b01_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "chest",
+        "forearm",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "identidade/zen_f_b06_d2",
+      "why": "as proprias medidas do avatar tem que devolver ele mesmo",
+      "input": {
+        "sex": "f",
+        "height_cm": 175.0,
+        "weight_kg": 83.6,
+        "measures": {
+          "neck_cm": 33.8,
+          "shoulder_cm": 98.6,
+          "chest_cm": 88.4,
+          "waist_cm": 79.7,
+          "hip_cm": 120.2,
+          "arm_cm": 30.3,
+          "forearm_cm": 28.5,
+          "thigh_cm": 73.3,
+          "calf_cm": 43.3
+        }
+      },
+      "expect_id": "zen_f_b06_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "forearm",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "identidade/zen_f_b09h_d2",
+      "why": "as proprias medidas do avatar tem que devolver ele mesmo",
+      "input": {
+        "sex": "f",
+        "height_cm": 175.0,
+        "weight_kg": 105.3,
+        "measures": {
+          "neck_cm": 41.8,
+          "shoulder_cm": 109.4,
+          "chest_cm": 93.5,
+          "waist_cm": 91.1,
+          "hip_cm": 129.4,
+          "arm_cm": 38.3,
+          "forearm_cm": 33.3,
+          "thigh_cm": 79.2,
+          "calf_cm": 47.3
+        }
+      },
+      "expect_id": "zen_f_b09h_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "forearm",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "identidade/zen_f_b03_d2",
+      "why": "as proprias medidas do avatar tem que devolver ele mesmo",
+      "input": {
+        "sex": "f",
+        "height_cm": 175.0,
+        "weight_kg": 60.6,
+        "measures": {
+          "neck_cm": 31.9,
+          "shoulder_cm": 96.6,
+          "chest_cm": 84.7,
+          "waist_cm": 60.9,
+          "hip_cm": 101.7,
+          "arm_cm": 25.5,
+          "forearm_cm": 23.6,
+          "thigh_cm": 59.0,
+          "calf_cm": 36.5
+        }
+      },
+      "expect_id": "zen_f_b03_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "chest",
+        "forearm",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "altura/zen_f_b06_d2/1.60m",
+      "why": "o mesmo corpo em outra estatura cai no mesmo avatar",
+      "input": {
+        "sex": "f",
+        "height_cm": 160.0,
+        "weight_kg": 69.9,
+        "measures": {
+          "neck_cm": 30.9,
+          "shoulder_cm": 90.1,
+          "chest_cm": 80.8,
+          "waist_cm": 72.9,
+          "hip_cm": 109.9,
+          "arm_cm": 27.7,
+          "forearm_cm": 26.1,
+          "thigh_cm": 67.0,
+          "calf_cm": 39.6
+        }
+      },
+      "expect_id": "zen_f_b06_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "forearm",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0039
+    },
+    {
+      "name": "altura/zen_f_b06_d2/1.95m",
+      "why": "o mesmo corpo em outra estatura cai no mesmo avatar",
+      "input": {
+        "sex": "f",
+        "height_cm": 195.0,
+        "weight_kg": 103.8,
+        "measures": {
+          "neck_cm": 37.7,
+          "shoulder_cm": 109.9,
+          "chest_cm": 98.5,
+          "waist_cm": 88.8,
+          "hip_cm": 133.9,
+          "arm_cm": 33.8,
+          "forearm_cm": 31.8,
+          "thigh_cm": 81.7,
+          "calf_cm": 48.2
+        }
+      },
+      "expect_id": "zen_f_b06_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "forearm",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0036
+    },
+    {
+      "name": "parcial/zen_f_b06_d2",
+      "why": "usuario que so mediu cintura, quadril e ombro",
+      "input": {
+        "sex": "f",
+        "height_cm": 175.0,
+        "weight_kg": 83.6,
+        "measures": {
+          "waist_cm": 79.7,
+          "hip_cm": 120.2,
+          "shoulder_cm": 98.6
+        }
+      },
+      "expect_id": "zen_f_b06_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "hip",
+        "shoulder",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "marcada/zen_f_b03_d2/hip",
+      "why": "a coluna 'hip' esta em unreliable_columns deste avatar, entao envenena-la nao pode mudar a escolha",
+      "input": {
+        "sex": "f",
+        "height_cm": 175.0,
+        "weight_kg": 60.6,
+        "measures": {
+          "neck_cm": 31.9,
+          "shoulder_cm": 96.6,
+          "chest_cm": 84.7,
+          "waist_cm": 60.9,
+          "hip_cm": 152.6,
+          "arm_cm": 25.5,
+          "forearm_cm": 23.6,
+          "thigh_cm": 59.0,
+          "calf_cm": 36.5
+        }
+      },
+      "expect_id": "zen_f_b03_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "chest",
+        "forearm",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "outlier/zen_f_b06_d2/forearm",
+      "why": "uma coluna medida errada nao pode mudar o avatar escolhido; sem o teto por coluna ela decidia sozinha",
+      "input": {
+        "sex": "f",
+        "height_cm": 175.0,
+        "weight_kg": 83.6,
+        "measures": {
+          "neck_cm": 33.8,
+          "shoulder_cm": 98.6,
+          "chest_cm": 88.4,
+          "waist_cm": 79.7,
+          "hip_cm": 120.2,
+          "arm_cm": 30.3,
+          "forearm_cm": 17.1,
+          "thigh_cm": 73.3,
+          "calf_cm": 43.3
+        }
+      },
+      "expect_id": "zen_f_b06_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "fallback/sem-medida/f",
+      "why": "so peso e altura: cai no IMC, na linha d2",
+      "input": {
+        "sex": "f",
+        "height_cm": 175.0,
+        "weight_kg": 72.0,
+        "measures": {}
+      },
+      "expect_id": "zen_f_b05_d2",
+      "expect_rule": "nearest_measured_bmi",
+      "expect_columns_used": [],
+      "expect_distance": 0.6102
+    },
+    {
+      "name": "fallback/poucas-colunas/f",
+      "why": "duas colunas so, abaixo de min_columns: tem que cair no IMC",
+      "input": {
+        "sex": "f",
+        "height_cm": 175.0,
+        "weight_kg": 72.0,
+        "measures": {
+          "waist_cm": 79.7,
+          "hip_cm": 120.2
+        }
+      },
+      "expect_id": "zen_f_b05_d2",
+      "expect_rule": "nearest_measured_bmi",
+      "expect_columns_used": [],
+      "expect_distance": 0.6102
+    },
+    {
+      "name": "identidade/zen_m_b02_d1",
+      "why": "as proprias medidas do avatar tem que devolver ele mesmo",
+      "input": {
+        "sex": "m",
+        "height_cm": 175.0,
+        "weight_kg": 55.1,
+        "measures": {
+          "neck_cm": 34.7,
+          "shoulder_cm": 106.0,
+          "chest_cm": 85.3,
+          "waist_cm": 67.6,
+          "hip_cm": 87.8,
+          "arm_cm": 22.7,
+          "forearm_cm": 22.6,
+          "thigh_cm": 51.5,
+          "calf_cm": 29.4
+        }
+      },
+      "expect_id": "zen_m_b02_d1",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "chest",
+        "forearm",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "identidade/zen_m_b05m_d1",
+      "why": "as proprias medidas do avatar tem que devolver ele mesmo",
+      "input": {
+        "sex": "m",
+        "height_cm": 175.0,
+        "weight_kg": 82.7,
+        "measures": {
+          "neck_cm": 42.0,
+          "shoulder_cm": 117.3,
+          "chest_cm": 100.8,
+          "waist_cm": 91.3,
+          "hip_cm": 105.4,
+          "arm_cm": 30.6,
+          "forearm_cm": 27.5,
+          "thigh_cm": 62.6,
+          "calf_cm": 37.1
+        }
+      },
+      "expect_id": "zen_m_b05m_d1",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "forearm",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "identidade/zen_m_b07_d1",
+      "why": "as proprias medidas do avatar tem que devolver ele mesmo",
+      "input": {
+        "sex": "m",
+        "height_cm": 175.0,
+        "weight_kg": 122.2,
+        "measures": {
+          "neck_cm": 51.3,
+          "shoulder_cm": 128.3,
+          "chest_cm": 118.0,
+          "waist_cm": 116.0,
+          "hip_cm": 129.8,
+          "arm_cm": 37.6,
+          "forearm_cm": 31.3,
+          "thigh_cm": 71.9,
+          "calf_cm": 44.6
+        }
+      },
+      "expect_id": "zen_m_b07_d1",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "forearm",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "identidade/zen_m_b05_d2",
+      "why": "as proprias medidas do avatar tem que devolver ele mesmo",
+      "input": {
+        "sex": "m",
+        "height_cm": 175.0,
+        "weight_kg": 82.1,
+        "measures": {
+          "neck_cm": 42.7,
+          "shoulder_cm": 119.6,
+          "chest_cm": 101.2,
+          "waist_cm": 83.2,
+          "hip_cm": 103.7,
+          "arm_cm": 34.7,
+          "forearm_cm": 30.7,
+          "thigh_cm": 63.4,
+          "calf_cm": 39.1
+        }
+      },
+      "expect_id": "zen_m_b05_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "forearm",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "altura/zen_m_b05m_d1/1.60m",
+      "why": "o mesmo corpo em outra estatura cai no mesmo avatar",
+      "input": {
+        "sex": "m",
+        "height_cm": 160.0,
+        "weight_kg": 69.1,
+        "measures": {
+          "neck_cm": 38.4,
+          "shoulder_cm": 107.2,
+          "chest_cm": 92.2,
+          "waist_cm": 83.5,
+          "hip_cm": 96.4,
+          "arm_cm": 28.0,
+          "forearm_cm": 25.1,
+          "thigh_cm": 57.2,
+          "calf_cm": 33.9
+        }
+      },
+      "expect_id": "zen_m_b05m_d1",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "forearm",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0036
+    },
+    {
+      "name": "altura/zen_m_b05m_d1/1.95m",
+      "why": "o mesmo corpo em outra estatura cai no mesmo avatar",
+      "input": {
+        "sex": "m",
+        "height_cm": 195.0,
+        "weight_kg": 102.7,
+        "measures": {
+          "neck_cm": 46.8,
+          "shoulder_cm": 130.7,
+          "chest_cm": 112.3,
+          "waist_cm": 101.7,
+          "hip_cm": 117.4,
+          "arm_cm": 34.1,
+          "forearm_cm": 30.6,
+          "thigh_cm": 69.8,
+          "calf_cm": 41.3
+        }
+      },
+      "expect_id": "zen_m_b05m_d1",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "forearm",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0031
+    },
+    {
+      "name": "parcial/zen_m_b05m_d1",
+      "why": "usuario que so mediu cintura, quadril e ombro",
+      "input": {
+        "sex": "m",
+        "height_cm": 175.0,
+        "weight_kg": 82.7,
+        "measures": {
+          "waist_cm": 91.3,
+          "hip_cm": 105.4,
+          "shoulder_cm": 117.3
+        }
+      },
+      "expect_id": "zen_m_b05m_d1",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "hip",
+        "shoulder",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "marcada/zen_m_b05_d2/chest",
+      "why": "a coluna 'chest' esta em unreliable_columns deste avatar, entao envenena-la nao pode mudar a escolha",
+      "input": {
+        "sex": "m",
+        "height_cm": 175.0,
+        "weight_kg": 82.1,
+        "measures": {
+          "neck_cm": 42.7,
+          "shoulder_cm": 119.6,
+          "chest_cm": 151.8,
+          "waist_cm": 83.2,
+          "hip_cm": 103.7,
+          "arm_cm": 34.7,
+          "forearm_cm": 30.7,
+          "thigh_cm": 63.4,
+          "calf_cm": 39.1
+        }
+      },
+      "expect_id": "zen_m_b05_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "forearm",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "outlier/zen_m_b05m_d1/forearm",
+      "why": "uma coluna medida errada nao pode mudar o avatar escolhido; sem o teto por coluna ela decidia sozinha",
+      "input": {
+        "sex": "m",
+        "height_cm": 175.0,
+        "weight_kg": 82.7,
+        "measures": {
+          "neck_cm": 42.0,
+          "shoulder_cm": 117.3,
+          "chest_cm": 100.8,
+          "waist_cm": 91.3,
+          "hip_cm": 105.4,
+          "arm_cm": 30.6,
+          "forearm_cm": 16.5,
+          "thigh_cm": 62.6,
+          "calf_cm": 37.1
+        }
+      },
+      "expect_id": "zen_m_b05m_d1",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "fallback/sem-medida/m",
+      "why": "so peso e altura: cai no IMC, na linha d2",
+      "input": {
+        "sex": "m",
+        "height_cm": 175.0,
+        "weight_kg": 72.0,
+        "measures": {}
+      },
+      "expect_id": "zen_m_b04_d2",
+      "expect_rule": "nearest_measured_bmi",
+      "expect_columns_used": [],
+      "expect_distance": 1.0102
+    },
+    {
+      "name": "fallback/poucas-colunas/m",
+      "why": "duas colunas so, abaixo de min_columns: tem que cair no IMC",
+      "input": {
+        "sex": "m",
+        "height_cm": 175.0,
+        "weight_kg": 72.0,
+        "measures": {
+          "waist_cm": 91.3,
+          "hip_cm": 105.4
+        }
+      },
+      "expect_id": "zen_m_b04_d2",
+      "expect_rule": "nearest_measured_bmi",
+      "expect_columns_used": [],
+      "expect_distance": 1.0102
+    }
+  ],
+  "goal_cases": [
+    {
+      "name": "objetivo/zen_f_b06_d2/lose_weight",
+      "why": "meta tem que existir e andar na direcao",
+      "input": {
+        "sex": "f",
+        "current_id": "zen_f_b06_d2",
+        "goal": "lose_weight"
+      },
+      "expect_id": "zen_f_b04_d1",
+      "expect_has_target": true,
+      "expect_distance": 0.558
+    },
+    {
+      "name": "objetivo/zen_f_b06_d2/gain_muscle",
+      "why": "meta tem que existir e andar na direcao",
+      "input": {
+        "sex": "f",
+        "current_id": "zen_f_b06_d2",
+        "goal": "gain_muscle"
+      },
+      "expect_id": "zen_f_b09i_d2",
+      "expect_has_target": true,
+      "expect_distance": 0.6428
+    },
+    {
+      "name": "objetivo/zen_f_b06_d2/recomp",
+      "why": "meta tem que existir e andar na direcao",
+      "input": {
+        "sex": "f",
+        "current_id": "zen_f_b06_d2",
+        "goal": "recomp"
+      },
+      "expect_id": "zen_f_b08_d3",
+      "expect_has_target": true,
+      "expect_distance": 0.7898
+    },
+    {
+      "name": "objetivo/zen_f_b06_d2/maintain",
+      "why": "objetivo sem corpo-alvo: a tela mostra UM avatar",
+      "input": {
+        "sex": "f",
+        "current_id": "zen_f_b06_d2",
+        "goal": "maintain"
+      },
+      "expect_id": null,
+      "expect_has_target": false,
+      "expect_distance": null
+    },
+    {
+      "name": "objetivo/zen_f_b06_d2/improve_health",
+      "why": "objetivo sem corpo-alvo: a tela mostra UM avatar",
+      "input": {
+        "sex": "f",
+        "current_id": "zen_f_b06_d2",
+        "goal": "improve_health"
+      },
+      "expect_id": null,
+      "expect_has_target": false,
+      "expect_distance": null
+    },
+    {
+      "name": "objetivo/zen_f_b06_d2/performance",
+      "why": "objetivo sem corpo-alvo: a tela mostra UM avatar",
+      "input": {
+        "sex": "f",
+        "current_id": "zen_f_b06_d2",
+        "goal": "performance"
+      },
+      "expect_id": null,
+      "expect_has_target": false,
+      "expect_distance": null
+    },
+    {
+      "name": "objetivo/zen_m_b05m_d1/lose_weight",
+      "why": "meta tem que existir e andar na direcao",
+      "input": {
+        "sex": "m",
+        "current_id": "zen_m_b05m_d1",
+        "goal": "lose_weight"
+      },
+      "expect_id": "zen_m_b04_d2",
+      "expect_has_target": true,
+      "expect_distance": 0.304
+    },
+    {
+      "name": "objetivo/zen_m_b05m_d1/gain_muscle",
+      "why": "meta tem que existir e andar na direcao",
+      "input": {
+        "sex": "m",
+        "current_id": "zen_m_b05m_d1",
+        "goal": "gain_muscle"
+      },
+      "expect_id": "zen_m_b05_d1",
+      "expect_has_target": true,
+      "expect_distance": 0.3684
+    },
+    {
+      "name": "objetivo/zen_m_b05m_d1/recomp",
+      "why": "meta tem que existir e andar na direcao",
+      "input": {
+        "sex": "m",
+        "current_id": "zen_m_b05m_d1",
+        "goal": "recomp"
+      },
+      "expect_id": "zen_m_b05_d2",
+      "expect_has_target": true,
+      "expect_distance": 0.204
+    },
+    {
+      "name": "objetivo/zen_m_b05m_d1/maintain",
+      "why": "objetivo sem corpo-alvo: a tela mostra UM avatar",
+      "input": {
+        "sex": "m",
+        "current_id": "zen_m_b05m_d1",
+        "goal": "maintain"
+      },
+      "expect_id": null,
+      "expect_has_target": false,
+      "expect_distance": null
+    },
+    {
+      "name": "objetivo/zen_m_b05m_d1/improve_health",
+      "why": "objetivo sem corpo-alvo: a tela mostra UM avatar",
+      "input": {
+        "sex": "m",
+        "current_id": "zen_m_b05m_d1",
+        "goal": "improve_health"
+      },
+      "expect_id": null,
+      "expect_has_target": false,
+      "expect_distance": null
+    },
+    {
+      "name": "objetivo/zen_m_b05m_d1/performance",
+      "why": "objetivo sem corpo-alvo: a tela mostra UM avatar",
+      "input": {
+        "sex": "m",
+        "current_id": "zen_m_b05m_d1",
+        "goal": "performance"
+      },
+      "expect_id": null,
+      "expect_has_target": false,
+      "expect_distance": null
+    }
+  ]
+}

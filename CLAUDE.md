@@ -11,19 +11,19 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 
 | quando a tarefa for… | ler ANTES de agir | tamanho |
 |---|---|---:|
-| **QUALQUER COISA que toque o app Zenith** — medida, seleção, objetivo, contrato | `docs/INTEGRACAO_ZENITH.md` | **4,7k** |
+| **QUALQUER COISA que toque o app Zenith** — medida, seleção, objetivo, contrato | `docs/INTEGRACAO_ZENITH.md` | **7,3k** |
 | **montar prompt de folha** | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 5,2k / 2,4k |
 | decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,5k |
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
 | **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **22,5k** |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **28,6k** |
 | entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-08.md` (7,4k) · `diario-2026-07.md` (**grep**) | 57,2k |
 | o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
 
-> Leitura padrão: `CLAUDE.md` **5,6k** + `state.md` **10,0k** = **15,6k** antes de
+> Leitura padrão: `CLAUDE.md` **6,5k** + `state.md` **12,5k** = **19,0k** antes de
 > qualquer trabalho. O `LICOES.md` seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
-> **22,5k**).
+> 26,3k → **28,6k**, com as oito lições novas de morph, §7.15–§7.22).
 >
 > 🔴 **O corte do `state.md` foi FEITO na sessão 22 e não bastou.** O bloco da
 > sessão 20 foi mandado para o `INTEGRACAO_ZENITH.md` §1b como estava planejado —
@@ -116,7 +116,8 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     ⚠️ **Medida de fita é LANDMARK, não extremo.** `chest` (0,720) e `shoulder` (0,795) são fração fixa **de propósito** — os dois foram testados como "máximo numa banda" e os dois falharam: o peito foge para a **axila** (+8 cm) e o ombro desce para o **tórax**. Máximo ao longo do eixo vertical sempre acha uma junção, porque é lá que dois volumes se somam. **Não reabrir** — `LICOES.md` §1.8b.
 
     ⚠️ **Quem procura extremo numa banda tem que denunciar a borda.** Toda medida de extremo grava `at_band_edge: hi|lo` quando o pico encosta no limite da faixa. Isso existe porque a `CALF_BAND` media o **joelho** em 50 dos 76 avatares sem nada acusar: o máximo travava em 0,320 exato, a própria borda. **Exceção: na coxa o `hi` é anatomia, não defeito** (ela é mais larga colada na virilha) — por isso está fora do aviso. `LICOES.md` §1.8
-6. `build_index.py` — monta o `library.json` a partir das medidas
+6. `build_index.py` — monta o `library.json` a partir das medidas. **Schema 4 desde 03/08: a seleção é por MEDIDAS**, não mais por IMC dentro de linha de definição, e publica escala por sexo, `z_cap`, faixa plausível, pesos e vetor de objetivo
+6b. `select.py` — **a REGRA de seleção, e é a implementação de REFERÊNCIA.** A mesma regra vive em três linguagens (aqui, no `avatar_tester.html` em JS, e no app em Dart); o que diverge entre elas é *qual corpo o usuário vê*. A defesa é `test/selection_cases.json`: 34 casos que as três rodam. **Mexeu na regra → muda AQUI primeiro, `--cases`, e copia índice e casos para o app.** `--demo` responde com medidas na linha de comando
 7. `render.py` — gera os frames de turntable (ainda não escrito)
 8. `zenith_material.py` — **não é executável**: é a fonte única do material (cor/metallic/roughness), importada pelo `process.py` e pelo `restyle.py`
 9. `make_env.py` — gera o ambiente de iluminação (`03_dist/env/zenith_env.hdr`). A identidade Zenith mora aqui
@@ -139,6 +140,17 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     **O que ele NÃO mede é TÔNUS** — largura e profundidade não veem relevo de superfície, que foi como duas folhas com abdomens diferentes passaram como "o mesmo corpo" na sessão 7. Para isso, `qa/probe/sondas/probe_tonus_f.py`.
 13. `zenith_paths.py` — **não é executável**: fonte única de **duas** coisas. (a) o layout de `00_input/`, **separado por sexo** desde 28/07 (`sheets/{m,f}/`, `references/{m,f}/`); (b) desde 01/08, o **nome versionado** do entregue em `03_dist/glb/` — `dist_glb_current` (para quem lê), `dist_glb_next` (para quem grava), `dist_glb_retire` (aposenta a anterior). Importado por `intake.py`, `crop.py`, `measure.py`, `process.py`, `restyle.py`, `shorts.py`, `qa_render.py` e `shorts_ref.py`. **Não montar esses caminhos à mão em script novo, e nunca escrever `_v1` literal** — `01_raw/`, `02_master/` e `03_dist/glb/` seguem planos de propósito (ver README §3)
 14. `shorts_ref.py` — **régua externa**: mede o short na folha de referência (preto sobre cinza) e compara com o 3D. Existe porque o `--report` compara cada avatar com a SÉRIE, e uma série pode estar inteira errada — foi assim que o `b12_d1` passou com o cós 25 cm fora do lugar
+15. `morph.py` — grava os **9 shape keys** de ajuste fino (um por coluna de medida) no avatar entregue. `--fit` calibra e sonda sem gravar · `--apply` grava o dist v(n+1) · `--remap` reescreve só o mapa. Os números de cada avatar vivem em `config/morph_map.json`, e **o mapa é o produto**, como no short.
+
+    ⚠️ **Ele lê o DIST, não o master** (regra 9: quem lê o master e grava o dist apaga o short) — e por isso mede numa **cópia soldada**: o dist chega com a costura corpo/short duplicada, o `metrics.py` separa por topologia e lendo o dist cru o antebraço mede **48,3 cm** onde o índice diz 29,8. A trava é externa e barata: **a régua sobre a base tem que reproduzir o `library_metrics.json`** (hoje 9 de 9). `LICOES.md` §7.10
+
+    ⚠️ **Máscara de morph cobre a BANDA INTEIRA da régua, com platô.** Régua de extremo dentro de banda não se move enquanto o extremo não for ultrapassado, e foge para a borda descoberta: com a máscara começando 1% dentro da banda, a cintura travou em **+2,5 cm** para qualquer amplitude. Mesma família do joelho na banda da panturrilha. `LICOES.md` §7.9
+
+    ⚠️ **O teto de influence é POR MORPH e veio da FOTO.** Padrão ±1,0; a panturrilha vai a ±2,0 porque é cilindro isolado e o render aprovou. **Todo valor acima de 1,0 exige render olhado naquele extremo** — generalizar veredito visual de uma região para outra custou metade da faixa da panturrilha. `LICOES.md` §7.12 e §7.15
+
+    ⚠️ **Morph com um lado SATURADO calibra pelo outro** (`cal_sign`). O pescoço é mínimo de banda travado pelo queixo: crescer satura em +2,2 cm, e calibrar por lá fazia a amplitude fugir para o teto — o lado negativo virava −19 cm com 206 triângulos invertidos. `LICOES.md` §7.16
+
+    ⚠️ **Coluna que a seleção descartou não morfa.** `LICOES.md` §7.18
 
 O contrato entre o humano e o pipeline é o **nome do arquivo**: o script extrai o ID do arquétipo do nome do GLB em `01_raw/`. Nome errado = avatar errado na biblioteca.
 
@@ -186,6 +198,18 @@ não mexer nos outros — nem para procurar padrão. Mais em `docs/LICOES.md` §
 **Dois geradores de imagem em uso, de propósito.** ChatGPT e Gemini têm atratores em lugares diferentes, então o vazio de um é coberto pelo outro — o buraco de IMC 28–38 resistiu a 3 tentativas no ChatGPT e o Gemini entrou nele de primeira. Nenhum é "melhor"; usar o outro quando o alvo cair numa zona morta comprovada. **Folha do Gemini tem um selo (estrelinha) que o `crop.py` não acusa** — o `intake.py` acha e apaga sozinho, sempre; não pedir isso ao humano.
 
 Os avatares dos testes exploratórios (plano gratuito, CC BY 4.0) **não entraram na biblioteca**. Tudo em `02_master/` é do plano Pro.
+
+**A INTEGRAÇÃO COM O APP ESTÁ NO AR desde 04/08.** O avatar 3D aparece na home,
+escolhido pelas 9 circunferências. Os 76 GLBs e o HDR vivem no Supabase Storage
+(bucket público `avatars`), e o `library.json` vai embutido no app. Contrato
+completo em `docs/INTEGRACAO_ZENITH.md` §11 — **ler antes de tocar em seleção,
+índice ou GLB entregue.**
+
+**A pesquisa de MORPH está aberta e mudou a conta de avatares.** Quatro
+experimentos em `qa/probe/sondas/morph_lab*.py`: a axila não quebrou em nenhum, e
+com morph a biblioteca quase não precisa crescer (falta **1** avatar em vez de
+~90). Faixas medidas e as armadilhas em `docs/LICOES.md` §7. **Não é decisão
+tomada** — é pesquisa, e ainda falta enforcer, calibração e device.
 
 **Ver `state.md` para o detalhe corrente — ele abre com um bloco "ABRIR AQUI NA SESSÃO NOVA".**
 
