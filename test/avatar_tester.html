@@ -76,7 +76,15 @@
   .colcount { font-size:11px; color:var(--muted); }
   /* Painel de morph. Uma linha por shape key: rotulo, slider e o CENTIMETRO -
      porque o contrato com o app e em cm, nao em influence. */
-  .morphbox { margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
+  /* Coluna propria desde 11/08, a pedido do Rogerio: com 10 shape keys a caixa
+     empurrava o resultado da selecao para fora da tela no painel da esquerda, e
+     o lado direito estava vazio. Sticky pelo mesmo motivo da .listcol - mexer no
+     slider e olhar o corpo tem de ser a mesma tela. */
+  .morphbox { width:340px; position:sticky; top:24px;
+              max-height:calc(100vh - 48px); overflow-y:auto; }
+  .morphbox::-webkit-scrollbar { width:10px; }
+  .morphbox::-webkit-scrollbar-thumb { background:#2f2f3d; border-radius:99px; }
+  .morphbox::-webkit-scrollbar-track { background:transparent; }
   .mline { display:grid; grid-template-columns:74px 1fr 108px; align-items:center;
     gap:8px; margin:3px 0; font-size:11px; }
   .mline .nome { color:var(--muted); }
@@ -136,19 +144,6 @@
       <div class="colcount" id="casos" style="margin-top:10px"></div>
     </div>
 
-    <!-- MORPH. O padrao é AUTOMÁTICO: as influences saem das medidas digitadas,
-         que é o que o app vai fazer - ele recebe medida e escolhe, ninguém
-         arrasta slider no produto. Os sliders existem para BANCADA: sentir o
-         que cada morph faz e onde ele começa a ficar feio. -->
-    <div class="morphbox" id="morphbox" style="display:none">
-      <label>Morph <span class="val" id="morphV"></span></label>
-      <div class="opt" style="margin:2px 0 6px">
-        <label style="margin:0"><input type="checkbox" id="morphAuto" checked> das medidas (como no app)</label>
-        <button id="morphZero">zerar</button>
-      </div>
-      <div id="morphSliders"></div>
-      <div class="sub" id="morphNota" style="margin-top:6px; line-height:1.5"></div>
-    </div>
   </div>
 
   <div class="viewer">
@@ -216,6 +211,20 @@
     <div class="sub" id="count">carregando library.json…</div>
     <div class="quick" id="quick"></div>
     <div class="empty" id="empty" style="display:none"></div>
+  </div>
+
+  <!-- MORPH. O padrao é AUTOMÁTICO: as influences saem das medidas digitadas,
+       que é o que o app vai fazer - ele recebe medida e escolhe, ninguém
+       arrasta slider no produto. Os sliders existem para BANCADA: sentir o
+       que cada morph faz e onde ele começa a ficar feio. -->
+  <div class="panel morphbox" id="morphbox" style="display:none">
+    <label>Morph <span class="val" id="morphV"></span></label>
+    <div class="opt" style="margin:2px 0 6px">
+      <label style="margin:0"><input type="checkbox" id="morphAuto" checked> das medidas (como no app)</label>
+      <button id="morphZero">zerar</button>
+    </div>
+    <div id="morphSliders"></div>
+    <div class="sub" id="morphNota" style="margin-top:6px; line-height:1.5"></div>
   </div>
 </div>
 

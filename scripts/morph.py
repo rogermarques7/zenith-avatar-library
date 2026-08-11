@@ -828,11 +828,25 @@ def worker_main():
                   (base.z_queixo - base.zmin) / base.H,
                   (base.z_pulso - base.zmin) / base.H))
 
+    # ⚠️ A COLUNA CAI, O AVATAR NAO. Ate 11/08 uma coluna divergente derrubava o
+    # avatar inteiro - e o `zen_m_b04_d3` mostrou o preco: 8 das 9 colunas
+    # batendo EXATAS e a coxa +4,0 cm, porque naquele corpo o landmark da coxa
+    # cai em cima da BAINHA do short (o master nao tem peca, o dist tem, e o aro
+    # do tecido entra na circunferencia). Recusar os nove por causa de um joga
+    # fora 8 morphs bons.
+    #
+    # Nao e excecao inventada: o `library.json` ja publica `unreliable_columns`
+    # por avatar pelo mesmo motivo, e o contrato ja diz que coluna que a selecao
+    # descartou nao morfa (LICOES 7.18). A regra e a mesma; aqui quem aponta e a
+    # regua externa. O mapa publica `dropped_columns` para o app saber.
     ruim = conferir_base(root, aid, base, co)
     if ruim:
-        sys.exit("\nTRAVA: a regua nao reproduz o library_metrics.json em: {}.\n"
-                 "Calibrar morph sobre base errada e publicar delta de um numero "
-                 "que o app nao usa.".format(", ".join(ruim)))
+        print("\n⚠️ FORA DA REGUA EXTERNA: {}. Esses morphs NAO vao para o mapa -\n"
+              "   calibrar sobre base errada e publicar delta de um numero que o\n"
+              "   app nao usa. Os outros seguem.".format(", ".join(ruim)))
+        if len(ruim) > 3:
+            sys.exit("TRAVA: {} colunas fora da regua. Isso nao e landmark caindo "
+                     "na peca - e a malha errada.".format(len(ruim)))
 
     masks = base.campo(co)
     campo_real = base.campo(co_real)
@@ -844,6 +858,11 @@ def worker_main():
     acoplado = {}     # {key do morph de tamanho: (mascara, direcao, amplitude)}
     for spec in MORPHS:
         key, col = spec["key"], spec["column"]
+        if col in ruim or (spec.get("couple") and
+                           spec["couple"] not in [r["key"] for r in resultado]):
+            print("\n[{}] PULADO - a coluna {} nao passou na regua externa"
+                  .format(key, col or spec.get("couple")))
+            continue
         m, d = masks[key]
         tocados = int((m > 0.01).sum())
 
@@ -1000,25 +1019,37 @@ def worker_main():
                       inf, cm, dict(r["curve"]).get(inf, float("nan")), inv))
             if inv == 0:
                 pontos.append([inf, round(cm, 2)])
+        # ⚠️ O ACHATAMENTO E MELHORIA, NAO REQUISITO - se o acoplamento quebra a
+        # malha, quem cai e ELE, nao a cintura. No `zen_m_b04_d1` o lado
+        # negativo da cintura ja tinha morrido na varredura e o acoplado deixava
+        # 1 normal invertida em toda influence positiva: com isso o morph de
+        # CINTURA - o mais importante dos nove - sumia do mapa inteiro, e o
+        # `morph_waist_flatten` ficava publicado apontando para um `couple` que
+        # nao existia mais. Perder a forma custa profundidade de barriga; perder
+        # o tamanho custa a coluna que o app mais usa.
+        if not [p for p in pontos if p[0] > 0] and [p for p in r["curve"] if p[0] > 0]:
+            print("   ACOPLADO REPROVADO em toda a faixa positiva -> o achatamento "
+                  "SAI deste avatar\n   e a cintura fica isotropica (curva solta).")
+            resultado[:] = [x for x in resultado if x.get("couple") != alvo_key]
+            continue
         pontos.sort()
         r["curve"] = pontos
         r["cm_max"] = pontos[-1][1]
         r["influence_max"] = pontos[-1][0]
 
     # A colisao que matou o outro projeto so aparecia no estado COMBINADO. Nao
-    # basta cada morph passar sozinho.
+    # basta cada morph passar sozinho - e desde 11/08 ele nao e so IMPRESSO,
+    # e TRAVA: ver `_travar_combinado`.
     print("\nestado COMBINADO:")
     for nome, sinal in (("todos no maximo", +1), ("todos no minimo", -1)):
-        soma = np.zeros((len(co), 3))
-        mtot = np.zeros(len(co))
-        for r in resultado:
-            soma += r["delta"] * (r["influence_max"] if sinal > 0 else r["influence_min"])
-            mtot = np.maximum(mtot, masks[r["key"]][0])
-        inv, va, vc, _ = base.sondas(co + soma, mtot)
-        print("  {:<16} normais invertidas {:>4} | axila {} cm | coxas {} cm"
-              .format(nome, inv,
-                      "{:.2f}".format(va) if va is not None else "FECHOU",
-                      "{:.2f}".format(vc) if vc is not None else "FECHOU"))
+        _travar_combinado(base, co, resultado, masks, sinal, nome)
+
+    # acoplado orfao nao se publica: o app calcularia `max(0, influence de um
+    # key que nao esta no arquivo`. Foi o que o `zen_m_b04_d1` gravou.
+    vivos = {r["key"] for r in resultado
+             if r["influence_max"] > 0 or r["influence_min"] < 0}
+    resultado[:] = [r for r in resultado
+                    if not (r.get("couple") and r["couple"] not in vivos)]
 
     usaveis = [r for r in resultado if r["influence_max"] > 0 or r["influence_min"] < 0]
     print("\n{} de {} morphs com faixa util".format(len(usaveis), len(resultado)))
@@ -1040,7 +1071,7 @@ def worker_main():
         if pior > 0.2:
             sys.exit("--remap: a calibracao nao reproduz o que esta no arquivo. "
                      "O deslocamento mudou - isso exige --apply e versao nova.")
-        _gravar_mapa(root, aid, ver_atual, usaveis)
+        _gravar_mapa(root, aid, ver_atual, usaveis, ruim)
         return
 
     if not args.apply:
@@ -1083,7 +1114,116 @@ def worker_main():
     print("\ndist  : {} ({:.0f} KB){}"
           .format(dest, os.path.getsize(dest) / 1024,
                   "  [aposentou {}]".format(", ".join(gone)) if gone else ""))
-    _gravar_mapa(root, aid, nova, usaveis)
+    _gravar_mapa(root, aid, nova, usaveis, ruim)
+
+
+def _travar_combinado(base, co, resultado, masks, sinal, nome):
+    """O estado combinado tambem e um estado que o APP produz - entao ele nao
+    pode so ser impresso.
+
+    Ate 11/08 cada morph era varrido SOZINHO e a faixa saia dai; o estado com
+    todos ligados juntos era medido e o numero ia para a tela sem consequencia.
+    Medido no `zen_m_b02_d1`: cintura em -1,0 limpa, quadril em -1,0 limpa,
+    todos em -0,5 limpos - e todos em -1,0 **enruga o cos do short**, com 6
+    normais invertidas que a foto confirmou (`qa/morph/{id}/onset/`). A causa e
+    somar tres campos radiais com centros diferentes na mesma casca: cada um
+    cabe, a soma dobra.
+
+    Consertar isso no app custaria regra nova em TRES linguagens (o contrato e
+    "clamp por morph"). Aqui custa faixa, e so de quem tem culpa: quem some do
+    estado e faz as invertidas cairem apanha o fator, o resto fica intacto. Um
+    avatar cujo combinado ja e limpo nao muda nada.
+
+    ⚠️ O fator e uniforme DENTRO do grupo culpado de proposito. Procurar o
+    limite de cada um separadamente e busca em N dimensoes sobre uma sonda que
+    conta triangulo - a §7.12 (todo teto acima do padrao pede foto) vale aqui
+    tambem, e o que se pode defender com uma foto e um numero, nao nove.
+    """
+    import numpy as np
+    lim = "influence_max" if sinal > 0 else "influence_min"
+    # ⚠️ TOLERANCIA ZERO, E ELA FOI TESTADA CONTRA A ALTERNATIVA - as fotos
+    # estao em `qa/morph/{id}/` (onset, cmp, t90). Tres estados do mesmo dia:
+    #   zen_m_b02_d1  combinado no minimo  inv 6 -> cos ENRUGADO, obvio
+    #                 a 90% da faixa       inv 2 -> ainda tem um repuxo em V
+    #                 a 80% da faixa       inv 0 -> limpo
+    #   zen_m_b05h_d2 combinado no minimo  inv 2 -> foto identica a base
+    # Ou seja: `inv 2` e invisivel num avatar e visivel no outro, entao a
+    # CONTAGEM NAO TRANSFERE - tolerar 2 seria calibrar num corpo e aplicar no
+    # outro. O que sobrevive aos dois e o criterio estrito, que ja e o mesmo da
+    # varredura de um morph so (`ruim_i = inv > 0`).
+    #
+    # O preco esta medido e e real: o `b05h_d2`, unico avatar aprovado no olho
+    # ate hoje, perde faixa NEGATIVA de peito/cintura/quadril (cintura -5,0 ->
+    # -3,0 cm). Ela e a faixa de quem e MAIS MAGRO que ele - e para esse usuario
+    # a selecao ja entrega outro corpo. O lado positivo, que e o dele, nao muda.
+    TOL_INV = 0
+
+    def _acoplar(infl):
+        """A forma segue o tamanho, e so no lado positivo - como no app."""
+        for r in resultado:
+            if r.get("couple"):
+                infl[r["key"]] = max(0.0, infl.get(r["couple"], 0.0))
+        return infl
+
+    def _sondar(infl):
+        soma = np.zeros((len(co), 3))
+        mtot = np.zeros(len(co))
+        for r in resultado:
+            f = infl.get(r["key"], 0.0)
+            if f:
+                soma += r["delta"] * f
+            mtot = np.maximum(mtot, masks[r["key"]][0])
+        return base.sondas(co + soma, mtot)
+
+    infl = _acoplar({r["key"]: r[lim] for r in resultado})
+    inv, va, vc, _ = _sondar(infl)
+    print("  {:<16} normais invertidas {:>4} | axila {} cm | coxas {} cm"
+          .format(nome, inv,
+                  "{:.2f}".format(va) if va is not None else "FECHOU",
+                  "{:.2f}".format(vc) if vc is not None else "FECHOU"))
+    if inv <= TOL_INV:
+        return
+
+    # quem, tirado do estado, faz o defeito diminuir
+    moveis = [r["key"] for r in resultado if infl.get(r["key"]) and not r.get("couple")]
+    culpados = []
+    for k in moveis:
+        sem = _acoplar(dict(infl, **{k: 0.0}))
+        if _sondar(sem)[0] < inv:
+            culpados.append(k)
+    if not culpados:
+        culpados = moveis          # ninguem isolado explica: a soma e a culpada
+
+    for f in (0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.0):
+        tent = _acoplar({k: (round(v * f, 2) if k in culpados else v)
+                         for k, v in infl.items()})
+        inv_f = _sondar(tent)[0]
+        if inv_f <= TOL_INV:
+            break
+
+    print("    TRAVA do combinado: {:.0%} da faixa em {} -> invertidas {}"
+          .format(f, ", ".join(culpados), inv_f))
+
+    for r in resultado:
+        if r["key"] not in culpados:
+            continue
+        novo = tent[r["key"]]
+        b0 = medir(base, co, r["column"]) * 100
+        P = co + r["delta"] * novo
+        for outro in resultado:                      # a forma anda junto
+            if outro.get("couple") == r["key"] and novo > 0:
+                P = P + outro["delta"] * novo
+        v = medir(base, P, r["column"])
+        cm = round(v * 100 - b0, 2) if v is not None else 0.0
+        # so o lado travado encolhe - a curva do outro lado fica inteira
+        pontos = [p for p in r["curve"]
+                  if (p[0] > novo if sinal < 0 else p[0] < novo)]
+        pontos.append([novo, cm])
+        pontos.sort()
+        r["curve"] = pontos
+        r[lim] = novo
+        r["cm_min" if sinal < 0 else "cm_max"] = cm
+        print("      {:<16} {} {:+.2f} ({:+.1f} cm)".format(r["key"], lim, novo, cm))
 
 
 def _ate_o_defeito(passos, limpo):
@@ -1193,7 +1333,7 @@ def _gltf_targets(path):
     return prims, nomes, esp, den
 
 
-def _gravar_mapa(root, aid, versao, resultado):
+def _gravar_mapa(root, aid, versao, resultado, dropped=()):
     p = os.path.join(root, MAP_PATH)
     data = {}
     if os.path.isfile(p):
@@ -1204,6 +1344,7 @@ def _gravar_mapa(root, aid, versao, resultado):
             data = {}
     data[aid] = {
         "glb_version": versao,
+        "dropped_columns": list(dropped),
         "calibrated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "note": ("influence = interp(usuario_cm - avatar_cm, curve[cm], "
                  "curve[influence]), ja limitada por construcao a "

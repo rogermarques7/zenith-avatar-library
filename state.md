@@ -1,6 +1,6 @@
 ﻿# state.md — o presente
 
-Última atualização: **06/08/2026, fim da sessão 24**
+Última atualização: **11/08/2026, fim da sessão 25**
 
 > ## 🔀 OS DOIS REPOSITÓRIOS VIRARAM SESSÕES SEPARADAS (06/08)
 >
@@ -46,61 +46,68 @@
 >   `cdn_base` do índice aponta para lá. Sobe com
 >   `python scripts/publish_avatars.py` (mora no repo do APP).
 >
-> ### 🧬 MORPH: APROVADO NO OLHO DELE, E É A RECEITA PARA OS OUTROS 75
+> ### 🧬 OS 76 TÊM SHAPE KEY — o lote inteiro rodou em 11/08 (sessão 25)
 >
-> **`03_dist/glb/zen_m_b05h_d2_v7.glb`, 981 KB** — 9 shape keys, um por coluna de
-> medida. Testado e **aprovado pelo Rogério no testador em 06/08**. É o corpo que
-> a seleção escolhe para ele, e é o único com morph até agora.
+> **76 de 76 no `config/morph_map.json`**, cada um com `--apply` próprio, versão
+> nova de GLB e a anterior aposentada. Distribuição: **35 avatares com 10 shape
+> keys, 33 com 9, 5 com 8, 3 com 7** — o que falta em cada um está em
+> `dropped_columns` no mapa, e o motivo é sempre régua, nunca desistência.
 >
-> **A receita, que é o trabalho a repetir nos outros 75:**
+> Réguas externas rodadas DEPOIS do lote, as duas limpas:
+> - `probe_material_dist.py` → **76/76** em `#B9BCC2` / 0.25 / 0.45 com a peça
+>   cobrada de quem está no `shorts_map` (é a trava do apagão de 31/07, e o
+>   morph reescreveu os 76 arquivos — era obrigatório rodar).
+> - `select.py --check` → **34/34** · `morph_cases.py --check` → **608/608**.
+> - Índice reconstruído: **nenhum id com duas versões no disco**, e nenhum
+>   `assets.glb` apontando para arquivo que não existe.
+>
+> 🔴 **NADA FOI PARA O APP.** O contrato do `INTEGRACAO_ZENITH.md` §12 não mudou,
+> mas os arquivos novos (`library.json`, `morph_map.json`, `morph_cases.json`) e
+> os 76 GLBs **estão só aqui**, esperando o olho dele no testador. Ele pediu
+> explicitamente aprovação visual antes de subir.
+>
+> **A receita continua a mesma, e agora está exercitada 76 vezes:**
 >
 > ```
 > python scripts/morph.py {id} --fit      # calibra e sonda, nao grava
->   -> conferir: a regua na base bate com o library_metrics.json (9 de 9)
->   -> conferir: linearidade em 0,5 perto de 1,00 em cada morph
-> renderizar os extremos e OLHAR  (qa/probe/sondas/morph_render_ab.py)
+> python qa/probe/sondas/morph_folha.py {id}   # base x max x min, 4 vistas
 > python scripts/morph.py {id} --apply    # grava o dist v(n+1) + o mapa
-> python scripts/morph.py {id} --remap    # se a FOTO mudar a faixa, so o mapa
+> python scripts/morph.py {id} --remap    # so o mapa, sem gastar versao
 > ```
 >
-> ⚠️ **`--fit` primeiro, sempre.** Nesta sessão ele achou seis defeitos que nenhuma
-> trava anterior pegava, e três deles eram invisíveis no número: a mão entrando na
-> máscara da coxa, o corte duro na virilha e a máscara fraca onde a régua lê.
+> 🆕 **`morph_folha.py`** é a folha de contato do morph: base × todos-no-máximo ×
+> todos-no-mínimo, em corpo/perfil/3-quartos/axila, **numa imagem só**. Defeito de
+> morph é DIFERENÇA contra a base — olhar 12 PNGs em sequência perde a
+> comparação. As 76 estão em `qa/morph/{id}/folha.png`.
 >
-> ⚠️ **A FOTO decide a faixa, não a sonda.** Três vezes nesta sessão as sondas
-> passaram limpas e o render reprovou (§7.5, §7.15). E uma vez o contrário: no
-> pescoço em −1,5 as duas reprovaram juntas, o que é o caso confortável.
+> ### 🔴 O QUE O LOTE ACHOU — três travas novas, e uma pendência grande
 >
-> **Faixas medidas neste avatar** (as dos outros vão diferir — anatomia diferente):
+> **1. O estado COMBINADO era relatório e virou trava (§7.23).** Cada morph
+> passava sozinho e a soma enrugava o cós do short. Hoje a faixa do **grupo
+> culpado** (quase sempre cintura+quadril) é reduzida até zerar as normais
+> invertidas. Disparou em ~2/3 dos 76. Tolerar `inv ≤ 2` foi **testado e
+> refutado com foto** — o mesmo número é invisível num corpo e visível no outro.
 >
-> | morph | faixa (cm) | | morph | faixa (cm) |
-> |---|---|---|---|---|
-> | cintura | **−5,0 a +10,0** | | pescoço | −6,0 a +1,8 |
-> | ombro | −5,9 a +6,0 | | bíceps | −3,5 a +4,0 |
-> | coxa | −5,9 a +6,0 | | antebraço | −3,1 a +3,1 |
-> | quadril | −3,8 a +8,0 | | panturrilha | **−6,0 a +6,0** |
-> | peito | −2,7 a +6,0 | | | |
+> ⚠️ **Isso mexeu no `b05h_d2`, o avatar que ele aprovou:** perdeu faixa
+> NEGATIVA de peito/cintura/quadril (cintura −5,0 → −3,0 cm), que é a faixa de
+> quem é mais magro que ele. O lado positivo — o dele — não mudou, e o **GLB não
+> foi tocado** (só o mapa, via `--remap`).
 >
-> **Resultado no corpo real dele** (176 cm, 94 kg, IMC 30,3 · avatar 30,6):
-> erro RMS **4,49 → 1,14 cm**, com 8 das 9 colunas fechando exatas. Sobra o
-> pescoço (−3,4), e o motivo é estrutural: `LICOES.md` §7.19.
+> **2. Uma coluna fora da régua derrubava o avatar inteiro (§7.24).** Hoje cai só
+> a coluna, e o mapa publica `dropped_columns`. O `b04_d3` tinha 8 de 9 colunas
+> EXATAS e perdia os nove morphs por causa da coxa.
 >
-> **➡️ O contrato com o app está no `INTEGRACAO_ZENITH.md` §12.** Os três pontos
-> que quebram em silêncio: usar `interp(Δcm, curve)` e **nunca** `Δ/cm_at_full`
-> (o pescoço erra 68% assim); setar `morphTargetInfluences` em **todas** as
-> primitivas (são duas — corpo e short); e **não morfar coluna que a seleção
-> descartou** (§7.18).
+> **3. O achatamento acoplado derrubava a cintura (§7.24).** No `b04_d1` o
+> `morph_waist` sumia do mapa e o `morph_waist_flatten` ficava publicado
+> apontando para um `couple` inexistente. Hoje quem sai é o achatamento.
 >
-> ✅ **Medido no navegador antes do device** (`test/morph_probe.html`, three.js
-> puro): os 9 targets chegam nas duas primitivas em WebGL2, influence **negativa
-> renderiza**, e depois de 7 s de laço os valores continuam aplicados — **o
-> enforcer não se reproduziu**. Segue em aberto só para o `model_viewer_plus`: se
-> o morph não aparecer no device, é aí que se olha primeiro.
->
-> 🎚️ **O testador tem painel de morph** (`test/avatar_tester.html`). O padrão é
-> **automático das medidas digitadas**, que é o que o app fará — slider é bancada,
-> não produto. Avatar com shape key vem marcado com **◈**.
->
+> **4. 🔴 A COXA NÃO É MEDÍVEL NO DIST — e isso é padrão, não avatar (§7.25).** A
+> banda da coxa lê a PEÇA: desvio até **+6,9 cm no masculino e +14,5 cm no
+> feminino** contra o `library_metrics.json`, com as outras oito colunas batendo
+> em ±0,1. Resultado: **28 dos 76 estão sem morph de coxa** (21 femininos, 7
+> masculinos). O conserto provável é medir a coxa com a virilha **do master**, e
+> isso mexe no `metrics.py`, que a biblioteca inteira usa — **sessão própria.**
+
 > ### ✅ O MORPH DE CINTURA ERA ISOTRÓPICO E ENGORDAVA — CONSERTADO EM 06/08
 >
 > Reclamação do Rogério, medida e **confirmada**: com os shape keys o avatar fica
@@ -159,29 +166,52 @@
 > A elipse subestima seção achatada, então o 1,44 dele é **piso**, não teto. A
 > direção não depende disso: 1,44 contra 1,12 sobrevive a qualquer erro de ±4%.
 >
+> ### 🆕 A LISTA DAS PEÇAS CHEGOU (11/08) — está em `docs/FILA_PECAS.md`
+>
+> A fila que a sessão 22 esperava. **30 dos 37 tops femininos** em três classes
+> que ele definiu com screenshot (mínima = listra fina na borda de cima ·
+> mediana = listra maior + ponto sem pintar · maior = top quase todo errado) e
+> **7 shorts masculinos**, que são os sete mais pesados do acervo (`b09_d1` a
+> `b12_d1`, IMC 63 a 148). **Ele mandou começar pelos tops femininos.**
+>
+> 🔴 **A lista é o produto — não varrer os outros procurando defeito.** E há
+> **duas coisas a confirmar com ele** antes de mexer: três avatares aparecem em
+> duas classes, e o `b03_d3` (o exemplo que ele mandou de "mínima") não está na
+> lista. Detalhe no `FILA_PECAS.md`.
+>
+> ✅ A classe "mínima" é a **borda de cima da faixa**, que a §4.5b do `LICOES.md`
+> já tinha medido como *não medida em avatar nenhum*. Agora são duas linhas
+> independentes no mesmo lugar, e a decisão de **modelar** a subida deixou de ser
+> especulação: tem demanda.
+>
+> ### 📄 O PROBLEMA DA COXA ESTÁ ESCRITO PARA LEITOR DE FORA — `docs/PROBLEMA_COXA.md`
+>
+> A pedido dele, para consultar um modelo mais avançado. E **escrever mudou o
+> diagnóstico**: não é o tecido do short entrando na medida. Medindo o dist com o
+> `metrics.py` cru dá **+1,1 cm**; o que dá **+18,5** é a **cópia soldada** que o
+> `morph.py` usa — a mesma soldagem que conserta o antebraço. Três caminhos
+> plausíveis estão listados lá, nenhum testado.
+
 > ### 🔴 A LISTA DO QUE FALTA AQUI — é esta a pauta das sessões da biblioteca
 >
 > **1. O morph isotrópico da cintura** — o bloco acima. É o único item com defeito CONFIRMADO no olho dele.
 >
-> **2. Shape keys nos 75 avatares restantes.** Mecânico, mas não automático: cada
-> um exige `--fit`, render olhado e `--apply`, e **gasta uma versão de GLB + um
-> upload**. Sugestão de ordem: os da **faixa de usuário primeiro** (IMC 17–40, 27
-> masculinos e 24 femininos) — os extremos quase não são servidos.
+> **2.** ~~Shape keys nos 75 restantes~~ ✅ **FEITO em 11/08 — 76 de 76.** Ver o
+> bloco de morph acima. O que sobra dessa frente é **o olho dele no testador** e,
+> depois, a subida para o app.
 >
-> ⚠️ **Os femininos nunca passaram pelo `morph.py`.** Duas peças (short **e**
-> faixa) em vez de uma, então o GLB tem **três** primitivas e não duas — a trava
-> do round-trip já confere isso, mas a máscara do peito vai encontrar geometria
-> que o masculino não tem. **Rodar o primeiro feminino com atenção redobrada.**
+> ⚠️ **Correção de fato:** o GLB feminino tem **duas** primitivas, não três —
+> short e faixa dividem o material `Zenith_Shorts`. O que este arquivo dizia
+> antes estava errado, e a trava do round-trip confirma 2 de 2 em todas as 37.
 >
 > **3. As peças.** A fila de short masculina e o defeito de faixa feminino — ver
 > os dois blocos abaixo. **A lista dele nunca chegou** e é a primeira coisa a
 > pedir quando a frente voltar.
 >
-> **4. Não existe banco de casos para o MORPH.** A regra de morph já tem duas
-> implementações (JS no testador, e a de referência que é o próprio
-> `morph_map.json` + a curva) e vai virar três com o Dart. É exatamente o
-> problema que o `selection_cases.json` resolveu para a seleção, e ele vai
-> reaparecer: o que diverge em silêncio é **qual corpo o usuário vê**.
+> **4.** ~~Não existe banco de casos para o MORPH~~ ✅ **existe:**
+> `scripts/morph_cases.py` + `test/morph_cases.json`, **608 casos** (era 8, de um
+> avatar só). ⚠️ O arquivo tem **497 KB** — se isso pesar como fixture no app, o
+> corte é gerar casos de um subconjunto, não deixar de ter árbitro.
 >
 > **5. `approved` continua campo morto** — `build_index.py:164` grava `True` fixo
 > e nada lê. O `b09_d3` (32,4) e o `b10_d3` (45,1) lêem masculinos e são servidos.
@@ -317,9 +347,11 @@
 > `assets.glb` do índice). **Sem flag `--bump`** — mudou o conteúdo, mudou o
 > número. Motivo e efeitos em `LICOES.md` §4.2g.
 >
-> Versões correntes: **os 39 masculinos em v2** (short reaplicado em 01/08) e
-> **as 37 femininas com short+faixa** — 35 em v2, `b05_d2` e `b01_d1` em **v3**.
-> Conferido: 76 arquivos, 76 ids, **nenhum id com duas versões no disco**.
+> Versões correntes: **todas mudaram em 11/08** — o lote de morph gravou v(n+1)
+> nos 76 e aposentou a anterior. Conferido depois: 76 arquivos, 76 ids, **nenhum
+> id com duas versões no disco**, e nenhum `assets.glb` do índice apontando para
+> arquivo que não existe. 🔴 **O Storage do app está com os GLBs VELHOS** — a
+> subida só acontece depois da aprovação visual dele.
 > ⚠️ **O `library.json` foi reconstruído** — ele estava parado em 31/07 e agora
 > carrega também a panturrilha e o ombro corrigidos na sessão 20.
 >

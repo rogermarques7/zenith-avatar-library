@@ -1956,3 +1956,96 @@ acoplada só no crescimento, calibrada para devolver a profundidade da base.
 corpo* como padrão de todos, com **exatamente um corpo real medido** no projeto.
 O default escolhido não aposta em nenhuma hipótese: ele só impede que o morph
 piore o eixo visível.
+
+---
+
+### 7.23 🔴 Cada morph passa sozinho e a SOMA quebra — o estado combinado tinha que ser trava, não relatório
+
+Medido em 11/08, no `zen_m_b02_d1`, ao começar o lote dos 75:
+
+| estado | normais invertidas | foto do cós |
+|---|---:|---|
+| `morph_waist` sozinho em −1,0 | 0 | limpa |
+| `morph_hip` sozinho em −1,0 | 0 | limpa |
+| todos em −0,5 | 0 | limpa |
+| **todos em −1,0** | **6** | **cós enrugado, pregas em volta** |
+
+A varredura do `--fit` sempre mediu um morph por vez, e o estado com todos
+ligados era **impresso e ignorado** — apesar de o próprio comentário do código
+dizer que *"a colisão que matou o outro projeto só aparecia no estado
+combinado"*. Um campo radial cabe na casca; três campos radiais com centros
+diferentes somados na mesma casca dobram o tecido.
+
+**O conserto ficou no lado da biblioteca de propósito.** Tratar isso no app
+custaria regra nova em **três** linguagens (o contrato é *clamp por morph*).
+Aqui custa faixa, e só de quem tem culpa: `_travar_combinado` mede o estado, tira
+um morph por vez para descobrir **quem** contribui, e reduz a faixa **só do grupo
+culpado** em passos de 10% até zerar. Quem já é limpo não perde nada.
+
+⚠️ **O culpado é quase sempre o par cintura+quadril**, e a razão é o cós do
+short: é a única aresta rígida que os dois campos atravessam. Em 51 avatares a
+trava disparou em ~2/3 deles, sempre nesse par (ou peito+cintura).
+
+#### A tolerância foi testada e refutada — a contagem NÃO transfere entre corpos
+
+Tentei `inv ≤ 2` para não punir avatar limpo. Três fotos derrubaram:
+
+- `zen_m_b05h_d2` combinado no mínimo, **inv 2** → foto idêntica à base
+- `zen_m_b02_d1` a 90% da faixa, **inv 2** → repuxo em V no cós, visível
+- `zen_m_b02_d1` a 100%, inv 6 → enrugado óbvio
+
+Ou seja: **o mesmo número é invisível num corpo e visível no outro.** Tolerar 2
+seria calibrar num corpo e aplicar no outro — a §1.1 de novo, num eixo novo. E
+agrupar os triângulos invertidos por vizinhança **também não separa**: nos dois
+casos eles são singles isolados; o que muda é onde caem (no caso ruim, seis
+espalhados pelo mesmo anel do cós).
+
+O preço do critério estrito está medido e é real: o `b05h_d2`, o único avatar
+aprovado no olho até hoje, perdeu faixa **negativa** de peito/cintura/quadril
+(cintura −5,0 → −3,0 cm). É a faixa de quem é mais magro que ele — e para esse
+usuário a seleção já entrega outro corpo. O lado positivo, que é o dele, não
+mudou. **O GLB não foi tocado: só o mapa, via `--remap`.**
+
+### 7.24 A COLUNA cai, o avatar não — e o achatamento cai antes da cintura
+
+Duas travas que recusavam demais, achadas no mesmo lote:
+
+**1. Uma coluna fora da régua externa derrubava os nove morphs.** O
+`zen_m_b04_d3` tinha 8 das 9 colunas batendo **exatas** contra o
+`library_metrics.json` e a coxa +4,0 cm — porque naquele corpo o landmark da
+coxa cai **em cima da bainha do short**. O master não tem peça, o dist tem. Hoje
+a coluna é pulada, o mapa publica `dropped_columns`, e os outros oito seguem. Não
+é exceção inventada: o `library.json` já publica `unreliable_columns` pelo mesmo
+motivo, e o contrato já diz que coluna descartada não morfa (§7.18). Acima de 3
+colunas fora, aí sim para — isso não é landmark na peça, é malha errada.
+
+**2. O achatamento acoplado derrubava a cintura inteira.** No `zen_m_b04_d1` o
+lado negativo da cintura já tinha morrido na varredura, e a curva positiva
+**refeita com o achatamento** deixava 1 normal invertida em toda influence: com
+isso o `morph_waist` — a coluna que o app mais usa — sumia do mapa, e o
+`morph_waist_flatten` ficava publicado apontando para um `couple` **que não
+existia mais**. Hoje, se o acoplado reprova a faixa positiva inteira, quem sai é
+o **achatamento**, e a cintura fica isotrópica. *Perder a forma custa
+profundidade de barriga; perder o tamanho custa a coluna principal.*
+
+### 7.25 🔴 A COXA não é medível no dist — e isso não é um avatar, é um padrão
+
+A régua da coxa (`máximo nos 6 cm abaixo da virilha`) lê a **peça**, não a perna,
+e o desvio contra o `library_metrics.json` chega a:
+
+| | avatares afetados | pior desvio |
+|---|---:|---:|
+| masculino | 6 de 27 | +6,9 cm |
+| feminino | ~11 de 24 | **+14,5 cm** |
+
++14,5 cm em coxa de 49,5 não é espessura de tecido (isso daria ~1 cm): é a banda
+caindo onde o short ainda **une as duas pernas**, ou no aro da bainha. A trava da
+§7.24 faz a coisa certa — larga a coluna — mas o efeito colateral é que **o morph
+de coxa quase não existe no feminino.**
+
+⚠️ **Não consertar por analogia.** As outras oito colunas batem em `±0,1 cm` nos
+mesmos avatares, então não é a régua nem a malha: é o landmark da coxa
+especificamente. O conserto provável é medir a coxa com a virilha **do master**
+(o dist tem a virilha preenchida pelo tecido), e isso mexe no `metrics.py`, que a
+biblioteca inteira usa. **É trabalho de sessão própria, com régua externa antes e
+depois.**

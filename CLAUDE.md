@@ -17,13 +17,15 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
 | **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **28,6k** |
+| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/FILA_PECAS.md` | 2,0k |
+| investigar a coxa que não fecha no morph | `docs/PROBLEMA_COXA.md` | 2,8k |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **29,9k** |
 | entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-08.md` (7,4k) · `diario-2026-07.md` (**grep**) | 57,2k |
 | o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
 
-> Leitura padrão: `CLAUDE.md` **6,5k** + `state.md` **12,5k** = **19,0k** antes de
+> Leitura padrão: `CLAUDE.md` **6,7k** + `state.md` **12,6k** = **19,3k** antes de
 > qualquer trabalho. O `LICOES.md` seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
-> 26,3k → **28,6k**, com as oito lições novas de morph, §7.15–§7.22).
+> 26,3k → 28,6k → **29,9k**, com as três lições do lote de morph, §7.23–§7.25).
 >
 > 🔴 **O corte do `state.md` foi FEITO na sessão 22 e não bastou.** O bloco da
 > sessão 20 foi mandado para o `INTEGRACAO_ZENITH.md` §1b como estava planejado —
@@ -151,6 +153,20 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     ⚠️ **Morph com um lado SATURADO calibra pelo outro** (`cal_sign`). O pescoço é mínimo de banda travado pelo queixo: crescer satura em +2,2 cm, e calibrar por lá fazia a amplitude fugir para o teto — o lado negativo virava −19 cm com 206 triângulos invertidos. `LICOES.md` §7.16
 
     ⚠️ **Coluna que a seleção descartou não morfa.** `LICOES.md` §7.18
+
+    ⚠️ **Cada morph passa sozinho e a SOMA quebra.** O estado com todos ligados
+    juntos enruga o cós do short, e desde 11/08 ele é **trava**, não relatório: a
+    faixa do grupo culpado (quase sempre cintura+quadril) é reduzida até zerar as
+    normais invertidas. Tolerar `inv ≤ 2` foi **testado e refutado** — o mesmo
+    número é invisível num corpo e visível no outro. `LICOES.md` §7.23
+
+    ⚠️ **Uma coluna fora da régua externa derruba a COLUNA, não o avatar** — o
+    mapa publica `dropped_columns`. E se o achatamento reprovar a faixa positiva
+    inteira, quem sai é ele, não a cintura. `LICOES.md` §7.24
+
+    🔴 **A COXA não é medível no dist**: a banda lê a peça, não a perna (até
+    **+14,5 cm** no feminino). O morph de coxa cai em 6 de 27 masculinos e ~11 de
+    24 femininas. Conserto é sessão própria, mexe no `metrics.py`. §7.25
 
 O contrato entre o humano e o pipeline é o **nome do arquivo**: o script extrai o ID do arquétipo do nome do GLB em `01_raw/`. Nome errado = avatar errado na biblioteca.
 
