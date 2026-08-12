@@ -350,7 +350,13 @@
 > **5. `approved` continua campo morto** — `build_index.py:164` grava `True` fixo
 > e nada lê. O `b09_d3` (32,4) e o `b10_d3` (45,1) lêem masculinos e são servidos.
 >
-> **6. O backup foi refeito em 12/08** (`_backup_zenith/zenith_assets_2026-08-12.zip`).
+> **6. O backup foi refeito em 12/08** — `_backup_zenith/zenith_assets_2026-08-12.zip`,
+> **486 MB**, integridade conferida, com `00_input` `01_raw` `02_master` `03_dist`
+> `config` `metrics` `test` e o `library.json`.
+> ⚠️ **A primeira tentativa saiu sem o `01_raw`** e por isso 120 MB menor que o
+> zip anterior — o que denunciou foi comparar a LISTA de pastas com a do zip de
+> 31/07, não o tamanho. `01_raw` é o único material irreproduzível (custou
+> crédito na Meshy); tudo o mais se refaz a partir dele.
 > ⚠️ Continua **no mesmo disco** — protege contra erro meu, não contra falha de disco.
 >
 > ### 📋 A FILA DE CORREÇÃO DOS SHORTS CONTINUA CONGELADA
