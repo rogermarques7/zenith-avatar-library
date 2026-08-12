@@ -1,6 +1,6 @@
 {
   "schema_version": 4,
-  "generated_at": "2026-08-12T01:44:00Z",
+  "generated_at": "2026-08-12T19:06:56Z",
   "cdn_base": "https://nhloypjtpgyndmjtcpcf.supabase.co/storage/v1/object/public/avatars/",
   "reference_height_m": 1.75,
   "selection": {
@@ -2046,9 +2046,9 @@
       "label": "extremo",
       "waist_to_height": 0.85,
       "body_shape": "medium",
-      "version": 3,
+      "version": 9,
       "assets": {
-        "glb": "zen_m_b09_d1_v3.glb",
+        "glb": "zen_m_b09_d1_v9.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2079,9 +2079,9 @@
       "label": "extremo",
       "waist_to_height": 0.991,
       "body_shape": "medium",
-      "version": 3,
+      "version": 9,
       "assets": {
-        "glb": "zen_m_b10_d1_v3.glb",
+        "glb": "zen_m_b10_d1_v9.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2112,9 +2112,9 @@
       "label": "extremo",
       "waist_to_height": 1.111,
       "body_shape": "medium",
-      "version": 3,
+      "version": 9,
       "assets": {
-        "glb": "zen_m_b11_d1_v3.glb",
+        "glb": "zen_m_b11_d1_v9.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2146,9 +2146,9 @@
       "label": "extremo",
       "waist_to_height": 1.431,
       "body_shape": "medium",
-      "version": 3,
+      "version": 5,
       "assets": {
-        "glb": "zen_m_b12_d1_v3.glb",
+        "glb": "zen_m_b12_d1_v5.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2430,9 +2430,9 @@
       "label": "extremo",
       "waist_to_height": 0.76,
       "body_shape": "medium",
-      "version": 3,
+      "version": 7,
       "assets": {
-        "glb": "zen_m_b08_d2_v3.glb",
+        "glb": "zen_m_b08_d2_v7.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2463,9 +2463,9 @@
       "label": "extremo",
       "waist_to_height": 0.892,
       "body_shape": "medium",
-      "version": 3,
+      "version": 9,
       "assets": {
-        "glb": "zen_m_b09_d2_v3.glb",
+        "glb": "zen_m_b09_d2_v9.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2497,9 +2497,9 @@
       "label": "extremo",
       "waist_to_height": 0.983,
       "body_shape": "medium",
-      "version": 3,
+      "version": 9,
       "assets": {
-        "glb": "zen_m_b10_d2_v3.glb",
+        "glb": "zen_m_b10_d2_v9.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2530,9 +2530,9 @@
       "label": "extremo",
       "waist_to_height": 1.173,
       "body_shape": "medium",
-      "version": 3,
+      "version": 9,
       "assets": {
-        "glb": "zen_m_b11_d2_v3.glb",
+        "glb": "zen_m_b11_d2_v9.glb",
         "turntable": null
       },
       "circumferences_cm": {

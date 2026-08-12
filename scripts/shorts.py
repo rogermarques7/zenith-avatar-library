@@ -158,6 +158,49 @@ WAIST_WINDOW_BACK_ZH    = 0.05   # costas/lados: so o jogo do proprio elastico
 WAIST_PRIOR_SIGMA       = 0.70   # largura do prior, em fracao da janela
 WAIST_MEDIAN            = 7      # termos da mediana circular (era 5)
 
+# --- O AVENTAL PENDE POR CIMA DO COS, e o corte por ALTURA pinta a pele ------
+# Veredito do Rogerio em 12/08, com print de 8 avatares: *"a tinta nao segue o
+# cos do short, voce pinta em cima da barriga"*. Medido no b09_d1, setor 4:
+#
+#   z=0.564  nz=-0.04   a barriga comeca a virar para baixo
+#   z=0.524  nz=-0.13   <- o cos estava AQUI, no meio da face de baixo
+#   z=0.468  nz=-0.92   o fundo da dobra: e aqui que o avental acaba
+#
+# Sao ~10 cm de pele dentro do material do short. O campo do w_field e
+# `z <= cos(azimute)`, ou seja um corte por ALTURA; num corpo com avental a
+# barriga desce ABAIXO dessa altura e cai dentro da regiao. Nao e o detector
+# errando o vinco por pouco: o vinco que ele acha (concavidade maxima) fica no
+# MEIO da face de baixo, e nao no fim dela.
+#
+# ✅ O QUE SEPARA PELE DE TECIDO E A ORIENTACAO DA SUPERFICIE. A face de baixo do
+# avental aponta para baixo (nz ate -0.93); o tecido do short, na altura do cos,
+# tem nz perto de zero. O fundo da dobra e o ponto MAIS BAIXO em que a face de
+# baixo ainda existe - abaixo dele nao ha mais avental para pintar por engano.
+#
+# 🔴 E SO VALE NA FRENTE. Nas costas o mesmo sinal e o SULCO GLUTEO (nz -0.6 a
+# -0.9 no b09_d1), que e short de verdade: descer o cos la e o defeito de
+# "cortar a bunda no meio" que a WAIST_WINDOW assimetrica existe para evitar.
+# O piso acima da virilha existe pelo mesmo motivo do outro lado: a virilha e o
+# pube tambem apontam para baixo, e sem piso a frente desabaria ate la.
+#
+# ❌ ANTES DISTO EU LI O DEFEITO AO CONTRARIO e subi o cos 0.015 no lado da
+# barriga, para fechar uma "listra clara" que eu tinha visto de tres-quartos.
+# Aquela listra era a barriga aparecendo por cima do short - que e o certo, e e
+# o que a folha de referencia mostra. A subida pintou 2,6 cm A MAIS de pele.
+# Revertida. LICOES.md §4.5e.
+COS_AVENTAL_NZ = -0.70     # mediana da normal vertical na fatia
+COS_AVENTAL_PISO = 0.04    # acima da virilha; abaixo disso e pube, nao avental
+COS_AVENTAL_SETORES = 7    # +-105 graus da frente (7 de 24); ver w_cos_avental
+
+# ❌ E A LEITURA QUE VEIO ANTES, para nao ser refeita ------------------------
+# De tres-quartos aparece uma faixa clara entre a barriga e o preto, e eu a li
+# como "tecido faltando" e subi o cos 0.015 para fecha-la. Estava errado: aquela
+# faixa e a propria barriga aparecendo por cima do short, que e o que a folha de
+# referencia mostra. Duas hipoteses geometricas foram construidas em cima dessa
+# leitura errada (subir ate a crista de raio; subir onde a superficie alarga) e
+# as duas tambem morreram medidas. O veredito dele veio no print: o problema
+# nunca foi falta de preto, era preto DEMAIS. LICOES.md §4.5e.
+
 
 # --- janelas de busca, ancoradas na VIRILHA e calibradas pela biblioteca -----
 # A virilha e o unico marco anatomico que acompanha a distorcao de proporcao de
@@ -1479,6 +1522,75 @@ def w_waist_curve(np, A, center_b, floor_b, az_bins, front_mask):
             for j in range(az_bins)]
 
 
+def w_cos_avental(np, co, nor, is_arm, H, crotch_zh, hem_zh, waist_zh, az_bins):
+    """Desce o cos da FRENTE ate o fundo da dobra do avental.
+
+    Devolve a curva com `min(cos, dobra)` nos setores da frente e o cos
+    inalterado no resto. Ver COS_AVENTAL_NZ para o criterio e para as duas
+    hipoteses que morreram antes desta.
+    """
+    import math
+    z = co[:, 2] / H
+    az = np.arctan2(co[:, 1], co[:, 0])
+    ab = np.clip(((az + math.pi) / (2 * math.pi) * az_bins).astype(np.int64),
+                 0, az_bins - 1)
+    # A regiao e MAIS LARGA que a mascara frontal do cos: o avental nao acaba em
+    # +-60 graus, ele sobe de volta indo para o flanco. Cortando em 60 o setor
+    # vizinho fica 10 cm acima e a curva vira um DEGRAU - o short saiu com um
+    # recorte retangular no b11_d1, visivel na hora. Ate +-105 graus a dobra
+    # ainda e barriga; de 105 para tras comeca o sulco gluteo, que e short.
+    frente = np.zeros(az_bins, dtype=bool)
+    meio = az_bins // 4
+    for d in range(-COS_AVENTAL_SETORES, COS_AVENTAL_SETORES + 1):
+        frente[(meio + d) % az_bins] = True
+    piso = max(crotch_zh + COS_AVENTAL_PISO, hem_zh + 0.02)
+    passo = 0.008
+    out = list(waist_zh)
+    for j in range(az_bins):
+        if not frente[j]:
+            continue
+        c = waist_zh[j]
+        sel = (ab == j) & (~is_arm)
+        achou = None
+        for zz in np.arange(c + 0.02, piso, -passo):
+            m = sel & (z >= zz) & (z < zz + passo)
+            if m.sum() < 3:
+                continue
+            if float(np.median(nor[m, 2])) <= COS_AVENTAL_NZ:
+                achou = float(zz)      # continua descendo: quer o MAIS BAIXO
+        if achou is not None:
+            out[j] = min(c, achou)
+    # mediana circular de 3 DENTRO da frente: o detector decide setor a setor e
+    # um setor solto vira degrau. As bordas do bloco frontal ficam intactas, que
+    # e onde a curva encontra o lado - e onde alisar inventaria transicao.
+    idx = [j for j in range(az_bins) if frente[j]]
+    if len(idx) >= 3:
+        suave = list(out)
+        for k in range(1, len(idx) - 1):
+            j = idx[k]
+            suave[j] = float(sorted([out[idx[k - 1]], out[j], out[idx[k + 1]]])[1])
+        out = suave
+
+    # TRAVA DE DEGRAU, a mesma que o --report ja cobra (WAIST_STEP_MAX_ZH). A
+    # descida do avental chega a 10 cm; despejada em um setor ela e uma parede.
+    # Aqui ela so pode SUBIR o que a dobra baixou - o teto de cada setor e o
+    # vizinho mais o passo -, entao a trava espalha a descida por varios setores
+    # em vez de recusa-la, e nenhum setor fora da regiao e tocado.
+    for _ in range(az_bins):
+        mudou = False
+        for j in range(az_bins):
+            if not frente[j] or out[j] >= waist_zh[j]:
+                continue
+            piso_viz = max(out[(j - 1) % az_bins],
+                           out[(j + 1) % az_bins]) - WAIST_STEP_MAX_ZH
+            if out[j] < piso_viz - 1e-9:
+                out[j] = min(waist_zh[j], piso_viz)
+                mudou = True
+        if not mudou:
+            break
+    return [float(v) for v in out]
+
+
 def w_faixa(np, co, kn, H, is_arm, crotch, base_override=None, topo_reto=False,
             topo_frente_zh=None):
     """A FAIXA do peito: base ESCALAR e topo CURVO por azimute.
@@ -1650,7 +1762,7 @@ def w_faixa_curve(np, A, center_b, floor_b, az_bins, front_mask, reto=False,
 
 def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
           waist_override=None, faixa=False, faixa_base_override=None,
-          faixa_topo_reto=False, faixa_topo_frente=None):
+          faixa_topo_reto=False, faixa_topo_frente=None, cos_avental=False):
     """Devolve (cfg em metros, diagnostico).
 
     A bainha sai como ESCALAR por perna e o cos como curva de 24 setores.
@@ -1775,12 +1887,20 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
     A_f = w_fill_holes(np, A_t, occ_t)  # ver w_fill_holes: 32% -> 84% de ocupacao
     wf = w_waist_curve(np, A_f, waist_b, floor_b, WAIST_AZ_BINS, ~back_side)
 
+    waist_zh = [(b + 0.5) / Z_BINS for b in wf]
+    if cos_avental:
+        nor_v = np.empty(len(me.vertices) * 3, dtype=np.float64)
+        me.vertices.foreach_get("normal", nor_v)
+        waist_zh = w_cos_avental(np, co, nor_v.reshape(-1, 3), is_arm, H,
+                                 crotch / H, max(hem_curves) / H,
+                                 waist_zh, WAIST_AZ_BINS)
+
     cfg = {
         "hem_l": hem_curves[0],
         "hem_r": hem_curves[1],
         "hem_center_l": hem_centers[0],
         "hem_center_r": hem_centers[1],
-        "waist": [(b + 0.5) / Z_BINS * H for b in wf],
+        "waist": [v * H for v in waist_zh],
     }
     diag = {
         "crotch_zh": round(crotch / H, 4),
@@ -1967,10 +2087,11 @@ def worker_main():
         fov = _e.get("faixa_base_override_zh")
         fret = bool(_e.get("faixa_topo_reto"))
         ffre = _e.get("faixa_topo_frente_zh")
+        cave = bool(_e.get("cos_avental"))
         cfg, diag = w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=ov,
                           waist_override=wov, faixa=tem_faixa(a.id),
                           faixa_base_override=fov, faixa_topo_reto=fret,
-                          faixa_topo_frente=ffre)
+                          faixa_topo_frente=ffre, cos_avental=cave)
         entry = {
             # gravado em FRACAO DA ALTURA, nao em metros: assim um numero copiado
             # de um avatar para outro continua querendo dizer a mesma coisa
@@ -1994,6 +2115,8 @@ def worker_main():
             entry["faixa_topo_reto"] = True
         if ffre is not None:
             entry["faixa_topo_frente_zh"] = ffre
+        if cave:
+            entry["cos_avental"] = True
     else:
         smap = load_map(a.root)
         entry = smap[a.id]

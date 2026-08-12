@@ -17,18 +17,18 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
 | **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
-| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/FILA_PECAS.md` | 1,3k |
+| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/FILA_PECAS.md` | 1,6k |
 | investigar a coxa que não fecha no morph | `docs/PROBLEMA_COXA.md` | 2,8k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **31,2k** |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **32,3k** |
 | entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-08.md` (7,4k) · `diario-2026-07.md` (**grep**) | 57,2k |
 | o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
 
-> Leitura padrão: `CLAUDE.md` **6,9k** + `state.md` **14,0k** = **20,9k** antes de
+> Leitura padrão: `CLAUDE.md` **7,1k** + `state.md` **14,9k** = **22,0k** antes de
 > qualquer trabalho. O `LICOES.md` seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
-> 26,3k → 28,6k → 29,9k → **31,2k**, com a §4.5c/§4.5d da sessão 26).
+> 26,3k → 28,6k → 29,9k → 31,2k → **32,3k**, com a §4.5e da sessão 27).
 >
 > 🔴 **O corte do `state.md` foi FEITO na sessão 22 e não bastou** — de 9,4k ele
-> foi a 10,0k, depois 12,6k, e a sessão 26 o deixou em **14,0k**. **Enxugar não
+> foi a 10,0k, depois 12,6k, 14,0k, e a sessão 27 o deixou em **14,9k**. **Enxugar não
 > vence escrita nova**; o próximo corte tem que ser maior que o que se pretende
 > acrescentar, ou não é corte. Candidatos óbvios a descer para o diário: o bloco
 > da sessão 18, o da sessão 22 (que o próprio arquivo já marca como "mantido por
@@ -128,6 +128,15 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
 11. `shorts.py` — segmenta e pinta as peças, **um avatar por vez**, lendo o vinco da malha: short no masculino, **short + faixa** no feminino desde 01/08. `--fit` propõe e renderiza QA · `--report` confere contra a série · `--check` roda só as travas · `--apply` grava em `03_dist/glb/`
 
     ✅ **A borda de CIMA da faixa é MODELADA, não procurada (11/08).** Ela nunca foi medível — de 4 a 9 dos 9 setores da frente não têm aro. Hoje o topo frontal vem do `faixa_topo_frente_zh` no mapa, que é **régua externa por avatar** (o `faixa_ref.py` lê a folha), e o traçado é platô na frente inteira + descida nos lados. Erro: **±0,002 em 37 de 37**. A válvula `faixa_topo_reto` morreu. `LICOES.md` §4.5c.
+
+    🔴 **O corte é por ALTURA, e num corpo com avental a barriga desce abaixo
+    dele e sai PINTADA (12/08).** Veredito dele com print: *"a tinta não segue o
+    cós"*. `w_cos_avental` desce o cós da frente até o fundo da dobra — a face de
+    baixo do avental aponta para baixo (nz ≤ −0,70) e é isso que separa pele de
+    tecido. Só na frente (nas costas o mesmo sinal é o sulco glúteo, que é short),
+    com piso acima da virilha e **rampa de 0,045 por setor**: sem ela a descida
+    de 10 cm vira recorte retangular. Ligado por `"cos_avental": true` no mapa.
+    `LICOES.md` §4.5e.
 
     🔴 **Veredito de PINTURA não se dá no render do `--fit`** — ele é clay com luz chapada, e tecido sem pintar tem quase o tom do corpo. Uma listra branca passou por 37 avatares e por uma régua verde assim; quem a viu foi o Rogério, no testador. Usar `qa/probe/sondas/render_dist.py`, que renderiza o GLB entregue com o HDR. §4.5c.
 

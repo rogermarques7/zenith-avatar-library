@@ -21068,9 +21068,9 @@
     ]
   },
   "zen_m_b08_d2": {
-    "glb_version": 3,
+    "glb_version": 7,
     "dropped_columns": [],
-    "calibrated_at": "2026-08-11T15:41:32Z",
+    "calibrated_at": "2026-08-12T19:06:56Z",
     "note": "influence = interp(usuario_cm - avatar_cm, curve[cm], curve[influence]), ja limitada por construcao a [influence_min, influence_max]. NAO usar cm_at_full x influence: a relacao nao e linear em todo morph (ver linearity_at_half). Morph com kind=flatten NAO tem coluna: ele e acoplado - influence = max(0, influence do morph em `couple`) quando couple_when=positive. O GLB tem 2 primitivas (corpo e short): setar morphTargetInfluences em TODAS.",
     "morphs": [
       {
@@ -21180,7 +21180,7 @@
         "base_cm": 133.0,
         "cm_at_full": 10.0,
         "amplitude_m": 0.01825,
-        "verts": 5874,
+        "verts": 5911,
         "influence_min": -1.0,
         "influence_max": 0.4,
         "cm_min": -9.45,
@@ -21211,7 +21211,7 @@
         "base_cm": 146.2,
         "cm_at_full": 8.0,
         "amplitude_m": 0.01394,
-        "verts": 4397,
+        "verts": 4434,
         "influence_min": 0.0,
         "influence_max": 1.0,
         "cm_min": 0.0,
@@ -21296,7 +21296,7 @@
         "base_cm": 86.2,
         "cm_at_full": 6.0,
         "amplitude_m": 0.01338,
-        "verts": 4706,
+        "verts": 4708,
         "influence_min": -0.5,
         "influence_max": 1.0,
         "cm_min": -2.95,
@@ -22635,9 +22635,9 @@
     ]
   },
   "zen_m_b09_d1": {
-    "glb_version": 3,
+    "glb_version": 9,
     "dropped_columns": [],
-    "calibrated_at": "2026-08-11T15:47:00Z",
+    "calibrated_at": "2026-08-12T19:01:33Z",
     "note": "influence = interp(usuario_cm - avatar_cm, curve[cm], curve[influence]), ja limitada por construcao a [influence_min, influence_max]. NAO usar cm_at_full x influence: a relacao nao e linear em todo morph (ver linearity_at_half). Morph com kind=flatten NAO tem coluna: ele e acoplado - influence = max(0, influence do morph em `couple`) quando couple_when=positive. O GLB tem 2 primitivas (corpo e short): setar morphTargetInfluences em TODAS.",
     "morphs": [
       {
@@ -22751,7 +22751,7 @@
         "base_cm": 148.8,
         "cm_at_full": 10.0,
         "amplitude_m": 0.01663,
-        "verts": 7312,
+        "verts": 7276,
         "influence_min": -0.9,
         "influence_max": 1.0,
         "cm_min": -8.92,
@@ -22785,17 +22785,17 @@
         "column": "hip",
         "base_cm": 167.3,
         "cm_at_full": 8.0,
-        "amplitude_m": 0.01293,
-        "verts": 5267,
+        "amplitude_m": 0.01291,
+        "verts": 5360,
         "influence_min": -0.9,
         "influence_max": 1.0,
-        "cm_min": -7.18,
+        "cm_min": -7.17,
         "cm_max": 8.0,
         "linearity_at_half": 1.0,
         "curve": [
           [
             -0.9,
-            -7.18
+            -7.17
           ],
           [
             -0.5,
@@ -22891,7 +22891,7 @@
         "base_cm": 88.7,
         "cm_at_full": 6.0,
         "amplitude_m": 0.01283,
-        "verts": 3375,
+        "verts": 3374,
         "influence_min": -1.0,
         "influence_max": 1.0,
         "cm_min": -5.79,
@@ -22977,7 +22977,7 @@
         "base_cm": 43.9,
         "cm_at_full": 0.0,
         "amplitude_m": 0.0156,
-        "verts": 7312,
+        "verts": 7276,
         "influence_min": 0.0,
         "influence_max": 1.0,
         "cm_min": 0.0,
@@ -23003,9 +23003,9 @@
     ]
   },
   "zen_m_b09_d2": {
-    "glb_version": 3,
+    "glb_version": 9,
     "dropped_columns": [],
-    "calibrated_at": "2026-08-11T15:48:04Z",
+    "calibrated_at": "2026-08-12T19:02:29Z",
     "note": "influence = interp(usuario_cm - avatar_cm, curve[cm], curve[influence]), ja limitada por construcao a [influence_min, influence_max]. NAO usar cm_at_full x influence: a relacao nao e linear em todo morph (ver linearity_at_half). Morph com kind=flatten NAO tem coluna: ele e acoplado - influence = max(0, influence do morph em `couple`) quando couple_when=positive. O GLB tem 2 primitivas (corpo e short): setar morphTargetInfluences em TODAS.",
     "morphs": [
       {
@@ -23119,7 +23119,7 @@
         "base_cm": 156.1,
         "cm_at_full": 10.0,
         "amplitude_m": 0.01713,
-        "verts": 6888,
+        "verts": 6828,
         "influence_min": -1.0,
         "influence_max": 1.0,
         "cm_min": -9.35,
@@ -23154,7 +23154,7 @@
         "base_cm": 172.3,
         "cm_at_full": 8.0,
         "amplitude_m": 0.01293,
-        "verts": 4331,
+        "verts": 4330,
         "influence_min": -1.0,
         "influence_max": 1.0,
         "cm_min": -7.96,
@@ -23333,7 +23333,7 @@
         "base_cm": 46.2,
         "cm_at_full": 0.0,
         "amplitude_m": 0.01713,
-        "verts": 6888,
+        "verts": 6828,
         "influence_min": 0.0,
         "influence_max": 1.0,
         "cm_min": 0.0,
@@ -23359,9 +23359,9 @@
     ]
   },
   "zen_m_b10_d1": {
-    "glb_version": 3,
+    "glb_version": 9,
     "dropped_columns": [],
-    "calibrated_at": "2026-08-11T15:49:07Z",
+    "calibrated_at": "2026-08-12T19:03:21Z",
     "note": "influence = interp(usuario_cm - avatar_cm, curve[cm], curve[influence]), ja limitada por construcao a [influence_min, influence_max]. NAO usar cm_at_full x influence: a relacao nao e linear em todo morph (ver linearity_at_half). Morph com kind=flatten NAO tem coluna: ele e acoplado - influence = max(0, influence do morph em `couple`) quando couple_when=positive. O GLB tem 2 primitivas (corpo e short): setar morphTargetInfluences em TODAS.",
     "morphs": [
       {
@@ -23463,7 +23463,7 @@
         "base_cm": 173.5,
         "cm_at_full": 10.0,
         "amplitude_m": 0.02111,
-        "verts": 7353,
+        "verts": 7331,
         "influence_min": -0.5,
         "influence_max": 0.5,
         "cm_min": -4.19,
@@ -23489,17 +23489,17 @@
         "column": "hip",
         "base_cm": 199.4,
         "cm_at_full": 8.0,
-        "amplitude_m": 0.01316,
-        "verts": 5517,
+        "amplitude_m": 0.01313,
+        "verts": 5529,
         "influence_min": -1.0,
         "influence_max": 1.0,
-        "cm_min": -7.96,
+        "cm_min": -7.98,
         "cm_max": 8.0,
         "linearity_at_half": 1.0,
         "curve": [
           [
             -1.0,
-            -7.96
+            -7.98
           ],
           [
             -0.5,
@@ -23670,9 +23670,9 @@
     ]
   },
   "zen_m_b10_d2": {
-    "glb_version": 3,
+    "glb_version": 9,
     "dropped_columns": [],
-    "calibrated_at": "2026-08-11T15:50:15Z",
+    "calibrated_at": "2026-08-12T19:04:18Z",
     "note": "influence = interp(usuario_cm - avatar_cm, curve[cm], curve[influence]), ja limitada por construcao a [influence_min, influence_max]. NAO usar cm_at_full x influence: a relacao nao e linear em todo morph (ver linearity_at_half). Morph com kind=flatten NAO tem coluna: ele e acoplado - influence = max(0, influence do morph em `couple`) quando couple_when=positive. O GLB tem 2 primitivas (corpo e short): setar morphTargetInfluences em TODAS.",
     "morphs": [
       {
@@ -23786,7 +23786,7 @@
         "base_cm": 172.1,
         "cm_at_full": 10.0,
         "amplitude_m": 0.01774,
-        "verts": 6833,
+        "verts": 6832,
         "influence_min": -0.7,
         "influence_max": 0.7,
         "cm_min": -6.92,
@@ -23820,21 +23820,21 @@
         "column": "hip",
         "base_cm": 189.8,
         "cm_at_full": 8.0,
-        "amplitude_m": 0.01322,
-        "verts": 4362,
+        "amplitude_m": 0.01318,
+        "verts": 4410,
         "influence_min": -1.0,
         "influence_max": 1.0,
-        "cm_min": -7.94,
+        "cm_min": -7.97,
         "cm_max": 8.0,
         "linearity_at_half": 1.0,
         "curve": [
           [
             -1.0,
-            -7.94
+            -7.97
           ],
           [
             -0.5,
-            -3.98
+            -3.99
           ],
           [
             0.0,
@@ -23914,7 +23914,7 @@
         "base_cm": 105.0,
         "cm_at_full": 6.0,
         "amplitude_m": 0.01284,
-        "verts": 4337,
+        "verts": 4336,
         "influence_min": -1.0,
         "influence_max": 1.0,
         "cm_min": -5.95,
@@ -24000,7 +24000,7 @@
         "base_cm": 51.7,
         "cm_at_full": 0.0,
         "amplitude_m": 0.01774,
-        "verts": 6833,
+        "verts": 6832,
         "influence_min": 0.0,
         "influence_max": 1.0,
         "cm_min": 0.0,
@@ -24026,9 +24026,9 @@
     ]
   },
   "zen_m_b11_d1": {
-    "glb_version": 3,
+    "glb_version": 9,
     "dropped_columns": [],
-    "calibrated_at": "2026-08-11T15:51:17Z",
+    "calibrated_at": "2026-08-12T19:05:08Z",
     "note": "influence = interp(usuario_cm - avatar_cm, curve[cm], curve[influence]), ja limitada por construcao a [influence_min, influence_max]. NAO usar cm_at_full x influence: a relacao nao e linear em todo morph (ver linearity_at_half). Morph com kind=flatten NAO tem coluna: ele e acoplado - influence = max(0, influence do morph em `couple`) quando couple_when=positive. O GLB tem 2 primitivas (corpo e short): setar morphTargetInfluences em TODAS.",
     "morphs": [
       {
@@ -24130,7 +24130,7 @@
         "base_cm": 194.5,
         "cm_at_full": 10.0,
         "amplitude_m": 0.02117,
-        "verts": 7464,
+        "verts": 7475,
         "influence_min": -0.9,
         "influence_max": 0.0,
         "cm_min": -7.08,
@@ -24156,8 +24156,8 @@
         "column": "hip",
         "base_cm": 224.2,
         "cm_at_full": 8.0,
-        "amplitude_m": 0.01312,
-        "verts": 5420,
+        "amplitude_m": 0.01311,
+        "verts": 5413,
         "influence_min": -1.0,
         "influence_max": 1.0,
         "cm_min": -7.09,
@@ -24170,7 +24170,7 @@
           ],
           [
             -0.5,
-            -3.88
+            -3.87
           ],
           [
             0.0,
@@ -24336,7 +24336,7 @@
         "base_cm": 61.2,
         "cm_at_full": 0.0,
         "amplitude_m": 0.02117,
-        "verts": 7464,
+        "verts": 7475,
         "influence_min": 0.0,
         "influence_max": 1.0,
         "cm_min": 0.0,
@@ -24362,9 +24362,9 @@
     ]
   },
   "zen_m_b11_d2": {
-    "glb_version": 3,
+    "glb_version": 9,
     "dropped_columns": [],
-    "calibrated_at": "2026-08-11T15:52:22Z",
+    "calibrated_at": "2026-08-12T19:06:01Z",
     "note": "influence = interp(usuario_cm - avatar_cm, curve[cm], curve[influence]), ja limitada por construcao a [influence_min, influence_max]. NAO usar cm_at_full x influence: a relacao nao e linear em todo morph (ver linearity_at_half). Morph com kind=flatten NAO tem coluna: ele e acoplado - influence = max(0, influence do morph em `couple`) quando couple_when=positive. O GLB tem 2 primitivas (corpo e short): setar morphTargetInfluences em TODAS.",
     "morphs": [
       {
@@ -24443,7 +24443,7 @@
         "base_cm": 205.2,
         "cm_at_full": 10.0,
         "amplitude_m": 0.02032,
-        "verts": 7108,
+        "verts": 7065,
         "influence_min": -0.5,
         "influence_max": 0.25,
         "cm_min": -4.19,
@@ -24469,21 +24469,17 @@
         "column": "hip",
         "base_cm": 224.0,
         "cm_at_full": 8.0,
-        "amplitude_m": 0.01398,
-        "verts": 4344,
-        "influence_min": -1.0,
+        "amplitude_m": 0.01397,
+        "verts": 4309,
+        "influence_min": -0.5,
         "influence_max": 0.5,
-        "cm_min": -6.47,
+        "cm_min": -3.31,
         "cm_max": 3.73,
         "linearity_at_half": 0.93,
         "curve": [
           [
-            -1.0,
-            -6.47
-          ],
-          [
             -0.5,
-            -3.32
+            -3.31
           ],
           [
             0.0,
@@ -24641,7 +24637,7 @@
         "base_cm": 60.6,
         "cm_at_full": 0.0,
         "amplitude_m": 0.02032,
-        "verts": 7108,
+        "verts": 7065,
         "influence_min": 0.0,
         "influence_max": 1.0,
         "cm_min": 0.0,
@@ -24929,12 +24925,12 @@
     ]
   },
   "zen_m_b12_d1": {
-    "glb_version": 3,
+    "glb_version": 5,
     "dropped_columns": [
       "biceps",
       "forearm"
     ],
-    "calibrated_at": "2026-08-11T15:54:28Z",
+    "calibrated_at": "2026-08-12T16:25:11Z",
     "note": "influence = interp(usuario_cm - avatar_cm, curve[cm], curve[influence]), ja limitada por construcao a [influence_min, influence_max]. NAO usar cm_at_full x influence: a relacao nao e linear em todo morph (ver linearity_at_half). Morph com kind=flatten NAO tem coluna: ele e acoplado - influence = max(0, influence do morph em `couple`) quando couple_when=positive. O GLB tem 2 primitivas (corpo e short): setar morphTargetInfluences em TODAS.",
     "morphs": [
       {
@@ -25044,7 +25040,7 @@
         "base_cm": 250.4,
         "cm_at_full": 10.0,
         "amplitude_m": 0.02064,
-        "verts": 7919,
+        "verts": 7917,
         "influence_min": -0.8,
         "influence_max": 0.5,
         "cm_min": -6.25,
@@ -25075,7 +25071,7 @@
         "base_cm": 257.0,
         "cm_at_full": 8.0,
         "amplitude_m": 0.01684,
-        "verts": 4768,
+        "verts": 4769,
         "influence_min": -1.0,
         "influence_max": 1.0,
         "cm_min": -6.49,

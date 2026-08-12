@@ -1,6 +1,69 @@
 ﻿# state.md — o presente
 
-Última atualização: **11/08/2026, fim da sessão 26**
+Última atualização: **12/08/2026, fim da sessão 27**
+
+> ## 🟡 SESSÃO 27 — OS SHORTS MASCULINOS: 5 RESOLVIDOS, 3 PENDENTES
+>
+> A §2 do `docs/FILA_PECAS.md`, em modo automático. Regravados: `b09_d1` ·
+> `b09_d2` · `b10_d1` · `b10_d2` · `b11_d1` · `b11_d2` · `b08_d2` (este último
+> não estava na lista original — ele mandou depois).
+>
+> 🔴 **EU LI O DEFEITO AO CONTRÁRIO NA PRIMEIRA RODADA e gravei uma versão
+> errada.** Ver `LICOES.md` §4.5e — é a lição principal da sessão, e é de método,
+> não de geometria. O defeito real: o campo do short é `z <= cós(azimute)`, um
+> corte por ALTURA; num corpo com avental a barriga desce abaixo dele e **sai
+> pintada de preto**. São ~10 cm de pele no `b09_d1`.
+>
+> ✅ **`w_cos_avental`**: desce o cós da frente até o fundo da dobra, achado pela
+> **orientação da superfície** (a face de baixo do avental tem `nz <= -0,70`; o
+> tecido na altura do cós tem nz perto de zero). Só na frente — nas costas o mesmo
+> sinal é o sulco glúteo, que é short — com piso acima da virilha e **rampa de
+> 0,045 por setor** (sem ela a descida vira recorte retangular). Ligado por
+> `"cos_avental": true` no mapa, nunca automático.
+>
+> **Placar depois do lote:** `--check` 7/7 · `probe_material_dist` **76/76** ·
+> `select --check` **34/34** · `morph_cases --check` **608/608** · índice 76, zero
+> GLB faltando, zero id com duas versões · shape keys **35/33/5/3**, a mesma
+> distribuição de antes.
+>
+> ### 🔴 O QUE FICOU PENDENTE — é por aqui que a próxima sessão começa
+>
+> **1. `b11_d1` melhora e não zera.** O avental desce quase até a virilha; para
+> tirar todo o preto o cós teria de cair 10 cm em poucos graus, e é isso que vira
+> parede. Sobra mancha na frente.
+>
+> **2. `b12_d1` não se moveu.** A frente dele já está no piso da bainha. Se o
+> defeito que ele viu é esse mesmo, precisa de outra solução; **falta print dele
+> de frente.**
+>
+> **3. 🔴 ELE DIZ QUE O MESMO DEFEITO ESTÁ NAS FEMININAS.** Não medido. Elas usam
+> o mesmo `w_waist_curve`, então é esperado — e são 37.
+>
+> **4. Nada subiu para o app** — nem isto, nem o lote da sessão 26.
+>
+> ### ➡️ A PRÓXIMA SESSÃO É A **PARTE DE BAIXO DO SHORT** — ele marcou em 12/08
+>
+> Aprovou o lote (*"melhorou bastante"*) e disse que a sessão seguinte é para
+> **corrigir a parte de baixo dos shorts** — a BAINHA. O que já se sabe dela e
+> vale abrir antes: `LICOES.md` §4.3b/§4.3c (o `crotch_override_zh` conserta a
+> âncora, não a segmentação; a correção do `b12_d1` **não** virou detector) e a
+> tentativa descartada de "seguir o vinco setor a setor", no docstring do
+> `w_fit` — a bainha mediu **praticamente horizontal**, e a passada fina de 48
+> setores saiu pior que a reta.
+>
+> ⚠️ E a pergunta a fazer antes de escolher método é a mesma que faltou desta
+> vez: **qual é o defeito?** Nesta sessão a lista veio sem descrição, eu li o
+> sinal ao contrário e gravei uma versão errada. Pedir print, ou pedir que ele
+> descreva, antes de mexer no detector.
+
+> ### 🆕 Instrumentos novos em `qa/probe/sondas/`
+>
+> `peca_folha.py` (o GLB entregue com HDR, 4 vistas no quadril — foi nele que o
+> defeito apareceu) · `mascara_peca.py` (máscara ortográfica chapada: fundo, corpo
+> e peça em três classes exatas) · `cos_avental_mapa.py` (banco de ensaio: pinta
+> por vertex color no master e fotografa, ~40 s a tentativa, contra uma versão de
+> dist + um `morph --apply` pelo caminho de produção). O `render_dist.py` ganhou
+> vistas por `VISTAS` — o short não mora em 0,72 da altura.
 
 > ## ✅ SESSÃO 26 — OS 37 TOPS FEMININOS ESTÃO CONSERTADOS
 >
@@ -287,7 +350,8 @@
 > **5. `approved` continua campo morto** — `build_index.py:164` grava `True` fixo
 > e nada lê. O `b09_d3` (32,4) e o `b10_d3` (45,1) lêem masculinos e são servidos.
 >
-> **6. O backup está 78 arquivos atrás e no mesmo disco.**
+> **6. O backup foi refeito em 12/08** (`_backup_zenith/zenith_assets_2026-08-12.zip`).
+> ⚠️ Continua **no mesmo disco** — protege contra erro meu, não contra falha de disco.
 >
 > ### 📋 A FILA DE CORREÇÃO DOS SHORTS CONTINUA CONGELADA
 >
@@ -858,13 +922,11 @@ reclassificar ou inserir, nunca regerar.
 
 ## Pendências que não bloqueiam
 
-- ⚠️ **Três cópias soltas do mapa esperando decisão antes do commit:**
-  `config/shorts_map.json.bak`, `.bak2` e `shorts_map.sessao21.json`. **Não
-  apaguei** — o mapa é o produto (regra 3b), e apagar backup de produto sem ele
-  mandar é a decisão errada de tomar sozinho. Mas eles estão **fora do
-  `.gitignore`**, então entram no primeiro `git add .` como se fossem fonte.
-  Decidir: apagar, ignorar, ou mover para fora do repositório. O mesmo vale para
-  `qa/`, que hoje é untracked inteiro e guarda render.
+- ✅ **As três cópias soltas do mapa saíram do repositório em 12/08**, por ordem
+  dele: foram para `_backup_zenith/mapas_soltos/`. Nenhuma foi apagada — o mapa é
+  o produto (regra 3b) — e a `sessao21.json` é byte a byte igual ao commit
+  `531f403`, enquanto as duas `.bak` não batem com commit nenhum, que é
+  justamente por que não se apaga.
 
 - 🔴 **`approved` é campo morto, e agora com DOIS assets dependendo dele.** O
   `build_index.py:164` grava `True` fixo e nada lê — nem o `avatar_tester.html`.

@@ -1415,6 +1415,82 @@ oposto é chute com cara de calibração.
 `b11_d2`, `b12_d1`, `b07_d3`) sobra um recorte pequeno na quina de baixo. Quem
 diz se incomoda é o olho dele.
 
+#### 4.5e O corte do short é por ALTURA, e num corpo com avental isso PINTA A BARRIGA (12/08)
+
+A fila §2 do `FILA_PECAS.md` chegou sem descrição de defeito. Eu renderizei o GLB
+entregue, vi uma **faixa clara** entre a barriga e o preto, li como "falta tecido"
+e subi o cós 0,015. **Estava ao contrário.** O veredito dele veio com print de 8
+avatares: *"a tinta não segue o cós do short, você pinta em cima da barriga"* — a
+faixa clara era a própria barriga aparecendo por cima do short, que é o certo e é
+o que a folha de referência mostra. Minha subida pintou 2,6 cm A MAIS de pele.
+
+##### 🔴 A lição de método, que vale mais que o conserto
+
+**Eu tinha as duas leituras disponíveis e escolhi a errada sem testar a outra.**
+"Falta preto" e "sobra preto" produzem a MESMA imagem quando não se sabe onde a
+divisa deveria estar — e eu tinha a folha de referência, que responde: nela a
+barriga cobre o short e não há preto na pele. Perguntar *"e se o sinal for o
+oposto?"* custava um render; custou três rodadas e duas versões de GLB.
+
+E as duas hipóteses geométricas que construí em cima da leitura errada morreram
+medidas: **crista de raio** (não há máximo local em 4,5 cm — o raio sobe monótono
+até a barriga inteira) e **dr/dz** (não separa: o controle chega a +10 mm na
+frente e o `b11_d2` a +24 mm nas costas, que são os glúteos). Hipótese boa
+construída sobre premissa errada continua errada — e ela *parece* boa, porque
+explica a imagem que eu li mal.
+
+⚠️ E um bug de medida sustentou a primeira: `np.convolve(..., "same")`
+**zero-padda a borda**, e o primeiro ponto do perfil — o raio NO CÓS, referência
+de tudo — saía a dois terços do valor real. Todo setor media "avental de 10 cm",
+inclusive as costas lisas. Média móvel sobre janela que começa no ponto de
+interesse tem que replicar a borda.
+
+##### ✅ O conserto: a orientação da superfície separa pele de tecido
+
+O campo é `z <= cos(azimute)` — corte por ALTURA. Num corpo com avental a barriga
+desce abaixo dessa altura e cai dentro da região. Medido no `b09_d1`, setor 4:
+
+| z | nz | o que é |
+|---|---:|---|
+| 0,564 | −0,04 | a barriga começa a virar para baixo |
+| 0,524 | −0,13 | **o cós estava aqui**, no meio da face de baixo |
+| 0,468 | −0,92 | o fundo da dobra: o avental acaba |
+
+São ~10 cm de pele dentro do material do short. `w_cos_avental` desce o cós da
+frente até o ponto mais baixo em que a face voltada para baixo ainda existe
+(`nz <= -0,70`) — abaixo dele não há mais avental para pintar por engano.
+
+🔴 **Só na frente, e com piso.** Nas costas o mesmo sinal é o **sulco glúteo**
+(−0,6 a −0,9 no `b09_d1`), que é short de verdade: descer lá é o "cortar a bunda
+no meio" que a `WAIST_WINDOW` assimétrica existe para evitar. Abaixo da virilha é
+o púbis, que também aponta para baixo — daí `COS_AVENTAL_PISO`.
+
+##### 🔴 A descida sem RAMPA vira um recorte retangular
+
+Primeira versão aplicada: a região era a máscara frontal (±60°) e a descida ia
+inteira num setor. No `b11_d1` o cós caiu 10 cm entre setores vizinhos e o short
+saiu com uma **mordida retangular** — pior que o defeito original, e visível no
+primeiro render. Dois consertos:
+
+1. **A região é ±105°, não ±60°.** O avental não acaba na frente; ele sobe de
+   volta indo para o flanco. Cortar em 60° era o que criava a parede.
+2. **A trava de degrau passou a ATUAR.** O `WAIST_STEP_MAX_ZH = 0,045` já existia
+   como *relatório* no `--report`; agora ela limita a inclinação da curva, e a
+   descida se espalha por vários setores em vez de ser recusada.
+
+⚠️ **O clamp nasceu com o sinal invertido** (`min(vizinhos) + passo` como teto em
+vez de `max(vizinhos) − passo` como piso) e desfazia a correção inteira em
+silêncio — o mapa saía idêntico ao de entrada, com "0 setores movidos". Trava que
+pode anular o que ela deveria só suavizar precisa de um caso de teste que
+distinga "não precisou" de "não funcionou".
+
+##### O que NÃO fechou
+
+`b11_d1` e `b12_d1`: o avental desce quase até a virilha e a rampa não deixa o cós
+acompanhar. Sobra preto na barriga do `b11_d1`; o `b12_d1` não se move porque a
+frente dele já está no piso da bainha. **Ele diz que o mesmo defeito existe nas
+femininas** — não medido ainda.
+
 ---
 
 ## 5. Biblioteca e classificação

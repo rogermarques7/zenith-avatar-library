@@ -90,6 +90,25 @@ Ele listou por IMC medido:
 | `zen_m_b11_d2` | 111,7 |
 | `zen_m_b12_d1` | 147,7 |
 
+## ✅ A PARTE 2 FOI ATACADA EM 12/08 (sessão 27) — os 7, em modo automático
+
+> A lista chegou **sem descrição de defeito** (a §1 tinha três classes com
+> screenshot; esta não tem nada). O defeito é **preto pintado em cima da
+> barriga**: o corte do short é por ALTURA e o avental desce abaixo dele.
+>
+> ⚠️ **A primeira leitura estava ao contrário** e gerou uma versão errada. O
+> veredito dele, com print de 8 avatares: *"a tinta não segue o cós do short,
+> você pinta em cima da barriga"*. `w_cos_avental` desce o cós da frente até o
+> fundo da dobra (`nz <= -0,70`), só na frente e com rampa. `LICOES.md` §4.5e.
+>
+> ✅ **Aprovado por ele em 12/08** — *"melhorou bastante"*. Fechados: `b09_d1`
+> `b09_d2` `b10_d1` `b10_d2` `b11_d2` `b08_d2`.
+> **Pendentes:** `b11_d1` (melhora, não zera) e `b12_d1` (não se move — a frente
+> já está no piso; falta print dele de frente).
+> 🔴 **Ele diz que o mesmo defeito está nas femininas** — não medido.
+
+---
+
 **São 7, e são os sete mais pesados do acervo masculino** — todos fora da faixa
 de usuário (17–40). Isso é informação: o detector do `shorts.py` foi calibrado
 com corpo dentro da faixa, e a §3b do `CLAUDE.md` já avisa que *"achar o cós
@@ -106,4 +125,10 @@ sido apontados.
 
 ## Ordem combinada
 
-Ele disse: **"comece pelos tops femininos"**. Os shorts masculinos vêm depois.
+Ele disse: **"comece pelos tops femininos"** — feito na sessão 26. Os shorts
+masculinos vieram depois, na 27.
+
+➡️ **A próxima é a PARTE DE BAIXO do short (a bainha)**, marcada por ele em
+12/08. E fora da fila continuam: `b11_d1` e `b12_d1` (o cós, que não zerou) e o
+mesmo defeito de cós **nas 37 femininas**, que ele apontou e ainda não foi
+medido.

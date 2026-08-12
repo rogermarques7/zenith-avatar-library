@@ -3,6 +3,17 @@
 
     blender -b -P qa/probe/sondas/render_dist.py -- <caminho.glb> <saida.png> [hdr]
 
+Com a variavel de ambiente VISTAS (JSON), renderiza VARIAS vistas de uma vez e
+`<saida>` passa a ser uma PASTA:
+
+    VISTAS='[["frente",0.45,2.4,0,85],["lado",0.45,2.4,90,85]]'
+    -> cada item e [nome, alvo_zh, distancia_m, azimute_graus, lente_mm]
+
+A peca de baixo nao mora em 0.72 (o cos vai de 0.48 a 0.57 e a bainha de 0.34 a
+0.40), e defeito de short aparece de lado e de costas tanto quanto de frente -
+por isso a vista deixou de ser fixa. O default reproduz exatamente o
+enquadramento de torso da sessao 26.
+
 POR QUE ISTO EXISTE, e por que nao basta o render do `shorts.py --fit`
 ---------------------------------------------------------------------
 Em 11/08 (sessao 26) eu consertei a borda de cima da faixa nos 37 femininos,
@@ -21,6 +32,7 @@ PINTURA se julga no arquivo que o usuario baixa, nunca no QA intermediario.
 
 Ver LICOES.md 4.5c.
 """
+import json
 import math
 import os
 import sys
@@ -36,9 +48,7 @@ hdr = argv[2] if len(argv) > 2 else None
 # Enquadramento do TORSO. A faixa mora perto de 0.72 da altura em todo mundo
 # (o personagem tem sempre 1.75 m - CLAUDE.md 2), entao o alvo e fixo em fracao
 # e serve do IMC 16 ao 114 sem ajuste por avatar.
-ALVO_ZH = 0.72
-LENTE = 120.0
-DIST = 3.2
+VISTAS = json.loads(os.environ.get("VISTAS", '[["", 0.72, 3.2, 0, 120]]'))
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.gltf(filepath=glb)
@@ -71,13 +81,16 @@ zs = [(ob.matrix_world @ v.co).z for v in ob.data.vertices]
 alt = max(zs) - min(zs)
 
 cam_d = bpy.data.cameras.new("C")
-cam_d.lens = LENTE
 cam = bpy.data.objects.new("C", cam_d)
 sc.collection.objects.link(cam)
 sc.camera = cam
-cam.location = (0.0, -DIST, min(zs) + alt * ALVO_ZH)
-cam.rotation_euler = (math.radians(90), 0.0, 0.0)
 
-sc.render.filepath = out
-bpy.ops.render.render(write_still=True)
-print("OK", out)
+for nome, alvo_zh, dist, ang, lente in VISTAS:
+    cam_d.lens = float(lente)
+    z = min(zs) + alt * float(alvo_zh)
+    a = math.radians(float(ang))
+    cam.location = (dist * math.sin(a), -dist * math.cos(a), z)
+    cam.rotation_euler = (math.radians(90), 0.0, a)
+    sc.render.filepath = out if not nome else os.path.join(out, nome + ".png")
+    bpy.ops.render.render(write_still=True)
+    print("OK", sc.render.filepath)
