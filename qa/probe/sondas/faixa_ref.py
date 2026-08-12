@@ -118,6 +118,37 @@ def do_3d(hi, quarto):
     return float(np.median(vs))
 
 
+# ---------------------------------------------------------------------------
+# QUAL DAS CORRIDAS DA FRENTE E A FAIXA - pela BASE, nao pela ordem (11/08)
+# ---------------------------------------------------------------------------
+# A versao anterior pegava a corrida de CIMA da vista frontal. Em 35 das 37 isso
+# acerta, e em duas nao: o b08_d1 e o b11_d1 tem uma terceira corrida escura la
+# em cima (0.869..0.856 e 0.861..0.848, treze milesimos de altura, na sombra do
+# queixo), e a regua devolvia ELA como topo da faixa. O efeito nao era silencioso
+# - dava -0.113 e -0.101 contra o 3D, absurdo obvio -, mas tirava os dois avatares
+# do alcance de qualquer conserto guiado por folha.
+#
+# O criterio novo nao e altura minima de corrida (isso seria mais um limiar
+# escolhido para caber nesses dois): e o FATO MEDIDO de que a borda de BAIXO da
+# faixa esta na mesma altura na frente e nas costas - delta +0.015 medio, contra
+# +0.031 a +0.060 da borda de cima. Entao a corrida frontal certa e a que casa a
+# base com a das costas, e as costas leem bem nos 37.
+#
+# A trava continua: se a melhor candidata errar a base por mais que isto, nao ha
+# faixa legivel na frente e a funcao devolve None em vez de um numero plausivel.
+# Regua externa tambem erra; o que nao pode e errar CALADA.
+BASE_TOL = 0.05
+
+
+def casa_frente(cf, faixa_costas):
+    """A corrida frontal da FAIXA, escolhida pela base contra a vista de costas."""
+    if len(cf) < 2 or not faixa_costas:
+        return None
+    alvo = faixa_costas[1]
+    melhor = min(cf, key=lambda c: abs(c[1] - alvo))
+    return melhor if abs(melhor[1] - alvo) <= BASE_TOL else None
+
+
 def main():
     alvo = sys.argv[1] if len(sys.argv) > 1 else None
     smap = {}
@@ -156,7 +187,7 @@ def main():
         # acima da pintura, e o das costas nao.
         fr = zp.ref_path(ROOT, aid, "front")
         cf = corridas(fr) if os.path.isfile(fr) else []
-        frente = cf[0] if len(cf) >= 2 else None
+        frente = casa_frente(cf, faixa)
         saida[aid] = {"faixa": faixa, "faixa_frente": frente, "short": short,
                       "n": len(cs)}
 

@@ -1,6 +1,77 @@
 ﻿# state.md — o presente
 
-Última atualização: **11/08/2026, fim da sessão 25**
+Última atualização: **11/08/2026, fim da sessão 26**
+
+> ## ✅ SESSÃO 26 — OS 37 TOPS FEMININOS ESTÃO CONSERTADOS
+>
+> A fila do `docs/FILA_PECAS.md` foi atacada em **modo automático**, a pedido
+> dele. O conserto foi no **detector**, então rodou nos 37 e não nos 30 da lista.
+>
+> **Dois defeitos, medidos e separados:**
+>
+> - **A — a listra branca no topo.** A subida frontal deixou de ser procurada e
+>   passou a ser **modelada**: platô na altura que a folha mede para aquele
+>   avatar (`faixa_topo_frente_zh` no mapa), descida nos setores do lado. Erro
+>   contra a régua externa: **±0,002 em 37 de 37**, contra −0,041 no pior.
+> - **B — o dente na axila.** Duas causas empilhadas no `w_arm_wide`: cada fatia
+>   de 0,005 decidia sozinha (virou mediana móvel de 5) e o `PROF_FRAC` acha "já
+>   é tronco" e não "aqui começa o tronco" (`ARM_COL_OUT`, uma coluna para fora).
+>
+> **A válvula `faixa_topo_reto` morreu.** Era o mesmo modelo com amplitude zero,
+> e a folha nunca endossa amplitude zero.
+>
+> **Placar final, todas as réguas rodadas depois do lote:**
+>
+> | régua | resultado |
+> |---|---|
+> | folha × 3D, topo frontal | **±0,002 em 37/37** |
+> | folha × 3D, topo costas / base | máx 0,014 / 0,018 — **iguais ao que já eram** |
+> | `shorts.py --check --all` | **76/76**, zero `CONFERIR`, zero `ILHAS` |
+> | `probe_material_dist.py` | **76/76**, zero short apagado |
+> | `select.py --check` | **34/34** |
+> | `morph_cases.py --check` | **608/608** |
+> | GLB × índice × `morph_map` | 76 × 76 × 76, **zero inconsistência** |
+>
+> Shape keys: **35 com 10, 33 com 9, 5 com 8, 3 com 7** — exatamente a
+> distribuição da sessão 25. Nada se perdeu na ida e volta pela peça.
+>
+> ### 🔴 TRÊS COISAS QUE A SESSÃO NOVA PRECISA SABER
+>
+> **1. A ordem peça→morph é OBRIGATÓRIA, e quase custou os 76 shape keys.**
+> O `shorts.py --apply` lê o `02_master/`, que não tem morph — é a regra 9 com
+> outro par de escritores. Quem aplica peça **tem** que reaplicar o morph
+> depois:
+>
+> ```
+> python scripts/shorts.py {id} --apply    # corpo + peca  -> v(n+1)
+> python scripts/morph.py  {id} --apply    # le esse dist  -> v(n+2)
+> ```
+>
+> É seguro: o `morph --apply` **limpa os shape keys que achar e recalibra do
+> zero**, então a costura nova (+1200 tri) é remedida, não herdada.
+>
+> **2. Veredito de PINTURA não se dá no render do `--fit`.** Julguei os 37
+> naquele clay, dei o lote por bom, e ele abriu o testador e viu **faixa branca
+> no topo de absolutamente todos**. Usar `qa/probe/sondas/render_dist.py`, que
+> renderiza o GLB entregue com o `zenith_env.hdr`. `LICOES.md` §4.5c.
+>
+> **3. A régua da folha passou VERDE com o avatar errado.** Ela compara a
+> mediana do quarto frontal — mede o **pico**, não a **forma**. Deu ±0,002 nos
+> 37 enquanto o traçado caía cedo demais para os lados.
+>
+> ### 📋 O QUE SOBROU DOS TOPS — é esta a fila viva
+>
+> **Recorte pequeno na quina de baixo da faixa** em `b09_d2` · `b10_d1` ·
+> `b11_d2` · `b12_d1` · `b07_d3`. Encolheu muito e **não tem régua externa** —
+> só o olho dele decide se volta para a fila. **Não varrer os outros.**
+>
+> Os 7 shorts masculinos do `FILA_PECAS.md` §2 **não foram tocados** — ele mandou
+> começar pelos tops.
+>
+> 🔴 **Nada subiu para o app.** Os 37 GLBs novos, o `library.json`, o
+> `morph_map.json` e o `morph_cases.json` estão só aqui. A receita de subida é a
+> do bloco dos dois repositórios, logo abaixo — **índice primeiro, upload
+> depois**.
 
 > ## 🔀 OS DOIS REPOSITÓRIOS VIRARAM SESSÕES SEPARADAS (06/08)
 >

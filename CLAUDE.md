@@ -17,21 +17,22 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
 | **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
-| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/FILA_PECAS.md` | 2,0k |
+| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/FILA_PECAS.md` | 1,3k |
 | investigar a coxa que não fecha no morph | `docs/PROBLEMA_COXA.md` | 2,8k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **29,9k** |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **31,2k** |
 | entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-08.md` (7,4k) · `diario-2026-07.md` (**grep**) | 57,2k |
 | o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
 
-> Leitura padrão: `CLAUDE.md` **6,7k** + `state.md` **12,6k** = **19,3k** antes de
+> Leitura padrão: `CLAUDE.md` **6,9k** + `state.md` **14,0k** = **20,9k** antes de
 > qualquer trabalho. O `LICOES.md` seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
-> 26,3k → 28,6k → **29,9k**, com as três lições do lote de morph, §7.23–§7.25).
+> 26,3k → 28,6k → 29,9k → **31,2k**, com a §4.5c/§4.5d da sessão 26).
 >
-> 🔴 **O corte do `state.md` foi FEITO na sessão 22 e não bastou.** O bloco da
-> sessão 20 foi mandado para o `INTEGRACAO_ZENITH.md` §1b como estava planejado —
-> e o arquivo ainda assim subiu de 9,4k para **10,0k**, porque na mesma sessão
-> entrou mais coisa do que saiu. **Enxugar não vence escrita nova**; o próximo
-> corte tem que ser maior que o que se pretende acrescentar, ou não é corte.
+> 🔴 **O corte do `state.md` foi FEITO na sessão 22 e não bastou** — de 9,4k ele
+> foi a 10,0k, depois 12,6k, e a sessão 26 o deixou em **14,0k**. **Enxugar não
+> vence escrita nova**; o próximo corte tem que ser maior que o que se pretende
+> acrescentar, ou não é corte. Candidatos óbvios a descer para o diário: o bloco
+> da sessão 18, o da sessão 22 (que o próprio arquivo já marca como "mantido por
+> contexto") e o bloco de morph da 25, agora que a 26 o resumiu.
 >
 > **Toda a coluna foi remedida na sessão 18** com um divisor único de 3,6
 > chars/token, calibrado contra os números que já estavam certos (`prompt_m.md`
@@ -126,7 +127,11 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
 10. `restyle.py` — reaplica o material nos 39 `03_dist/glb/` **lendo os masters, sem re-decimar e sem tocar em `02_master/`**. É o jeito de mexer em cor sem refazer QA. `--preview {id}` renderiza 4 vistas com o ambiente em `qa/look/{id}/`
 11. `shorts.py` — segmenta e pinta as peças, **um avatar por vez**, lendo o vinco da malha: short no masculino, **short + faixa** no feminino desde 01/08. `--fit` propõe e renderiza QA · `--report` confere contra a série · `--check` roda só as travas · `--apply` grava em `03_dist/glb/`
 
-    ⚠️ **A borda de CIMA da faixa não é medida de verdade em avatar nenhum** — de 4 a 9 dos 9 setores da frente não têm aro (o busto apaga o vinco) e o traçado sai de ruído alisado. Piso sobre o pico foi **testado e refutado**: reescreve os 37, inclusive os certos. Válvula declarada: `"faixa_topo_reto": true` no mapa. Antes de mexer nisso, `LICOES.md` §4.5b — o conserto muda os 37 e **não tem régua externa**.
+    ✅ **A borda de CIMA da faixa é MODELADA, não procurada (11/08).** Ela nunca foi medível — de 4 a 9 dos 9 setores da frente não têm aro. Hoje o topo frontal vem do `faixa_topo_frente_zh` no mapa, que é **régua externa por avatar** (o `faixa_ref.py` lê a folha), e o traçado é platô na frente inteira + descida nos lados. Erro: **±0,002 em 37 de 37**. A válvula `faixa_topo_reto` morreu. `LICOES.md` §4.5c.
+
+    🔴 **Veredito de PINTURA não se dá no render do `--fit`** — ele é clay com luz chapada, e tecido sem pintar tem quase o tom do corpo. Uma listra branca passou por 37 avatares e por uma régua verde assim; quem a viu foi o Rogério, no testador. Usar `qa/probe/sondas/render_dist.py`, que renderiza o GLB entregue com o HDR. §4.5c.
+
+    ⚠️ **Régua verde não é avatar certo.** A régua da folha compara a **mediana do quarto frontal**: ela mede o *pico*, não a *forma*. Deu ±0,002 nos 37 com o traçado caindo cedo demais para os lados — o defeito que ele viu. §1.5 num eixo novo.
 12. `sheet_qa.py` — mede a folha **ainda em Downloads**, antes de ela entrar no repositório: alinhamento das 3 vistas, espaçamento, **largura do tronco na frente** (ombro/cintura/quadril/coxa, com o braço fora da conta), **profundidade no perfil** (barriga/glúteo/coxa) e extensão do tecido. Aceita uma 2ª folha como referência e imprime o delta. O `measure.py` só roda depois do `crop.py`, e não se grava folha que pode reprovar. **Passo padrão antes de aprovar qualquer folha, dos dois geradores.**
 
     ⚠️ **O critério é a ASSINATURA DE VAZAMENTO, não o gerador — este parágrafo já ensinou o contrário e estava errado.** Até 30/07 ele dizia "em folha do Gemini ele não mede nada", e o `LICOES.md` §1.1 já tinha derrubado isso: **o gerador nunca foi a variável.** A folha do `zen_f_b06_d3` é do **ChatGPT** e vazou (5,05% de variação, `cintura/ombro 1,245`), enquanto a folha do Gemini medida em 30/07 leu **sã** — 0,14% de variação, 0 px nos pés, `cintura/ombro 0,554` — e a leitura dela decidiu uma escolha entre duas folhas. Pela redação antiga eu teria jogado fora uma medida válida.

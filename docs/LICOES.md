@@ -1333,6 +1333,88 @@ por uma **coincidência de direção** — §1.5, *duas estimativas concordando 
 uma confirmação*. A queixa dele confirma que **existe defeito no topo**; ela não
 confirma que **é este**.
 
+#### 4.5c ✅ RESOLVIDO em 11/08 (sessão 26) — e as duas lições valem mais que o conserto
+
+A subida frontal **deixou de ser procurada e passou a ser modelada**, ancorada na
+folha. Erro contra a régua externa: **±0,002 em 37 de 37**, contra −0,041 no pior
+antes. A válvula `faixa_topo_reto` morreu — era o mesmo modelo com amplitude
+zero, e amplitude zero é a única escolha que a folha nunca endossa.
+
+**A régua que faltava existia, e a §4.5b não a creditou.** Ela diz *"não existe
+régua externa para o traçado por setor"* — verdade, e continua verdade. O que
+faltou notar é que a **altura do pico** tem uma, por avatar: o `faixa_ref.py` lê
+a corrida escura na vista **frontal** da folha. E o pico é a única incógnita que
+um modelo precisa. *Perguntar o que a régua não mede é metade; a outra metade é
+perguntar o que ela mede e ninguém está usando.*
+
+##### 🔴 A hipótese óbvia estava errada, e o jeito de saber foi medir
+
+O `b08_d3` era o único com a válvula **e** o exemplo do defeito maior — parecia
+causa. Tirar a válvula deixou o erro **idêntico** (−0,041 antes e depois) e
+trouxe de volta a cunha do esterno: dos 24 setores, **22 na própria âncora e 2
+disparando +0,046**. A válvula era o curativo, não a doença. E a classe "maior"
+não tinha causa única: cruzando as três classes dele com a régua, as medianas
+deram −0,009 / −0,004 / −0,010 — **nenhuma separação**. Cinco dos dez "maiores"
+mediam o topo certo e tinham **outro** defeito (o dente na axila, §4.5d).
+
+##### 🔴 A RÉGUA PASSOU E O AVATAR ESTAVA ERRADO — o platô
+
+Primeira versão do modelo: platô nos 5 setores centrais, descida começando ainda
+dentro da frente. A régua deu **±0,002 nos 37** e eu dei o lote por bom. O
+Rogério abriu o testador: **faixa branca no topo de absolutamente todos**, fina
+no meio e larga nos lados.
+
+A régua estava certa e era irrelevante. Ela compara a **mediana do quarto
+frontal** contra a folha — ou seja, mede o **pico**. O que estava errado era o
+traçado caindo cedo demais para os lados, e **pico não é forma**. É a §1.5 num
+eixo novo: uma medida que confirma a altura não diz nada sobre a largura do
+platô.
+
+O conserto: o platô cobre a **máscara frontal inteira** (setores 2..10) e a
+descida mora nos setores do lado. A folha sustenta isso sozinha — ela mede
+frente 0,750..0,776 **e** costas 0,705..0,735, e a transição entre as duas não
+atravessa o peito.
+
+##### 🔴 E EU JULGUEI 37 AVATARES NUMA IMAGEM QUE NÃO VÊ O DEFEITO
+
+Conferi os 37 no `qa/shorts/{id}/0_frente.png` do `--fit`. Aquilo é clay com luz
+chapada: tecido não pintado e corpo saem quase no mesmo tom, e uma tira de 1 cm
+é invisível. No GLB entregue, com o alumínio e o HDR, ela grita.
+
+**Defeito de PINTURA se julga no arquivo que o usuário baixa.** O QA
+intermediário serve para geometria (ilhas, costura, região conexa), não para
+cobertura de material. O conserto do ciclo é `qa/probe/sondas/render_dist.py`,
+que renderiza o `03_dist/glb/*.glb` com o `zenith_env.hdr` — e foi nele que os
+37 foram reconferidos.
+
+Não é a §1.1 sobre um script: é sobre uma **imagem**. Toda vez que o veredito é
+visual, a pergunta *"o que esta imagem não mostra?"* vale igual à pergunta sobre
+uma régua numérica.
+
+#### 4.5d O dente na axila tinha DUAS causas empilhadas
+
+Buracos brancos na dobra do braço, na altura da faixa. Os dois consertos são no
+`w_arm_wide` e nenhum é limiar de gosto:
+
+1. **Cada fatia de 0,005 decidia sozinha.** A fronteira braço/tronco é uma
+   linha, não 20 decisões independentes; perto da axila o braço afina, o degrau
+   de profundidade fica raso e uma fatia isolada acha o corte um passo mais para
+   dentro. Vira dente do tamanho de uma fatia. Corrigido com **mediana móvel de
+   5**, que só mexe em fatia que já cortava — interpolar onde não havia corte
+   inventaria braço onde a profundidade não viu nenhum.
+2. **`PROF_FRAC = 0.60` acha "já é tronco", não "aqui começa o tronco".** As
+   colunas logo fora ainda são tronco, só que o tronco afina de lado e elas não
+   chegam a 60%. O corte anda **uma coluna para fora** (`ARM_COL_OUT`).
+
+⚠️ **O valor da coluna veio de render nos DOIS extremos**, que é o que a §7.12
+cobra: 0 colunas → fiapo branco serrilhado; 1 → some, sobra dente pequeno na
+quina; 2 → a faixa **invade o braço**. Um valor decidido por foto sem o extremo
+oposto é chute com cara de calibração.
+
+🔴 **Não zerou, e não tem régua.** Nos mais pesados (`b09_d2`, `b10_d1`,
+`b11_d2`, `b12_d1`, `b07_d3`) sobra um recorte pequeno na quina de baixo. Quem
+diz se incomoda é o olho dele.
+
 ---
 
 ## 5. Biblioteca e classificação

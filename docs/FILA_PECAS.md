@@ -7,6 +7,31 @@ lista não está na fila (regra §6.1, *um por vez é um por vez*).
 
 ---
 
+## ✅ A PARTE 1 FOI ATACADA EM 11/08 (sessão 26) — os 37, não os 30
+
+> Ele mandou **modo automático**: *"o máximo de avatares que conseguir, não
+> precisa me mandar print, use o print pra você identificar os erros"*. Por isso
+> o conserto foi no **detector**, e rodou nos 37 femininos — a classe de cada
+> avatar deixou de importar, e **as duas confirmações abaixo ficaram sem efeito**
+> (o `b03_d3` foi consertado junto; `b08_d3`/`b09h_d3`/`b09i_d2` também).
+>
+> **O que foi consertado:**
+> - **A listra do topo** — a subida frontal virou modelada, ancorada na folha.
+>   Erro contra a régua externa: **±0,002 em 37 de 37**. `LICOES.md` §4.5c.
+> - **O dente na axila** — duas causas no `w_arm_wide`. `LICOES.md` §4.5d.
+>
+> 🔴 **O que NÃO fechou:** sobra um recorte pequeno na quina de baixo da faixa
+> nos mais pesados — **`b09_d2` · `b10_d1` · `b11_d2` · `b12_d1` · `b07_d3`**.
+> Diminuiu muito e **não tem régua externa**; é o olho dele que decide se volta
+> para a fila. **Essa é a fila viva dos tops.**
+>
+> ⚠️ **Duas armadilhas desta rodada, e as duas já custaram um lote inteiro:**
+> o veredito de pintura **não** se dá no render do `--fit` (é clay, não mostra a
+> falta de tinta) — usar `qa/probe/sondas/render_dist.py`; e a régua da folha
+> **passou verde com o avatar errado**, porque ela mede o pico e não a forma.
+
+---
+
 ## 1. TOPS FEMININOS — três classes, definidas por ele com screenshot
 
 | classe | o que se vê | exemplo que ele mandou |
@@ -34,18 +59,20 @@ lista não está na fila (regra §6.1, *um por vez é um por vez*).
 
 **30 dos 37**, todos com `zen_f_` na frente.
 
-### ⚠️ Duas coisas a confirmar com ele antes de começar
+### ~~Duas coisas a confirmar com ele~~ — sem efeito desde 11/08
 
-1. **`b08_d3`, `b09h_d3` e `b09i_d2` aparecem NAS DUAS listas** (mediana e
-   maior). Assumido: vale a **maior**, que é a menção mais recente. Confirmar.
-2. **`b03_d3` é o exemplo que ele mandou de correção mínima, mas não está na
-   lista.** Ou ele já está bom e a screenshot era só didática, ou faltou.
-   Confirmar antes de mexer nele.
+1. ~~`b08_d3`, `b09h_d3` e `b09i_d2` aparecem NAS DUAS listas.~~
+2. ~~`b03_d3` é o exemplo de correção mínima mas não está na lista.~~
 
-> 🔴 O `b08_d3` é o único avatar com a válvula `"faixa_topo_reto": true` no
-> `config/shorts_map.json` — e é justamente o exemplo do defeito MAIOR. A
-> hipótese óbvia a testar primeiro é que a válvula é a **causa** da classe
-> maior, não o conserto.
+O conserto foi no detector e rodou nos 37, então nenhuma das duas mudou o que
+foi feito. **Ficam registradas porque a pergunta era certa** — só deixou de
+bloquear quando o método parou de ser por avatar.
+
+> 🔴 ~~A válvula `faixa_topo_reto` é a causa da classe maior.~~ **Testada e
+> refutada com medida (11/08):** tirar a válvula deixou o erro **idêntico**
+> (−0,041 antes e depois) e trouxe de volta a cunha do esterno. Ela era o
+> curativo, não a doença. E a classe "maior" não tem causa única — cinco dos dez
+> mediam o topo **certo** e tinham o defeito da axila. `LICOES.md` §4.5c.
 
 ---
 

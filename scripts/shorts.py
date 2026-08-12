@@ -260,6 +260,25 @@ WAIST_ABS_RANGE_F = (0.48, 0.61)
 # profundidade passa desta fracao da profundidade da fatia. Ver w_arm_wide.
 PROF_FRAC = 0.60
 
+# Largura da coluna daquela varredura, em fracao da altura (1.4 cm num corpo de
+# 1.75 m). Era literal em dois lugares do w_arm_wide e virou constante quando o
+# corte passou a ser o CENTRO da coluna e nao a borda - dois numeros que tem de
+# andar juntos nao podem estar escritos duas vezes.
+COL_W = 0.008
+
+# De quantas colunas o corte anda para FORA depois de achado. Nao e ajuste fino
+# de um avatar: e correcao de um vies do proprio PROF_FRAC, que responde "esta
+# coluna ja e funda" e nao "aqui comeca o tronco". Medido no zen_f_b09_d2, que e
+# o caso mais visivel, com o mesmo render em tres valores:
+#
+#   0 colunas  fiapo branco vertical dos dois lados, serrilhado, altura da faixa
+#   1 coluna   fiapo some; sobra um dente pequeno na quina de baixo
+#   2 colunas  a faixa INVADE o braco - lingueta preta saindo pela quina de baixo
+#
+# Um valor decidido por render precisa do render nos dois extremos, senao e
+# chute com cara de calibracao (LICOES.md 7.12). Os tres estao acima.
+ARM_COL_OUT = 1.0
+
 # A ordem das pecas no w_field(partes=True): 0 short, 1 faixa. So a faixa pode
 # sair legitimamente partida em duas (braco tapando o lado do torax).
 FAIXA_PECA = 1
@@ -329,6 +348,41 @@ FAIXA_PICO_MIN = 0.012        # abaixo disso nao e vinco, e a borda da janela
 # 0.730).
 FAIXA_TOPO_UP_FRONT = 0.070   # o busto empurra a borda para cima (folha: ate 0.060)
 FAIXA_TOPO_BACK_ZH = 0.025    # costas e lados: so o jogo do proprio elastico
+
+# --- A SUBIDA FRONTAL MODELADA, ancorada na folha (11/08, sessao 26) ---------
+# A busca setor a setor nao mede: em 4 a 9 dos 9 setores da frente nao ha aro
+# nenhum (LICOES.md 4.5b), o argmax pega ruido e a mediana de 7 devolve a propria
+# ancora. Medido no b08_d3: dos 24 setores, 22 ficaram na ancora e 2 dispararam
+# para +0.046 - a "cunha no esterno". Nao e traçado, e ruido com forma.
+#
+# O que MUDOU em relacao a 4.5b, e que reabre a decisao: a altura do topo frontal
+# TEM regua externa POR AVATAR. O faixa_ref.py le a corrida escura na vista
+# FRONTAL da folha de referencia e devolve o topo em 35 das 37 (duas ilegiveis,
+# b08_d1 e b11_d1, que leem 0.869 e 0.861 - a regua pega a corrida errada e se
+# denuncia sozinha). A 4.5b diz "nao existe regua externa para o traçado por
+# setor", e isso continua verdade: o que ela nao creditou e que a ALTURA DO PICO
+# tem uma, e o pico e a unica incognita que um modelo precisa.
+#
+# Entao aqui a frente para de ser procurada e passa a ser MODELADA, como ja se
+# fez com o topo escalar ("O TOPO NAO E UMA SEGUNDA MEDIDA", acima): plato na
+# altura da folha nos setores centrais, meia-cossenoide descendo ate a ancora nos
+# das costas e dos lados. Zero busca, zero argmax, zero mediana - o traçado deixa
+# de ter grau de liberdade que ninguem mede.
+#
+# Os dois raios sao em SETORES e nao em graus porque e a resolucao real do campo
+# (24 setores = 15 graus cada); o w_interp_circ suaviza o resto.
+# ⚠️ O PLATO COBRE A FRENTE INTEIRA, e isso foi corrigido no olho DELE.
+# A primeira versao usava plato 2 / raio 5, ou seja o teto so nos 5 setores
+# centrais e a descida ja comecando dentro da frente. Ficou faixa branca no
+# TERCO DE FORA da peca nos 37 - fina no meio, larga nos lados -, e eu nao vi
+# porque estava julgando pelo render do --fit, que e clay com luz chapada e nao
+# separa tecido de corpo. No GLB entregue, com o material e o HDR, e obvia.
+# A borda de cima e reta: a folha diz frente 0.750..0.776 e costas 0.705..0.735,
+# e a transicao entre as duas nao acontece ATRAVESSANDO o peito - acontece nos
+# setores do LADO. Plato 4 = a mascara da frente inteira (setores 2..10), e a
+# descida mora fora dela. Ver LICOES.md 4.5c.
+FAIXA_FRENTE_PLATO = 4        # setores de cada lado do centro que ficam no teto
+FAIXA_FRENTE_RAIO = 7         # onde a subida ja voltou a ancora, ja nos lados
 
 
 def tem_faixa(aid):
@@ -1060,7 +1114,26 @@ def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh):
     versao ignorava isso e rodava na banda inteira - o zen_f_b01_d1, que e magro
     e cuja fusao (0.7588) ja fica ACIMA do topo da faixa (0.756), voltou com a
     borda de baixo serrilhada: nao faltava nada nele e o corte so comeu tronco.
-    Nos magros a funcao agora nao processa fatia nenhuma, que e o certo."""
+    Nos magros a funcao agora nao processa fatia nenhuma, que e o certo.
+
+    ------------------------------------------------------------------------
+    O CORTE E ALISADO ENTRE FATIAS (11/08, sessao 26)
+    ------------------------------------------------------------------------
+    A primeira versao decidia cada fatia de 0.005 SOZINHA, e a fronteira
+    braco/tronco nao e uma decisao independente 20 vezes seguidas: e uma linha.
+    Perto da axila o braco afina e o degrau de profundidade fica raso, entao uma
+    fatia isolada acha o degrau um passo mais para DENTRO e come tronco - e o que
+    sai no render e um dente branco no meio da faixa, do tamanho de uma fatia.
+    Era esse o defeito visivel no b09_d2 e no b10_d2, os dois com a ALTURA do topo
+    certa contra a folha (+0.003 e +0.001): nao era a borda de cima, era aqui.
+
+    A correcao e mediana movel de 5 fatias sobre o proprio corte, por lado. Ela
+    so mexe em fatia que JA cortava: onde o corte nao existia (ou caiu perto do
+    eixo) continua nao existindo, porque marcar por interpolacao inventaria braco
+    onde a profundidade nao viu nenhum - e o comentario de SEGURANCA abaixo vale
+    inteiro, pelo mesmo motivo de sempre. E a mesma familia da mediana circular
+    do w_waist_curve, num eixo diferente: la nenhum setor destoa dos vizinhos,
+    aqui nenhuma fatia."""
     z = co[:, 2]
     zh = (z - z.min()) / H
     cx = np.median(co[:, 0])
@@ -1068,35 +1141,78 @@ def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh):
     passo = 0.005
     if is_arm.any():
         lo_zh = max(lo_zh, float(zh[is_arm].max()))
-    for k in range(int(np.floor(lo_zh / passo)), int(np.ceil(hi_zh / passo)) + 1):
+    ks = list(range(int(np.floor(lo_zh / passo)),
+                    int(np.ceil(hi_zh / passo)) + 1))
+
+    # PASSADA 1 - o corte cru de cada fatia, sem marcar nada ainda.
+    fatias, cortes = {}, {-1.0: [], 1.0: []}
+    for k in ks:
         fatia = np.where((zh >= k * passo) & (zh < (k + 1) * passo))[0]
-        if len(fatia) < 40:
-            continue
-        y = co[fatia, 1]
-        fundo = y.max() - y.min()
-        if fundo <= 0:
+        fatias[k] = fatia
+        y = co[fatia, 1] if len(fatia) else None
+        fundo = (y.max() - y.min()) if y is not None and len(y) else 0.0
+        x = co[fatia, 0] - cx if len(fatia) else None
+        for sinal in (-1.0, 1.0):
+            corte = None
+            if len(fatia) >= 40 and fundo > 0:
+                lado = np.where(np.sign(x) == sinal)[0]
+                if len(lado) >= 20:
+                    xl = x[lado] * sinal                   # sempre positivo
+                    for b in np.arange(xl.max(), 0.0, -COL_W * H):
+                        col = (xl <= b) & (xl > b - COL_W * H)
+                        if col.sum() < 3:
+                            continue
+                        yc = y[lado][col]
+                        if yc.max() - yc.min() >= PROF_FRAC * fundo:
+                            # PROF_FRAC ACHA "JA E TRONCO", NAO "COMECA O TRONCO",
+                            # e a diferenca entre as duas coisas e um fiapo branco.
+                            # Com 0.60 a coluna que passa no teste e a primeira
+                            # SOLIDAMENTE funda; as de fora dela ainda sao tronco,
+                            # so que o tronco afina de lado e elas nao chegam a 60%.
+                            # Cortar em `b` marcava essas como braco, e o que sai
+                            # no render e uma tira vertical sem pintar entre o
+                            # preto e o braco. ARM_COL_OUT devolve esse
+                            # deslocamento.
+                            corte = b + ARM_COL_OUT * COL_W * H
+                            break
+                    # SEGURANCA: se o corte cair perto do eixo, quem foi achado
+                    # nao era o vinco e marcar aquilo comeria metade do tronco.
+                    # Melhor nao marcar nada - a faixa atravessando o braco e
+                    # feio, faixa com buraco no meio do peito e outra categoria
+                    # de erro.
+                    if corte is not None and corte < 0.35 * xl.max():
+                        corte = None
+            cortes[sinal].append(corte)
+
+    # PASSADA 2 - mediana movel de 5, so entre as fatias que cortaram.
+    raio = 2
+    suave = {}
+    for sinal in (-1.0, 1.0):
+        c = cortes[sinal]
+        s = []
+        for i, v in enumerate(c):
+            if v is None:
+                s.append(None)
+                continue
+            viz = [c[j] for j in range(max(0, i - raio), min(len(c), i + raio + 1))
+                   if c[j] is not None]
+            s.append(float(np.median(viz)))
+        suave[sinal] = s
+
+    # PASSADA 3 - marca com o corte alisado.
+    for i, k in enumerate(ks):
+        fatia = fatias[k]
+        if not len(fatia):
             continue
         x = co[fatia, 0] - cx
         for sinal in (-1.0, 1.0):
+            corte = suave[sinal][i]
+            if corte is None:
+                continue
             lado = np.where(np.sign(x) == sinal)[0]
-            if len(lado) < 20:
+            if not len(lado):
                 continue
-            xl = x[lado] * sinal                       # sempre positivo
-            corte = None
-            for b in np.arange(xl.max(), 0.0, -0.008 * H):
-                col = (xl <= b) & (xl > b - 0.008 * H)
-                if col.sum() < 3:
-                    continue
-                yc = y[lado][col]
-                if yc.max() - yc.min() >= PROF_FRAC * fundo:
-                    corte = b
-                    break
-            # SEGURANCA: se o corte cair perto do eixo, quem foi achado nao era o
-            # vinco e marcar aquilo comeria metade do tronco. Melhor nao marcar
-            # nada - a faixa atravessando o braco e feio, faixa com buraco no meio
-            # do peito e outra categoria de erro.
-            if corte is None or corte < 0.35 * xl.max():
-                continue
+            xl = x[lado] * sinal
             out[fatia[lado[xl > corte]]] = True
     return out & ~is_arm
 
@@ -1363,7 +1479,8 @@ def w_waist_curve(np, A, center_b, floor_b, az_bins, front_mask):
             for j in range(az_bins)]
 
 
-def w_faixa(np, co, kn, H, is_arm, crotch, base_override=None, topo_reto=False):
+def w_faixa(np, co, kn, H, is_arm, crotch, base_override=None, topo_reto=False,
+            topo_frente_zh=None):
     """A FAIXA do peito: base ESCALAR e topo CURVO por azimute.
 
     A assimetria entre as duas bordas nao e estetica, e medida na folha nas duas
@@ -1417,22 +1534,33 @@ def w_faixa(np, co, kn, H, is_arm, crotch, base_override=None, topo_reto=False):
     if chute_t:
         topo_b = int(round(alvo * Z_BINS - 0.5))
 
+    # A SUBIDA FRONTAL, quando a folha a mede, entra aqui como BIN e nao como
+    # fracao: e o mesmo eixo do topo_b, e converter num lugar so evita a familia
+    # de erros de meio-bin que ja apareceu no crotch.
+    frente_b = None
+    if topo_frente_zh is not None:
+        frente_b = int(round(topo_frente_zh * Z_BINS - 0.5))
+
     A_f = w_fill_holes(np, A, occ)
     curva = w_faixa_curve(np, A_f, topo_b, base_b, WAIST_AZ_BINS, ~back_side,
-                          reto=topo_reto)
+                          reto=topo_reto, frente_b=frente_b)
 
     diag = {"faixa_peaks_base": pk_b, "faixa_peaks_topo": pk_t,
             "faixa_anel_base": manual or not chute_b,
             "faixa_anel_topo": not chute_t,
             "faixa_base_fonte": "manual" if manual else "anel",
-            "faixa_topo_fonte": "reto" if topo_reto else "curva",
+            "faixa_topo_fonte": ("folha" if frente_b is not None
+                                 else "reto" if topo_reto else "curva"),
+            "faixa_topo_frente_zh": (round((frente_b + 0.5) / Z_BINS, 4)
+                                     if frente_b is not None else None),
             "faixa_topo_alvo_zh": round(alvo, 4),
             "faixa_topo_anel_zh": round((topo_b + 0.5) / Z_BINS, 4)}
     return ((base_b + 0.5) / Z_BINS,
             [(b + 0.5) / Z_BINS for b in curva], diag)
 
 
-def w_faixa_curve(np, A, center_b, floor_b, az_bins, front_mask, reto=False):
+def w_faixa_curve(np, A, center_b, floor_b, az_bins, front_mask, reto=False,
+                  frente_b=None):
     """A borda de CIMA da faixa, setor a setor. Espelho do w_waist_curve, com a
     assimetria invertida: aqui e a FRENTE que SOBE (o busto empurra o tecido) e
     nunca desce abaixo do anel das costas.
@@ -1468,7 +1596,33 @@ def w_faixa_curve(np, A, center_b, floor_b, az_bins, front_mask, reto=False):
 
     Ate la, `reto` e a valvula: onde o ruido virou defeito visivel, a borda de
     cima e a propria ancora nos 24 setores. Nao fossiliza nada, porque continua
-    sendo RETRACADA da ancora a cada --fit."""
+    sendo RETRACADA da ancora a cada --fit.
+
+    ------------------------------------------------------------------------
+    E `frente_b` e a saida dos dois (11/08): a subida MODELADA
+    ------------------------------------------------------------------------
+    Quando o chamador passa a altura do topo frontal - que vem da folha, ou seja
+    de regua EXTERNA e por avatar -, nao se procura nada: plato ate
+    FAIXA_FRENTE_PLATO setores do centro e meia-cossenoide ate FAIXA_FRENTE_RAIO,
+    onde ja e a ancora. Substitui a valvula `reto`, que era o mesmo modelo com
+    amplitude ZERO - e amplitude zero e a unica escolha que a folha nunca
+    endossa."""
+    if frente_b is not None:
+        amp = max(0.0, float(frente_b - center_b))
+        front = az_bins // 4
+        out = []
+        for j in range(az_bins):
+            d = abs((j - front + az_bins // 2) % az_bins - az_bins // 2)
+            if d <= FAIXA_FRENTE_PLATO:
+                s = 1.0
+            elif d >= FAIXA_FRENTE_RAIO:
+                s = 0.0
+            else:
+                t = (d - FAIXA_FRENTE_PLATO) / float(FAIXA_FRENTE_RAIO
+                                                     - FAIXA_FRENTE_PLATO)
+                s = 0.5 * (1.0 + float(np.cos(np.pi * t)))
+            out.append(int(round(center_b + amp * s)))
+        return out
     if reto:
         return [center_b] * az_bins
     out = []
@@ -1496,7 +1650,7 @@ def w_faixa_curve(np, A, center_b, floor_b, az_bins, front_mask, reto=False):
 
 def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
           waist_override=None, faixa=False, faixa_base_override=None,
-          faixa_topo_reto=False):
+          faixa_topo_reto=False, faixa_topo_frente=None):
     """Devolve (cfg em metros, diagnostico).
 
     A bainha sai como ESCALAR por perna e o cos como curva de 24 setores.
@@ -1646,7 +1800,8 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
     if faixa:
         fb, ft, fdiag = w_faixa(np, co, kn, H, is_arm, crotch,
                                 base_override=faixa_base_override,
-                                topo_reto=faixa_topo_reto)
+                                topo_reto=faixa_topo_reto,
+                                topo_frente_zh=faixa_topo_frente)
         cfg["faixa_lo"] = fb * H
         cfg["faixa_hi"] = [v * H for v in ft]
         diag.update(fdiag)
@@ -1811,9 +1966,11 @@ def worker_main():
         wov = _e.get("waist_ring_override_zh")
         fov = _e.get("faixa_base_override_zh")
         fret = bool(_e.get("faixa_topo_reto"))
+        ffre = _e.get("faixa_topo_frente_zh")
         cfg, diag = w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=ov,
                           waist_override=wov, faixa=tem_faixa(a.id),
-                          faixa_base_override=fov, faixa_topo_reto=fret)
+                          faixa_base_override=fov, faixa_topo_reto=fret,
+                          faixa_topo_frente=ffre)
         entry = {
             # gravado em FRACAO DA ALTURA, nao em metros: assim um numero copiado
             # de um avatar para outro continua querendo dizer a mesma coisa
@@ -1835,6 +1992,8 @@ def worker_main():
             entry["faixa_base_override_zh"] = fov
         if fret:
             entry["faixa_topo_reto"] = True
+        if ffre is not None:
+            entry["faixa_topo_frente_zh"] = ffre
     else:
         smap = load_map(a.root)
         entry = smap[a.id]
