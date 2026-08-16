@@ -11,28 +11,33 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 
 | quando a tarefa for… | ler ANTES de agir | tamanho |
 |---|---|---:|
-| **QUALQUER COISA que toque o app Zenith** — medida, seleção, objetivo, contrato | `docs/INTEGRACAO_ZENITH.md` | **7,3k** |
+| **QUALQUER COISA que toque o app Zenith** — medida, seleção, objetivo, contrato | `docs/INTEGRACAO_ZENITH.md` | **7,5k** |
 | **montar prompt de folha** | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 5,2k / 2,4k |
 | decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,5k |
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
 | **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
-| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/FILA_PECAS.md` | 1,6k |
-| investigar a coxa que não fecha no morph | `docs/PROBLEMA_COXA.md` | 2,8k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **32,3k** |
-| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-08.md` (7,4k) · `diario-2026-07.md` (**grep**) | 57,2k |
+| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/FILA_PECAS.md` | 3,9k |
+| investigar a coxa (RESOLVIDA em 14/08 por offset — ler antes de reabrir) | `docs/PROBLEMA_COXA.md` | 3,7k |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **37,5k** |
+| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-08.md` (11,5k) · `diario-2026-07.md` (**grep**) | 61,3k |
 | o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
 
-> Leitura padrão: `CLAUDE.md` **7,1k** + `state.md` **14,9k** = **22,0k** antes de
+> Leitura padrão: `CLAUDE.md` **8,0k** + `state.md` **16,5k** = **24,5k** antes de
 > qualquer trabalho. O `LICOES.md` seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
-> 26,3k → 28,6k → 29,9k → 31,2k → **32,3k**, com a §4.5e da sessão 27).
+> 26,3k → 28,6k → 29,9k → 31,2k → 32,3k → **37,5k**, com a §4.5f, a §4.5g, a
+> §7.22b e a §7.25b da sessão 30).
 >
-> 🔴 **O corte do `state.md` foi FEITO na sessão 22 e não bastou** — de 9,4k ele
-> foi a 10,0k, depois 12,6k, 14,0k, e a sessão 27 o deixou em **14,9k**. **Enxugar não
-> vence escrita nova**; o próximo corte tem que ser maior que o que se pretende
-> acrescentar, ou não é corte. Candidatos óbvios a descer para o diário: o bloco
-> da sessão 18, o da sessão 22 (que o próprio arquivo já marca como "mantido por
-> contexto") e o bloco de morph da 25, agora que a 26 o resumiu.
+> ✅ **O corte do `state.md` FUNCIONOU na sessão 30, e é o primeiro que funciona.**
+> Ele vinha de 9,4k → 10,0k → 12,6k → 14,0k → 14,9k → 17,9k; desceram os blocos
+> narrativos das sessões 26, 27 e 29 para o diário e ele fechou em **16,5k** —
+> cortou 4,7k contra 3,7k de escrita nova. Empatou por pouco: a sessão seguiu
+> depois do corte e acrescentou o lote de subida, o achatamento e a coxa. É essa a conta: *o corte tem que
+> ser maior que o que se pretende acrescentar, ou não é corte.* **Enxugar não
+> vence escrita nova** — as cinco tentativas anteriores provaram isso.
+>
+> Próximos candidatos a descer, quando a frente deles fechar: o bloco de morph
+> da sessão 25 e o do material de 31/07.
 >
 > **Toda a coluna foi remedida na sessão 18** com um divisor único de 3,6
 > chars/token, calibrado contra os números que já estavam certos (`prompt_m.md`
@@ -121,7 +126,13 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     ⚠️ **Quem procura extremo numa banda tem que denunciar a borda.** Toda medida de extremo grava `at_band_edge: hi|lo` quando o pico encosta no limite da faixa. Isso existe porque a `CALF_BAND` media o **joelho** em 50 dos 76 avatares sem nada acusar: o máximo travava em 0,320 exato, a própria borda. **Exceção: na coxa o `hi` é anatomia, não defeito** (ela é mais larga colada na virilha) — por isso está fora do aviso. `LICOES.md` §1.8
 6. `build_index.py` — monta o `library.json` a partir das medidas. **Schema 4 desde 03/08: a seleção é por MEDIDAS**, não mais por IMC dentro de linha de definição, e publica escala por sexo, `z_cap`, faixa plausível, pesos e vetor de objetivo
 6b. `select.py` — **a REGRA de seleção, e é a implementação de REFERÊNCIA.** A mesma regra vive em três linguagens (aqui, no `avatar_tester.html` em JS, e no app em Dart); o que diverge entre elas é *qual corpo o usuário vê*. A defesa é `test/selection_cases.json`: 34 casos que as três rodam. **Mexeu na regra → muda AQUI primeiro, `--cases`, e copia índice e casos para o app.** `--demo` responde com medidas na linha de comando
-7. `render.py` — gera os frames de turntable (ainda não escrito)
+7. ~~`render.py` — frames de turntable~~ ❌ **não é necessário e não vai ser
+   escrito (avaliado em 16/08).** Ele existia para uma pergunta em aberto do
+   README — *"GLB ou turntable como formato de entrega?"* — e essa pergunta **foi
+   respondida pela integração**: o app roda GLB no model-viewer, no device, desde
+   04/08, com o morph em cima. Turntable é sequência de imagem: não gira sob
+   controle do usuário, não recebe shape key e não reaproveita o HDR. Escrever o
+   script hoje seria produzir um formato que nada consome
 8. `zenith_material.py` — **não é executável**: é a fonte única do material (cor/metallic/roughness), importada pelo `process.py` e pelo `restyle.py`
 9. `make_env.py` — gera o ambiente de iluminação (`03_dist/env/zenith_env.hdr`). A identidade Zenith mora aqui
 10. `restyle.py` — reaplica o material nos 39 `03_dist/glb/` **lendo os masters, sem re-decimar e sem tocar em `02_master/`**. É o jeito de mexer em cor sem refazer QA. `--preview {id}` renderiza 4 vistas com o ambiente em `qa/look/{id}/`
@@ -137,6 +148,23 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     com piso acima da virilha e **rampa de 0,045 por setor**: sem ela a descida
     de 10 cm vira recorte retangular. Ligado por `"cos_avental": true` no mapa.
     `LICOES.md` §4.5e.
+
+    ⚠️ **O cós é ALISADO no fim, e a trava é a QUINA, não o degrau (15/08).** A
+    borda de cima saía poligonal — parede de 16 cm no flanco do `zen_f_b11_d1`,
+    cunha e tala diagonal nos outros seis que ele apontou. O `DEGRAU` mede
+    inclinação e passava limpa em 6 dos 7, porque inclinação alta é legítima; o
+    que se vê é a **mudança** dela. `CANTO` = segunda diferença, corte 0,018.
+    `w_waist_liso` alisa com teto de 2 bins — e o teto é a **mediana de 3** da
+    curva, senão sobra um V no centro da frente vindo da rampa do avental.
+    `LICOES.md` §4.5f.
+
+    ⚠️ **A máscara do braço na faixa é o VÃO DE AR, não a profundidade (15/08).**
+    `PROF_FRAC` responde *"esta coluna já é tronco?"* e num corpo com busto a
+    barra de 60% fica alta demais — o corte caía 4,2 cm DENTRO do tronco e comia
+    a quina de baixo da faixa. Acima da fusão existe ar entre braço e tronco em
+    toda fatia da banda; `_arm_cut_vao` corta ali e o critério antigo virou plano
+    B. E o corte é alisado por **parábola em zh** — a mediana de 5 mata o disparo
+    mas preserva degrau, e o que sobrava era borda serrilhada. `LICOES.md` §4.5g.
 
     🔴 **Veredito de PINTURA não se dá no render do `--fit`** — ele é clay com luz chapada, e tecido sem pintar tem quase o tom do corpo. Uma listra branca passou por 37 avatares e por uma régua verde assim; quem a viu foi o Rogério, no testador. Usar `qa/probe/sondas/render_dist.py`, que renderiza o GLB entregue com o HDR. §4.5c.
 
@@ -178,9 +206,19 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     mapa publica `dropped_columns`. E se o achatamento reprovar a faixa positiva
     inteira, quem sai é ele, não a cintura. `LICOES.md` §7.24
 
-    🔴 **A COXA não é medível no dist**: a banda lê a peça, não a perna (até
-    **+14,5 cm** no feminino). O morph de coxa cai em 6 de 27 masculinos e ~11 de
-    24 femininas. Conserto é sessão própria, mexe no `metrics.py`. §7.25
+    ✅ **A COXA foi resolvida em 14/08 por OFFSET, não por medir melhor.** A banda
+    lê a peça (até +14,5 cm no feminino) e as **três** tentativas de trocar qual
+    malha é medida quebraram avatar que já passava. `calibrar_offset_coxa` mede
+    o desvio UMA VEZ contra o `library_metrics.json` na base e soma um número
+    fixo — a medição segue pela malha cheia. **75 de 76 têm morph de coxa** (só
+    o `zen_m_b06h_d3` não). Teto `COXA_OFFSET_MAX_CM = 22`. `LICOES.md` §7.25b.
+
+**O testador visual é o `testador.cmd` na raiz** — clique duplo, sobe um
+`http.server` na 8765 e abre `test/avatar_tester.html`. **Sempre por http;
+`file://` não serve** (o testador lê o `library.json` por `fetch` e o
+model-viewer carrega GLB e HDR por URL relativa). Ele existe porque até 15/08 o
+servidor subia junto com a sessão de trabalho e morria com ela — o ambiente
+"parou de abrir" sem nada ter quebrado. **Abrir só quando ele pedir.**
 
 O contrato entre o humano e o pipeline é o **nome do arquivo**: o script extrai o ID do arquétipo do nome do GLB em `01_raw/`. Nome errado = avatar errado na biblioteca.
 
@@ -234,6 +272,11 @@ escolhido pelas 9 circunferências. Os 76 GLBs e o HDR vivem no Supabase Storage
 (bucket público `avatars`), e o `library.json` vai embutido no app. Contrato
 completo em `docs/INTEGRACAO_ZENITH.md` §11 — **ler antes de tocar em seleção,
 índice ou GLB entregue.**
+
+✅ **O Storage foi atualizado em 16/08** — 76 GLBs, 0 falhas. Todo lote de peça
+ou de morph grava versão nova aqui e aposenta a anterior, então **depois de
+qualquer `--apply` o Storage fica atrás até a próxima subida.** A receita
+(índice primeiro, upload depois) está no `state.md`.
 
 **A pesquisa de MORPH está aberta e mudou a conta de avatares.** Quatro
 experimentos em `qa/probe/sondas/morph_lab*.py`: a axila não quebrou em nenhum, e

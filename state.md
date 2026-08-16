@@ -1,140 +1,179 @@
 ﻿# state.md — o presente
 
-Última atualização: **12/08/2026, fim da sessão 27**
+Última atualização: **16/08/2026, fim da sessão 30**
 
-> ## 🟡 SESSÃO 27 — OS SHORTS MASCULINOS: 5 RESOLVIDOS, 3 PENDENTES
+> ## 🚀 A BIBLIOTECA ESTÁ NO AR — subida em 16/08, a primeira desde 11/08
 >
-> A §2 do `docs/FILA_PECAS.md`, em modo automático. Regravados: `b09_d1` ·
-> `b09_d2` · `b10_d1` · `b10_d2` · `b11_d1` · `b11_d2` · `b08_d2` (este último
-> não estava na lista original — ele mandou depois).
+> **76 GLBs enviados, 0 falhas.** O HDR já estava lá e foi pulado (`upsert=false`
+> é o padrão — nome novo entra, nome existente não se regrava). Conferido no CDN
+> público depois: `zen_f_b12_d1_v20.glb` 200, `zenith_env.hdr` 200.
 >
-> 🔴 **EU LI O DEFEITO AO CONTRÁRIO NA PRIMEIRA RODADA e gravei uma versão
-> errada.** Ver `LICOES.md` §4.5e — é a lição principal da sessão, e é de método,
-> não de geometria. O defeito real: o campo do short é `z <= cós(azimute)`, um
-> corte por ALTURA; num corpo com avental a barriga desce abaixo dele e **sai
-> pintada de preto**. São ~10 cm de pele no `b09_d1`.
+> Índice, mapa de morph e os dois bancos de casos foram copiados para o app antes
+> do upload (**índice primeiro, upload depois** — o `publish_avatars.py` recusa
+> rodar se o índice promete GLB que não está no disco daqui).
 >
-> ✅ **`w_cos_avental`**: desce o cós da frente até o fundo da dobra, achado pela
-> **orientação da superfície** (a face de baixo do avental tem `nz <= -0,70`; o
-> tecido na altura do cós tem nz perto de zero). Só na frente — nas costas o mesmo
-> sinal é o sulco glúteo, que é short — com piso acima da virilha e **rampa de
-> 0,045 por setor** (sem ela a descida vira recorte retangular). Ligado por
-> `"cos_avental": true` no mapa, nunca automático.
+> **O que subiu junto:** a quina do cós (30 femininos), a máscara do braço (23
+> femininos), a trava `CANTO` nos 14, a coxa resolvida por offset (14/08), o
+> bíceps refeito (14/08) e os **dois achatamentos novos** (quadril e peitoral).
 >
-> **Placar depois do lote:** `--check` 7/7 · `probe_material_dist` **76/76** ·
-> `select --check` **34/34** · `morph_cases --check` **608/608** · índice 76, zero
-> GLB faltando, zero id com duas versões · shape keys **35/33/5/3**, a mesma
-> distribuição de antes.
+> ⚠️ **Os GLBs antigos continuam no bucket.** É de propósito: URL de CDN não se
+> reescreve (regra 8), então versão velha fica órfã até alguém limpar. Ninguém
+> limpa hoje, e o custo é ~1 MB por versão aposentada.
 >
-> ### 🔴 O QUE FICOU PENDENTE — é por aqui que a próxima sessão começa
+> ### ✅ ACHATAMENTO DE QUADRIL E PEITORAL — a pendência de 06/08 fechou
 >
-> **1. `b11_d1` melhora e não zera.** O avental desce quase até a virilha; para
-> tirar todo o preto o cós teria de cair 10 cm em poucos graus, e é isso que vira
-> parede. Sobra mancha na frente.
+> `morph_hip_flatten` e `morph_chest_flatten`, pelo mesmo raciocínio da cintura:
+> morph radial uniforme PRESERVA a forma da seção, então fechar centímetro de
+> perímetro custa profundidade — e profundidade é o que aparece de perfil.
 >
-> **2. `b12_d1` não se moveu.** A frente dele já está no piso da bainha. Se o
-> defeito que ele viu é esse mesmo, precisa de outra solução; **falta print dele
-> de frente.**
+> O `_achatar()` já era genérico; o que estava preso à cintura era o **critério de
+> calibração**. Hoje cada um mede a sua profundidade na altura em que a sua régua
+> lê (`_waist_depth` · `_hip_depth` · `_chest_depth`). Validado no
+> `zen_m_b05h_d2`: quadril 27,5 → 30,4 só com tamanho → **27,5 com forma**;
+> peitoral 29,8 → 32,2 → **29,8**; cintura idêntica ao publicado (nada regrediu).
 >
-> **3. 🔴 ELE DIZ QUE O MESMO DEFEITO ESTÁ NAS FEMININAS.** Não medido. Elas usam
-> o mesmo `w_waist_curve`, então é esperado — e são 37.
+> **Distribuição nova de shape keys: 33 com 12 · 25 com 11 · 11 com 10 · 5 com 9 ·
+> 2 com 8.** Achatamentos publicados: cintura 64, quadril 48, peitoral 65.
+> Tamanho do GLB: mediana 1.162 KB, máximo 1.395 KB — dentro do orçamento de 1–3
+> MB do `README`.
 >
-> **4. Nada subiu para o app** — nem isto, nem o lote da sessão 26.
+> 🔴 **Trava nova, e ela veio de um caso de borda real:** se o morph de tamanho não
+> afunda a seção, não há o que achatar. No `zen_f_b12_d1` o peitoral não afunda e
+> a busca devolveria amplitude ~0 — uma shape key morta de **7.352 vértices** que
+> o app baixaria para não mover nada. `FLATTEN_MIN_GANHO_CM = 0.2`. `LICOES.md`
+> §7.22b.
 >
-> ### ➡️ A PRÓXIMA SESSÃO É A **PARTE DE BAIXO DO SHORT** — ele marcou em 12/08
+> ⚠️ **O app não precisou mudar:** o `avatar_morpher.dart:116` já trata `couple`
+> de forma genérica, então os dois achatamentos novos entram como dado.
 >
-> Aprovou o lote (*"melhorou bastante"*) e disse que a sessão seguinte é para
-> **corrigir a parte de baixo dos shorts** — a BAINHA. O que já se sabe dela e
-> vale abrir antes: `LICOES.md` §4.3b/§4.3c (o `crotch_override_zh` conserta a
-> âncora, não a segmentação; a correção do `b12_d1` **não** virou detector) e a
-> tentativa descartada de "seguir o vinco setor a setor", no docstring do
-> `w_fit` — a bainha mediu **praticamente horizontal**, e a passada fina de 48
-> setores saiu pior que a reta.
+> ### ✅ A TRAVA `CANTO` RODOU NOS 14 — sobraram 3, e o motivo é geometria
 >
-> ⚠️ E a pergunta a fazer antes de escolher método é a mesma que faltou desta
-> vez: **qual é o defeito?** Nesta sessão a lista veio sem descrição, eu li o
-> sinal ao contrário e gravei uma versão errada. Pedir print, ou pedir que ele
-> descreva, antes de mexer no detector.
+> Decisão dele em 16/08: rodar nos 14 que a trava reprovava e ele nunca tinha
+> apontado. 8 pelo `--fit` normal. 🔴 **Os outros 6 estavam `source: manual`** — e
+> o que é manual neles é a **bainha** (`hem_fonte: anel-xsign`), corrigida à mão
+> em sessões anteriores. Um `--refit` teria jogado isso fora; para eles o
+> alisamento foi aplicado em cima da curva do mapa
+> (`cos_liso_mapa.py --escrever`, que só toca o `waist_zh`).
+>
+> **Sobraram 3 acima do corte e eles NÃO devem ser "consertados":**
+> `zen_m_b12_d1` 0,042 · `b11_d2` 0,022 · `b11_d1` 0,021. A causa é medida — o cós
+> encosta no **piso da bainha** e a curva achata contra ele; a quina é a entrada
+> nesse platô. É o mesmo limite que este arquivo já registrava para o `b12_d1`
+> ("não se move"). Iterar o filtro até a trava passar derrubaria a curva 2,4 cm
+> para esconder geometria: **é tunar contra a própria trava**, e este projeto já
+> pagou por isso (regra 3 do `CLAUDE.md`).
+>
+> ### ✅ Backup refeito em 16/08 — `_backup_zenith/zenith_assets_2026-08-16.zip`
+>
+> **492 MB**, integridade conferida (`testzip`), **lista de pastas batida contra o
+> zip de 12/08** (é essa comparação, não o tamanho, que pegou o `01_raw` faltando
+> daquela vez) e os 76 GLBs do índice conferidos um a um dentro do zip.
+> ⚠️ Continua **no mesmo disco** — protege contra erro meu, não contra falha de
+> disco.
 
-> ### 🆕 Instrumentos novos em `qa/probe/sondas/`
->
-> `peca_folha.py` (o GLB entregue com HDR, 4 vistas no quadril — foi nele que o
-> defeito apareceu) · `mascara_peca.py` (máscara ortográfica chapada: fundo, corpo
-> e peça em três classes exatas) · `cos_avental_mapa.py` (banco de ensaio: pinta
-> por vertex color no master e fotografa, ~40 s a tentativa, contra uma versão de
-> dist + um `morph --apply` pelo caminho de produção). O `render_dist.py` ganhou
-> vistas por `VISTAS` — o short não mora em 0,72 da altura.
 
-> ## ✅ SESSÃO 26 — OS 37 TOPS FEMININOS ESTÃO CONSERTADOS
+> ## ✅ SESSÃO 30 — A QUINA DO CÓS: 7 FEMININOS CONSERTADOS E ENTREGUES
 >
-> A fila do `docs/FILA_PECAS.md` foi atacada em **modo automático**, a pedido
-> dele. O conserto foi no **detector**, então rodou nos 37 e não nos 30 da lista.
+> Ele mandou **7 prints do testador, com o cursor em cima do defeito**, e pediu
+> modo automático. Os sete tinham o MESMO defeito: **a borda de cima do short é
+> uma poligonal** — parede vertical de 16 cm no flanco do `b11_d1`, cunha
+> angulosa no `b12_d1`/`b10_d1`/`b11_d2`, tala diagonal atravessando a barriga no
+> `b09_d2` e no `b08_d1`, quina seca no `b06_d1`.
 >
-> **Dois defeitos, medidos e separados:**
+> **A trava que existia não podia pegar isso.** `DEGRAU` mede `|w[j]−w[j+1]|`, a
+> INCLINAÇÃO, e passava limpa em 6 dos 7 — corretamente, porque inclinação alta é
+> legítima (o arco da barriga do `b12_d1` desce 0,0399 por setor na folha). O que
+> se vê é a MUDANÇA da inclinação. Trava nova: **`CANTO`**, a segunda diferença,
+> corte em **0,018** — o vão entre os 30 não apontados (≤0,017 em 27 deles) e os
+> 7 apontados (0,020 a 0,092).
 >
-> - **A — a listra branca no topo.** A subida frontal deixou de ser procurada e
->   passou a ser **modelada**: platô na altura que a folha mede para aquele
->   avatar (`faixa_topo_frente_zh` no mapa), descida nos setores do lado. Erro
->   contra a régua externa: **±0,002 em 37 de 37**, contra −0,041 no pior.
-> - **B — o dente na axila.** Duas causas empilhadas no `w_arm_wide`: cada fatia
->   de 0,005 decidia sozinha (virou mediana móvel de 5) e o `PROF_FRAC` acha "já
->   é tronco" e não "aqui começa o tronco" (`ARM_COL_OUT`, uma coluna para fora).
+> ✅ **Conserto: `w_waist_liso`** — gaussiana circular σ=1 setor, alternada com um
+> teto de 2 bins de `Z_BINS` (a resolução da própria medida), 12 vezes. σ
+> escolhido por RENDER em três valores (0,7 · 1,0 · 1,6) no banco de ensaio novo
+> `qa/probe/sondas/cos_liso_mapa.py`, ~40 s a tentativa.
 >
-> **A válvula `faixa_topo_reto` morreu.** Era o mesmo modelo com amplitude zero,
-> e a folha nunca endossa amplitude zero.
+> 🔴 **O teto teve que ser a MEDIANA de `w0`, e isso custou um render.** Com o
+> teto colado na curva medida sobrou um **V anguloso no centro da frente** do
+> `b11_d1` e do `b12_d1`, visível no GLB entregue. O `cos_etapas.py` (sonda nova)
+> mostrou que o V nasce no `w_cos_avental`: o fundo do avental é um **platô**
+> (setores 4..7 em 0,456 no `b12_d1`) e a rampa de 0,020/setor desenha um
+> triângulo cujo vértice é o teto da rampa, não uma medida. `LICOES.md` §4.5f.
 >
-> **Placar final, todas as réguas rodadas depois do lote:**
+> **Resultado, conferido no GLB entregue com material + HDR (`qa/look/cos_liso/`):
+> canto 0,007 a 0,015 nos sete, borda lisa em 5 azimutes.** Shape keys
+> preservadas (o `b09_d2` até ganhou uma: 9 → 10). As versões finais estão no
+> bloco da máscara do braço, abaixo — os sete foram regravados de novo lá.
 >
-> | régua | resultado |
-> |---|---|
-> | folha × 3D, topo frontal | **±0,002 em 37/37** |
-> | folha × 3D, topo costas / base | máx 0,014 / 0,018 — **iguais ao que já eram** |
-> | `shorts.py --check --all` | **76/76**, zero `CONFERIR`, zero `ILHAS` |
-> | `probe_material_dist.py` | **76/76**, zero short apagado |
-> | `select.py --check` | **34/34** |
-> | `morph_cases.py --check` | **608/608** |
-> | GLB × índice × `morph_map` | 76 × 76 × 76, **zero inconsistência** |
+> ### ✅ E DEPOIS, NA MESMA SESSÃO: A QUINA DA FAIXA (o recorte do braço)
 >
-> Shape keys: **35 com 10, 33 com 9, 5 com 8, 3 com 7** — exatamente a
-> distribuição da sessão 25. Nada se perdeu na ida e volta pela peça.
+> Ele aprovou o cós (*"ficou muito bom"*) e mandou a frente seguinte com 3
+> prints: **`b09_d2` · `b10_d1` · `b05_d1`**, *"os tops que faltam colorir"*. É a
+> fila viva dos tops desde 11/08, que esperava a decisão dele.
 >
-> ### 🔴 TRÊS COISAS QUE A SESSÃO NOVA PRECISA SABER
+> **Não era a faixa, era a MÁSCARA DO BRAÇO.** O `w_arm_wide` cortava
+> braço/tronco por "60% da profundidade máxima da fatia"; num corpo com busto a
+> fatia é funda no meio, a barra fica alta e o flanco do tronco — que é raso —
+> não a alcança e vira braço. No `b10_d1` o corte caía **4,2 cm dentro do
+> tronco**.
 >
-> **1. A ordem peça→morph é OBRIGATÓRIA, e quase custou os 76 shape keys.**
-> O `shorts.py --apply` lê o `02_master/`, que não tem morph — é a regra 9 com
-> outro par de escritores. Quem aplica peça **tem** que reaplicar o morph
-> depois:
+> ✅ **`_arm_cut_vao`**: acima da fusão existe **ar** entre braço e tronco em toda
+> fatia da banda (2 a 6 colunas, 2,8 a 8,4 cm). Ar é sinal binário, sem limiar
+> para calibrar errado — e é a doutrina que o cabeçalho do arquivo já declara: o
+> que separa os dois é topologia, não profundidade. O critério antigo virou plano
+> B.
 >
-> ```
-> python scripts/shorts.py {id} --apply    # corpo + peca  -> v(n+1)
-> python scripts/morph.py  {id} --apply    # le esse dist  -> v(n+2)
-> ```
+> ✅ **Parábola em zh**: o corte cru varia ±2 cm entre fatias vizinhas de 0,9 cm.
+> A mediana de 5 mata o disparo e **preserva degrau** — a borda serrilhada que
+> sobrava. É a §4.5f num eixo diferente, e é a terceira vez que o par
+> mediana+alisamento resolve.
 >
-> É seguro: o `morph --apply` **limpa os shape keys que achar e recalibra do
-> zero**, então a costura nova (+1200 tri) é remedida, não herdada.
+> Tronco indevidamente mascarado, dentro da banda: `b09_d2` 514 → 0 · `b10_d1`
+> 504 → 0 · `b05_d1` 140 → 0. **23 dos 37 mudaram de fato e foram regravados**;
+> 14 saem bit a bit idênticos e não gastaram versão. O magro `b01_d1` — a
+> regressão a vigiar — não mudou um vértice (114 → 114). `LICOES.md` §4.5g.
 >
-> **2. Veredito de PINTURA não se dá no render do `--fit`.** Julguei os 37
-> naquele clay, dei o lote por bom, e ele abriu o testador e viu **faixa branca
-> no topo de absolutamente todos**. Usar `qa/probe/sondas/render_dist.py`, que
-> renderiza o GLB entregue com o `zenith_env.hdr`. `LICOES.md` §4.5c.
+> Versões finais dos que ele apontou: `b05_d1` **v12** · `b06_d1` **v17** ·
+> `b08_d1` **v21** · `b09_d2` **v16** · `b10_d1` **v19** · `b11_d1` **v19** ·
+> `b11_d2` **v19** · `b12_d1` **v19**.
 >
-> **3. A régua da folha passou VERDE com o avatar errado.** Ela compara a
-> mediana do quarto frontal — mede o **pico**, não a **forma**. Deu ±0,002 nos
-> 37 enquanto o traçado caía cedo demais para os lados.
+> 🆕 Sondas novas: `cos_liso_mapa.py` · `cos_etapas.py` · `braco_corte.py`
+> (o corte braço/tronco fatia a fatia, com o perfil de profundidade cru) ·
+> `faixa_braco_mapa.py` (banco de ensaio antes/depois da máscara).
 >
-> ### 📋 O QUE SOBROU DOS TOPS — é esta a fila viva
+> **Réguas depois dos dois lotes:** `probe_material_dist` **76/76** ·
+> `shorts --check --all` **76/76** · `select --check` **34/34** ·
+> `morph_cases --check` **608/608** · índice 76, nenhum id com duas versões,
+> nenhum GLB faltando · shape keys **54/16/3/3**.
 >
-> **Recorte pequeno na quina de baixo da faixa** em `b09_d2` · `b10_d1` ·
-> `b11_d2` · `b12_d1` · `b07_d3`. Encolheu muito e **não tem régua externa** —
-> só o olho dele decide se volta para a fila. **Não varrer os outros.**
+> ### 🔴 O QUE FICOU PARADO — é por aqui que a sessão nova começa
 >
-> Os 7 shorts masculinos do `FILA_PECAS.md` §2 **não foram tocados** — ele mandou
-> começar pelos tops.
+> **1. A fila viva da trava `CANTO`.** Ela reprova **3 femininos** (`b06h_d3`
+> 0,029 · `b10_d3` 0,025 · `b10_d2` 0,021) e **11 masculinos** (até 0,121 no
+> `b12_d1`). Ele mandou "os 7 com defeito MAIS visível", não "os 7 únicos" —
+> nenhum desses foi tocado. **O conserto é o mesmo comando, já pronto**
+> (`shorts --fit` + `--apply` + `morph --apply`); falta a decisão dele.
 >
-> 🔴 **Nada subiu para o app.** Os 37 GLBs novos, o `library.json`, o
-> `morph_map.json` e o `morph_cases.json` estão só aqui. A receita de subida é a
-> do bloco dos dois repositórios, logo abaixo — **índice primeiro, upload
-> depois**.
+> **2. A franja na quina faixa/braço.** Sobra ~1 triângulo de franja onde a
+> faixa encontra a face interna do braço, visível só em ângulo rasante nas
+> vistas de costas. É a máscara de braço ser aplicada **por face** (`is_paint`),
+> enquanto as bordas por altura passam pelo corte exato do `w_cut_boundary`. O
+> conserto é levar a máscara de braço para o mesmo corte — frente própria, não
+> tentada.
+>
+> **3.** ~~Nada subiu para o app~~ ✅ **subiu em 16/08** — 76 GLBs, 0 falhas,
+> mais índice, mapa de morph e os dois bancos de casos. Ver o bloco no topo.
+>
+> **4.** ~~O backup está 30 GLBs atrás~~ ✅ **refeito em 16/08.**
+>
+> ⚠️ **O DIFF É MAIOR QUE ESTA SESSÃO — e vale saber o que é o quê.** O working
+> tree já chegou aqui com o `config/morph_map.json` recalibrado **inteiro** em
+> 14/08 (os 76; `zen_m_b03_d1` foi de `glb_version` 3 para 6) mais
+> `scripts/morph.py` e `docs/PROBLEMA_COXA.md` modificados. **Aquela sessão
+> resolveu a COXA e refez o BÍCEPS** e não deixou registro no `state.md` — o
+> bloco acima foi escrito em 15/08, lendo o código e os números. Está tudo
+> consistente (`morph_cases --check` tem trava de `glb_version` contra o índice e
+> passa 608/608), mas **nada disso está commitado**, nem o trabalho de 14/08 nem
+> o de 15/08.
 
 > ## 🔀 OS DOIS REPOSITÓRIOS VIRARAM SESSÕES SEPARADAS (06/08)
 >
@@ -148,12 +187,20 @@
 >
 > ```
 > python scripts/build_index.py          # o nome do GLB muda a cada versão
+> python scripts/morph_cases.py          # os 608 casos seguem o glb_version
 > python scripts/select.py --check       # 34/34
+> python scripts/morph_cases.py --check  # 608/608
 > cp library.json          ../zenith/assets/avatars/library.json
 > cp config/morph_map.json ../zenith/assets/avatars/morph_map.json
 > cp test/selection_cases.json ../zenith/test/fixtures/selection_cases.json
+> cp test/morph_cases.json     ../zenith/test/fixtures/morph_cases.json
 > cd ../zenith && python scripts/publish_avatars.py
 > ```
+>
+> ⚠️ **O `morph_cases.json` entrou nesta receita em 15/08** e faltava: ele tem uma
+> trava que recusa gerar se o `glb_version` do mapa não bater com o do índice,
+> então depois de qualquer `morph --apply` ele precisa ser **regerado**, não só
+> conferido. Rodar só o `--check` devolve divergência e parece defeito.
 >
 > 🔴 **ÍNDICE PRIMEIRO, UPLOAD DEPOIS.** O `publish_avatars.py` recusa rodar se o
 > índice do app promete um GLB que não está no disco daqui — e depois de um
@@ -183,9 +230,10 @@
 > ### 🧬 OS 76 TÊM SHAPE KEY — o lote inteiro rodou em 11/08 (sessão 25)
 >
 > **76 de 76 no `config/morph_map.json`**, cada um com `--apply` próprio, versão
-> nova de GLB e a anterior aposentada. Distribuição: **35 avatares com 10 shape
-> keys, 33 com 9, 5 com 8, 3 com 7** — o que falta em cada um está em
+> nova de GLB e a anterior aposentada. Distribuição **na época**: 35 com 10 shape
+> keys, 33 com 9, 5 com 8, 3 com 7 — o que falta em cada um está em
 > `dropped_columns` no mapa, e o motivo é sempre régua, nunca desistência.
+> ✅ **Hoje é 54/16/3/3**, depois da coxa ter sido resolvida em 14/08.
 >
 > Réguas externas rodadas DEPOIS do lote, as duas limpas:
 > - `probe_material_dist.py` → **76/76** em `#B9BCC2` / 0.25 / 0.45 com a peça
@@ -235,12 +283,9 @@
 > `morph_waist` sumia do mapa e o `morph_waist_flatten` ficava publicado
 > apontando para um `couple` inexistente. Hoje quem sai é o achatamento.
 >
-> **4. 🔴 A COXA NÃO É MEDÍVEL NO DIST — e isso é padrão, não avatar (§7.25).** A
-> banda da coxa lê a PEÇA: desvio até **+6,9 cm no masculino e +14,5 cm no
-> feminino** contra o `library_metrics.json`, com as outras oito colunas batendo
-> em ±0,1. Resultado: **28 dos 76 estão sem morph de coxa** (21 femininos, 7
-> masculinos). O conserto provável é medir a coxa com a virilha **do master**, e
-> isso mexe no `metrics.py`, que a biblioteca inteira usa — **sessão própria.**
+> **4.** ~~A COXA NÃO É MEDÍVEL NO DIST~~ ✅ **RESOLVIDA em 14/08** — ver o bloco
+> logo abaixo. Era o maior buraco do morph (28 dos 76 sem coxa) e hoje são
+> **75 de 76**.
 
 > ### ✅ O MORPH DE CINTURA ERA ISOTRÓPICO E ENGORDAVA — CONSERTADO EM 06/08
 >
@@ -300,31 +345,50 @@
 > A elipse subestima seção achatada, então o 1,44 dele é **piso**, não teto. A
 > direção não depende disso: 1,44 contra 1,12 sobrevive a qualquer erro de ±4%.
 >
-> ### 🆕 A LISTA DAS PEÇAS CHEGOU (11/08) — está em `docs/FILA_PECAS.md`
+> ### ✅ A FILA DAS PEÇAS está em `docs/FILA_PECAS.md` — e ela é o produto
 >
-> A fila que a sessão 22 esperava. **30 dos 37 tops femininos** em três classes
-> que ele definiu com screenshot (mínima = listra fina na borda de cima ·
-> mediana = listra maior + ponto sem pintar · maior = top quase todo errado) e
-> **7 shorts masculinos**, que são os sete mais pesados do acervo (`b09_d1` a
-> `b12_d1`, IMC 63 a 148). **Ele mandou começar pelos tops femininos.**
+> Ele manda a fila por **print do testador**; o que não está nela não está na
+> fila (regra §6.1). Quatro rodadas fechadas: tops femininos (26), shorts
+> masculinos (27), cós-avental feminino (29), quina do cós + máscara do braço
+> (30). O arquivo guarda o placar de cada uma.
 >
-> 🔴 **A lista é o produto — não varrer os outros procurando defeito.** E há
-> **duas coisas a confirmar com ele** antes de mexer: três avatares aparecem em
-> duas classes, e o `b03_d3` (o exemplo que ele mandou de "mínima") não está na
-> lista. Detalhe no `FILA_PECAS.md`.
+> 🔴 **O que sobrou de fila viva está no bloco da sessão 30, no topo:** 3
+> femininos e 11 masculinos que a trava `CANTO` reprova, e a franja de 1
+> triângulo na quina faixa/braço. Nenhum foi tocado — entram por decisão dele.
 >
-> ✅ A classe "mínima" é a **borda de cima da faixa**, que a §4.5b do `LICOES.md`
-> já tinha medido como *não medida em avatar nenhum*. Agora são duas linhas
-> independentes no mesmo lugar, e a decisão de **modelar** a subida deixou de ser
-> especulação: tem demanda.
+> ### ✅ A COXA FOI RESOLVIDA EM 14/08 — por OFFSET, não por medir melhor
 >
-> ### 📄 O PROBLEMA DA COXA ESTÁ ESCRITO PARA LEITOR DE FORA — `docs/PROBLEMA_COXA.md`
+> Trabalho de uma sessão que **não deixou registro aqui** (o mesmo dia da
+> recalibração dos 76 no working tree). Descoberto em 15/08 ao conferir os
+> números antes de escrever esta documentação, e é o item mais importante que
+> estava desatualizado: o `state.md` dizia "28 dos 76 sem morph de coxa".
 >
-> A pedido dele, para consultar um modelo mais avançado. E **escrever mudou o
-> diagnóstico**: não é o tecido do short entrando na medida. Medindo o dist com o
-> `metrics.py` cru dá **+1,1 cm**; o que dá **+18,5** é a **cópia soldada** que o
-> `morph.py` usa — a mesma soldagem que conserta o antebraço. Três caminhos
-> plausíveis estão listados lá, nenhum testado.
+> **Hoje são 75 de 76** — só o `zen_m_b06h_d3` não tem. O `dropped_columns` da
+> biblioteca inteira é `forearm` 3 · `biceps` 2 · `waist_min` 1; **a coxa saiu
+> da lista.** É isso que explica a distribuição de shape keys ter ido de
+> 35/33/5/3 para **54/16/3/3**.
+>
+> **O conserto foi parar de tentar trocar a medida.** As três tentativas de mexer
+> em *qual malha é medida* (`PROBLEMA_COXA.md` §5) consertavam quem falhava e
+> quebravam quem já passava — a última achou **10 regressões novas** entre os 48
+> que passavam. `calibrar_offset_coxa` mede o desvio **uma vez** contra o
+> `library_metrics.json` na base e soma um offset constante; a medição segue pela
+> malha cheia, sem risco de laço vazio. Teto `COXA_OFFSET_MAX_CM = 22`.
+>
+> ⚠️ **A suposição não verificada:** o excesso de tecido é constante em cm ao
+> longo da amplitude do morph. Plausível, sem medida que comprove — não existe
+> medida de coxa deformada no projeto. `LICOES.md` §7.25b e `PROBLEMA_COXA.md`
+> §7b.
+>
+> 🔴 **O `metrics.py` continua medindo a coxa errado no dist.** O offset conserta
+> o morph, que é quem precisa da leitura. Se algo mais passar a medir coxa no
+> dist, o problema volta inteiro.
+>
+> 🆕 **Na mesma sessão de 14/08 o morph do BÍCEPS foi refeito** (3ª versão, as
+> duas anteriores reprovadas por ele com print): a máscara deixou de ser faixa
+> em Z e passou a ser faixa no **eixo do próprio braço** — em A-pose o braço sai
+> a ~24° da vertical, então fatia de Z global corta o membro na diagonal e pega
+> bíceps de um lado e cotovelo do outro. Está no docstring do `morph.py`.
 
 > ### 🔴 A LISTA DO QUE FALTA AQUI — é esta a pauta das sessões da biblioteca
 >
@@ -338,63 +402,30 @@
 > short e faixa dividem o material `Zenith_Shorts`. O que este arquivo dizia
 > antes estava errado, e a trava do round-trip confirma 2 de 2 em todas as 37.
 >
-> **3. As peças.** A fila de short masculina e o defeito de faixa feminino — ver
-> os dois blocos abaixo. **A lista dele nunca chegou** e é a primeira coisa a
-> pedir quando a frente voltar.
+> **3.** ~~As peças~~ ✅ **as quatro rodadas fecharam** (sessões 26, 27, 29 e 30).
+> O que sobra é a fila viva do bloco da sessão 30, no topo, e ela depende de
+> decisão dele — não de trabalho de máquina.
 >
 > **4.** ~~Não existe banco de casos para o MORPH~~ ✅ **existe:**
 > `scripts/morph_cases.py` + `test/morph_cases.json`, **608 casos** (era 8, de um
 > avatar só). ⚠️ O arquivo tem **497 KB** — se isso pesar como fixture no app, o
 > corte é gerar casos de um subconjunto, não deixar de ter árbitro.
 >
-> **5. `approved` continua campo morto** — `build_index.py:164` grava `True` fixo
-> e nada lê. O `b09_d3` (32,4) e o `b10_d3` (45,1) lêem masculinos e são servidos.
+> **5. `approved` NÃO é campo morto — falta só a metade que escreve.** Corrigido
+> em 16/08: `select.py:61` e `:201` filtram por ele, e o `avatar_tester.html:323`
+> também. O que não existe é alguém que grave `False` — `build_index.py:432` põe
+> `True` fixo. Ou seja: **o mecanismo de não-servir um avatar já está pronto nas
+> três implementações da regra; falta a lista de ids reprovados.** O `b09_d3`
+> (32,4) e o `b10_d3` (45,1) leem masculinos e continuam sendo servidos.
 >
-> **6. O backup foi refeito em 12/08** — `_backup_zenith/zenith_assets_2026-08-12.zip`,
-> **486 MB**, integridade conferida, com `00_input` `01_raw` `02_master` `03_dist`
-> `config` `metrics` `test` e o `library.json`.
+> **6.** ~~O backup está desatualizado~~ ✅ **refeito em 16/08** —
+> `zenith_assets_2026-08-16.zip`, 492 MB, conferido. Ver o bloco no topo.
+> ⚠️ Continua no mesmo disco.
 > ⚠️ **A primeira tentativa saiu sem o `01_raw`** e por isso 120 MB menor que o
 > zip anterior — o que denunciou foi comparar a LISTA de pastas com a do zip de
 > 31/07, não o tamanho. `01_raw` é o único material irreproduzível (custou
 > crédito na Meshy); tudo o mais se refaz a partir dele.
 > ⚠️ Continua **no mesmo disco** — protege contra erro meu, não contra falha de disco.
->
-> ### 📋 A FILA DE CORREÇÃO DOS SHORTS CONTINUA CONGELADA
->
-> Ele revisou os 76 no testador em 02/08 e mandou congelar a frente de shorts
-> para retomar a integração. **A lista dele nunca chegou** — quando a sessão de
-> shorts voltar, é ela a primeira coisa. Regra §6.1: não adiantar, não varrer os
-> 37 procurando defeito de faixa.
->
-> ### 📋 O bloco abaixo é da sessão 22 e está mantido por contexto
->
-> ### 📋 A PRIMEIRA COISA DAQUELA SESSÃO ERA RECEBER A LISTA DELE
->
-> Ele revisou **os 76 no testador em 02/08** e o veredito foi de aprovação geral —
-> mas com fila de correção, e **ele disse que manda a lista na sessão seguinte,
-> começando pelos femininos**:
->
-> > *"eu revisei todos, tanto masculinos quanto femininos… os masculinos faltam
-> > bem poucos pra gente finalizar, são pequenos ajustes finos. nos femininos
-> > faltam mais… os femininos a maioria é defeito mais no top."*
->
-> 🔴 **NÃO ADIANTAR ESSA FILA.** Não varrer os 37 procurando defeito de faixa, não
-> propor conserto em massa, não "já ir consertando os óbvios". A lista é dele e
-> vem no começo da sessão — regra §6.1, *um por vez é um por vez*. O que se faz
-> antes dela chegar é **nada de produção**.
->
-> 🔴 **E o defeito dos femininos é no TOP — o que é evidência, não só uma queixa.**
-> Ele diz que a maioria dos defeitos femininos está na faixa. A medida da sessão 22
-> diz que a **borda de cima da faixa não é medida em avatar nenhum** (`LICOES.md`
-> §4.5b). São **duas linhas independentes apontando o mesmo lugar**: o olho dele e
-> o sweep. Quando a lista chegar, a pergunta a fazer primeiro é se o defeito
-> listado é a **subida frontal** — e, se for, a decisão de **modelar** a subida
-> (que muda os 37) deixa de ser especulação e passa a ter demanda.
->
-> ⚠️ **O que ainda falta para poder decidir isso:** saber *como* o defeito se
-> parece. "Defeito no top" pode ser subida errada, altura errada, largura errada
-> ou borda serrilhada — e são consertos diferentes. **Perguntar, ou pedir print,
-> antes de escolher o método.**
 >
 > ### 🎯 A FRENTE É INTEGRAÇÃO com o app Zenith
 >
@@ -688,25 +719,34 @@
 > masculino — 32,4 (`b09_d3`) e 45,1 — e como o campo `approved` é morto, os dois
 > são servidos. **Não gastar geração acima de IMC ~30 na `d3` no ChatGPT.**
 >
-> 🔴 **PENDÊNCIA DE PRODUTO ABERTA (agora com 2 assets):** o campo `approved` do
-> `library.json` é **fixo em `True`** no `build_index.py:164` e **nada o lê** — nem
-> o `avatar_tester.html`. Não existe mecanismo para manter um asset sem servi-lo.
-> O conserto é `build_index.py` lendo uma lista de ids reprovados, com o
-> `nearest_id` ignorando-os.
+> 🔴 **PENDÊNCIA DE PRODUTO ABERTA (agora com 2 assets):** o `approved` é **lido**
+> pelas três implementações da regra (`select.py:61` e `:201`, tester `:323`),
+> mas o `build_index.py:432` grava **`True` fixo** — então não existe como manter
+> um asset no acervo sem servi-lo. Falta a lista de ids reprovados.
+> ⚠️ Este parágrafo dizia "nada o lê" até 16/08, e estava errado.
 >
 > 🔴 **O método de QA, cobrado por ele:** *"você é o especialista em corpo humano,
 > não tem como eu decidir algo no olho assim, a menos que seja uma inconsistência
 > grande ou defeito na pintura do short."* **Não pedir a ele veredito de
 > anatomia.** Anatomia é medida e julgada aqui.
 >
-> ### ⚠️ Rótulos fora de ordem — a lista cresceu, e não foram consertados
+> ### ✅ Bandas fora de ordem no id — DECIDIDO em 16/08: são rótulo histórico
 >
-> `b09_d1` (34,1) × `b08_d1` (42,6) invertidos · `b06_d1` (32,4) × `b07_d1` (31,9)
-> · `b10_d2` (52,6) × `b09_d2` (53,9) · e agora `b05_d1` medindo **44,4** entre o
-> `b08_d1` e o `b11_d1`, `b03_d3` medindo **16,1** abaixo do `b02_d3`, e `b02_d1`
-> medindo **16,4** abaixo do `b01_d1`. Não quebra o app (o `nearest_id` usa IMC
-> medido), mas o **nome mente sobre a ordem**. Decisão do Rogério pendente:
-> reclassificar, ou aceitar que o rótulo de banda é só histórico.
+> **Decisão dele, tomada com a medida na mão.** São **10 inversões em 5 linhas**
+> (ex.: `b07_d1` 31,9 antes do `b06_d1` 32,4; `b09_d1` 34,1 antes do `b08_d1`
+> 42,6). Ficam como estão.
+>
+> ⚠️ **E o que eu tinha reportado como "o nome mente" estava impreciso:** o campo
+> `label` do índice **não** vem da banda — `build_index.py:259` o deriva da razão
+> **cintura/altura medida** (0,43 muito magra · 0,50 magra · 0,55 média · 0,63
+> cheia · 0,75 muito cheia). O label é honesto. O que está fora de ordem é só o
+> número `b01..b12` **dentro do id**.
+>
+> **E nada no produto lê esse número:** a seleção usa medidas, o índice ordena por
+> `measured_bmi`, o tester ordena por `measured_bmi`, os vãos de cobertura também.
+> Renomear custaria 76 GLBs + as chaves dos dois mapas + invalidar a URL de CDN
+> de todo mundo que já baixou — a regra 8 inteira, para consertar um sintoma que
+> só existe para quem lê nome de arquivo.
 >
 > ⚠️ **`b03_d3` e `b02_d1` são quase-empates com os vizinhos** — 16,1 contra 16,9
 > e 16,4 contra 16,5. Fecharam slot de grade; **cobertura de IMC, quase nenhuma.**
@@ -919,9 +959,19 @@ por reprovação visual.
 Os 4 `d3` da sessão 13 ele ainda não abriu no testador, mas isso **não bloqueia**
 — o `b09_d3` já tem parecer meu (lê masculino) e a decisão dele já saiu.
 
-Servidor: `preview_start` na config `static` (`.claude/launch.json`, porta 8765)
-→ `http://localhost:8765/test/avatar_tester.html`. **Sempre por http; `file://`
-não serve** porque o testador lê o `library.json` por `fetch`.
+Servidor: **`testador.cmd` na raiz do repositório** (clique duplo) → abre o
+navegador em `http://localhost:8765/test/avatar_tester.html` e deixa o
+`http.server` de pé enquanto a janela preta estiver aberta.
+
+🔴 **Sempre por http; `file://` não serve** — o testador lê o `library.json` por
+`fetch` e o model-viewer carrega GLB e HDR por URL relativa; em `file://` o
+navegador barra os três e a página sobe em branco.
+
+⚠️ **Em 15/08 o ambiente "parou de abrir" e não havia nada quebrado**: o servidor
+subia junto com a sessão de trabalho (`preview_start` na config `static` do
+`.claude/launch.json`) e morria com ela. O `testador.cmd` existe para o servidor
+não depender de sessão nenhuma. Conferido depois de subir: HTML 200,
+`library.json` 200, o GLB que o índice aponta 200, o HDR 200.
 
 Não pedir opinião sobre PNG de `qa/look/`. E se ele reprovar algum: regra 5b,
 reclassificar ou inserir, nunca regerar.
@@ -934,11 +984,13 @@ reclassificar ou inserir, nunca regerar.
   `531f403`, enquanto as duas `.bak` não batem com commit nenhum, que é
   justamente por que não se apaga.
 
-- 🔴 **`approved` é campo morto, e agora com DOIS assets dependendo dele.** O
-  `build_index.py:164` grava `True` fixo e nada lê — nem o `avatar_tester.html`.
-  O `b09_d3` (32,4) e o `b10_d3` (45,1) lêem masculinos e **são servidos**.
-  Conserto: `build_index.py` lendo uma lista de ids reprovados, com o
-  `nearest_id` ignorando-os.
+- 🔴 **`approved` — falta só quem escreve `False`.** ⚠️ Corrigido em 16/08: este
+  item dizia "campo morto, nada lê", e estava **errado** — `select.py:61` e
+  `:201` filtram por ele e o `avatar_tester.html:323` também. O que falta é a
+  metade que ESCREVE: `build_index.py:432` grava `True` fixo, então nunca há
+  como um asset ficar no acervo sem ser servido. Conserto: uma lista de ids
+  reprovados lida pelo `build_index.py`. O `b09_d3` (32,4) e o `b10_d3` (45,1)
+  leem masculinos e **continuam sendo servidos**.
 - 🔴 **A leitura padrão passou de 17,5k:** `CLAUDE.md` 6,4k + este **11,2k** antes
   de qualquer trabalho, e o `LICOES.md` está em **26,3k**. O corte da sessão 22
   não bastou e a 24 acrescentou de novo (bloco de morph aqui, §12 no
@@ -984,8 +1036,14 @@ reclassificar ou inserir, nunca regerar.
   isso importar um dia, a conversa é sobre LFS ou storage externo.
 - ✅ **`state.md.cauda.tmp` não existe mais** — conferido na sessão 17, a pendência
   estava obsoleta.
-- `render.py` (turntable) não existe — e pode não ser necessário: o GLB com
-  auto-rotate no model-viewer foi aprovado no teste do app.
+- ❌ **`render.py` (turntable) NÃO SERÁ ESCRITO — avaliado e descartado em
+  16/08, a pedido dele.** Ele existia para responder *"GLB ou turntable como
+  formato de entrega?"* (README §215), e **a integração respondeu**: o app roda
+  GLB no model-viewer, no device, desde 04/08, com morph em cima. Turntable é
+  sequência de imagem — não gira sob controle do usuário, não recebe shape key e
+  não reaproveita o HDR, que é metade da identidade Zenith. Sairia um formato
+  que nada consome. O campo `assets.turntable` do índice fica como `null`; não
+  custa nada e o schema já está publicado no app.
 - **Dois vãos `high` masculinos seguem abertos: d1 27,8→33,3 e d3 27,4→32,4.**
   Método medido: âncora única em **IMC alvo − 7** e gerar no **Gemini**. Para o
   `m d1` dá âncora ~23,5 mirando ~30,5; para o `m d3`, âncora ~23 mirando ~30.

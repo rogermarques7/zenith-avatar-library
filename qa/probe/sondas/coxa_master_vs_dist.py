@@ -22,7 +22,7 @@ root = mt.repo_root()
 for aid in argv:
     print("\n" + "=" * 74)
     print(aid)
-    for rotulo, path in (("master", os.path.join(root, "02_master", aid + ".glb")),
+    for rotulo, path in (("master", os.path.join(root, "02_master", aid + "_master.glb")),
                          ("dist  ", zp.dist_glb_current(root, aid)[1])):
         if not path or not os.path.isfile(path):
             print("  {}: nao existe".format(rotulo))

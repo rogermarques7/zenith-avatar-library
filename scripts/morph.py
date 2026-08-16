@@ -126,13 +126,42 @@ MORPHS = [
     #     quando ele for positivo. Reduzir cintura tem que perder profundidade
     #     (e o que emagrecer faz), entao a reducao continua isotropica.
     #
-    #     `cal_depth` e o criterio de calibracao: a amplitude e a que devolve a
+    #     `depth_column` e o criterio de calibracao: a amplitude e a que devolve a
     #     PROFUNDIDADE da base quando o `morph_waist` esta em +1,0. E o default
     #     conservador - o morph deixa de piorar o eixo visivel, sem apostar em
     #     nenhuma forma de corpo.
     {"key": "morph_waist_flatten", "column": None, "kind": "flatten",
-     "couple": "morph_waist", "couple_when": "positive", "cal_depth": True},
+     "couple": "morph_waist", "couple_when": "positive",
+     "depth_column": "_waist_depth"},
+
+    # ⚠️ QUADRIL e PEITORAL ganharam o mesmo tratamento em 16/08, a pedido dele.
+    #     O raciocinio e identico ao da cintura e ja estava escrito como
+    #     pendencia desde 06/08: morph radial uniforme PRESERVA a forma da
+    #     secao, entao fechar centimetro de perimetro custa profundidade — e
+    #     profundidade e o eixo que aparece de perfil e de 3/4.
+    #
+    #     Cada um mede a SUA profundidade, na altura em que a SUA regua le:
+    #     `_hip_depth` no maximo da banda do quadril, `_chest_depth` na fracao
+    #     do peito. Reaproveitar a altura da cintura seria calibrar a forma de
+    #     uma secao medindo outra.
+    #
+    #     Mesmo default conservador: a amplitude e a que devolve a profundidade
+    #     da BASE quando o morph de tamanho esta em +1,0. Nao se mira forma de
+    #     ninguem — com UM corpo real medido no projeto inteiro, mirar uma razao
+    #     seria embutir aquele corpo como padrao de todo mundo.
+    {"key": "morph_hip_flatten", "column": None, "kind": "flatten",
+     "couple": "morph_hip", "couple_when": "positive",
+     "depth_column": "_hip_depth"},
+    {"key": "morph_chest_flatten", "column": None, "kind": "flatten",
+     "couple": "morph_chest", "couple_when": "positive",
+     "depth_column": "_chest_depth"},
 ]
+
+# Quanto o morph de TAMANHO precisa afundar a secao para valer a pena publicar o
+# morph de FORMA junto. Abaixo disso a busca devolveria amplitude ~0 e o que
+# sairia e uma shape key que nao move nada e mesmo assim carrega um target
+# esparso de milhares de vertices no GLB.
+FLATTEN_MIN_GANHO_CM = 0.2
 
 # Amplitudes varridas para achar onde cada morph quebra. Passa do util de
 # proposito: faixa so vale medida ate o defeito aparecer.
@@ -270,6 +299,35 @@ class Base(object):
         self.z_pulso = w[3] if w else z + 0.56 * H
         self.z_meio = (self.z_pulso + self.arm_top) / 2.0
 
+        # --- AS MESMAS ANCORAS, PROJETADAS NO EIXO DO BRACO (14/08).
+        # O braco em A-pose sai a ~24 graus da vertical, entao faixa de Z
+        # GLOBAL corta o braco na DIAGONAL: a mesma fatia pega biceps de um
+        # lado e cotovelo do outro. Foi por isso que duas tentativas de
+        # reposicionar o morph do biceps em Z falharam no testador (prints do
+        # Rogerio, 14/08). `t` = projecao no eixo do proprio membro, entao a
+        # faixa acompanha a inclinacao e vale igual nos dois bracos.
+        d0, _, _ = self._dist_eixo(co)
+        _br = (co[:, 0] > 0) & (d0 < 0.080)
+        _t = (co[_br] - self.arm_c) @ self.arm_e
+        _zb = co[_br][:, 2]
+
+        def _t_em(z_alvo, meia=0.012):
+            """t medio dos vertices do braco na altura z_alvo."""
+            m = np.abs(_zb - z_alvo) < meia
+            return float(_t[m].mean()) if m.sum() >= 4 else None
+
+        self.t_pulso = _t_em(self.z_pulso)
+        self.t_top = _t_em(self.arm_top)
+        # teto: onde o braco funde no tronco. Acima daqui a mascara pegaria
+        # deltoide/peito, e `no_braco` sozinho nao segura (a reta do eixo,
+        # estendida, passa perto do pescoco - a sonda achou ate vertice de
+        # CABECA em t alto).
+        self.t_fusao = _t_em(self.arm_split if self.arm_split else self.armpit)
+        if self.t_pulso is None or self.t_top is None:
+            self.t_pulso, self.t_top = -0.06, 0.23      # fallback medido
+        if self.t_fusao is None or self.t_fusao <= self.t_top:
+            self.t_fusao = self.t_top + 0.35 * (self.t_top - self.t_pulso)
+
         # --- PERFIL DO CENTRO DO TRONCO, com o braco fora da conta. O push
         # radial sai daqui: o tronco nao e cilindro centrado, e usar o eixo
         # global empurraria a barriga so para a frente.
@@ -396,6 +454,13 @@ class Base(object):
         d_braco = np.minimum(d_dir, d_esq)
         br_dir = (P[:, 0] > 0) & (d_dir < 0.080)
         br_esq = (P[:, 0] < 0) & (d_esq < 0.080)
+        # t = quanto o vertice andou AO LONGO do eixo do proprio braco (ver
+        # t_pulso/t_top/t_fusao na Base). Um so array: cada lado projeta no seu
+        # eixo, e o lado oposto fica com valor irrelevante porque as mascaras
+        # do braco sao multiplicadas por br_dir/br_esq.
+        t_arm = np.where(P[:, 0] > 0,
+                         (P - self.arm_c) @ self.arm_e,
+                         (P * np.array([-1.0, 1.0, 1.0]) - self.arm_c) @ self.arm_e)
         dir_arm = np.zeros((n, 3))
         # A componente do braco que aponta PARA O TRONCO morre onde a axila ja
         # esta fechando - o mesmo remedio das coxas. Sem ela o unico jeito de
@@ -479,8 +544,45 @@ class Base(object):
         # por cima dele: media +0,1 cm em influence 0,5 e +4,3 cm em 1,0, ou
         # seja o mapa mentiria em toda a metade de baixo da faixa.
         no_braco = (br_dir | br_esq).astype(float)
-        m_biceps = no_braco * band(Z, self.z_meio - 0.06, self.z_meio,
-                                   self.arm_top - 0.010, self.arm_top + 0.012)
+        # 🔴 O BICEPS E FAIXA NO EIXO DO BRACO, NAO EM ALTURA (14/08, 3a versao;
+        # as duas anteriores falharam no testador, com print do Rogerio).
+        #
+        # O que a sonda `perfil_braco` mediu no b04_d2, projetando no eixo:
+        #     eixo a 24,3 graus da vertical
+        #     cotovelo  t=+0,15   (raio para de cair e volta a subir)
+        #     biceps    t=+0,20 a +0,34
+        #     fusao     t=+0,31   (arm_split; acima disso e deltoide/tronco)
+        #     arm_top   t=+0,23   <- o TETO da mascara antiga
+        #
+        # Os dois defeitos que ele viu saem dai, e sao um so erro:
+        #   - faixa de Z corta um membro inclinado na DIAGONAL, entao a mesma
+        #     fatia pega biceps de um lado e cotovelo do outro;
+        #   - `arm_top` nao e o topo do biceps, e o MEIO dele - o plato antigo
+        #     ia de t~0,18 a t~0,23 e deixava de fora 2/3 do musculo. Era a
+        #     "regiao minima" da queixa.
+        #
+        # Agora o plato vai do cotovelo (+15% do vao pulso->arm_top, para nao
+        # tocar a dobra) ate a FUSAO com o tronco, que e onde o braco acaba de
+        # verdade. A regua le em arm_top, que fica dentro do plato - a exigencia
+        # do §7.9 (mascara CHEIA onde a regua le) continua satisfeita.
+        # O plato fica CENTRADO em t_top, que e onde a regua le o maximo - a
+        # exigencia do §7.9. As rampas e que sao longas: descem ate logo acima
+        # do cotovelo e sobem ate a fusao, entao o musculo inteiro se move com
+        # queda suave nas pontas, sem parede no cotovelo nem empurrao dentro da
+        # axila (que era de onde vinham as normais invertidas).
+        vao_br = self.t_top - self.t_pulso
+        t_cot = self.t_pulso + 0.72 * vao_br
+        t_lo0 = t_cot + 0.06 * vao_br
+        t_lo1 = self.t_top - 0.10 * vao_br
+        t_hi0 = self.t_top + 0.10 * vao_br
+        # ⚠️ O TETO PARA NA FUSAO, e mexer nele foi TESTADO E NAO CONVERGIU
+        # (14/08). Recuar para antes da fusao devolvia faixa no zen_m_b10_d1
+        # mas colapsava a mascara para 199 vertices (morph invisivel); por um
+        # piso de 0.25*vao a mascara voltava a 386 vertices e a faixa caia de
+        # novo. Corpo obeso funde o braco cedo demais para esta banda ter folga.
+        # O valor abaixo e o que esta APLICADO nos 76 e verificado na foto.
+        t_hi1 = self.t_fusao + 0.05 * vao_br
+        m_biceps = no_braco * band(t_arm, t_lo0, t_lo1, t_hi0, t_hi1)
         # ⚠️ A DESCIDA DO ANTEBRACO MORRE NO COTOVELO, nao no meio do osso.
         # A versao anterior fechava de z_meio-0,010 a z_meio+0,020: 3 cm de
         # rampa no MEIO de um antebraco liso, com plato de so 5 cm. Encolher
@@ -569,6 +671,12 @@ class Base(object):
             # cintura. O perimetro quase nao muda; o que muda e a razao entre
             # largura e profundidade.
             "morph_waist_flatten": (m_cintura, self._achatar(P)),
+            # ...e a MESMA operacao nas outras duas bandas do tronco (16/08).
+            # A direcao e identica - `_achatar` ja e generico, ele so precisa do
+            # perfil do centro do tronco -, o que muda e a mascara e, na
+            # calibracao, QUAL profundidade e medida.
+            "morph_hip_flatten":   (m_quadril, self._achatar(P)),
+            "morph_chest_flatten": (m_peito,   self._achatar(P)),
         }
 
     def _achatar(self, P):
@@ -653,6 +761,25 @@ class Base(object):
 #  A REGUA OFICIAL, aplicada a uma malha deformada
 # ==========================================================================
 
+def _prof_em(m, zc):
+    """Profundidade (extensao em Y) da secao do tronco na altura `zc`.
+
+    O criterio de calibracao dos morphs de FORMA. Nao e medida de fita: fita da
+    perimetro, e perimetro e cego para forma - duas cinturas de 101 cm podem ser
+    redonda ou chata. Profundidade e o eixo que aparece de perfil e de 3/4, e foi
+    nele que o morph isotropico piorava o avatar (LICOES 7.19).
+
+    Pega o MAIOR laco da fatia porque na altura do peito o corte pode devolver
+    tambem os bracos como lacos proprios."""
+    if zc is None:
+        return None
+    lps = m.loops(float(zc))
+    if not lps:
+        return None
+    lp = max(lps, key=len)
+    return float(lp[:, 1].max() - lp[:, 1].min())
+
+
 def medir(base, P, column):
     """O centimetro daquela coluna, pelas MESMAS funcoes do metrics.py, com os
     landmarks de ancoragem congelados na base (ver cabecalho)."""
@@ -676,13 +803,21 @@ def medir(base, P, column):
         # calibracao do achatamento.
         per, zc = mt.torso_extreme(m, z + mt.WAIST_BAND[0] * H,
                                    z + mt.WAIST_BAND[1] * H, "min")
-        if zc is None:
-            return None
-        lps = m.loops(float(zc))
-        if not lps:
-            return None
-        lp = max(lps, key=len)
-        return float(lp[:, 1].max() - lp[:, 1].min())
+        return _prof_em(m, zc)
+    if column == "_hip_depth":
+        # a mesma coisa na altura em que o QUADRIL e lido (maximo da banda).
+        per, zc = mt.torso_extreme(m, z + mt.HIP_BAND[0] * H,
+                                   z + mt.HIP_BAND[1] * H, "max")
+        return _prof_em(m, zc)
+    if column == "_chest_depth":
+        # e na altura do PEITO, que nao e extremo de banda: e fracao fixa, com
+        # o mesmo recuo pela axila que a medida de peito usa (CHEST_PAD_M).
+        # Repetir a conta aqui em vez de reaproveitar o `chest` e de proposito -
+        # aquele ramo devolve PERIMETRO e este precisa da altura.
+        cz = z + mt.CHEST_FRAC * H
+        if base.arm_split is not None and base.arm_split < cz:
+            cz = base.arm_split - mt.CHEST_PAD_M
+        return _prof_em(m, cz)
     if column == "hip":
         return mt.torso_extreme(m, z + mt.HIP_BAND[0] * H, z + mt.HIP_BAND[1] * H, "max")[0]
     if column == "biceps":
@@ -694,7 +829,15 @@ def medir(base, P, column):
     if column == "thigh":
         topo = base.leg_top
         r = mt.pair_extreme(m, topo - mt.THIGH_BAND_M, topo - mt.SCAN_STEP_M, False, "max")
-        return r[0] if r else None
+        if r is None:
+            return None
+        # LICOES 7.25 / PROBLEMA_COXA.md: a banda cai no aro do short e le a
+        # peca, nao a perna - sempre para MAIS (nunca para menos). Duas
+        # tentativas de filtrar QUAL triangulo entra no laco quebraram avatar
+        # que ja lia certo (ver docstring de calibrar_offset_coxa). Este e um
+        # terceiro caminho: nao mexe em qual malha e medida, corrige o NUMERO
+        # por um offset constante medido uma vez contra o master.
+        return r[0] + getattr(base, "thigh_offset", 0.0)
     if column == "calf":
         r = mt.pair_extreme(m, z + mt.CALF_BAND[0] * H, z + mt.CALF_BAND[1] * H, False, "max")
         return r[0] if r else None
@@ -803,6 +946,52 @@ def conferir_base(root, aid, base, co):
     return ruim
 
 
+# Teto do offset da coxa, em CM: maior contaminacao ja medida na biblioteca
+# foi +18,5 cm (zen_f_b08h_d3, LICOES 7.25). Acima disso o offset nao esta
+# corrigindo fabrico, esta escondendo landmark errado - melhor deixar cair.
+COXA_OFFSET_MAX_CM = 22.0
+
+
+def calibrar_offset_coxa(root, aid, base, co):
+    """Corrige a coxa por OFFSET CONSTANTE em vez de trocar qual malha e medida.
+
+    Terceira tentativa (13/08) depois de duas mortas: filtrar a banda por
+    material (fecha o laco pela pele, nao pela peca) quebrou 2 avatares que
+    liam certo (a banda cai inteira debaixo do short, sem face de corpo la, o
+    laco fecha por lixo); um fallback pra malha cheia quando o filtro falha
+    consertou esses 2 mas achou 10 REGRESSOES NOVAS em avatares diferentes
+    (o corpo-so as vezes acha um laco plausivel mas errado, pequeno demais
+    pra disparar o fallback e grande demais pra ser obviamente lixo).
+
+    A ideia aqui e nao trocar NADA na medicao - ela sempre roda pela malha
+    CHEIA, exatamente como sempre rodou, sem nenhum risco de laco vazio ou
+    degenerado. So se soma um numero fixo, medido UMA VEZ contra o
+    library_metrics.json na base (sem deformacao), que fecha exatamente a
+    diferenca ali. A suposicao que isso carrega: o excesso de tecido do short
+    dentro da banda e aproximadamente CONSTANTE em cm ao longo da amplitude do
+    morph - plausivel porque o tecido acompanha a perna (a mesma mascara de
+    empurrao que move a pele proximo move o tecido proximo), mas NAO
+    verificada contra medida real de coxa deformada (nao existe tal medida).
+    Por isso o teto: se o offset que fecharia a base for maior que qualquer
+    contaminacao ja vista na biblioteca, e mais provavel que o problema seja
+    outro (landmark errado) do que fabrico, e a coluna cai como sempre caiu."""
+    p = os.path.join(root, "metrics", "library_metrics.json")
+    with open(p, "r", encoding="utf-8") as f:
+        pub = json.load(f)["avatars"][aid]["circumferences_cm"]
+    alvo = pub.get("thigh", {}).get("cm")
+    if alvo is None:
+        return 0.0, None
+    base.thigh_offset = 0.0
+    bruto = medir(base, co, "thigh")
+    if bruto is None:
+        return 0.0, None
+    bruto_cm = bruto * 100
+    offset_cm = alvo - bruto_cm
+    if abs(offset_cm) > COXA_OFFSET_MAX_CM:
+        return 0.0, offset_cm
+    return offset_cm / 100.0, offset_cm
+
+
 def worker_main():
     import numpy as np
     argv = sys.argv
@@ -819,6 +1008,11 @@ def worker_main():
     ver_atual, src = _zp.dist_glb_current(root, aid)
     ob, co_real, co, mesh, sk_existentes = carregar(src)
     base = Base(co, mesh)
+    offset_m, offset_bruto_cm = calibrar_offset_coxa(root, aid, base, co)
+    base.thigh_offset = offset_m
+    if offset_bruto_cm is not None:
+        print("\ncoxa: offset {:+.1f} cm{}".format(
+            offset_bruto_cm, "" if offset_m else " (fora do teto, NAO aplicado)"))
 
     print("\nmalha: {} verts no disco -> {} soldados | altura {:.4f} m"
           .format(len(co_real), len(co), base.H))
@@ -871,13 +1065,41 @@ def worker_main():
             alvo_key = spec["couple"]
             r_tam = next(r for r in resultado if r["key"] == alvo_key)
             m_t, d_t = masks[alvo_key]
+            # CADA achatamento mede a SUA profundidade, na altura em que a SUA
+            # regua le. Ate 16/08 isto era literal `_waist_depth`, porque so
+            # existia o da cintura; com quadril e peitoral, medir a altura
+            # errada calibraria a forma de uma secao olhando outra.
+            dcol = spec.get("depth_column", "_waist_depth")
+            regiao = {"_waist_depth": "cintura", "_hip_depth": "quadril",
+                      "_chest_depth": "peitoral"}.get(dcol, dcol)
+
             # o estado que o app vai produzir: tamanho em +1,0 e forma junto
             def _prof(a_flat):
                 P = (co + d_t * (m_t * r_tam["amplitude_m"])[:, None]
                         + d * (m * a_flat)[:, None])
-                return medir(base, P, "_waist_depth") * 100
-            prof0 = medir(base, co, "_waist_depth") * 100
+                v = medir(base, P, dcol)
+                return None if v is None else v * 100
+            _p0 = medir(base, co, dcol)
+            if _p0 is None or _prof(0.0) is None:
+                # sem altura de secao nao ha criterio de calibracao, e chutar
+                # amplitude de forma e pior que nao ter forma nenhuma.
+                print("\n[{}] PULADO - {} nao devolveu secao para medir "
+                      "profundidade".format(key, dcol))
+                continue
+            prof0 = _p0 * 100
             prof_sem = _prof(0.0)
+            # ⚠️ SE O MORPH DE TAMANHO NAO AFUNDA A SECAO, NAO HA O QUE ACHATAR.
+            # Acontece de verdade: no zen_f_b12_d1 o `morph_chest` mal cresce, e
+            # a profundidade do peitoral fica identica com e sem ele. A busca
+            # abaixo devolveria amplitude ~0, e uma shape key de amplitude zero
+            # nao e inofensiva - ela e um target esparso de milhares de vertices
+            # (7.352 naquele avatar) que o app baixa e soma para nao mover nada.
+            # O corte e a resolucao da propria medida de secao.
+            if prof_sem - prof0 < FLATTEN_MIN_GANHO_CM:
+                print("\n[{}] PULADO - o {} nao afunda com o tamanho "
+                      "({:+.1f} cm), nao ha forma a corrigir".format(
+                          key, regiao, prof_sem - prof0))
+                continue
             # busca a amplitude que devolve a profundidade da BASE
             lo, hi = 0.0, 0.050
             for _ in range(22):
@@ -887,7 +1109,8 @@ def worker_main():
                 else:
                     hi = mid
             amp = (lo + hi) / 2
-            print("\n[{}] FORMA da cintura | mascara toca {} verts".format(key, tocados))
+            print("\n[{}] FORMA do {} | mascara toca {} verts".format(
+                key, regiao, tocados))
             print("  profundidade: base {:.1f} cm | so tamanho {:.1f} (+{:.1f}) | "
                   "com forma {:.1f} cm".format(prof0, prof_sem, prof_sem - prof0, _prof(amp)))
             print("  amplitude {:.4f} m, acoplada a {} quando positivo".format(amp, alvo_key))

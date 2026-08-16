@@ -158,6 +158,14 @@ WAIST_WINDOW_BACK_ZH    = 0.05   # costas/lados: so o jogo do proprio elastico
 WAIST_PRIOR_SIGMA       = 0.70   # largura do prior, em fracao da janela
 WAIST_MEDIAN            = 7      # termos da mediana circular (era 5)
 
+# --- e o ALISAMENTO, que e o filtro que a mediana nao e (ver w_waist_liso) ---
+# SIGMA escolhido por RENDER nos dois extremos, como manda a LICOES 7.12: 0.7 /
+# 1.0 / 1.6 setores no zen_f_b11_d1 (a parede) e no zen_f_b09_d2 (a tala
+# diagonal), no banco de ensaio qa/probe/sondas/cos_liso_mapa.py.
+WAIST_LISO_SIGMA     = 1.0   # sigma do alisamento circular, em SETORES
+WAIST_LISO_TETO_BINS = 2.0   # licenca para SUBIR, em bins de Z_BINS (0.0083)
+WAIST_LISO_ITERS     = 12    # alterna alisar / re-aplicar o teto
+
 # --- O AVENTAL PENDE POR CIMA DO COS, e o corte por ALTURA pinta a pele ------
 # Veredito do Rogerio em 12/08, com print de 8 avatares: *"a tinta nao segue o
 # cos do short, voce pinta em cima da barriga"*. Medido no b09_d1, setor 4:
@@ -191,6 +199,17 @@ WAIST_MEDIAN            = 7      # termos da mediana circular (era 5)
 COS_AVENTAL_NZ = -0.70     # mediana da normal vertical na fatia
 COS_AVENTAL_PISO = 0.04    # acima da virilha; abaixo disso e pube, nao avental
 COS_AVENTAL_SETORES = 7    # +-105 graus da frente (7 de 24); ver w_cos_avental
+
+# 🔴 LATERAL EM DEGRAU (13/08). No zen_m_b11_d1 (IMC 107,3) a mediana de 3 nao
+# bastou: a descida de ~17,5 cm ficou em DOIS degraus de exatamente 0.045 (o
+# teto do WAIST_STEP_MAX_ZH partilhado com o resto do arquivo), um entrando na
+# dobra e outro saindo - vira parede vertical no quadril, visivel de lado. O
+# teto compartilhado foi calibrado para o PIOR ARCO REAL da folha (0.0399,
+# LICOES em WAIST_STEP_MAX_ZH); aqui nao e arco real, e o degrau que sobra
+# porque so 15 dos 24 setores podem receber a descida (COS_AVENTAL_SETORES).
+# Um teto proprio, mais apertado, forca a correcao a se espalhar por mais
+# setores dentro da mesma janela em vez de convergir em dois degraus no teto.
+COS_AVENTAL_STEP_MAX_ZH = 0.020
 
 # ❌ E A LEITURA QUE VEIO ANTES, para nao ser refeita ------------------------
 # De tres-quartos aparece uma faixa clara entre a barriga e o preto, e eu a li
@@ -321,6 +340,11 @@ COL_W = 0.008
 # Um valor decidido por render precisa do render nos dois extremos, senao e
 # chute com cara de calibracao (LICOES.md 7.12). Os tres estao acima.
 ARM_COL_OUT = 1.0
+
+# Grau do ajuste que tira a ESCADA do corte braco/tronco ao longo da altura.
+# 0 desliga (volta ao comportamento so-mediana de 11/08) e existe para o banco
+# de ensaio poder fotografar o antes. Ver a PASSADA 2 do w_arm_wide.
+ARM_AJUSTE_GRAU = 2
 
 # A ordem das pecas no w_field(partes=True): 0 short, 1 faixa. So a faixa pode
 # sair legitimamente partida em duas (braco tapando o lado do torax).
@@ -525,6 +549,35 @@ def composite_previews(paths, bg_hex):
 # que o proprio limite ja filtrou.
 WAIST_STEP_MAX_ZH = 0.045
 
+# --- ...e a QUINA, que e o degrau que o degrau nao pega (15/08, sessao 30) ---
+# O Rogerio mandou 7 prints do testador com o cursor em cima do defeito, e o
+# defeito e o mesmo nos sete: a borda de CIMA do short e uma poligonal. Parede
+# vertical no flanco do b11_d1, cunha angulosa no b12_d1/b10_d1/b11_d2, tala
+# diagonal atravessando a barriga no b09_d2 e no b08_d1, quina seca no b06_d1.
+#
+# A trava de DEGRAU nao via nada disso, e o motivo e que ela pergunta a coisa
+# errada. Ela mede |w[j] - w[j+1]|, ou seja INCLINACAO, e inclinacao alta e
+# legitima: o arco da barriga do b12_d1 desce 0.0399 por setor na folha. O que
+# a vista mostra nao e a inclinacao, e a MUDANCA dela - o vinco onde um trecho
+# reto encontra outro. Isso e a segunda diferenca:
+#
+#     canto = |w[j-1] - 2*w[j] + w[j+1]|
+#
+# Medida nos 37 femininos, ela separa a lista dele do resto quase sozinha:
+#
+#   os 7 apontados       0.020 .. 0.092   (b11_d1 0.092, b12_d1 0.037)
+#   os 30 nao apontados  0.004 .. 0.029   com 27 deles <= 0.017
+#
+# Os tres de cima dos nao apontados (b06h_d3 0.029, b10_d3 0.025, b10_d2 0.021)
+# ficam do lado errado do corte - e isso e informacao, nao ruido: ele mandou
+# "os 7 com defeito MAIS visivel", nao "os 7 unicos". O corte fica em 0.018,
+# que e o vao entre 0.017 e 0.020.
+#
+# ⚠️ Ela reprova tambem 11 masculinos, do b05i_d1 (0.021) ao b12_d1 (0.121).
+# Nao e trava nova mentindo: e o mesmo defeito, na colecao que ele aprovou como
+# "melhorou bastante" e nao como "pronto". Nenhum GLB masculino foi tocado.
+WAIST_CANTO_MAX_ZH = 0.018
+
 
 def _trace_flags(e):
     """Travas de TRACADO do cos - o que faltava nas duas reguas.
@@ -541,7 +594,10 @@ def _trace_flags(e):
       FRENTE^   algum setor da frente esta ACIMA do anel - a barriga so pode
                 empurrar o elastico para BAIXO; subir significa que o argmax
                 pegou sulco de musculo (baixo-ventre / V inguinal)
-      DEGRAU    salto entre setores vizinhos maior que tecido nenhum faz"""
+      DEGRAU    salto entre setores vizinhos maior que tecido nenhum faz
+      CANTO     a inclinacao MUDA de repente - dois trechos retos se encontrando
+                num vinco. E o que se ve, e o DEGRAU nao pega (ver
+                WAIST_CANTO_MAX_ZH)"""
     out = []
     diag = e.get("diag", {})
     w = e.get("waist_zh")
@@ -569,6 +625,10 @@ def _trace_flags(e):
     salto = max(abs(w[i] - w[(i + 1) % n]) for i in range(n))
     if salto > WAIST_STEP_MAX_ZH:
         out.append("DEGRAU{:.3f}".format(salto))
+
+    canto = max(abs(w[(i - 1) % n] - 2 * w[i] + w[(i + 1) % n]) for i in range(n))
+    if canto > WAIST_CANTO_MAX_ZH:
+        out.append("CANTO{:.3f}".format(canto))
     return out
 
 
@@ -1104,7 +1164,90 @@ def w_limbs(me, np, co, H):
     return crotch_z, leg_id, is_arm
 
 
-def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh):
+# Profundidade minima, em fracao da profundidade da fatia, para uma coluna
+# depois do vao contar como TRONCO e nao como lasca de malha. As lascas existem
+# e sao pequenas: no zen_f_b05_d1 aparece 0.013 no meio do vao, e no zen_f_b10_d1
+# aparecem 0.010 e 0.012 dentro do peito. O tronco logo depois do vao mede 0.34 a
+# 0.45 da profundidade da fatia nos casos medidos, entao 0.25 separa com folga.
+ARM_VAO_TRONCO_FRAC = 0.25
+
+# Quantas colunas vazias seguidas contam como VAO de verdade. Uma coluna solta
+# pode ser buraco de decimacao; nos casos medidos o vao braco/tronco tem de 2 a 6
+# colunas (2,8 a 8,4 cm) em toda fatia da banda da faixa.
+ARM_VAO_MIN_COLS = 2
+
+
+def _arm_cut_vao(perfil, fundo):
+    """O corte pela TOPOLOGIA: o vao de ar entre o braco e o tronco.
+
+    `perfil` e a lista [(b, profundidade|None)] de fora para dentro. Devolve o
+    `b` da primeira coluna de TRONCO depois do vao, ou None se nao houver vao.
+
+    ---------------------------------------------------------------------
+    POR QUE ESTE CRITERIO, E POR QUE O DE PROFUNDIDADE COMIA TRONCO
+    ---------------------------------------------------------------------
+    O de profundidade pergunta "esta coluna ja tem 60% da profundidade da
+    fatia?". Num corpo com busto a fatia e MUITO funda no meio, entao 60% dela e
+    uma barra alta, e o flanco do tronco - que e raso porque o tronco afina de
+    lado - nao a alcanca. Medido no zen_f_b10_d1, zh 0.680, lado esquerdo:
+
+        0.329:0.054  0.315:0.087  [6 colunas VAZIAS]  0.231:0.120  0.217:0.097
+          braco         braco            o vao          <- o tronco comeca aqui
+
+    60% de 0.3557 e 0.2134, e a primeira coluna que chega la esta em 0.175. Com
+    o ARM_COL_OUT o corte sai em 0.189, ou seja **4,2 cm dentro do tronco** - e
+    e essa a mordida que ele viu na quina de baixo da faixa. Nao e limiar mal
+    escolhido: a pergunta e que estava errada.
+
+    O vao responde a pergunta certa, e e a mesma doutrina do resto do arquivo:
+    o que separa braco de tronco e TOPOLOGIA, nao profundidade. Acima da fusao
+    do w_limbs existe ar entre os dois em toda fatia da banda nos corpos
+    medidos, e o ar e um sinal binario - nao tem limiar para calibrar errado.
+
+    ⚠️ Varre de FORA para dentro e para no primeiro vao: assim o `b` devolvido e
+    o do tronco, e tudo que estiver mais lateral que ele (braco + o proprio ar)
+    fica marcado. Varrer do eixo para fora nao serve - no peito ha coluna vazia
+    de verdade perto do esterno (zen_f_b10_d1 em zh 0.765), e a varredura pararia
+    la."""
+    n = len(perfil)
+    i = 0
+    while i < n and perfil[i][1] is None:      # nada antes do braco, mas guarda
+        i += 1
+    while i < n and perfil[i][1] is not None:  # o braco
+        i += 1
+    vazias = 0
+    while i < n and perfil[i][1] is None:      # o vao
+        vazias += 1
+        i += 1
+    if vazias < ARM_VAO_MIN_COLS or i >= n:
+        return None
+    while i < n:                               # a primeira coluna de TRONCO
+        b, p = perfil[i]
+        if p is not None and p >= ARM_VAO_TRONCO_FRAC * fundo:
+            return b
+        i += 1
+    return None
+
+
+def _arm_cut_prof(perfil, fundo, col_w):
+    """O corte pela PROFUNDIDADE - hoje o plano B, quando nao ha vao.
+
+    Era o unico criterio ate 15/08. Continua valendo onde o braco encosta mesmo
+    no tronco e nao ha ar para achar: ali nao existe fronteira topologica e
+    qualquer corte e escolha, entao a escolha antiga fica.
+
+    PROF_FRAC acha "JA E TRONCO", nao "COMECA O TRONCO", e a diferenca entre as
+    duas coisas e um fiapo branco: com 0.60 a coluna que passa no teste e a
+    primeira SOLIDAMENTE funda, e as de fora dela ainda sao tronco, so que o
+    tronco afina de lado e elas nao chegam a 60%. ARM_COL_OUT devolve esse
+    deslocamento."""
+    for b, p in perfil:
+        if p is not None and p >= PROF_FRAC * fundo:
+            return b + ARM_COL_OUT * col_w
+    return None
+
+
+def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh, diag=None):
     """O braco na ALTURA DA FAIXA, que a mascara topologica nao alcanca.
 
     O w_limbs devolve o braco ate onde ele FUNDE no tronco. Em corpo magro a
@@ -1189,6 +1332,7 @@ def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh):
 
     # PASSADA 1 - o corte cru de cada fatia, sem marcar nada ainda.
     fatias, cortes = {}, {-1.0: [], 1.0: []}
+    fontes = {-1.0: [], 1.0: []}
     for k in ks:
         fatia = np.where((zh >= k * passo) & (zh < (k + 1) * passo))[0]
         fatias[k] = fatia
@@ -1197,37 +1341,55 @@ def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh):
         x = co[fatia, 0] - cx if len(fatia) else None
         for sinal in (-1.0, 1.0):
             corte = None
+            fonte = "-"
             if len(fatia) >= 40 and fundo > 0:
                 lado = np.where(np.sign(x) == sinal)[0]
                 if len(lado) >= 20:
                     xl = x[lado] * sinal                   # sempre positivo
+                    # perfil de profundidade coluna a coluna, de FORA para
+                    # dentro. None = coluna sem malha (menos de 3 vertices).
+                    perfil = []
                     for b in np.arange(xl.max(), 0.0, -COL_W * H):
                         col = (xl <= b) & (xl > b - COL_W * H)
                         if col.sum() < 3:
+                            perfil.append((float(b), None))
                             continue
                         yc = y[lado][col]
-                        if yc.max() - yc.min() >= PROF_FRAC * fundo:
-                            # PROF_FRAC ACHA "JA E TRONCO", NAO "COMECA O TRONCO",
-                            # e a diferenca entre as duas coisas e um fiapo branco.
-                            # Com 0.60 a coluna que passa no teste e a primeira
-                            # SOLIDAMENTE funda; as de fora dela ainda sao tronco,
-                            # so que o tronco afina de lado e elas nao chegam a 60%.
-                            # Cortar em `b` marcava essas como braco, e o que sai
-                            # no render e uma tira vertical sem pintar entre o
-                            # preto e o braco. ARM_COL_OUT devolve esse
-                            # deslocamento.
-                            corte = b + ARM_COL_OUT * COL_W * H
-                            break
+                        perfil.append((float(b), float(yc.max() - yc.min())))
+
+                    corte = _arm_cut_vao(perfil, fundo)
+                    fonte = "vao"
+                    if corte is None:
+                        corte = _arm_cut_prof(perfil, fundo, COL_W * H)
+                        fonte = "prof" if corte is not None else "-"
                     # SEGURANCA: se o corte cair perto do eixo, quem foi achado
                     # nao era o vinco e marcar aquilo comeria metade do tronco.
                     # Melhor nao marcar nada - a faixa atravessando o braco e
                     # feio, faixa com buraco no meio do peito e outra categoria
                     # de erro.
                     if corte is not None and corte < 0.35 * xl.max():
-                        corte = None
+                        corte, fonte = None, "-"
             cortes[sinal].append(corte)
+            fontes[sinal].append(fonte)
 
-    # PASSADA 2 - mediana movel de 5, so entre as fatias que cortaram.
+    # PASSADA 2 - mediana movel de 5 (tira o disparo) e AJUSTE (tira a escada).
+    #
+    # Sao dois filtros porque sao dois defeitos, e o mesmo argumento do
+    # w_waist_liso: mediana e filtro de POSTO, e o filtro certo contra a fatia
+    # que disparou (o vao acha buraco de decimacao dentro do tronco e devolve
+    # 0.129 onde as vizinhas dao 0.22) - mas ela PRESERVA degrau, entao o que
+    # sobra dela ainda zigue-zagueia meio centimetro de fatia para fatia. Numa
+    # banda de 9 cm de altura isso e a ESCADA que ele viu na quina da faixa.
+    #
+    # A fronteira braco/tronco ao longo de 9 cm de altura e uma linha suave: uma
+    # PARABOLA em zh, por minimos quadrados, tem forma de sobra para o que o
+    # corpo faz ali e nao tem grau de liberdade para serrilhar. Grau 2 e nao 1
+    # porque perto do deltoide a fronteira volta para dentro.
+    #
+    # ⚠️ O ajuste so e avaliado onde JA HAVIA corte. Preencher os None por
+    # extrapolacao inventaria braco onde a varredura nao viu nenhum, que e o
+    # comentario de SEGURANCA de sempre - e no magro, onde quase nao ha fatia
+    # com corte, o `< 4 pontos` devolve a mediana e nada muda.
     raio = 2
     suave = {}
     for sinal in (-1.0, 1.0):
@@ -1240,6 +1402,14 @@ def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh):
             viz = [c[j] for j in range(max(0, i - raio), min(len(c), i + raio + 1))
                    if c[j] is not None]
             s.append(float(np.median(viz)))
+        idx = [i for i, v in enumerate(s) if v is not None]
+        if ARM_AJUSTE_GRAU and len(idx) >= 4:
+            zz = np.array([ks[i] * passo for i in idx], dtype=np.float64)
+            vv = np.array([s[i] for i in idx], dtype=np.float64)
+            grau = ARM_AJUSTE_GRAU if len(idx) >= 6 else 1
+            aj = np.polyval(np.polyfit(zz - zz.mean(), vv, grau), zz - zz.mean())
+            for i, v in zip(idx, aj):
+                s[i] = float(v)
         suave[sinal] = s
 
     # PASSADA 3 - marca com o corte alisado.
@@ -1257,6 +1427,19 @@ def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh):
                 continue
             xl = x[lado] * sinal
             out[fatia[lado[xl > corte]]] = True
+
+    if diag is not None:
+        diag["passo"] = passo
+        diag["zh"] = [k * passo for k in ks]
+        diag["cru"] = {s: list(cortes[s]) for s in cortes}
+        diag["suave"] = {s: list(suave[s]) for s in suave}
+        diag["fonte"] = {s: list(fontes[s]) for s in fontes}
+        diag["meia_largura"] = []
+        for k in ks:
+            f = fatias[k]
+            xx = np.abs(co[f, 0] - cx) if len(f) else None
+            diag["meia_largura"].append(float(xx.max()) if xx is not None
+                                        and len(xx) else 0.0)
     return out & ~is_arm
 
 
@@ -1576,19 +1759,123 @@ def w_cos_avental(np, co, nor, is_arm, H, crotch_zh, hem_zh, waist_zh, az_bins):
     # Aqui ela so pode SUBIR o que a dobra baixou - o teto de cada setor e o
     # vizinho mais o passo -, entao a trava espalha a descida por varios setores
     # em vez de recusa-la, e nenhum setor fora da regiao e tocado.
+    # ⚠️ Testada tambem uma versao SIMETRICA (puxava setor "imune" - achou=None
+    # - para baixo na direcao de vizinho fundo, nao so o inverso). Piorou: no
+    # zen_m_b11_d1, que esta secao ja tinha deixado limpo, a correcao cascateou
+    # fundo demais e a bainha parou de ser detectada (BAINHA-CHUTE novo) junto
+    # com um DEGRAU novo. Revertida no mesmo dia. So o piso (abaixo) sobrevive.
     for _ in range(az_bins):
         mudou = False
         for j in range(az_bins):
             if not frente[j] or out[j] >= waist_zh[j]:
                 continue
             piso_viz = max(out[(j - 1) % az_bins],
-                           out[(j + 1) % az_bins]) - WAIST_STEP_MAX_ZH
+                           out[(j + 1) % az_bins]) - COS_AVENTAL_STEP_MAX_ZH
             if out[j] < piso_viz - 1e-9:
                 out[j] = min(waist_zh[j], piso_viz)
                 mudou = True
         if not mudou:
             break
     return [float(v) for v in out]
+
+
+def w_waist_liso(np, waist_zh, floor_zh):
+    """Alisa a curva do cos: elastico nao tem QUINA.
+
+    Entra a curva medida (24 setores, ja com o avental aplicado se houver), sai
+    a mesma curva sem os vincos que o Rogerio apontou nos 7 prints de 15/08.
+
+    ---------------------------------------------------------------------
+    POR QUE O ALISAMENTO NAO ESTAVA AQUI, E POR QUE A MEDIANA NAO BASTA
+    ---------------------------------------------------------------------
+    O w_waist_curve ja alisa - com MEDIANA CIRCULAR de 7. Mediana e o filtro
+    certo contra o defeito que ela foi escrever: um setor solto que disparou.
+    Mas mediana e um filtro de POSTO, nao de media: ela preserva degrau e
+    preserva plato por construcao, que e exatamente a virtude dela em outro
+    contexto. O b11_d1 saiu com 0.615 em cinco setores do flanco e 0.523 no
+    vizinho - 16 cm de parede vertical, e a mediana de 7 nao tem como derruba-la
+    porque os dois lados sao platos largos. A DEGRAU tambem nao viu, porque
+    DEGRAU e um relatorio e nao um enforcador.
+
+    ---------------------------------------------------------------------
+    O TETO E O QUE IMPEDE ISTO DE VIRAR A REGRESSAO DA 4.5e
+    ---------------------------------------------------------------------
+    Alisar SOBE o fundo da dobra, e subir o cos num corpo com avental e
+    literalmente o defeito que a 4.5e consertou: pinta a barriga de preto. Sem
+    teto, o alisamento gaussiano levantava o fundo do b11_d1 em 0.027 - uns 4,7
+    cm de pele dentro do tecido.
+
+    Entao o alisamento so tem licenca para subir DOIS BINS de Z_BINS acima da
+    medida. O numero nao e gosto: e a resolucao da propria medida (1/240 da
+    altura, 0.73 cm). Alisar dentro da resolucao e limpar quantizacao; alisar
+    alem dela e contradizer o que se mediu.
+
+    ⚠️ E "a medida" aqui e a MEDIANA DE 3 de w0, nao w0 - ver o comentario no
+    corpo da funcao. Foi a diferenca entre entregar a borda lisa e entregar um
+    bico no meio da barriga.
+
+    O laco alterna alisar e re-aplicar o teto, que e o jeito de fazer a correcao
+    se espalhar pelos VIZINHOS em vez de cortar um bico: quem nao pode subir
+    puxa quem esta em volta para baixo.
+
+    Medido nos 7 da lista dele: curvatura de 0.020..0.092 para 0.007..0.015, com
+    o cos descendo no maximo 0.016 nos 5 mais leves (0.067 no b11_d1, que e a
+    parede do flanco voltando para a altura do anel, onde ela deveria estar).
+
+    ---------------------------------------------------------------------
+    ❌ O QUE FOI MEDIDO E DESCARTADO ANTES DESTA VERSAO
+    ---------------------------------------------------------------------
+    - LIMITADOR DE INCLINACAO puro (clipar cada setor contra os vizinhos ±passo).
+      Conserta o degrau e NAO conserta a quina: a saida e uma rampa reta ligada
+      a um plato reto, que e um vinco igual ao que se queria tirar. Medido nos 8:
+      passo cai para 0.012 e a curvatura fica em 0.010-0.017, contra 0.006-0.013
+      daqui.
+    - TRUNCAR HARMONICOS (K=4..6, com janela de Hann). Alisa mais que tudo
+      (curvatura 0.003-0.009) mas SEM teto sobe o fundo da dobra em ate 0.035,
+      e com teto o corte de banda ressoa e devolve ondulacao onde nao havia.
+    - ALISAR SO A FRENTE. A parede do b11_d1 esta no FLANCO (setor 0 contra 1),
+      que e borda da mascara frontal; alisar so a frente e nao tocar nela."""
+    w0 = np.asarray(waist_zh, dtype=np.float64)
+    n = w0.size
+    if n < 4:
+        return [float(v) for v in w0]
+
+    d = np.arange(n)
+    d = np.minimum(d, n - d)
+    k = np.exp(-0.5 * (d / WAIST_LISO_SIGMA) ** 2)
+    k /= k.sum()
+    K = np.fft.fft(k)
+
+    # 🔴 O TETO NAO E `w0`, E A MEDIANA DE 3 DE `w0` - e essa linha custou um
+    # render inteiro do zen_f_b12_d1. Com o teto colado em w0, sobrava um V
+    # anguloso no centro da frente dos dois mais pesados, e ele APARECIA no GLB
+    # entregue: um bico no meio da barriga, feio de um jeito diferente do
+    # defeito original mas igualmente visivel.
+    #
+    # A causa nao e o alisamento, e o que ele estava sendo obrigado a respeitar.
+    # Medida a dobra sem a trava de degrau (COS_AVENTAL_STEP_MAX_ZH = 9), o
+    # fundo do avental do b12_d1 e um PLATO: setores 4..7 em 0.459 0.456 0.456
+    # 0.460, com penhasco de 0.066 nos dois lados. A rampa de 0.020 por setor
+    # nao alcanca esse fundo, entao ela desenha um TRIANGULO - 0.503 0.483
+    # 0.500 - cujo vertice e o proprio teto da rampa, e nao uma medida. Um
+    # setor isolado mais fundo que os dois vizinhos nao e dobra estreita: e
+    # geometria da trava. Fora o vertice, os vizinhos ja pintam 8 cm de pele
+    # sobre a mesma dobra, entao subir o vertice ate a altura deles nao pinta
+    # nada de novo - so tira a inconsistencia.
+    #
+    # E o mesmo argumento da mediana circular que este arquivo ja usa duas
+    # vezes: nenhum setor isolado tem autoridade sobre os vizinhos.
+    med = np.array([sorted([w0[(j - 1) % n], w0[j], w0[(j + 1) % n]])[1]
+                    for j in range(n)])
+    teto = med + WAIST_LISO_TETO_BINS / Z_BINS
+    s = w0.copy()
+    for _ in range(WAIST_LISO_ITERS):
+        s = np.real(np.fft.ifft(np.fft.fft(s) * K))
+        s = np.minimum(s, teto)
+    # o cos nunca desce abaixo da bainha - a mesma guarda do w_waist_curve, aqui
+    # de novo porque o alisamento e a ultima coisa que toca a curva.
+    s = np.maximum(s, floor_zh)
+    return [float(v) for v in s]
 
 
 def w_faixa(np, co, kn, H, is_arm, crotch, base_override=None, topo_reto=False,
@@ -1895,6 +2182,12 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
                                  crotch / H, max(hem_curves) / H,
                                  waist_zh, WAIST_AZ_BINS)
 
+    # ALISAMENTO POR ULTIMO, de proposito: o avental decide ONDE o cos tem que
+    # estar e este passo decide COMO ele chega la. Invertendo a ordem, o avental
+    # reintroduziria a quina que o alisamento acabou de tirar.
+    waist_bruto = list(waist_zh)
+    waist_zh = w_waist_liso(np, waist_zh, max(hem_curves) / H + 1.0 / Z_BINS)
+
     cfg = {
         "hem_l": hem_curves[0],
         "hem_r": hem_curves[1],
@@ -1915,6 +2208,14 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
         # sobreviver ao mapa, nao ficar so no log.
         "waist_ring_zh": round((waist_b + 0.5) / Z_BINS, 4),
         "waist_ring_found": bool(waist_peaks),
+        # quanto o alisamento mexeu, para o conserto ser auditavel sem refazer o
+        # --fit: [maior subida, maior descida] em fracao da altura. A subida e
+        # travada em WAIST_LISO_TETO_BINS/Z_BINS por construcao; a descida nao,
+        # e e ela que diz se o alisamento derrubou um flanco inteiro.
+        "waist_liso_dz": [
+            round(max([b - a for a, b in zip(waist_bruto, waist_zh)] + [0.0]), 4),
+            round(max([a - b for a, b in zip(waist_bruto, waist_zh)] + [0.0]), 4),
+        ],
     }
 
     if faixa:

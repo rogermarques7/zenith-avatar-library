@@ -444,6 +444,92 @@ coxa**; o antigo, em 0,394, estava fora por 7 cm.
 > virar discussão sobre o número; constante que já está no código é critério
 > verificável e não precisa de defesa.
 
+### 1.10 🔴 Régua que não reproduz a QUEIXA não guia conserto nenhum — e o conserto do ciclo é olhar o artefato de dentro daqui
+
+Sessão 28 (13/08). O Rogério apontou com seta verde, em 7 avatares, uma faixa sob
+a bainha do short. Eu passei a sessão medindo a malha, achei um defeito **real**
+(triângulos-lasca de até 4826:1 deixados pelo corte), consertei, entreguei — e o
+veredito foi *"deixou a peça exatamente igual"*. Depois vieram mais duas
+hipóteses minhas, as duas mortas por medida própria.
+
+**O erro não foi nenhuma das hipóteses.** Foi que eu escolhi e validei todas elas
+num **render do Blender que nunca mostrou a faixa**. A §4.5c já dizia isso para
+PINTURA (clay não mostra tinta faltando); a versão geral é maior:
+
+> **Antes de usar uma imagem para decidir, exigir que ela REPRODUZA o defeito.**
+> Se a queixa não aparece na imagem, essa imagem não pode confirmar nem refutar
+> nada sobre ela — e "medida verdadeira" não vira "medida relevante" por ser
+> verdadeira. A lasca existia mesmo, com número; não era o defeito.
+
+E ele fez a pergunta certa: *"vc não enxerga o avatar? isso põe em cheque todo o
+desenvolvimento, como vou saber se você mediu certo?"* A resposta honesta, que
+vale manter: **medida de geometria é verificável e sobrevive** — centímetro,
+contagem de triângulo, cor de material, round-trip de shape key, qualquer um
+refaz. O que não sobrevive sem imagem é o **elo** entre a medida e a queixa.
+
+✅ **O elo existe e é barato — usar SEMPRE nesta frente:** abrir o
+`avatar_tester.html` pelo browser embutido (`preview_start` em
+`http://localhost:8765/...`), dirigir a câmera por JS (`mv.cameraOrbit`,
+`cameraTarget`, `fieldOfView`), puxar os pixels com `mv.toDataURL()` e trazer o
+recorte para o disco com um `<a download>`. É **o mesmo three.js que ele julga**.
+⚠️ O painel do browser tem que estar visível, senão a página fica
+`visibilityState: hidden`, o rAF para e o canvas sai em branco.
+
+⚠️ **Blender MCP não substitui isso** — foi cogitado e a resposta é não: ele dá
+outra vista do mesmo renderizador que já tinha falhado. O problema nunca foi
+enxergar pixel; foi enxergar **o pixel certo**.
+
+#### O que eu já testei e MATEI na bainha — não repetir
+
+A sessão foi revertida inteira (nenhuma linha de código sobreviveu), mas as
+hipóteses foram medidas e o resultado vale. **Antes de reabrir a frente da
+bainha, ler isto:**
+
+1. ❌ **Lasca da costura.** O `w_cut_boundary` aceita cruzamento a partir de
+   `t=1e-3` e fabrica triângulo de até **4826:1** (176 na bainha e 215 no cós do
+   `b06j_d3`; 470 e 314 na `zen_f_b06_d2`, com faces degeneradas). É real e
+   medido, e **encostar a linha no vértice a menos de 1 mm** reduz de +343 para
+   +111 sobre o piso do master. **Mas não é o defeito** — ele olhou e disse
+   *"deixou a peça exatamente igual"*.
+   ⚠️ E o limiar tem que ser em MILÍMETRO: em fração da aresta (0,15) a bainha
+   sai **serrilhada**, porque face com as duas arestas encostadas deixa de ser
+   cortada e o erro vira a aresta inteira, ~9 mm.
+2. ❌ **Prateleira de tecido apontando para baixo.** O `nz` mediano fica entre
+   **−0,11 e −0,41 em todas as alturas**, sem tendência, e na linha da bainha é
+   onde é *menos* negativo (18% das faces com `nz ≤ −0,2`). Não há prateleira.
+3. ❌ **Vinco modelado diagonal.** Onde o sinal de curvatura é forte (contraste
+   6,8 e 8,8) o vinco está em **0,4271**, que é exatamente o Z do mapa. O que eu
+   li como diagonal num render era **sombra**.
+4. ❌ **Vinco setor a setor.** Segunda confirmação independente do que o
+   docstring do `w_fit` já dizia: 11 de 24 setores com vértices suficientes,
+   contraste degenerado (mediana zero em 6 deles) e 2 fugindo para a borda da
+   janela. **Acha ruído de decimação, não tecido.**
+
+O que a faixa É, medido no `model-viewer`: tira de **6 a 9 mm**, mais CLARA que
+o tecido acima (1,18 sob o HDR, 1,50 sob luz neutra), **idêntica** em
+fosco/metálico e **permanente** sob qualquer luz — logo não é reflexo nem
+iluminação. Move-se junto com a bainha: descendo 9 mm ela vai a 59 px, subindo
+9 mm cai a 19 px.
+
+🔴 **E o motivo de a sessão ter parado, que é o achado mais útil:** a direção é
+subir, mas **offset constante não acerta linha que não é reta** — e a régua que
+acharia a linha não-reta é justamente a do item 4, que não tem sinal. *O corte
+hoje é um plano; a bainha não é.* **Quem reabrir precisa de um SINAL NOVO** — não
+de um offset maior, não de mais uma passada de curvatura.
+
+### 1.11 ⚠️ Máximo dentro de janela foge para a borda da janela — três vezes no mesmo dia
+
+Na sessão 28 eu cometi a §1.8 três vezes em sequência, medindo coisas diferentes:
+a prateleira de `nz` deu **9,94 cm numa janela de 10 cm**; o vinco por setor
+encostou na borda em 2 setores de 11; e o contraste de curvatura devolveu
+`6.791.424` onde a mediana da janela era zero.
+
+> **Estatística de extremo dentro de janela não mede o objeto, mede a janela.**
+> O que serve é **contiguidade** (subir em fatias a partir da âncora e parar na
+> primeira que muda de regime) ou **contraste com denominador protegido**. E
+> antes de acreditar em qualquer pico: conferir se ele encostou na borda, que é
+> exatamente o que o `at_band_edge` do `metrics.py` já faz.
+
 ---
 
 ## 2. Mirar um IMC — o que funciona e o que não funciona
@@ -1491,6 +1577,158 @@ acompanhar. Sobra preto na barriga do `b11_d1`; o `b12_d1` não se move porque a
 frente dele já está no piso da bainha. **Ele diz que o mesmo defeito existe nas
 femininas** — não medido ainda.
 
+#### 4.5f A pergunta era INCLINAÇÃO e o que se vê é a QUINA (15/08, sessão 30)
+
+Ele mandou 7 prints do testador, com o cursor em cima do defeito em cada um, e o
+defeito é o mesmo nos sete: **a borda de cima do short é uma poligonal.** Parede
+vertical de 16 cm no flanco do `b11_d1`, cunha angulosa no `b12_d1`/`b10_d1`/
+`b11_d2`, tala diagonal atravessando a barriga no `b09_d2` e no `b08_d1`, quina
+seca no `b06_d1`.
+
+##### 🔴 A lição: DEGRAU e CANTO são perguntas diferentes, e só uma delas se vê
+
+O `--report` já tinha uma trava de traçado — `DEGRAU`, que mede
+`|w[j] − w[j+1]|`, a **inclinação**. Ela passou limpa em 6 dos 7. E tinha que
+passar: inclinação alta é *legítima*, o arco da barriga do `b12_d1` desce 0,0399
+por setor na própria folha de referência. O que a vista mostra não é a
+inclinação, é a **mudança** dela — o vinco onde um trecho reto encontra outro.
+Isso é a segunda diferença:
+
+```
+canto = |w[j-1] − 2·w[j] + w[j+1]|
+```
+
+Medida nos 37 femininos, ela separa a lista dele do resto quase sozinha:
+
+| grupo | canto |
+|---|---|
+| os 7 que ele apontou | **0,020 a 0,092** |
+| os 30 que ele não apontou | 0,004 a 0,029, com **27 deles ≤ 0,017** |
+
+Corte em **0,018**, que é o vão entre 0,017 e 0,020. `WAIST_CANTO_MAX_ZH`.
+
+**É a família da §1.5 num eixo novo, e é a terceira vez:** régua de ALTURA não vê
+traçado (§4.5b), régua de PICO não vê forma (§4.5c), e agora régua de INCLINAÇÃO
+não vê quina. A pergunta a fazer ao inventar uma trava geométrica é *"de que
+ordem é o defeito que eu quero pegar?"* — valor, derivada ou curvatura.
+
+##### ✅ O conserto: alisar, com teto — e a mediana NÃO servia
+
+`w_waist_liso`: gaussiana circular de σ = 1 setor sobre os 24, alternada com um
+teto, 12 vezes.
+
+- **Por que a mediana de 7 do `w_waist_curve` não bastava.** Mediana é filtro de
+  POSTO: preserva degrau e preserva platô por construção — que é a virtude dela
+  contra um setor solto que disparou, e a ruína dela contra dois platôs largos
+  encostados. No `b11_d1` eram cinco setores em 0,615 colados num em 0,523.
+- **Por que existe teto.** Alisar SOBE o fundo da dobra, e subir o cós num corpo
+  com avental é literalmente a §4.5e de volta. Sem teto, a gaussiana levantava o
+  fundo do `b11_d1` em 0,027 — 4,7 cm de pele dentro do tecido. A licença é de
+  **dois bins de `Z_BINS`** (0,0083), que é a resolução da própria medida:
+  alisar dentro dela é limpar quantização, além dela é contradizer o que se mediu.
+
+##### 🔴 E o teto tinha que ser a MEDIANA de `w0`, não `w0` — custou um render
+
+Com o teto colado na curva medida, sobrava um **V anguloso no centro da frente**
+do `b11_d1` e do `b12_d1`, e ele apareceu no GLB entregue: um bico no meio da
+barriga, feio de um jeito diferente do defeito original e igualmente visível.
+
+O `cos_etapas.py` (sonda nova: imprime o cós em cada etapa do `w_fit`) mostrou
+que o V **nasce no `w_cos_avental`, não no alisamento**. Medindo a dobra sem a
+trava de degrau (`COS_AVENTAL_STEP_MAX_ZH = 9`), o fundo do avental do `b12_d1` é
+um **platô** — setores 4..7 em 0,459 0,456 0,456 0,460, com penhasco de 0,066 dos
+dois lados. A rampa de 0,020 por setor não alcança esse fundo, então ela desenha
+um **triângulo** (0,503 0,483 0,500) cujo vértice é o teto da própria rampa e não
+uma medida. Um setor isolado mais fundo que os dois vizinhos não é dobra estreita:
+é geometria da trava. E os vizinhos já pintam 8 cm de pele sobre a mesma dobra,
+então subir o vértice até a altura deles não pinta nada de novo.
+
+Teto = `mediana3(w0) + 2 bins`. O canto dos dois caiu de 0,037/0,028 para
+0,014/0,015, e nos outros 35 o resultado é idêntico ao teto simples (nenhum deles
+tem entalhe de um setor).
+
+**A lição de método é a de sempre e eu a paguei de novo: quando um defeito
+sobrevive ao conserto, medir em QUAL etapa ele nasce antes de mexer no conserto.**
+Eu ia mexer no alisamento; o problema era o que ele estava sendo obrigado a
+respeitar.
+
+##### O que ficou
+
+Os 7 saíram com canto 0,007 a 0,015, todos abaixo do corte, conferidos no GLB
+entregue com material e HDR (`qa/look/cos_liso/`). A trava nova reprova ainda
+**3 femininos** (`b06h_d3` 0,029 · `b10_d3` 0,025 · `b10_d2` 0,021) e **11
+masculinos** (até 0,121 no `b12_d1`) — não é trava mentindo, é o mesmo defeito
+onde ele ainda não olhou. Nenhum desses GLB foi tocado.
+
+#### 4.5g A máscara do braço comia o tronco — e o critério estava fazendo a pergunta errada (15/08)
+
+O recorte na quina de baixo da faixa estava na fila viva desde 11/08 ("encolheu
+muito e não tem régua externa — só o olho dele decide se volta"). Ele decidiu:
+mandou 3 prints — `b09_d2`, `b10_d1`, `b05_d1` — dizendo *"os tops que faltam
+colorir"*.
+
+##### 🔴 O que estava errado: 60% da profundidade MÁXIMA não acha o começo do tronco
+
+`w_arm_wide` varre x de fora para dentro e corta na primeira coluna que passa de
+`PROF_FRAC = 0.60` da profundidade da fatia. Medido no `zen_f_b10_d1`, zh 0,680,
+lado esquerdo (perfil de profundidade, coluna a coluna):
+
+```
+0.329:0.054  0.315:0.087  [6 colunas VAZIAS]  0.231:0.120  0.217:0.097  ...
+   braço        braço            o vão          ← o tronco começa aqui
+```
+
+60% de 0,3557 é **0,2134**, e a primeira coluna que chega lá está em 0,175. Com o
+`ARM_COL_OUT` o corte sai em **0,189** — ou seja **4,2 cm dentro do tronco**. Essa
+é a mordida.
+
+A causa é que a fatia é funda no MEIO (busto), então 60% dela é uma barra alta, e
+o flanco do tronco — que é raso porque o tronco afina de lado — não a alcança. Não
+é limiar mal escolhido: **a pergunta é que estava errada.** `PROF_FRAC` responde
+"esta coluna já é tronco?", e o que se precisa é "onde o tronco começa?".
+
+##### ✅ O conserto: existe AR entre o braço e o tronco, e ar é sinal binário
+
+Acima da fusão do `w_limbs` há um vão de 2 a 6 colunas vazias (2,8 a 8,4 cm) em
+toda fatia da banda, em todos os corpos medidos. `_arm_cut_vao` varre de fora
+para dentro, pula o braço, acha o vão e corta na primeira coluna de tronco depois
+dele. Não tem limiar para calibrar errado — e é a mesma doutrina que o cabeçalho
+do arquivo já declara: **o que separa braço de tronco é TOPOLOGIA, não
+profundidade.**
+
+`_arm_cut_prof` (o critério antigo) vira plano B, para a fatia onde o braço
+encosta mesmo e não há ar. Nos 37, o vão decide na grande maioria das fatias.
+
+⚠️ **Varrer de fora para dentro, nunca do eixo para fora.** No peito há coluna
+vazia de verdade perto do esterno (`b10_d1` em zh 0,765) e a varredura pararia
+lá. E exigir profundidade ≥ 0,25 da fatia depois do vão, porque aparecem lascas
+de malha de 0,010–0,013 dentro dele.
+
+##### 🔴 E a ESCADA, que é a §4.5f de novo num eixo diferente
+
+Com o vão, o corte cru ainda variava ±2 cm entre fatias vizinhas de 0,9 cm de
+altura. A mediana móvel de 5 (de 11/08) mata o disparo isolado — 0,129 onde as
+vizinhas dão 0,22 — mas **mediana preserva degrau**, e o que sobrava zigue-zagueava
+meio centímetro por fatia. No render isso é a borda serrilhada da faixa.
+
+A fronteira braço/tronco ao longo de 9 cm é uma linha suave: **parábola em zh por
+mínimos quadrados**. Dois filtros, dois defeitos — exatamente o par
+mediana/alisamento do `w_waist_liso`, agora no eixo vertical em vez do azimutal.
+É a terceira vez que o mesmo par resolve: qualquer estimador por-fatia ou
+por-setor precisa de um robusto contra o disparo **e** de um suave contra a
+escada; um só nunca serviu.
+
+⚠️ O ajuste só é avaliado onde já havia corte. Preencher os `None` por
+extrapolação inventaria braço onde a varredura não viu nenhum.
+
+##### O placar
+
+Vértices de tronco indevidamente marcados como braço, dentro da banda:
+`b09_d2` 514 → 0 · `b10_d1` 504 → 0 · `b05_d1` 140 → 0. Nos 37, **23 mudam de
+fato** e 14 saem bit a bit idênticos. O magro `b01_d1` — o que a primeira versão
+do `w_arm_wide` quebrou em 11/08 — não muda um vértice (114 → 114), que era a
+regressão a vigiar.
+
 ---
 
 ## 5. Biblioteca e classificação
@@ -2115,6 +2353,38 @@ corpo* como padrão de todos, com **exatamente um corpo real medido** no projeto
 O default escolhido não aposta em nenhuma hipótese: ele só impede que o morph
 piore o eixo visível.
 
+#### 7.22b O mesmo ponto cego no QUADRIL e no PEITORAL — fechado em 16/08
+
+A §7.22 acima terminava com *"falta o mesmo para quadril e peitoral, pelo mesmo
+raciocínio"*, e ficou aberto desde 06/08. Ele mandou aplicar.
+
+O código já era quase genérico: `_achatar()` nunca soube de que banda estava
+falando — ele lê o perfil do centro do tronco e inverte o sinal em Y. O que
+estava preso à cintura era só o **critério de calibração**, literal em
+`_waist_depth`. Hoje cada achatamento declara a sua coluna de profundidade:
+
+| morph | profundidade medida em |
+|---|---|
+| `morph_waist_flatten` | `_waist_depth` — mínimo da banda da cintura |
+| `morph_hip_flatten` | `_hip_depth` — máximo da banda do quadril |
+| `morph_chest_flatten` | `_chest_depth` — fração do peito, com o recuo da axila |
+
+**Medir a altura errada calibraria a forma de uma seção olhando outra** — é por
+isso que não dava para reaproveitar `_waist_depth` nos três.
+
+Calibração validada no `zen_m_b05h_d2` (o avatar do corpo dele): quadril base
+27,5 cm → 30,4 só com tamanho → **27,5 com forma**; peitoral 29,8 → 32,2 →
+**29,8**. A cintura saiu 29,6/32,6/29,6, idêntica ao que estava publicado — sinal
+de que nada regrediu.
+
+🔴 **E uma trava que o caso de borda ensinou: se o tamanho não afunda, não há o
+que achatar.** No `zen_f_b12_d1` o `morph_chest` mal cresce e a profundidade do
+peitoral fica idêntica com e sem ele. A busca binária devolveria amplitude ~0 —
+e shape key de amplitude zero **não é inofensiva**: é um target esparso de 7.352
+vértices que o app baixa e soma para não mover nada. `FLATTEN_MIN_GANHO_CM = 0.2`
+(a resolução da própria medida de seção) descarta o morph em vez de publicá-lo
+morto.
+
 ---
 
 ### 7.23 🔴 Cada morph passa sozinho e a SOMA quebra — o estado combinado tinha que ser trava, não relatório
@@ -2203,7 +2473,34 @@ de coxa quase não existe no feminino.**
 
 ⚠️ **Não consertar por analogia.** As outras oito colunas batem em `±0,1 cm` nos
 mesmos avatares, então não é a régua nem a malha: é o landmark da coxa
-especificamente. O conserto provável é medir a coxa com a virilha **do master**
-(o dist tem a virilha preenchida pelo tecido), e isso mexe no `metrics.py`, que a
-biblioteca inteira usa. **É trabalho de sessão própria, com régua externa antes e
-depois.**
+especificamente.
+
+#### 7.25b ✅ RESOLVIDO em 14/08 por OFFSET, depois de três tentativas de trocar a medida
+
+Hoje **75 dos 76 têm morph de coxa** (só o `zen_m_b06h_d3` não), contra os 48 de
+11/08. O conserto não foi medir melhor — foi **parar de tentar medir melhor**.
+
+As três tentativas de mexer em *qual malha é medida* estão em
+`docs/PROBLEMA_COXA.md` §5, e as três morreram do mesmo jeito: consertavam quem
+falhava e **quebravam quem já passava**. Filtrar a banda por material quebrou
+`zen_m_b02_d1`/`d3` (a banda inteira cai debaixo do short, não sobra face de
+corpo e o laço fecha por lixo: 9,9 cm onde o certo é 51,5). Com fallback para a
+malha cheia, consertou esses dois e achou **10 regressões novas** entre os 48 que
+passavam.
+
+`calibrar_offset_coxa` faz outra coisa: a medição continua rodando pela malha
+**cheia**, exatamente como sempre — só se soma um número fixo, medido **uma vez**
+contra o `library_metrics.json` na base sem deformação, que fecha a diferença ali.
+Zero risco de laço vazio ou degenerado, porque nada muda em o que é medido.
+
+⚠️ **A suposição que isso carrega, escrita para não ser esquecida:** o excesso de
+tecido dentro da banda é aproximadamente **constante em cm ao longo da amplitude
+do morph**. É plausível (a mesma máscara de empurrão move pele e tecido juntos)
+e **não foi verificada contra medida real de coxa deformada** — tal medida não
+existe. O teto `COXA_OFFSET_MAX_CM = 22` é a guarda: acima da pior contaminação
+já vista (+18,5 cm), o offset não está corrigindo fabrico, está escondendo
+landmark errado, e a coluna cai como sempre caiu.
+
+🔴 **A lição de método, e ela vale além da coxa:** testar SEMPRE nos avatares que
+JÁ PASSAM, não só nos conhecidos como problema. Foi isso que expôs a tentativa 2
+— ela parecia perfeita nos 2 casos que a tentativa 1 tinha quebrado.

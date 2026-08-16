@@ -117,6 +117,52 @@ curto e mais justo na virilha, e a faixa acrescenta uma terceira superfície.
   praticamente iguais (0,816 e 0,840), então o topo da banda não é a variável.
 - **Derrubar o avatar inteiro quando uma coluna falha.** Era o comportamento
   antigo; custava 8 morphs bons para salvar 1 ruim. Hoje cai só a coluna.
+- **🔴 Filtrar por MATERIAL (13/08) — o caminho 3 do §7, tentado e MATADO.**
+  `carregar()` já sabe separar face por material (`Zenith_Body` vs
+  `Zenith_Shorts`, gravado por polígono); a tentativa foi excluir as faces do
+  short do mapa face→aresta usado **só na coluna coxa**, forçando o laço a
+  fechar pela pele. Resultado, medido em `--fit` (nada gravado):
+  - **Reduz o erro em quem já falhava** (`zen_f_b03_d1`: +11,2 → +3,4 cm),
+    mas não o suficiente pra passar a tolerância de 0,6 cm em NENHUM dos
+    avatares testados.
+  - **🔴 E QUEBRA quem já passava**: em `zen_m_b02_d1` e `zen_m_b02_d3` — dois
+    masculinos com a coxa OK hoje — a banda inteira (virilha−6cm até
+    virilha−0,5cm) cai **debaixo do short**, sem nenhuma face de corpo ali.
+    Sem face de corpo, o laço "fecha" por um fragmento qualquer e sai **9,9 cm**
+    e **6,3 cm** onde o publicado é 51,5 e 54,5. Revertido antes de qualquer
+    `--apply` — nenhum GLB foi tocado, mas **não usar esta abordagem sem
+    fallback para a malha cheia quando o laço filtrado vier vazio/degenerado.**
+  - Achado útil que sobrevive: a contaminação por short **não é a mesma coisa**
+    em todo avatar. Às vezes é "a peça alarga o laço" (o caso do §4, dá pra
+    filtrar), às vezes é "a peça é toda a banda" (não dá — não sobra pele pra
+    medir ali, e a resposta certa provavelmente é o caminho 1, medir no
+    master mesmo).
+  - Ferramentas que sobraram, ambas em `qa/probe/sondas/`: `coxa_master_vs_dist.py`
+    tinha um bug de path (`{id}.glb` em vez de `{id}_master.glb` — por isso
+    nunca tinha rodado; corrigido) e `coxa_solda.py`, nova, isola se a solda em
+    si (não o material) desloca a virilha — não desloca, `leg_split` bate
+    entre malha crua e soldada no mesmo avatar.
+
+- **🔴 Filtrar por material COM FALLBACK pra malha cheia (mesma sessão, tentativa
+  2) — MATOU DE OUTRO JEITO.** Ideia: quando o laço corpo-só vem vazio ou
+  menor que 70% da versão cheia (sinal do defeito acima), usar a versão cheia
+  em vez do lixo. Consertou os 2 casos que a tentativa 1 tinha quebrado
+  (`zen_m_b02_d1`/`d3` voltaram a bater exato). **Mas testado nos 48 avatares
+  que hoje passam a coxa (não só os 2 conhecidos), achou 10 REGRESSÕES NOVAS**
+  — `zen_m_b05i_d1` (−4,0), `b06_d1` (−5,1), `b06_d2` (−4,4), `b07_d2` (−3,1),
+  `b08_d2` (−4,6), `b09_d2` (−5,9), `b10_d2` (−6,7), `zen_f_b06_d2` (−4,0),
+  `b09h_d2` (−1,5), `b09i_d2` (−3,4). Nestes o laço corpo-só acha algo
+  **plausível mas ERRADO** — grande o bastante pra não disparar o fallback de
+  70%, pequeno o bastante pra não bater com o master. Revertido antes de
+  qualquer `--apply`; nenhum GLB chegou a carregar essa calibração.
+
+  **A lição que fica: o limiar de plausibilidade (0,7×) é arbitrário e não
+  tem como ser calibrado direito com uma trava tão grosseira** — o que separa
+  "corpo-só achou a perna certa" de "corpo-só achou outra coisa plausível" não
+  é o TAMANHO do laço, é a TOPOLOGIA dele (se ele ainda é convexo, se cruza a
+  linha média, etc.), que este método nunca olhou. Antes de tentar de novo,
+  testar SEMPRE nos 48 que hoje passam, não só nos avatares conhecidos como
+  problema — foi isso que expôs a tentativa 2.
 
 ## 6. Restrições que qualquer solução tem de respeitar
 
@@ -141,17 +187,58 @@ curto e mais justo na virilha, e a faixa acrescenta uma terceira superfície.
 **Como medir a circunferência da coxa numa malha que tem short, de forma
 comparável com a medida feita na mesma malha sem short?**
 
-Três caminhos plausíveis, nenhum testado:
+Três caminhos plausíveis. O 3 foi tentado em 13/08 e morreu (§5) — não por
+princípio errado, mas porque **filtrar por material não é o mesmo que filtrar
+por topologia**: material some por completo em bandas onde a peça cobre a
+banda inteira, e aí não sobra face de corpo nenhuma pra fechar o laço. Os
+outros dois continuam de pé:
 
 1. **Medir a coxa no master** (carregar os dois arquivos; a base geométrica é a
    mesma) e usar só o delta. Barato, mas precisa provar que o campo de
-   deformação avaliado no master descreve o mesmo movimento no dist.
+   deformação avaliado no master descreve o mesmo movimento no dist. **Favorito
+   depois de 13/08** — é o único que não depende de sobrar pele visível na
+   banda contaminada.
 2. **Não soldar a coxa**: soldar para as colunas que precisam e medir a coxa na
    malha crua, onde a leitura já bate (+1,1 cm no caso medido).
-3. **Escolher o laço por topologia em vez de por tamanho**: `pair_extreme` pega
-   os dois maiores laços; perto da virilha o maior pode ser um laço que
-   atravessa a entreperna. Filtrar por posição em X e por ser convexo separaria
-   perna de entreperna.
+3. ~~Escolher o laço por topologia em vez de por tamanho~~ — tentado como
+   "filtrar por material" em 13/08, reduz mas não fecha o erro, e quebra 2
+   avatares que hoje passam. Ver §5. Uma variante ainda não tentada: filtrar
+   por material **e** cair de volta pra malha cheia quando o laço filtrado vier
+   vazio ou anormalmente pequeno — não testada.
+
+## 7b. ✅ RESOLVIDO em 14/08 — pelo caminho 4, que não estava nesta lista
+
+Nenhum dos três caminhos acima foi o vencedor. O que fechou o problema foi
+**parar de tentar trocar a medida** e corrigir o NÚMERO:
+
+`calibrar_offset_coxa()`, em `scripts/morph.py`. A medição continua rodando pela
+malha **cheia**, exatamente como sempre — sem nenhum risco de laço vazio ou
+degenerado, que é como os três caminhos anteriores morreram. Só se soma um
+**offset constante**, medido **uma vez** contra o `library_metrics.json` na base
+sem deformação, que fecha exatamente a diferença ali.
+
+**Placar: 75 dos 76 têm morph de coxa** (só o `zen_m_b06h_d3` não), contra os 48
+de 11/08. O `dropped_columns` da biblioteca inteira hoje é `forearm` 3 ·
+`biceps` 2 · `waist_min` 1 — **a coxa saiu da lista.**
+
+### A suposição que isso carrega — está escrita porque não foi verificada
+
+O excesso de tecido dentro da banda é **aproximadamente constante em cm ao longo
+da amplitude do morph**. É plausível: a mesma máscara de empurrão que move a pele
+próxima move o tecido próximo. Mas **não foi verificada contra medida real de
+coxa deformada**, porque tal medida não existe no projeto.
+
+A guarda é o teto: `COXA_OFFSET_MAX_CM = 22`, um pouco acima da pior
+contaminação já vista na biblioteca (+18,5 cm no `zen_f_b08h_d3`). Acima disso o
+offset não estaria corrigindo fabrico, estaria escondendo **landmark errado** — e
+aí a coluna cai como sempre caiu.
+
+### O que isso NÃO resolve
+
+O `metrics.py` continua medindo a coxa errado no dist. O offset conserta o
+**morph**, que é quem precisa da leitura; o `library_metrics.json` (medido no
+master) nunca teve o problema. Se um dia algo mais passar a medir a coxa no dist,
+o problema volta inteiro — os caminhos 1 e 2 continuam de pé para esse dia.
 
 ## 8. Onde estão as evidências no repositório
 

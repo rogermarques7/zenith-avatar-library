@@ -353,6 +353,8 @@ Sem 3 colunas comparáveis, cai no fallback por IMC na linha `d2`.
 | regra, tester | `test/avatar_tester.html` (roda os casos ao abrir) |
 | banco de casos | `test/selection_cases.json` → copiado para `test/fixtures/` do app |
 | índice | `library.json` → copiado para `assets/avatars/` do app (67 KB, embutido) |
+| mapa de morph | `config/morph_map.json` → copiado para `assets/avatars/` do app |
+| casos de morph | `test/morph_cases.json` → copiado para `test/fixtures/` do app (497 KB) |
 | GLBs + HDR | Supabase Storage, bucket público `avatars` |
 | upload | `scripts/publish_avatars.py` — **no repo do APP**, porque esta biblioteca não tem rede nem chave (regra 1 do CLAUDE.md) |
 
@@ -500,9 +502,12 @@ não do morph: `LICOES.md` §7.19.
 
 ### 12.4 O que ainda não existe
 
-- **Só este avatar tem morph.** Rodar `python scripts/morph.py {id} --apply` nos
-  outros é mecânico, mas cada um gasta uma versão de GLB e precisa subir de novo
-  ao Storage. Fazer quando o device aprovar.
+- ~~**Só este avatar tem morph.**~~ ✅ **Os 76 têm, desde 11/08** (sessão 25):
+  distribuição 54 com 10 shape keys, 16 com 9, 3 com 8, 3 com 7 — o que falta em
+  cada um está em `dropped_columns` no mapa, e o motivo é sempre régua.
+  🔴 **Mas nada disso subiu ao Storage**, que segue com os GLBs de antes de
+  11/08: ele pediu aprovação visual no testador antes da subida, e desde então
+  os lotes de peça (sessões 29 e 30) regravaram versão de novo.
 - **O `library.json` não carrega o morph** — o mapa é um arquivo separado. Se o
   app preferir um arquivo só, é o `build_index.py` que passa a lê-lo.
 - **Nada persiste o avatar escolhido nem a influence aplicada** (§7.8).
