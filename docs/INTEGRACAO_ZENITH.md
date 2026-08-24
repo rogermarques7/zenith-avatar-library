@@ -48,7 +48,7 @@ combinado; foi descoberto. É o achado que torna a integração barata.
 | app — tabela `body_measurements` | tela | biblioteca — `circumferences_cm` |
 |---|---|---|
 | `chest_cm` | Peitoral | `chest` |
-| `waist_cm` | Cintura | **`waist_min`** ⚠️ ver §3 |
+| `waist_cm` | Cintura | **`waist_navel`** ⚠️ mudou em 21/08 — ver §3 |
 | `arm_cm` | Bíceps | `biceps` |
 | `forearm_cm` | Antebraço | `forearm` |
 | `thigh_cm` | Coxa | `thigh` |
@@ -58,7 +58,7 @@ combinado; foi descoberto. É o achado que torna a integração barata.
 | `shoulder_cm` | Ombros | ✅ **`shoulder`** — criado em 01/08, nos 76 |
 | `weight_kg`, `height_cm` | — | `est_mass_kg`, `height_m` |
 
-Sobras: a biblioteca tem `wrist` e `waist_navel` que o app não coleta.
+Sobras: a biblioteca tem `wrist` e `waist_min` que o app não consome mais.
 
 **Faixas medidas na faixa de usuário (IMC 17–40, n=51)**, para o outro lado saber
 o que esperar: `chest` 81,8–121,4 · `waist_min` 60,9–119,4 · `biceps` 20,8–45,4 ·
@@ -74,27 +74,208 @@ avatares da faixa de usuário, sem exceção. E `est_bmi` **não mudou em nenhum
 vez de IMC"*, listada como ❌ e como o item de melhor relação valor/custo, está
 **quase toda pronta** — os dois lados já falam os mesmos números.
 
-## 3. 🔴 `waist_cm` é a cintura MÍNIMA, não a do umbigo
+## 3. ✅ `waist_cm` é a cintura do UMBIGO desde 21/08 — e a razão foi medida em gente
 
-O guia do app instrui: *"Passe a fita ao redor da **parte mais estreita** do
-abdômen, logo acima do umbigo."*
+**Esta seção dizia o contrário até 21/08, e a inversão veio de dado novo:** os
+dois primeiros corpos reais que o projeto mediu.
 
-O `build_index.py` calcula `waist_to_height` e `band_label` a partir de
-**`waist_navel`**. É a coluna errada. Medido nos 76:
+O guia do app instrui *"a **parte mais estreita** do abdômen"*, e o anel do
+`abdomen.png` confirmava o desenho — ele caía em **at_frac 0,637**, que é o
+`waist_min` (0,645, delta −0,008). O rótulo do campo já tinha sido corrigido de
+"Abdômen" para "Cintura" justamente para o usuário parar de medir no umbigo.
 
-| | diferença `waist_navel − waist_min` |
+*(Medido com `qa/probe/sondas/anel_guia.py`. Uma primeira leitura deu 0,657 e
+estava contaminada: limiar de brilho sozinho pega o contorno luminoso da figura
+junto com o anel. O critério certo é largura da linha — o anel atravessa o
+tronco, o contorno são duas bordas finas.)*
+
+🔴 **Não funcionou.** Rogério e Joice se mediram com fita, com foto de cada
+medida, com o rótulo novo já no ar — e **os dois mediram no umbigo**. O rótulo
+não venceu o hábito. "O ponto mais estreito" pede julgamento e espelho; o umbigo
+é um marco que ninguém erra.
+
+**O custo do viés é ASSIMÉTRICO POR SEXO, e é isso que decidiu.** O número de
+6,5 cm que esta seção publicava era a mediana dos dois sexos juntos, e ela
+escondia a metade que importa:
+
+| | mediana `waist_navel − waist_min`, faixa de usuário (IMC 17–40) |
 |---|---|
-| mediana, biblioteca inteira | 10,7 cm |
-| mediana, faixa de usuário (IMC 17–40) | **6,5 cm** |
-| máximo na faixa de usuário | **24,2 cm** |
+| masculino | +2,8 cm |
+| **feminino** | **+13,7 cm** |
+| máximo na faixa de usuário | +26,2 cm (`zen_f_b10_d2`) |
 
-6,5 cm é mais do que separa dois avatares vizinhos da grade. O erro é
-**sistemático e para o lado gordo**, e não apareceria em trava nenhuma.
+A coleção feminina é ampulheta: cintura mínima muito cavada. Entrando inflada de
+~14 cm na coluna de **maior peso (3,0)**, a regra subia de IMC atrás de cintura.
+Medido na Joice (1,59 m · 62,3 kg · IMC 24,6): ela caía no `zen_f_b09_d1`, de
+**IMC medido 34,1**, com o quadril errando **26,6 cm**. Com a coluna certa cai no
+`zen_f_b04i_d1`, IMC 26,5 — erro médio de 7,8 para **4,2 cm**. Conferido no
+render do GLB entregue, lado a lado com a foto.
 
-⚠️ **O app se contradiz sozinho:** o formulário de onboarding rotula o campo
-**"Abdômen (cm)"** enquanto o guia chama de **"Cintura"** e ensina o ponto mais
-estreito. Quem lê o rótulo mede no umbigo, quem abre o guia mede o mínimo, e os
-dois vão para a mesma coluna. **Correção pedida no lado do app** (§8).
+⚠️ **Segundo argumento, de doutrina, apontando para o mesmo lado:** o `CLAUDE.md`
+já manda **medida de fita ser LANDMARK, não extremo** (§1.8b) — é por isso que
+`chest` e `shoulder` são fração fixa de propósito. `waist_min` era a única das 9
+que continuava sendo extremo procurado dentro de banda.
+
+### O que a troca exigiu aqui, e o que ela NÃO custou
+
+O morph também mira uma coluna, e `morph_cases.solve()` zera todo morph cuja
+coluna a seleção não usou (LIÇÕES §7.18). Trocar só o índice matou a cintura em
+silêncio: **357 dos 608 casos zeraram `morph_waist`**, 122 zeraram o achatamento.
+
+✅ **`cal_column`** separa a régua que CALIBRA da régua que se PUBLICA: a
+amplitude do `morph_waist` continua calibrada em `waist_min` e só a curva sai em
+`waist_navel`. Isso não é detalhe — recalibrar a amplitude mudaria o deslocamento
+gravado no GLB, o `--remap` recusaria e a saída seria `--apply` nos 76: versão
+nova, Storage atrasado e aprovação visual de novo.
+
+**Resultado do lote (`--remap` nos 76): 75 OK com divergência 0,000 mm contra o
+arquivo do disco; 0 avatares mudaram de amplitude ou de contagem de vértices;
+distribuição de shape keys idêntica (33/25/11/5/2); nenhum GLB tocado.** O único
+que recusou, `zen_f_b04_d2`, já tinha a cintura em `dropped_columns` antes — ele
+nunca teve `morph_waist`.
+
+### 🔴 O que o LADO DO APP ainda precisa (sessão separada)
+
+1. ✅ **`abdomen.png` — FEITO em 21/08**, gravado no repositório do app,
+   aguardando commit do lado de lá. O anel desceu **42 px**, de at_frac 0,637
+   para **0,599** (alvo 0,600). Original guardado antes de sobrescrever.
+
+   ⚠️ **A figura não é corpo preenchido: é contorno luminoso sobre preto** (o
+   interior mede menos de 0,02 de brilho), e o anel é brilho ADITIVO por cima.
+   Por isso deu para separar o anel do fundo e recompor 42 px abaixo, com o
+   rastro tapado por rampa vertical entre as linhas de fora do halo.
+
+   🔴 **A primeira tentativa aplicou a rampa na largura inteira e ficou visível
+   em tamanho real:** a faixa cruza os BRAÇOS, que têm estrutura vertical forte,
+   e a interpolação os achatou numa emenda horizontal. O conserto é limitar o
+   reparo a onde o anel de fato estava — e quem diz isso é o próprio brilho dele,
+   suavizado na horizontal para a borda não virar degrau. **Defeito de arte se vê
+   no tamanho em que ela é exibida, não no recorte** (é a §4.5c num eixo novo).
+
+   ⏸️ Falta o **texto** do guia: *"parte mais estreita do abdômen"* → *"na altura
+   do umbigo"*. É string no app, não foi tocada daqui.
+2. **`body_fat_calculator.dart:42`** carrega um bloco que manda **não** fazer
+   esta troca ("*ele também alimenta a seleção do avatar 3D, que precisa da
+   cintura MÍNIMA*"). A premissa dele acabou de se inverter e ele precisa ser
+   reescrito.
+3. ⚠️ **O viés da Navy TROCA DE SEXO, não desaparece.** O protocolo quer a
+   cintura no **umbigo para homens** e na **mínima para mulheres**. O app coletava
+   a mínima nos dois e subestimava 2,4 pp nos homens; agora o homem fica certo e
+   **a mulher passa a ficar errada**. Decisão em aberto — a saída limpa é o campo
+   NOVO que aquele próprio bloco sugere.
+
+### 🚻 O GUIA FEMININO, que ainda não existe: desenhar o anel no UMBIGO
+
+A pergunta certa não é "qual guia para cada sexo" — **é uma medida só.** O campo
+`waist_cm` é único, e a seleção do avatar consome `waist_navel` **nos dois
+sexos**. Então:
+
+- **masculino** — o `abdomen.png` **precisava mudar e mudou**. Manter o anel na
+  cintura mínima ensinaria a medir uma coisa e o índice leria outra, que é
+  exatamente o defeito que esta seção documenta.
+- **feminino** — desenhar o anel **na altura do umbigo**, `at_frac 0,600`, não no
+  ponto mais estreito. Numa figura em que o corpo vai do pé (`y_base`) ao topo da
+  cabeça (`y_topo`), o centro do anel fica em
+  `y = y_base − 0,600 × (y_base − y_topo)`.
+
+⚠️ **É contraintuitivo justamente no feminino, e é lá que o erro custa caro:** a
+cintura de mulher tem uma "cinturinha" visível e o desenhista tende a marcar
+ali. Na coleção feminina esse ponto fica **13,7 cm** (mediana) acima do umbigo —
+é o viés que fazia a regra subir 7,6 pontos de IMC. **O anel tem que ficar
+visivelmente ABAIXO da cintura estreita, na linha do umbigo.**
+
+✅ **A conferência é barata e não depende de olho:**
+`python qa/probe/sondas/anel_guia.py <arquivo>` — `at_frac` tem que dar
+**0,600 ± 0,01**. Se der ~0,64, a imagem caiu no atrator da cinturinha e é
+regerar, não aceitar.
+
+### ✅ `abdomen_f.png` — o primeiro guia feminino, entregue em 21/08
+
+Gerado pelo Rogério no ChatGPT com prompt + as duas guias masculinas anexadas
+como referência de estilo. **Passou de primeira: `at_frac 0,603`.**
+
+⚠️ **O prompt usou ÂNCORA POSITIVA no anel, e isso foi de propósito** — *"o anel
+passa exatamente pelo umbigo, o umbigo fica no centro do anel, visível"*, e não
+*"não é na parte mais estreita"*. A §2.4d deste projeto já mediu que **negação
+não vence atrator**, e em figura feminina o atrator da cinturinha é forte.
+
+🔴 **A régua de altura passou e o ENQUADRAMENTO estava errado** — é a
+`regua-de-altura-nao-ve-tracado` de novo. O `at_frac` é fração da FIGURA, então
+ele dá 0,603 com a figura ocupando qualquer fatia do quadro; mas o app desenha o
+PNG inteiro num espaço fixo. A figura nova ocupava **83% da altura do quadro
+contra 61% das masculinas** — no guia, a ilustração "pularia" de tamanho ao
+trocar de passo. Normalizada por semelhança pura (escala 0,7394 + translação)
+para a geometria exata do `abdomen.png`: figura em y 270..1388, 1118 px, 61%.
+`at_frac` sobreviveu em **0,602**.
+
+### ⏸️ O que falta para o guia feminino EXISTIR na tela
+
+1. **`measurement_guide_page.dart` não tem chave de sexo.** É uma lista única de
+   10 `_GuideStep` com o caminho do asset literal. Servir arte feminina é
+   mudança de código, não só arquivo.
+2. **Faltam as outras 9 femininas** — pescoço, ombro, peitoral, bíceps,
+   antebraço, glúteo, coxa, panturrilha, altura.
+3. **O texto do passo da cintura ainda ensina o antigo**
+   (`measurement_guide_page.dart:121`): *"a parte mais estreita do abdômen, logo
+   acima do umbigo"* → tem que virar *"na altura do umbigo"*. Hoje ele
+   contradiz o desenho novo E a coluna do índice.
+4. **~30 pontos com `waist_min` literal** em `avatar_selector.dart`,
+   `goal_screen_provider.dart`, `goal_page.dart` e `avatar_library_model.dart`.
+5. ✅ **Os coeficientes de eixo: resolvido em 21/08, mas por FATOR, não por
+   refit** — e a distinção importa. Ver o bloco abaixo.
+
+### 📐 Os coeficientes do `goal_target_calculator.dart` — só a CINTURA muda
+
+**As outras 8 colunas não mudam nada.** A medida delas é a mesma; só a régua da
+cintura se mexeu. São 4 números, um por mapa.
+
+🔴 **O refit absoluto NÃO É RECUPERÁVEL, e é honesto dizer por quê.** O método
+está descrito em duas linhas de comentário (*"regressão no eixo de definição
+d1→d2→d3 dentro da mesma constituição b, n=12 (m) / n=11 (f)"* e *"pares de
+avatares de MESMA cintura ±4 cm, n=39 (m) / n=51 (f)"*). Reconstruí seis
+variantes de pareamento e **nenhuma reproduz os `n` publicados**: a de gordura dá
+m=19/f=11 ou m=13/f=7, a de músculo dá m=39/f=42 ou m=46/f=59 — cada alvo bate
+num sexo e erra no outro.
+
+⚠️ **E os `n` do comentário são suspeitos:** a coleção tem **39 masculinos** e
+**51 avatares na faixa de usuário somando os dois sexos**. "n=39 (m) / n=51 (f)"
+é exatamente esse par — parece tamanho de população anotado no lugar do n da
+regressão. Rodar um método inventado e entregar o número daria diferença que eu
+não saberia atribuir à coluna ou à minha reconstrução.
+
+✅ **O que sobrevive à ignorância do método é a RAZÃO**, porque ela cancela o
+método desde que ele seja o mesmo nos dois lados da divisão. Medida nas seis
+variantes:
+
+| eixo de GORDURA | `waist_navel` ÷ `waist_min` |
+|---|---|
+| masculino | mediana **1,150** (faixa 1,069–1,213 nas 6 variantes) |
+| feminino | mediana **1,168** (faixa 1,095–1,282) |
+
+**Aplicar o fator ao número publicado preserva o método original, seja ele qual for:**
+
+| constante | hoje (`waist_min`) | com a coluna nova |
+|---|---:|---:|
+| `_fatAxisCmPerKg['waist']` | 1,121 | **1,289** |
+| `_fatAxisCmPerKgF['waist']` | 0,605 | **0,707** |
+
+🔴 **No eixo de MÚSCULO a razão é inútil e não deve ser usada** — ela sai de
+1,2 a 3,1 (m) e de 3,9 a **80,5** (f). O motivo é estrutural: os pares são
+escolhidos por *"mesma cintura"*, então o denominador é ~0 **por construção**.
+Razão contra zero não é fator de correção.
+
+Para esse eixo a leitura honesta é a **autoconsistente** — escolher os pares E
+medir na coluna nova:
+
+| constante | hoje | autoconsistente em `waist_navel` |
+|---|---:|---:|
+| `_muscleAxisCmPerKg['waist']` | 0,047 | **0,041** (mediana de 6 variantes) |
+| `_muscleAxisCmPerKgF['waist']` | 0,058 | **0,044** |
+
+Ou seja: **no eixo de músculo a cintura continua praticamente parada**, que é o
+que o vetor `gain_muscle` da biblioteca já declara. A mudança está dentro da
+dispersão entre variantes — trocar ou não trocar é indiferente, e não trocar tem
+a vantagem de não mexer no que não precisa.
 
 ## 4. 🔴 O app NÃO estima percentual de gordura
 

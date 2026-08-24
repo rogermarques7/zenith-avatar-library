@@ -103,11 +103,33 @@ except ImportError:
 #    pelo lado que satura faz a busca de amplitude fugir para o teto - mediu
 #    0,060 m, e nesse tamanho o lado negativo virou -19 cm com 206 triangulos
 #    invertidos. Quem tem lado saturado calibra pelo outro.
+#
+# ⚠️ `cal_column` SEPARA A REGUA QUE CALIBRA DA REGUA QUE SE PUBLICA, e existe
+#    por uma razao de CUSTO, medida em 21/08.
+#
+#    Quando o app trocou a cintura de `waist_min` para `waist_navel`, a coluna
+#    publicada tinha que mudar junto - senao `morph_cases.solve()` zera o morph
+#    (coluna que a selecao descartou nao morfa, LICOES 7.18), e foi exatamente o
+#    que aconteceu: 357 dos 608 casos zeraram `morph_waist` de uma vez.
+#
+#    Mas a AMPLITUDE e outra coisa. Ela e escolhida pela busca de `cm_at_full`,
+#    e o deslocamento resultante esta GRAVADO NO GLB. Recalibrar a amplitude
+#    numa coluna nova muda o deslocamento, o `--remap` recusa (guarda de 0,2 mm)
+#    e a saida vira `--apply` nos 76: versao nova de GLB, Storage desatualizado e
+#    aprovacao visual de novo - tudo isso para mudar de que altura sai o
+#    centimetro, o que nao e motivo para mexer em geometria aprovada.
+#
+#    Entao a amplitude continua sendo calibrada em `waist_min` e a CURVA e o
+#    `base_cm` saem em `waist_navel`. O mapa publica a promessa medida na regua
+#    que o app usa; o arquivo nao muda um vertice. `cm_at_full` deixa de ser
+#    redondo neste morph, e nao faz mal - o cabecalho do mapa ja avisa que quem
+#    multiplica `cm_at_full x influence` erra, e que a promessa e a CURVA.
 MORPHS = [
     {"key": "morph_neck",     "column": "neck",      "cm_at_full": 6.0, "cal_sign": -1},
     {"key": "morph_shoulder", "column": "shoulder",  "cm_at_full": 6.0},
     {"key": "morph_chest",    "column": "chest",     "cm_at_full": 6.0},
-    {"key": "morph_waist",    "column": "waist_min", "cm_at_full": 10.0},
+    {"key": "morph_waist",    "column": "waist_navel",
+     "cal_column": "waist_min", "cm_at_full": 10.0},
     {"key": "morph_hip",      "column": "hip",       "cm_at_full": 8.0},
     {"key": "morph_biceps",   "column": "biceps",    "cm_at_full": 4.0},
     {"key": "morph_forearm",  "column": "forearm",   "cm_at_full": 3.0},
@@ -797,6 +819,12 @@ def medir(base, P, column):
         return mt.torso_at(m, cz)
     if column == "waist_min":
         return mt.torso_extreme(m, z + mt.WAIST_BAND[0] * H, z + mt.WAIST_BAND[1] * H, "min")[0]
+    if column == "waist_navel":
+        # fracao FIXA, nao extremo procurado - e por isso que ela virou a coluna
+        # publicada em 21/08 (o CLAUDE.md ja manda medida de fita ser landmark).
+        # 0,600 cai dentro da WAIST_BAND (0,550-0,680), entao a mascara do
+        # morph de cintura cobre esta altura sem mudanca nenhuma.
+        return mt.torso_at(m, z + mt.NAVEL_FRAC * H)
     if column == "_waist_depth":
         # profundidade (Y) da secao na altura em que o waist_min e lido. Nao e
         # medida de fita - e o eixo que o olho ve de perfil, e o criterio de
@@ -1133,18 +1161,22 @@ def worker_main():
             continue
 
         alvo = spec["cm_at_full"]
+        # A regua que CALIBRA a amplitude pode nao ser a que se PUBLICA (ver o
+        # cabecalho da tabela). Onde `cal_column` nao existe, sao a mesma.
+        cal = spec.get("cal_column", col)
         b0 = medir(base, co, col) * 100
+        b0_cal = medir(base, co, cal) * 100
 
         # amplitude que da o alvo em cm. O deslocamento e linear na amplitude,
         # a circunferencia quase - tres correcoes multiplicativas convergem.
         sg = spec.get("cal_sign", 1)
         a = 0.010
         for _ in range(5):
-            v = medir(base, co + d * (m * a * sg)[:, None], col)
+            v = medir(base, co + d * (m * a * sg)[:, None], cal)
             if v is None:
                 a *= 0.5
                 continue
-            delta = (v * 100 - b0) * sg          # positivo = andou na direcao calibrada
+            delta = (v * 100 - b0_cal) * sg      # positivo = andou na direcao calibrada
             if delta <= 0.05:
                 a *= 2.0
                 continue
@@ -1153,8 +1185,10 @@ def worker_main():
         conf = medir(base, co + d * (m * amp)[:, None], col)
         conf_cm = (conf * 100 - b0) if conf else float("nan")
 
-        print("\n[{}] coluna {} | base {:.1f} cm | mascara toca {} verts"
-              .format(key, col, b0, tocados))
+        print("\n[{}] coluna {}{} | base {:.1f} cm | mascara toca {} verts"
+              .format(key, col,
+                      "" if cal == col else " (amplitude calibrada em {})".format(cal),
+                      b0, tocados))
         print("  influence 1.0 = amplitude {:.4f} m -> {:+.2f} cm (alvo {:+.1f} em {:+.0f})"
               .format(amp, conf_cm, alvo, sg))
         print("  {:>10} {:>10} {:>8} {:>10} {:>10} {:>9}"

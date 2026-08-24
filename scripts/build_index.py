@@ -89,19 +89,45 @@ DEFAULT_CDN = ("https://nhloypjtpgyndmjtcpcf.supabase.co"
                "/storage/v1/object/public/avatars/")
 
 # As 9 colunas que o app coleta e a biblioteca mede. O contrato fechou em 9 de 9
-# em 01/08 (shoulder foi a ultima a entrar). 'wrist' e 'waist_navel' ficam de
-# fora da DISTANCIA de proposito: o app nao coleta nenhuma das duas.
-SELECT_COLUMNS = ["neck", "shoulder", "chest", "waist_min", "hip",
+# em 01/08 (shoulder foi a ultima a entrar). 'wrist' e 'waist_min' ficam de fora
+# da DISTANCIA: o app nao coleta nenhuma das duas.
+SELECT_COLUMNS = ["neck", "shoulder", "chest", "waist_navel", "hip",
                   "biceps", "forearm", "thigh", "calf"]
 
-# De onde cada coluna vem na tabela `body_measurements` do app. O unico par que
-# nao e obvio e o da cintura: `waist_cm` e a cintura MINIMA desde 01/08 (o app
-# ja renomeou o rotulo de "Abdomen" para "Cintura"), entao ele bate com
-# `waist_min` e NAO com `waist_navel` - a diferenca mediana e 6,5 cm na faixa de
-# usuario, mais do que separa dois avatares vizinhos. INTEGRACAO_ZENITH secao 3.
+# De onde cada coluna vem na tabela `body_measurements` do app.
+#
+# 🔴 `waist_cm` PASSOU A SER `waist_navel` EM 21/08, e a razao e medida em gente.
+#
+# De 01/08 a 21/08 esta coluna foi `waist_min`, porque e isso que o guia do app
+# ENSINA (o anel do `abdomen.png` cai em at_frac 0,657, e o waist_min mora em
+# 0,645). O rotulo do campo ja tinha sido corrigido de "Abdomen" para "Cintura"
+# justamente para o usuario parar de medir no umbigo.
+#
+# Nao funcionou. Os dois primeiros corpos reais medidos no projeto - Rogerio e
+# Joice, fita e foto, 21/08 - mediram OS DOIS no umbigo, com o rotulo novo ja no
+# ar. O rotulo nao venceu o habito, e "o ponto mais estreito" pede julgamento e
+# espelho enquanto o umbigo e um marco que ninguem erra.
+#
+# O CUSTO DO VIES E ASSIMETRICO POR SEXO, e e por isso que ele nao podia ficar:
+#
+#     mediana `waist_navel - waist_min`, faixa de usuario (IMC 17-40)
+#       masculino   +2,8 cm
+#       feminino   +13,7 cm     <- a colecao feminina e ampulheta
+#
+# Entrando inflada de ~14 cm na coluna de MAIOR PESO (3,0), a regra sobe de IMC
+# atras de cintura: a Joice (IMC 24,6) caia num avatar de IMC medido 34,1, com o
+# quadril errando 26,6 cm. Com a coluna certa ela cai em IMC 26,5. Conferido no
+# render do GLB entregue, lado a lado com a foto.
+#
+# ⚠️ E ha um segundo argumento, de doutrina, que aponta para o mesmo lado: o
+# CLAUDE.md ja diz que **medida de fita e LANDMARK, nao extremo** (§1.8b) - por
+# isso `chest` e `shoulder` sao fracao fixa de proposito. `waist_min` era a
+# unica das 9 que continuava sendo extremo procurado dentro de banda.
+#
+# INTEGRACAO_ZENITH secao 3.
 APP_FIELD_MAP = {
     "neck_cm": "neck", "shoulder_cm": "shoulder", "chest_cm": "chest",
-    "waist_cm": "waist_min", "hip_cm": "hip", "arm_cm": "biceps",
+    "waist_cm": "waist_navel", "hip_cm": "hip", "arm_cm": "biceps",
     "forearm_cm": "forearm", "thigh_cm": "thigh", "calf_cm": "calf",
 }
 
@@ -131,7 +157,7 @@ APP_FIELD_MAP = {
 # (como o z_cap foi), e entao estes pesos se derivam delas em vez de serem
 # escolhidos.
 SELECT_WEIGHTS = {
-    "waist_min": 3.0,      # manda: e a coluna que a biblioteca nao consegue morfar muito
+    "waist_navel": 3.0,    # manda: e a coluna que a biblioteca nao consegue morfar muito
     "hip": 2.0,
     "chest": 2.0,
     "shoulder": 2.0,
@@ -199,19 +225,19 @@ GOAL_VECTORS = {
     "lose_weight": {
         "has_target_body": True,
         "summary": "Reduzir gordura mantendo massa magra",
-        "direction": {"waist_min": -1.0, "hip": -0.5, "chest": -0.25, "shoulder": -0.25,
+        "direction": {"waist_navel":-1.0, "hip": -0.5, "chest": -0.25, "shoulder": -0.25,
                       "neck": 0.0, "biceps": 0.0, "forearm": 0.0, "thigh": 0.0, "calf": 0.0},
     },
     "gain_muscle": {
         "has_target_body": True,
         "summary": "Ganhar massa muscular",
-        "direction": {"waist_min": 0.0, "hip": 0.0, "chest": 0.5, "shoulder": 0.5,
+        "direction": {"waist_navel":0.0, "hip": 0.0, "chest": 0.5, "shoulder": 0.5,
                       "neck": 0.0, "biceps": 1.0, "forearm": 1.0, "thigh": 1.0, "calf": 1.0},
     },
     "recomp": {
         "has_target_body": True,
         "summary": "Recomposicao: perder gordura e ganhar musculo ao mesmo tempo",
-        "direction": {"waist_min": -0.5, "hip": -0.25, "chest": 0.5, "shoulder": 0.5,
+        "direction": {"waist_navel":-0.5, "hip": -0.25, "chest": 0.5, "shoulder": 0.5,
                       "neck": 0.0, "biceps": 0.5, "forearm": 0.5, "thigh": 0.5, "calf": 0.5},
     },
     # Estes tres NAO TEM CORPO-ALVO, e isso ja esta no codigo do app: o
@@ -412,11 +438,14 @@ def main():
             # inventar cinco numeros novos sem medida que os sustente.
             "label": band_label(info["circumferences_cm"].get("waist_navel", {}).get("cm"),
                                 info["height_m"], m.group("sex")),
-            # Ja o NUMERO publicado e o da cintura minima, porque ele existe para
-            # ser comparado com o 'waist_cm' do app, que e minima desde 01/08.
-            "waist_to_height": (round(info["circumferences_cm"]["waist_min"]["cm"]
+            # O NUMERO publicado segue a coluna que o app manda: era 'waist_min'
+            # ate 21/08 e passou a ser 'waist_navel' junto com o APP_FIELD_MAP.
+            # Ele existe para ser comparado com o 'waist_cm' do usuario, entao
+            # tem que sair da MESMA regua - com a coluna antiga aqui, o tester
+            # mostraria uma razao que o campo digitado nunca reproduz.
+            "waist_to_height": (round(info["circumferences_cm"]["waist_navel"]["cm"]
                                       / (info["height_m"] * 100.0), 3)
-                                if info["circumferences_cm"].get("waist_min", {}).get("cm")
+                                if info["circumferences_cm"].get("waist_navel", {}).get("cm")
                                 else None),
             "body_shape": "medium",
             "version": version,

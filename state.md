@@ -1,6 +1,122 @@
 ﻿# state.md — o presente
 
-Última atualização: **16/08/2026, fim da sessão 30**
+Última atualização: **21/08/2026, sessão 31**
+
+> ## 🧍 SESSÃO 31 — OS DOIS PRIMEIROS CORPOS REAIS, E A CINTURA MUDOU DE COLUNA
+>
+> O Rogério e a Joice se mediram com fita, com **foto de cada medida** e com foto
+> de corpo inteiro frente/perfil com fita de 1,5 m na parede. É o teste de
+> calibração que este arquivo combinou lá atrás ("só fita e balança, zero
+> crédito"), e é a primeira vez que a régua encosta em gente.
+>
+> **O masculino passou; o feminino não.** Com os números dele o erro médio nas 9
+> colunas fica em 2,7 cm; com os dela, 7,8 cm — e o avatar escolhido tinha IMC
+> medido **34,1** contra os 24,6 reais dela.
+>
+> ### 🔴 DEFEITO 1 — a fita foi no UMBIGO nos dois, e o índice lia a MÍNIMA
+>
+> Está nas fotos. E o rótulo do app **já tinha sido corrigido** de "Abdômen" para
+> "Cintura" justamente para isso não acontecer: **o rótulo não venceu o hábito.**
+>
+> O custo é assimétrico por sexo, e é essa metade que a mediana de 6,5 cm do
+> `INTEGRACAO_ZENITH` §3 escondia: **+2,8 cm no masculino contra +13,7 cm no
+> feminino**, porque a coleção feminina é ampulheta.
+>
+> ✅ **`waist_cm` → `waist_navel`, aplicado.** Detalhe inteiro no
+> `INTEGRACAO_ZENITH.md` §3, que foi reescrito. Réguas: `select --check` **34/34**
+> · `morph_cases --check` **608/608** · testador **22/22 e 608/608** · shape keys
+> **33/25/11/5/2, idênticas** · **nenhum GLB tocado**.
+>
+> 🔴 **A troca teria matado o morph de cintura em silêncio.** `solve()` zera morph
+> cuja coluna a seleção não usou: **357 dos 608 casos zeraram `morph_waist`**.
+> Consertado com **`cal_column`** — a amplitude segue calibrada em `waist_min` e
+> só a curva publicada sai em `waist_navel`. Por isso o `--remap` nos 76 fechou
+> com **divergência 0,000 mm** e nenhuma versão de GLB foi gasta.
+>
+> ⚠️ **ELE TROCOU DE AVATAR: `zen_m_b05h_d2` → `zen_m_b05_d1`** — e o b05h_d2 é o
+> que ele aprovou no olho. Erro médio cai (2,7 → 2,1 cm) e o pescoço melhora 8,4 →
+> 2,3, **mas a cintura piora +2,6 → +8,9 cm**, justamente a coluna da mudança. A
+> causa é a escala: o dp da cintura masculina subiu de 15,6 para 17,5 cm, então o
+> peso 3,0 perdeu força. **Decisão dele, ainda em aberto** — mexer no peso seria
+> inventar constante sem medida.
+>
+> ### 🔴 DEFEITO 2 — o corpo dela NÃO EXISTE na biblioteca, e isso sobrevive à correção
+>
+> `cintura/quadril` dela é **0,907**; o **máximo das 24 femininas** da faixa de
+> usuário é **0,850**. Está fora da nuvem inteira, não na borda. As 37 femininas
+> são todas pera/ampulheta; ela é reta.
+>
+> **É alvo de Meshy, não de código:** falta mulher de IMC ~25–28 com
+> `cintura/quadril ≥ 0,88`. Quando houver crédito, é lugar melhor que os slots
+> `b07`/`b08` que este arquivo já desaconselha.
+>
+> ### ⚠️ O X/Y DE 06/08 NÃO SE REPRODUZ NA MEDIDA DIRETA — reabrir antes de confiar
+>
+> Aquela sessão mediu o X/Y da cintura dele em **1,44** contra 1,12 do avatar, e o
+> `morph_waist_flatten` foi calibrado em cima disso. Mas o 1,44 foi **derivado por
+> elipse** a partir do perímetro de fita, e o próprio bloco marcava que a elipse
+> subestima seção achatada.
+>
+> Medindo a largura **direto na foto de frente calibrada**, ele dá **1,11–1,36**
+> (faixa, porque a linha de altura na foto tem erro próprio) e o `zen_m_b05h_d2`
+> mede **1,218** — dentro da faixa dele. Ela dá ~1,53 contra 1,391 do `b04i_d1`.
+> **Não é prova de que o achatamento está errado**, é que o número que o calibrou
+> não se reproduz. Régua nova para reabrir: `qa/probe/sondas/secao_xy.py`.
+>
+> ### ✅ A INTEGRAÇÃO FECHOU NO MESMO DIA — os dois repositórios commitados
+>
+> **🎨 OS 20 GUIAS DE MEDIDA.** O `abdomen.png` masculino desceu para o umbigo
+> (0,637 → 0,599, editado em pixel) e **nasceu a coleção feminina inteira, 10 de
+> 10**, gerada por prompt + referência. Hoje moram em `assets/medidas/m/` e
+> `assets/medidas/f/`, e o `measurement_guide_page.dart` escolhe a pasta pelo
+> `sexFromGender` — o mesmo que decide a coleção do avatar 3D.
+>
+> ⚠️ **As femininas foram REFEITAS VESTIDAS** (faixa reta + short, a roupa do
+> `CHARACTER_BIBLE` §5). A primeira leva saiu nua e a última tinha aréola
+> modelada — risco de revisão de loja, apontado por ele. Vestir resolveu os dois
+> gargalos de uma vez: o da loja e o do filtro do gerador. **A roupa não cobre
+> nenhum ponto de medida** — conferido marca a marca: peitoral cai na faixa,
+> cintura na barriga nua acima do cós, quadril no short, coxa na pele logo abaixo
+> da bainha (que fica em ~0,475, raspando acima do ponto em 0,430–0,460).
+>
+> 🆕 Duas sondas novas: **`anel_guia.py`** (onde o anel cai, em `at_frac`) e
+> **`guia_normaliza.py`** (põe a figura no enquadramento do conjunto).
+>
+> 🔴 **A régua de altura passou e o ENQUADRAMENTO estava errado** — de novo a
+> `regua-de-altura-nao-ve-tracado`. O `at_frac` é fração da FIGURA, então passa
+> com a figura ocupando qualquer fatia do quadro; mas o app desenha o PNG inteiro
+> num espaço fixo, e a primeira feminina ocupava **83% do quadro contra 61%** das
+> masculinas. A ilustração pularia de tamanho a cada passo do guia.
+>
+> ⚠️ **Âncora positiva no prompt do anel, e foi ela que segurou o atrator.** Em
+> figura feminina o desenhista mira a *cinturinha*; o prompt diz *"o anel passa
+> exatamente pelo umbigo, o umbigo fica no centro do anel"*, nunca *"não é na
+> parte mais estreita"*. §2.4d fora da geração de avatar.
+>
+> ### 🔴 O QUE FICOU EM ABERTO
+>
+> **1. O viés da fórmula Navy TROCOU DE SEXO.** O protocolo quer o umbigo no
+> homem e a mínima na mulher. O app coletava a mínima nos dois e subestimava 2,4
+> pp nos homens; agora o homem está certo e **a mulher passou a ficar errada**. O
+> bloco do `body_fat_calculator.dart` foi reescrito dizendo isso. A saída limpa é
+> um campo NOVO, e continua não feita.
+>
+> **2. O destino do objetivo ficou com o BRAÇO MENOR.** Consequência medida do
+> coeficiente novo: o eixo de gordura masculino subiu de 1,121 para 1,289 cm/kg,
+> o alvo passou a pedir cintura bem mais baixa e a seleção alcança corpos mais
+> secos — o destino saiu do `zen_m_b05_d1` (bíceps 34,0) para o `zen_m_b05_d3`
+> (29,7), contra 36,0 de hoje. **Não é a regra falhando** (o alvo pede 36,1): é a
+> cobertura. O buraco que a biblioteca já documenta — *"o corpo 'mesma cintura,
+> braço maior' não existe"* — apareceu pelo outro lado: **não existe corpo seco
+> COM braço.** É produção na Meshy.
+>
+> **3. `zen_f_b04_d2` ainda diz `dropped_columns: ["waist_min"]`** — nome velho,
+> inofensivo (nada mais procura essa coluna), porque o `--remap` dele recusa: ele
+> nunca teve `morph_waist`.
+>
+> **4. O Storage NÃO precisou de upload.** O `--remap` não gasta versão de GLB,
+> então os 76 arquivos no bucket seguem sendo os de 16/08 e o índice novo aponta
+> para eles. Conferido: nenhum `assets.glb` mudou de nome.
 
 > ## 🚀 A BIBLIOTECA ESTÁ NO AR — subida em 16/08, a primeira desde 11/08
 >
@@ -187,7 +303,9 @@
 >
 > ```
 > python scripts/build_index.py          # o nome do GLB muda a cada versão
+> python scripts/select.py  --cases      # os 34 casos são ids de avatar
 > python scripts/morph_cases.py          # os 608 casos seguem o glb_version
+> git diff test/                         # ⬅ A REVISÃO É O DIFF. Ver abaixo.
 > python scripts/select.py --check       # 34/34
 > python scripts/morph_cases.py --check  # 608/608
 > cp library.json          ../zenith/assets/avatars/library.json
@@ -201,6 +319,62 @@
 > trava que recusa gerar se o `glb_version` do mapa não bater com o do índice,
 > então depois de qualquer `morph --apply` ele precisa ser **regerado**, não só
 > conferido. Rodar só o `--check` devolve divergência e parece defeito.
+>
+> 🔴 **O `select.py --cases` entrou em 20/08, pelo MESMO motivo, e a falta dele
+> custou quatro dias de teste vermelho no app.** A receita regerava um banco e só
+> **conferia** o outro — mas os `expect_id` do `selection_cases.json` são ids de
+> avatar, então ele depende do índice exatamente como o do morph. Em 16/08 o
+> `build_index.py` carimbou `2026-08-16T13:47:44Z`, o banco ficou em
+> `2026-08-14T18:04:45Z`, e o `avatar_selection_test.dart` reprovou de 16 a 19/08
+> — enquanto o `select.py --check` respondia **34/34 o tempo todo**.
+>
+> **Conferir RESPOSTA é cego para PROCEDÊNCIA**, e das três implementações da
+> regra só o Dart cobrava o carimbo. Hoje os dois `--check` daqui cobram também
+> (`select.py` e `morph_cases.py`), com mensagem própria — banco velho e regra
+> mudada pedem ações opostas e não podem sair com o mesmo texto.
+>
+> ### ✅ AS TRÊS CÓPIAS FECHADAS EM 20/08 — e o testador não tinha árbitro nenhum
+>
+> Ao fechar o carimbo nas três apareceu um buraco maior que ele. O
+> `avatar_tester.html` é a **terceira implementação da regra de MORPH** (junto
+> com o Python e o Dart) e **não rodava nenhum dos 608 casos** — eles só corriam
+> aqui e no app. A regra morava dentro do `aplicarMorph()`, que lê slider e
+> escreve em malha: **regra amarrada à tela é regra sem árbitro.**
+>
+> ✅ **`resolverInfluences()`** — a regra pura, espelhando o `solve()` do
+> `morph_cases.py`, e o `aplicarMorph()` passou a consumi-la no modo automático.
+> Os 608 rodam no load, ao lado dos 22 de seleção. Placar: **608/608**.
+>
+> 🔴 **E o `influenceDaCurva()` do testador tinha DUAS divergências latentes**
+> contra a referência, nenhuma visível sem banco de casos: (a) não ordenava a
+> curva por influence; (b) não protegia vão zero — dois pontos com o mesmo cm
+> davam divisão por zero e a influence saía `Infinity`, ou seja, **slider no
+> teto**. Reescrito ponto a ponto; conferido contra o Python em **6.736 amostras
+> de curva, delta máximo 0,0**.
+>
+> ⚠️ **O carimbo do testador cobria só a data.** Hoje cobra os três campos, como
+> o Dart. E no lado do app o teste de morph cobria só `glb_versions` — índice
+> regerado com os mesmos GLBs (recalibração de medida, coluna nova, avatar
+> reprovado) não move versão nenhuma e passava batido. Duas asserções novas lá:
+> `index_generated_at`, e **todo avatar do mapa tem que estar no banco** (o
+> sentido que faltava: avatar novo chegava sem caso nenhum cobrindo o morph
+> dele). Suíte do app: **87/87**.
+>
+> ### 📐 A REVISÃO DO LOTE É O `git diff test/` — e ela tem duas leituras
+>
+> Regerar não é revisar. Depois de `--cases` e `morph_cases.py`, **olhar o diff
+> antes do `cp`**:
+>
+> - **só o carimbo mudou** (1 linha em cada banco) → a recalibração **não moveu
+>   resposta nenhuma**. Copiar. Foi exatamente este o caso em 20/08: o
+>   `selection_cases.json` regerado deu **uma linha de diff**, o `generated_at`.
+> - **algum `expect_id` ou `expect_influences` no diff** → mudou **qual corpo o
+>   usuário vê**, ou como ele é esculpido. Aí alguém olha caso a caso **antes** do
+>   `cp`. Nunca copiar um diff de resposta sem ler: toda resposta errada continua
+>   sendo um avatar plausível na tela.
+>
+> ⚠️ **Não regerar de dentro do `--check`.** A trava tem que reprovar e parar; que
+> se auto-conserta não é trava, e o `expect_id` errado entraria no app calado.
 >
 > 🔴 **ÍNDICE PRIMEIRO, UPLOAD DEPOIS.** O `publish_avatars.py` recusa rodar se o
 > índice do app promete um GLB que não está no disco daqui — e depois de um
@@ -529,9 +703,11 @@
 >
 > ### 🔴 TRÊS DEFEITOS DO ÍNDICE, medidos, que bloqueiam a tela de objetivo
 >
-> 1. **O índice usa a cintura errada.** O app ensina a medir a **mais estreita**;
->    o `build_index.py` usa `waist_navel`. Diferença mediana **6,5 cm** na faixa de
->    usuário, máx 24,2 cm — sistemática, para o lado gordo.
+> 1. ~~**O índice usa a cintura errada.**~~ ✅ **RESOLVIDO em 21/08, e pelo lado
+>    OPOSTO ao que este item propunha** — quem se mudou foi o app, não o índice.
+>    Ver o bloco da sessão 31, no topo. Os dois corpos reais mediram no UMBIGO
+>    apesar do rótulo já corrigido, e o viés é +2,8 cm no masculino contra
+>    **+13,7 cm no feminino**. `waist_cm` → `waist_navel`.
 > 2. **`definition_thresholds_bodyfat_pct` é inutilizável.** O app **não estima
 >    gordura** em lugar nenhum; o campo é opcional e quase sempre nulo. E os 12
 >    `f d3` medem 22,7–52,6% contra o `d3_below: 21.0` que o índice declara.
@@ -539,10 +715,10 @@
 >    devolve o avatar atual como meta, e `gain_muscle` devolve um corpo mais gordo
 >    como "sua melhor versão".
 >
-> ✅ **Os três seguem de pé, e o conserto é o passo 3** — mas note que o defeito 1
-> ganhou confirmação independente na sessão 20: o anel do guia do app cai em
-> `at_frac` 0,645, e o `waist_min` da biblioteca em 0,644. **O desenho do app mede
-> a cintura mínima**, exatamente como o índice NÃO faz.
+> ✅ **Os defeitos 2 e 3 foram fechados pelo schema 4.** O 1 caiu em 21/08 pelo
+> lado contrário: o anel do guia do app media **0,637** (cintura mínima), e quem
+> estava errado passou a ser o **desenho**, não o índice. ✅ **Já desceu para
+> 0,599** — `qa/probe/sondas/anel_guia.py`, sonda nova.
 >
 > ✅ **A pendência do `ombro.png` morreu:** o arquivo commitado é um **anel**. Foi
 > ele quem estava certo.

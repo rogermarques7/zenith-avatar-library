@@ -239,29 +239,59 @@ def main():
                      "assinaria um erro." % (aid, entry.get("glb_version"),
                                              versoes[aid]))
 
-    cases = build_cases(mapa, index)
-    for c in cases:
-        i = c["input"]
-        c["expect_influences"] = {
-            k: round(v, 6)
-            for k, v in solve(mapa[i["avatar_id"]], i["height_m"],
-                              i["measures_cm"], i["columns_used"]).items()
-        }
-
-    payload = {
-        "generated_from": {
-            "map_avatars": sorted(k for k in mapa if "morphs" in mapa[k]),
-            "glb_versions": {k: mapa[k].get("glb_version")
-                             for k in sorted(mapa) if "morphs" in mapa[k]},
-            "index_generated_at": index["generated_at"],
-        },
-        "tolerance": {"influence": 1e-06},
-        "cases": cases,
+    # A PROCEDENCIA do banco, e ela e gravada na geracao E cobrada no --check.
+    # Gravar sem cobrar de volta e o que deixou o `selection_cases.json` quatro
+    # dias velho em 16/08 sem nenhuma regua daqui acusar - ver a mesma trava em
+    # `select.py`, dentro do `--check`.
+    stamp_atual = {
+        "map_avatars": sorted(k for k in mapa if "morphs" in mapa[k]),
+        "glb_versions": {k: mapa[k].get("glb_version")
+                         for k in sorted(mapa) if "morphs" in mapa[k]},
+        "index_generated_at": index["generated_at"],
     }
 
     if args.check:
         with open(OUT_PATH, encoding="utf-8") as f:
             banco = json.load(f)
+
+        # TRAVA DE CARIMBO. Duas falhas, duas acoes opostas:
+        #
+        #   carimbo velho    -> `python scripts/morph_cases.py`, e ler o diff.
+        #   influence errada -> a regra mudou de resposta; regerar apaga a prova.
+        #
+        # ⚠️ E e ela que da UTILIDADE a este --check fora da receita. Rodado logo
+        # depois da geracao, ele compara o arquivo recem-escrito com a mesma
+        # `solve()` que o escreveu: so pode passar. O carimbo e a unica dimensao
+        # em que ele pode reprovar sem que nada no codigo tenha mudado.
+        stamp = banco.get("generated_from") or {}
+        divergiu = []
+        for k, v in stamp_atual.items():
+            if stamp.get(k) == v:
+                continue
+            if k == "index_generated_at":
+                detalhe = "banco {!r}   indice {!r}".format(stamp.get(k), v)
+            elif k == "map_avatars":
+                no_banco = set(stamp.get(k) or [])
+                agora = set(v)
+                detalhe = "{} no banco, {} no mapa (so no mapa: {} | so no banco: {})".format(
+                    len(no_banco), len(agora),
+                    sorted(agora - no_banco) or "-", sorted(no_banco - agora) or "-")
+            else:
+                no_banco = stamp.get(k) or {}
+                mudou = sorted(i for i in set(no_banco) | set(v)
+                               if no_banco.get(i) != v.get(i))
+                detalhe = "{} avatar(es) com glb_version diferente: {}".format(
+                    len(mudou), ", ".join("{} v{}->v{}".format(i, no_banco.get(i), v.get(i))
+                                          for i in mudou[:8]) + (" ..." if len(mudou) > 8 else ""))
+            divergiu.append((k, detalhe))
+        if divergiu:
+            print("BANCO VELHO - test/morph_cases.json foi gerado de outro mapa/indice:")
+            for k, detalhe in divergiu:
+                print("  {:19s} {}".format(k, detalhe))
+            sys.exit("Rode: python scripts/morph_cases.py  - e leia o diff antes de copiar\n"
+                     "para o app. Curva e medida SOBRE uma malha: banco velho com GLB novo\n"
+                     "publica influence que ninguem gerou.")
+
         ruins = 0
         for c in banco["cases"]:
             i = c["input"]
@@ -276,6 +306,21 @@ def main():
             sys.exit("%d divergencia(s)" % ruins)
         print("%d casos conferidos, todos batem" % len(banco["cases"]))
         return
+
+    cases = build_cases(mapa, index)
+    for c in cases:
+        i = c["input"]
+        c["expect_influences"] = {
+            k: round(v, 6)
+            for k, v in solve(mapa[i["avatar_id"]], i["height_m"],
+                              i["measures_cm"], i["columns_used"]).items()
+        }
+
+    payload = {
+        "generated_from": stamp_atual,
+        "tolerance": {"influence": 1e-06},
+        "cases": cases,
+    }
 
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, "w", encoding="utf-8") as f:

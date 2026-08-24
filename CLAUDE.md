@@ -11,7 +11,7 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 
 | quando a tarefa for… | ler ANTES de agir | tamanho |
 |---|---|---:|
-| **QUALQUER COISA que toque o app Zenith** — medida, seleção, objetivo, contrato | `docs/INTEGRACAO_ZENITH.md` | **7,5k** |
+| **QUALQUER COISA que toque o app Zenith** — medida, seleção, objetivo, contrato | `docs/INTEGRACAO_ZENITH.md` | **8,4k** |
 | **montar prompt de folha** | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 5,2k / 2,4k |
 | decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,5k |
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |
@@ -23,7 +23,7 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 | entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-08.md` (11,5k) · `diario-2026-07.md` (**grep**) | 61,3k |
 | o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
 
-> Leitura padrão: `CLAUDE.md` **8,0k** + `state.md` **16,5k** = **24,5k** antes de
+> Leitura padrão: `CLAUDE.md` **8,3k** + `state.md` **18,7k** = **27,0k** antes de
 > qualquer trabalho. O `LICOES.md` seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
 > 26,3k → 28,6k → 29,9k → 31,2k → 32,3k → **37,5k**, com a §4.5f, a §4.5g, a
 > §7.22b e a §7.25b da sessão 30).
@@ -125,6 +125,16 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
 
     ⚠️ **Quem procura extremo numa banda tem que denunciar a borda.** Toda medida de extremo grava `at_band_edge: hi|lo` quando o pico encosta no limite da faixa. Isso existe porque a `CALF_BAND` media o **joelho** em 50 dos 76 avatares sem nada acusar: o máximo travava em 0,320 exato, a própria borda. **Exceção: na coxa o `hi` é anatomia, não defeito** (ela é mais larga colada na virilha) — por isso está fora do aviso. `LICOES.md` §1.8
 6. `build_index.py` — monta o `library.json` a partir das medidas. **Schema 4 desde 03/08: a seleção é por MEDIDAS**, não mais por IMC dentro de linha de definição, e publica escala por sexo, `z_cap`, faixa plausível, pesos e vetor de objetivo
+    ⚠️ **`waist_cm` do app é `waist_navel` desde 21/08, não `waist_min`.** Os
+    dois primeiros corpos reais medidos no projeto puseram a fita no UMBIGO, com
+    o rótulo do app já corrigido para "Cintura" — o rótulo não venceu o hábito. O
+    viés é **+2,8 cm no masculino e +13,7 cm no feminino** (a coleção feminina é
+    ampulheta), e na coluna de maior peso ele fazia a regra subir de IMC atrás de
+    cintura. ✅ **O `abdomen.png` do app já desceu** (anel de 0,637 para 0,599);
+    🔴 **o guia FEMININO ainda não existe e o anel dele vai no UMBIGO**, não na
+    cinturinha — é contraintuitivo e é lá que o erro custa os 13,7 cm.
+    `INTEGRACAO_ZENITH.md` §3. Régua: `qa/probe/sondas/anel_guia.py`.
+
 6b. `select.py` — **a REGRA de seleção, e é a implementação de REFERÊNCIA.** A mesma regra vive em três linguagens (aqui, no `avatar_tester.html` em JS, e no app em Dart); o que diverge entre elas é *qual corpo o usuário vê*. A defesa é `test/selection_cases.json`: 34 casos que as três rodam. **Mexeu na regra → muda AQUI primeiro, `--cases`, e copia índice e casos para o app.** `--demo` responde com medidas na linha de comando
 7. ~~`render.py` — frames de turntable~~ ❌ **não é necessário e não vai ser
    escrito (avaliado em 16/08).** Ele existia para uma pergunta em aberto do
@@ -194,7 +204,13 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
 
     ⚠️ **Morph com um lado SATURADO calibra pelo outro** (`cal_sign`). O pescoço é mínimo de banda travado pelo queixo: crescer satura em +2,2 cm, e calibrar por lá fazia a amplitude fugir para o teto — o lado negativo virava −19 cm com 206 triângulos invertidos. `LICOES.md` §7.16
 
-    ⚠️ **Coluna que a seleção descartou não morfa.** `LICOES.md` §7.18
+    ⚠️ **Coluna que a seleção descartou não morfa.** `LICOES.md` §7.18 — e em
+    21/08 isso quase passou batido: trocar a coluna da cintura no índice **zerou
+    `morph_waist` em 357 dos 608 casos**, em silêncio. Quem trocar coluna de
+    seleção tem que trocar a do morph junto. ✅ **`cal_column`** existe para isso
+    sair barato: calibra a amplitude numa régua e publica a curva noutra, então
+    o deslocamento gravado no GLB não muda e o `--remap` basta (76 avatares,
+    divergência 0,000 mm, zero versão gasta).
 
     ⚠️ **Cada morph passa sozinho e a SOMA quebra.** O estado com todos ligados
     juntos enruga o cós do short, e desde 11/08 ele é **trava**, não relatório: a

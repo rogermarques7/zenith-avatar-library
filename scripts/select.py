@@ -344,7 +344,7 @@ def build_cases(index):
             "why": "usuario que so mediu cintura, quadril e ombro",
             "input": {"sex": sex, "height_cm": ref_h * 100,
                       "weight_kg": round(parcial["measured_bmi"] * ref_h * ref_h, 1),
-                      "measures": measures_of(parcial, ["waist_min", "hip", "shoulder"])},
+                      "measures": measures_of(parcial, ["waist_navel", "hip", "shoulder"])},
             "expect_id": None,      # preenchido pelo run: nao ha resposta obvia a priori
         })
 
@@ -394,7 +394,7 @@ def build_cases(index):
             "name": "fallback/poucas-colunas/{}".format(sex),
             "why": "duas colunas so, abaixo de min_columns: tem que cair no IMC",
             "input": {"sex": sex, "height_cm": 175.0, "weight_kg": 72.0,
-                      "measures": measures_of(picks[1], ["waist_min", "hip"])},
+                      "measures": measures_of(picks[1], ["waist_navel", "hip"])},
             "expect_id": None,
         })
 
@@ -504,6 +504,41 @@ def main():
             sys.exit("test/selection_cases.json nao existe. Rode: python scripts/select.py --cases")
         with open(CASES_PATH, "r", encoding="utf-8") as f:
             payload = json.load(f)
+
+        # TRAVA DE CARIMBO - e ela responde uma pergunta DIFERENTE da dos casos.
+        #
+        # Os `expect_id` sao ids de avatar: o banco so responde pelo indice que o
+        # gerou. Em 16/08 o `build_index.py` regerou o `library.json` e ninguem
+        # regerou o banco; este `--check` respondeu 34/34 por quatro dias enquanto
+        # o teste do app estava vermelho, porque conferir RESPOSTA e cego para
+        # PROCEDENCIA. O Dart ja cobrava isso (`avatar_selection_test.dart:43`) e
+        # era a UNICA das tres implementacoes que cobrava.
+        #
+        # As duas falhas pedem acoes OPOSTAS, e por isso saem separadas:
+        #
+        #   carimbo velho   -> `python scripts/select.py --cases`, e LER O DIFF.
+        #   caso reprovado  -> a regra mudou de resposta. Regerar aqui APAGA a
+        #                      prova; investigar antes de tocar no banco.
+        #
+        # Ela nao se auto-conserta de proposito: trava que se conserta sozinha
+        # nao e trava, e regerar em silencio e exatamente como um `expect_id`
+        # errado entraria no app sem ninguem ver.
+        stamp = payload.get("generated_from") or {}
+        atual = {
+            "schema_version": index["schema_version"],
+            "generated_at": index["generated_at"],
+            "avatars": len(index["avatars"]),
+        }
+        divergiu = [(k, stamp.get(k), v) for k, v in atual.items() if stamp.get(k) != v]
+        if divergiu:
+            print("BANCO VELHO - test/selection_cases.json foi gerado de outro library.json:")
+            for k, no_banco, no_indice in divergiu:
+                print("  {:15s} banco {!r}   indice {!r}".format(k, no_banco, no_indice))
+            sys.exit("Rode: python scripts/select.py --cases  - e LEIA O DIFF antes de copiar\n"
+                     "para o app. Diff de UMA linha (so o carimbo) = a recalibracao nao moveu\n"
+                     "resposta nenhuma, pode copiar. Qualquer `expect_id` no diff = mudou QUAL\n"
+                     "CORPO O USUARIO VE, e ai alguem olha caso a caso antes do cp.")
+
         bad = 0
         for c in payload["cases"]:
             i = c["input"]

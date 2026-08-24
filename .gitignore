@@ -34,3 +34,13 @@ __pycache__/
 *.pyc
 Thumbs.db
 .DS_Store
+
+# 🔴 FOTOS PESSOAIS — NUNCA ENTRAM NO GIT.
+# Este repositorio e PUBLICO. A pasta abaixo tem as fotos de corpo do Rogerio e
+# da Joice, com fita metrica, usadas no teste de calibracao de 21/08. Elas sao a
+# unica calibracao contra pessoa real que o projeto tem, entao ficam no disco -
+# mas commit e irreversivel (historico, forks, cache do GitHub) e uma delas nao e
+# de quem opera este repositorio.
+# O que o projeto PODE publicar sao os NUMEROS que sairam delas, e esses estao no
+# state.md e no INTEGRACAO_ZENITH.md.
+fotos reais joice e rogerio/

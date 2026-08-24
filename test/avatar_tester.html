@@ -142,6 +142,12 @@
            (Python é a referência, Dart é o app). Vermelho aqui = o que o
            testador mostra deixou de ser o que o app faz. -->
       <div class="colcount" id="casos" style="margin-top:10px"></div>
+      <!-- O placar do MORPH. Ate 20/08 esta pagina implementava a regra de
+           morph (terceira copia, junto com Python e Dart) e NAO rodava caso
+           nenhum: os 608 rodavam so no Python e no app. Uma copia sem arbitro
+           diverge calada, e morph errado e mais silencioso que selecao errada -
+           o corpo continua plausivel na tela. -->
+      <div class="colcount" id="casosMorph" style="margin-top:6px"></div>
     </div>
 
   </div>
@@ -523,8 +529,12 @@ function update(){
 let MORPHS = null;
 fetch("../config/morph_map.json?t="+Date.now())
   .then(r => r.ok ? r.json() : null)
-  .then(j => { MORPHS = j; montarMorph(); if(LIB) renderQuick(); })
-  .catch(() => { MORPHS = null; });
+  .then(j => { MORPHS = j; montarMorph(); if(LIB) renderQuick(); talvezRodarCasosMorph(); })
+  .catch(() => {
+    MORPHS = null;
+    document.getElementById("casosMorph").innerHTML =
+      "<span class='fallback-note'>não li config/morph_map.json — os casos de morph não rodaram</span>";
+  });
 
 // O model-viewer nao expoe a cena do three.js na API publica. Em vez de casar o
 // NOME do simbolo interno (que muda de versao para versao), procura-se a
@@ -550,16 +560,78 @@ function malhasComMorph(){
 // morph_neck entrega +3,2 cm em influence 0,5 e so +3,8 em 1,0, porque ele e um
 // MINIMO de banda e crescer o meio empurra o minimo para a borda travada pelo
 // queixo. Multiplicar erra 68% ali. A curva ja vem limitada a faixa segura.
+// ⚠️ REESCRITA EM 20/08 para espelhar o `interp_influence` do
+// `scripts/morph_cases.py` PONTO A PONTO. A versao anterior tinha duas
+// divergencias latentes contra a referencia, e nenhuma podia ser vista sem
+// banco de casos - que esta pagina nao rodava:
+//   1. nao ordenava a curva por influence (o Python ordena);
+//   2. nao protegia span zero — dois pontos com o mesmo cm davam divisao por
+//      zero e a influence saia Infinity, ou seja, o slider no teto.
 function influenceDaCurva(curva, cm){
-  const inf = curva.map(p => p[0]), cms = curva.map(p => p[1]);
-  if(cm <= cms[0]) return inf[0];
-  for(let i=1;i<cms.length;i++){
-    if(cm <= cms[i]){
-      const t = (cm - cms[i-1]) / (cms[i] - cms[i-1]);
-      return inf[i-1] + t*(inf[i] - inf[i-1]);
+  if(!curva || curva.length < 2) return 0;
+  const pts = curva.slice().sort((a,b) => a[0]-b[0]);   // por influence
+  if(cm <= pts[0][1]) return pts[0][0];
+  if(cm >= pts[pts.length-1][1]) return pts[pts.length-1][0];
+  for(let i=0;i<pts.length-1;i++){
+    const a = pts[i][1], b = pts[i+1][1];
+    if(a <= cm && cm <= b){
+      const span = b - a;
+      if(Math.abs(span) < 1e-9) return pts[i][0];
+      const t = (cm - a) / span;
+      return pts[i][0] + t*(pts[i+1][0] - pts[i][0]);
     }
   }
-  return inf[inf.length-1];
+  return pts[pts.length-1][0];
+}
+
+// A REGRA DO MORPH, PURA - sem DOM, sem slider, sem cena. Espelha o `solve()`
+// do `scripts/morph_cases.py` (§12.1 do contrato), que e a referencia.
+//
+// Ela existe separada por um motivo so: enquanto a regra morava dentro do
+// `aplicarMorph()` — que le slider e escreve em malha — nao havia como rodar os
+// 608 casos contra esta copia. Regra amarrada a tela e regra sem arbitro.
+//
+// `medidasPorColuna` vem com as chaves de COLUNA (waist_min, hip...), nao com
+// as do app (waist_cm), que e o formato do banco de casos.
+function resolverInfluences(ent, alturaM, medidasPorColuna, colunasUsadas){
+  const out = {};
+  // Sem coluna comparada, a selecao caiu no fallback por IMC: nao ha o que
+  // esculpir. Mesma guarda do Python.
+  if(!ent || !ent.morphs || !(alturaM > 0)) return out;
+  if(!colunasUsadas || !colunasUsadas.length) return out;
+
+  const k = LIB.reference_height_m / alturaM;
+  const usadas = new Set(colunasUsadas);
+  const trava = (m, v) => Math.max(m.influence_min, Math.min(m.influence_max, v));
+
+  // 1a passada: os morphs de TAMANHO, que saem das medidas.
+  for(const m of ent.morphs){
+    if(m.column == null) continue;
+    // 🔴 Zero EXPLICITO, nao "deixa como esta": o shape key pode carregar valor
+    // de um render anterior.
+    if(!usadas.has(m.column)){ out[m.key] = 0; continue; }
+    const v = medidasPorColuna[m.column];
+    if(v == null || !(v > 0)){ out[m.key] = 0; continue; }
+    out[m.key] = trava(m, influenceDaCurva(m.curve, v*k - m.base_cm));
+  }
+
+  // 2a passada: as ACOPLADAS, que dependem do resultado da 1a.
+  for(const m of ent.morphs){
+    if(!m.couple) continue;
+    const driver = out[m.couple] || 0;
+    out[m.key] = trava(m, m.couple_when === "positive" ? Math.max(0, driver) : driver);
+  }
+  return out;
+}
+
+// As medidas digitadas, com as chaves de COLUNA e ja no formato que a regra
+// pura espera.
+function medidasPorColuna(){
+  const medidas = medidasAtuais(), out = {};
+  for(const [campo, col] of Object.entries(LIB.selection.app_field_map)){
+    if(medidas[campo] != null) out[col] = medidas[campo];
+  }
+  return out;
 }
 
 // O quanto o usuario pede daquela coluna, JA na estatura de referencia: os
@@ -601,20 +673,25 @@ function aplicarMorph(){
   // Rogério o erro de profundidade ia de 1,9 para 3,6 cm. Reduzir cintura
   // continua isotrópico, que é o que emagrecer faz.
   const infs = {};
-  for(const m of ent.morphs){
-    if(m.kind === "flatten") continue;
-    const sl = document.querySelector(`#morphSliders input[data-key="${m.key}"]`);
-    if(auto){
-      const p = pedidoEmCm(m);
-      infs[m.key] = p == null ? 0 : influenceDaCurva(m.curve, p);
-    } else {
+  if(auto){
+    // ⚠️ A REGRA VEM DA FUNCAO PURA, a mesma que os 608 casos exercitam. Se o
+    // que a tela mostra saisse de um caminho proprio, o placar verde nao diria
+    // nada sobre o corpo em exibicao.
+    Object.assign(infs, resolverInfluences(
+      ent, +altura_.value/100, medidasPorColuna(), COLUNAS_USADAS));
+    for(const m of ent.morphs) if(infs[m.key] == null) infs[m.key] = 0;
+  } else {
+    for(const m of ent.morphs){
+      if(m.kind === "flatten") continue;
+      const sl = document.querySelector(`#morphSliders input[data-key="${m.key}"]`);
       infs[m.key] = sl ? +sl.value : 0;
     }
-  }
-  for(const m of ent.morphs){
-    if(m.kind !== "flatten") continue;
-    const base = infs[m.couple] || 0;
-    infs[m.key] = (m.couple_when === "positive") ? Math.max(0, base) : base;
+    for(const m of ent.morphs){
+      if(m.kind !== "flatten") continue;
+      const base = infs[m.couple] || 0;
+      const v = (m.couple_when === "positive") ? Math.max(0, base) : base;
+      infs[m.key] = Math.max(m.influence_min, Math.min(m.influence_max, v));
+    }
   }
 
   for(const m of ent.morphs){
@@ -795,14 +872,37 @@ document.querySelectorAll("#sexsw button").forEach(b=>b.onclick=()=>{
 // Este e o unico jeito de saber que o JS daqui nao se afastou do Python. Roda
 // sozinho no load: se ficar vermelho, a regra desta pagina divergiu e o que ela
 // mostra deixou de ser o que o app faz.
+// A TRAVA DE CARIMBO, em texto - a mesma dos dois `--check` do Python e da
+// primeira asserção do `avatar_selection_test.dart`. Devolve a divergência ou
+// null. Banco velho e regra mudada pedem AÇÕES OPOSTAS e não podem sair com a
+// mesma mensagem: uma se conserta regerando, a outra se investiga.
+function conferirCarimbo(stampNoBanco, atual){
+  const fora = [];
+  for(const [k, v] of Object.entries(atual)){
+    const tinha = (stampNoBanco || {})[k];
+    if(JSON.stringify(tinha) !== JSON.stringify(v))
+      fora.push(`${k}: banco <b>${JSON.stringify(tinha)}</b> · atual <b>${JSON.stringify(v)}</b>`);
+  }
+  return fora.length ? fora : null;
+}
+function bancoVelho(box, fora, comando){
+  box.innerHTML = "<span class='fallback-note'>BANCO VELHO — gerado de outro índice/mapa:<br>"+
+    fora.join("<br>")+`<br>rode <code>${comando}</code> e leia o diff antes de copiar `+
+    "para o app</span>";
+}
+
 function rodarCasos(){
   const box = document.getElementById("casos");
   fetch("./selection_cases.json?t="+Date.now()).then(r=>r.json()).then(banco=>{
-    if(banco.generated_from.generated_at !== LIB.generated_at){
-      box.innerHTML = "<span class='fallback-note'>casos gerados de outro índice "+
-        "— rode <code>python scripts/select.py --cases</code></span>";
-      return;
-    }
+    // ⚠️ Os TRES campos, não só a data. O Dart cobra os três desde sempre
+    // (`avatar_selection_test.dart:47-52`) e esta página cobrava um: um avatar
+    // entrando ou saindo do índice sem o carimbo mudar passava batido aqui.
+    const fora = conferirCarimbo(banco.generated_from, {
+      schema_version: LIB.schema_version,
+      generated_at:   LIB.generated_at,
+      avatars:        LIB.avatars.length,
+    });
+    if(fora){ bancoVelho(box, fora, "python scripts/select.py --cases"); return; }
     const falhas = [];
     for(const c of banco.cases){
       const i = c.input;
@@ -821,11 +921,56 @@ function rodarCasos(){
   });
 }
 
+// ---- os 608 casos do MORPH, rodados nesta copia da regra -------------------
+//
+// Nasceu em 20/08. Ate aqui esta pagina implementava a regra de morph e nao
+// rodava caso nenhum - o `morph_cases.json` so era exercitado pelo Python e
+// pelo Dart. Precisa de LIB e de MORPHS, que chegam por fetches independentes,
+// entao os dois chamam e quem chegar por ultimo executa.
+function talvezRodarCasosMorph(){
+  if(!LIB || !MORPHS) return;
+  const box = document.getElementById("casosMorph");
+  fetch("./morph_cases.json?t="+Date.now()).then(r=>r.json()).then(banco=>{
+    const stamp = banco.generated_from || {};
+    const noMapa = Object.keys(MORPHS).filter(k => MORPHS[k] && MORPHS[k].morphs).sort();
+    const fora = conferirCarimbo(stamp, {
+      index_generated_at: LIB.generated_at,
+      map_avatars:        noMapa,
+      glb_versions:       Object.fromEntries(noMapa.map(k => [k, MORPHS[k].glb_version])),
+    });
+    if(fora){
+      // A lista dos 76 ids nao cabe na tela; o que importa e QUAL campo saiu.
+      bancoVelho(box, fora.map(f => f.split(":")[0] + " fora de sincronia"),
+                 "python scripts/morph_cases.py");
+      return;
+    }
+    const tol = banco.tolerance.influence;
+    const falhas = [];
+    for(const c of banco.cases){
+      const i = c.input;
+      const got = resolverInfluences(MORPHS[i.avatar_id], i.height_m,
+                                     i.measures_cm, i.columns_used);
+      for(const [k, esperado] of Object.entries(c.expect_influences)){
+        if(Math.abs((got[k] || 0) - esperado) > tol)
+          falhas.push(`${c.name}/${k}: banco ${esperado.toFixed(6)}, esta página ${(got[k]||0).toFixed(6)}`);
+      }
+    }
+    const n = banco.cases.length;
+    box.innerHTML = falhas.length
+      ? `<span class='fallback-note'>${falhas.length} caso(s) de MORPH FALHARAM de ${n}:<br>`+
+        falhas.slice(0,12).join("<br>")+(falhas.length>12?"<br>…":"")+"</span>"
+      : `<span style="color:#5bd18a">${n}/${n} casos de morph passaram</span>`;
+  }).catch(err => {
+    box.innerHTML = "<span class='fallback-note'>não li morph_cases.json ("+err+")</span>";
+  });
+}
+
 fetch("../library.json?t="+Date.now()).then(r=>r.json()).then(lib=>{
   LIB = lib;
   for(const a of lib.avatars) AVAILABLE.add(a.id);
   montarCampos();
   rodarCasos();
+  talvezRodarCasosMorph();
   const n = s => lib.avatars.filter(a=>a.sex===s).length;
   document.getElementById("nM").textContent="("+n("m")+")";
   document.getElementById("nF").textContent="("+n("f")+")";
