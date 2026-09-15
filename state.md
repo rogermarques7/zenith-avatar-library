@@ -1,6 +1,66 @@
 ﻿# state.md — o presente
 
-Última atualização: **21/08/2026, sessão 31**
+Última atualização: **15/09/2026, sessão 32**
+
+> ## 🆕 SESSÃO 32 — A PRODUÇÃO REABRIU, E O EIXO NOVO É **FORMA**
+>
+> Assinatura da Meshy renovada (~1.120 créditos). Pauta: o handoff do app
+> (`zenith/claude/handoff_biblioteca_corpos_faltando.md`) conta buracos no eixo
+> de **IMC**; medindo as razões da coleção apareceu um eixo que a grade não vê.
+>
+> 🔴 **O feminino tinha ZERO retângulo e ZERO maçã** na faixa de usuário, e
+> cintura-fina-com-glúteo-largo só existia em corpo de atleta `d3`. **Tudo em
+> `docs/COBERTURA_FORMAS.md`** — a lista das células, a régua (WHR/SHR), o que
+> falta e o que a sessão mediu. **Ler ANTES de escolher o próximo avatar.**
+>
+> ### ✅ 5 CORPOS NOVOS — a coleção foi de 76 para **81**
+>
+> | id | IMC | WHR | SHR | fecha |
+> |---|---:|---:|---:|---|
+> | `zen_f_b07h_d1` | 27,9 | 0,869 | 0,932 | — (ficou na fresta) |
+> | `zen_f_b07i_d1` | 27,9 | **0,923** | **1,009** | retângulo/maçã ~27 |
+> | `zen_f_b05h_d1` | 24,7 | 0,905 | 0,984 | retângulo/maçã ~24 |
+> | `zen_f_b08_d2` | 33,4 | 0,716 | 0,736 | violão pesado |
+> | `zen_f_b08h_d2` | 28,4 | 0,743 | 0,765 | **violão BR** (WHRmin 0,552) |
+>
+> **Régua externa — a Joice:** distância **0,73 → 0,4205** (critério era ≤0,45),
+> 9 de 9 colunas, erro médio 3,0 cm.
+>
+> ### 🔴 A MESHY TROCOU DE MODELO — Multi-View só roda em MESHY 7
+>
+> Trocar para Meshy 6 **faz o Multi-View sumir**: o caminho dos 76 não é mais
+> reproduzível. Calibração rodada (mesmas refs do `b04i_d1`, 20 créditos):
+> **o Meshy 7 lê o mesmo desenho ~+1,9 de IMC maior**, 11 colunas de 11 para
+> cima, erro médio 2,5 cm — **mas as razões atravessam intactas** (WHR 0,836 →
+> 0,830). Ou seja: **forma transfere, tamanho não.** As tabelas de passo do
+> `LICOES.md` §2.4/§2.5 estão em unidades de Meshy 6.
+> Cru e master da calibração em `qa/calib_meshy7/`.
+>
+> ⚠️ **Melhoria de imagem: DESLIGAR.** Uma malha veio com 38,4 mm de assimetria
+> no ombro (teto 20) e foi reprovada pelo `process.py`; regerada com o botão
+> desligado deu **5,2 mm**. Uma amostra, custo zero, e o passo de IMC não mudou.
+>
+> ### ⏭️ ONDE A PRÓXIMA SESSÃO COMEÇA
+>
+> **Faltam 25 corpos** (~500 créditos, saldo ~980): 11 femininos da 1ª onda, 12
+> masculinos da 2ª e 2 vãos `high` de IMC. **O próximo é o B2** — violão em IMC
+> ~24, âncora `zen_f_b02_d2` (18,3), com o prompt da última folha trocando só o
+> anexo. A régua de mira: **a cláusula de volume-para-baixo vale +6,1 de IMC
+> sobre a âncora**, reproduzida em duas amostras.
+>
+> ### 🔴 O QUE NÃO PODE IR PARA O APP AINDA
+>
+> Os 5 novos **não têm peça pintada e não têm morph**. O `library.json` já os
+> lista (81), mas:
+> - `config/morph_map.json` segue com **76** — corpo sem entrada lá aparece e
+>   **não responde às medidas**;
+> - `test/selection_cases.json` e `test/morph_cases.json` estão com o carimbo
+>   velho e vão reprovar de propósito (é a trava de procedência de 20/08);
+> - os 5 GLBs **não estão no Storage**.
+>
+> **Não copiar índice para o app nem rodar `publish_avatars.py`** até fechar
+> `shorts.py --fit/--apply` e `morph.py --fit/--apply` nos 5. Essa é a fase
+> automática que o Rogério já separou: primeiro a criação, depois peça e morph.
 
 > ## 🧍 SESSÃO 31 — OS DOIS PRIMEIROS CORPOS REAIS, E A CINTURA MUDOU DE COLUNA
 >
@@ -664,11 +724,14 @@
 > ⚠️ Altura: o `process.py` normaliza para 1,75 m. Comparar por
 > `medida_avatar × (altura_real / 1,75)`, ou pelas razões.
 >
-> ### 🛑 A produção de avatares segue parada por falta de crédito na Meshy
+> ### ▶️ A PRODUÇÃO REABRIU EM 14/09 — assinatura renovada, ~1000 créditos
 >
-> **Não montar prompt de folha, não pedir geração, não propor "só mais um"** — a
-> folha é grátis, o GLB não é, e uma folha aprovada esperando crédito é trabalho
-> que envelhece.
+> ~~A produção segue parada por falta de crédito~~ — **destravada.** A pauta é
+> **`docs/COBERTURA_FORMAS.md`**, criado nesta sessão: o que falta não é só
+> tamanho (o `handoff_biblioteca_corpos_faltando.md` do app conta o eixo de IMC),
+> é **FORMA**. Feminino tem **zero** retângulo e **zero** maçã na faixa de
+> usuário, e cintura-fina-com-glúteo-largo só existe em corpo de atleta `d3`.
+> **Ordem dele: femininos primeiro** (1ª onda, 17 corpos).
 >
 > ### ✅ OS 39 SHORTS MASCULINOS ESTÃO DE VOLTA — 38 reaplicados na sessão 21
 >
@@ -989,8 +1052,13 @@ cd qa/probe/sondas && python probe_tonus_f.py "<ancora COMPLETO>" "<folha>"
    (recebe CAMINHOS de arquivo, nao ids - passar id da erro de arquivo nao achado)
 python scripts/intake.py  zen_f_bXX_d3 --from "<caminho da folha>"
 python scripts/crop.py    zen_f_bXX_d3
-   (Meshy: Multi-View, Meshy 6 Padrao, densidade alta, SEM textura,
-    divisao automatica DESLIGADA. O slot da lateral tanto faz - medido.)
+   (Meshy 14/09/2026: Multi-View so roda em MESHY 7 - Flagship / Alto Detalhe.
+    Trocar para Meshy 6 ou Smart Topology FAZ O MULTI-VIEW SUMIR - nao da mais
+    para reproduzir o caminho dos 76. Resolucao PADRAO (20 cr; Ultra 2K custa
+    25), SEM textura (+10), SEM dividir (+10), Pose DESLIGADA, licenca Privado.
+    O slot da lateral tanto faz - medido.
+    ⚠️ Os 76 sao Meshy 6: a troca de gerador de MALHA nao foi medida. Ver
+    docs/COBERTURA_FORMAS.md §8.)
 python scripts/process.py zen_f_bXX_d3      # 60k, 8/8
 python scripts/metrics.py zen_f_bXX_d3
 python scripts/build_index.py               # imprime os vaos
