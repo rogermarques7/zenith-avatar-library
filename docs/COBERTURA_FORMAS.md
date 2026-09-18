@@ -128,32 +128,34 @@ Passo de ~3 de IMC dentro de cada forma. Não é a grade de 1,5 do handoff: o
 morph fecha resíduo de **tamanho** dentro de uma forma; o que ele não faz é
 trocar de forma.
 
-### 1ª onda — FEMININO, 17 corpos · **5 FEITOS em 15/09, 11 faltam**
+### 1ª onda — FEMININO, 17 corpos · ✅ **FECHADA em 17/09 — 17 de 17**
 
 | # | forma | alvo IMC | def | WHR alvo | SHR alvo | estado |
 |---|---|---:|---|---|---|---|
-| **A1** | **Retângulo / reto** | **26** | d1 | ≥ 0,88 | ≥ 1,03 | ✅ **`zen_f_b07i_d1` 27,9** · WHR 0,923 · SHR 1,009 |
-| A2 | Retângulo | 23 | d2 | ≥ 0,85 | ≥ 1,00 | ✅ **`zen_f_b05h_d1` 24,7** · WHR 0,905 · SHR 0,984 |
+| **A1** | **Retângulo / reto** | **26** | d1 | ≥ 0,88 | ≥ 1,03 | ✅ `zen_f_b07i_d1` 27,9 · WHR 0,923 · SHR 1,009 |
+| A2 | Retângulo | 23 | d2 | ≥ 0,85 | ≥ 1,00 | ✅ `zen_f_b05h_d1` 24,7 · WHR 0,905 · SHR 0,984 |
 | A3 | Retângulo | 29 | d1 | ≥ 0,88 | ≥ 1,00 | ⚠️ na prática coberto pelo A1 (27,9) |
-| A4 | Retângulo | 20 | d2 | ≥ 0,85 | ≥ 1,00 | 🔴 |
-| A5 | Retângulo | 32 | d1 | ≥ 0,88 | ≥ 1,00 | 🔴 |
-| **B1** | **Violão não-atlética** | **27** | d2 | ≤ 0,72 | < 0,92 | ✅ **`zen_f_b08h_d2` 28,4** · WHR 0,743 · **WHRmin 0,552** · quadril 129,8 |
-| B2 | Violão não-atlética | 24 | d2 | ≤ 0,72 | < 0,92 | 🔴 **é o próximo** |
-| B3 | Violão não-atlética | 30 | d1 | ≤ 0,74 | < 0,90 | ✅ **`zen_f_b08_d2` 33,4** · WHR 0,716 · quadril 141,0 (pousou alto) |
+| A4 | Retângulo | 20 | d2 | ≥ 0,85 | ≥ 1,00 | ✅ **`zen_f_b03h_d1` 21,5** · WHR 0,914 · SHR 1,052 |
+| A5 | Retângulo | 32 | d1 | ≥ 0,88 | ≥ 1,00 | ✅ coberto pelo C3 (`b09h_d1` 33,9 · 0,957/0,998) |
+| **B1** | **Violão não-atlética** | **27** | d2 | ≤ 0,72 | < 0,92 | ✅ `zen_f_b08h_d2` 28,4 · WHR 0,743 · **WHRmin 0,552** |
+| B2 | Violão não-atlética | 24 | d2 | ≤ 0,72 | < 0,92 | ✅ **`zen_f_b05i_d2` 22,8** (0,731) + **`b05h_d2` 26,7** (0,756) — ver §10 |
+| B3 | Violão não-atlética | 30 | d1 | ≤ 0,74 | < 0,90 | ✅ `zen_f_b08_d2` 33,4 · WHR 0,716 · quadril 141,0 |
+| — | violão extrema (passista) | — | d2 | — | — | ✅ **`zen_f_b07h_d2` 28,5** · **WHRmin 0,484** e **SHR 0,721**, os dois recordes |
 | C1 | Maçã / oval | 29 | d1 | ≥ 0,92 | ≥ 0,95 | ⚠️ coberto pelo A1 |
 | C2 | Maçã / oval | 26 | d1 | ≥ 0,92 | ≥ 0,95 | ⚠️ coberto pelo A2 |
-| C3 | Maçã / oval | 32 | d1 | ≥ 0,92 | ≥ 0,95 | 🔴 |
-| C4 | Maçã / oval | 35 | d1 | ≥ 0,92 | ≥ 0,95 | 🔴 |
-| D1 | Tri. invertido não-atleta | 26 | d2 | — | ≥ 1,05 | 🔴 |
-| D2 | Tri. invertido não-atleta | 22 | d2 | — | ≥ 1,05 | 🔴 |
-| D3 | Tri. invertido não-atleta | 30 | d1 | — | ≥ 1,05 | 🔴 |
-| **E1** | Ampulheta (vão de tamanho) | **24,5** | d3 | — | — | 🔴 **caso da Aura** |
-| E2 | Ampulheta (vão de tamanho) | 26,0 | d3 | — | — | 🔴 **caso da Aura** |
+| C3 | Maçã / oval | 32 | d1 | ≥ 0,92 | ≥ 0,95 | ✅ **`zen_f_b09h_d1` 33,9** · WHR 0,957 · SHR 0,998 |
+| C4 | Maçã / oval | 35 | d1 | ≥ 0,92 | ≥ 0,95 | ✅ **`zen_f_b12h_d1` 39,7** · **WHR 0,994** |
+| D1 | Tri. invertido não-atleta | 26 | d2 | — | ≥ 1,05 | ✅ **`zen_f_b07j_d1` 24,4** · SHR 1,097 · WHR 0,977 |
+| D2 | Tri. invertido não-atleta | 22 | d2 | — | ≥ 1,05 | ✅ coberto pelo A4 (`b03h_d1` 21,5 · SHR 1,052) |
+| D3 | Tri. invertido não-atleta | 30 | d1 | — | ≥ 1,05 | ✅ **`zen_f_b09j_d1` 28,4** · **SHR 1,118** · **WHR 1,047** |
+| **E1** | Ampulheta (vão de tamanho) | **24,5** | d3 | — | — | ✅ **`zen_f_b06i_d3` 24,4** — matou o buraco da Aura |
+| E2 | Ampulheta (vão de tamanho) | 26,0 | d3 | — | — | ✅ coberto pelo E1 (o vão `f d3` saiu do `coverage_gaps`) |
 
-> ⚠️ **O `b07h_d1` (27,9 · WHR 0,869 · SHR 0,932) não está nesta tabela porque não
-> fecha célula nenhuma** — ficou na fresta entre pera e retângulo. Não é
-> desperdício (foi ele que levou a Joice de 0,73 para 0,62), mas é o exemplo de
-> que **mirar forma sem categoria nova custa 2 gerações por célula.**
+**Corpos que a onda produziu sem fechar célula, e que ficam** (regra 5b):
+`zen_f_b07h_d1` 27,9 (a fresta entre pera e retângulo, de 15/09) ·
+`zen_f_b11h_d1` 54,8 (erro de mira — ver §10) ·
+`zen_f_b09i_d1` 33,7 (SHR 0,966, a tentativa que não alcançou o D3) ·
+`zen_f_b09i_d3` 38,5 (partiu o maior buraco `high` da coleção, 32,4 → 45,1).
 
 ### 2ª onda — MASCULINO, 12 corpos
 
@@ -360,3 +362,109 @@ primeiro (flood fill por aresta) disse "1 ilha" e escondeu o defeito.
 Critério do §7 era ≤ 0,45. **Batido**, com 9 de 9 colunas na conta e erro médio de
 3,0 cm. O resíduo é cintura +4,9 e quadril +3,7 — as duas colunas com a maior
 amplitude de morph.
+
+---
+
+## 10. O que a sessão de 16–17/09 MEDIU — 12 corpos, e as réguas de passo caíram
+
+**A 1ª onda fechou: 17 de 17 células.** A coleção foi de **81 para 93**.
+
+### 🔴 NENHUMA cláusula de direção tem passo confiável em três amostras
+
+A §9 declarou a cláusula de volume-para-baixo como *"a primeira régua de mira que
+reproduziu"*. **Ela quebrou na terceira**, e o mesmo aconteceu com a segunda régua
+que esta sessão achou:
+
+| lever | amostras | veredito |
+|---|---|---|
+| volume-para-baixo | +6,1 · +6,2 · **+8,4** | quebrou na 3ª |
+| tronco (texto neutro) | +6,0 · +5,8 · **+9,3** | quebrou na 3ª |
+| **subtrativo** (encolhe embaixo) | −3,5 · −3,2 · **−5,3** | quebrou na 3ª |
+| descida por âncora | −3,9 · −3,3 | 2 amostras |
+
+**O padrão é o mesmo nos três: o passo escala com o TAMANHO DA ÂNCORA.** Quanto
+mais pesada a âncora, maior o salto em pontos de IMC. Isso é aritmética de volume
+(IMC vai com massa, e massa cresce com o cubo da escala linear), não capricho do
+gerador — então **régua de passo medida numa faixa não vale em outra**, e é a §5c
+do `CLAUDE.md` aplicada ao prompt.
+
+**O que sobreviveu e vale usar:** a DIREÇÃO de cada lever é confiável; a
+MAGNITUDE não é. Mirar célula de forma funciona; mirar IMC exato, não.
+
+### ✅ O lever SUBTRATIVO é o mais confiável do projeto — e ele é a §2.4d aplicada
+
+*"Encolha quadril, glúteo e coxa; não mexa em nada do tronco."* Três usos, três
+acertos de forma:
+
+| âncora → corpo | SHR | WHR |
+|---|---|---|
+| `b07i_d1` → `b07j_d1` | 1,009 → **1,097** | 0,923 → 0,977 |
+| `b05h_d1` → `b03h_d1` | 0,984 → **1,052** | 0,905 → 0,914 |
+| `b09i_d1` → `b09j_d1` | 0,966 → **1,118** | 0,955 → **1,047** |
+
+**Ele nunca fala em ombro nem em cintura** — mexe só no denominador. O ganho de
+SHR cresce com o quadril disponível: +0,068 num corpo de 105 cm de quadril,
++0,152 num de 122,6.
+
+🔴 **O contraexemplo, na mesma sessão e com 5 minutos de diferença:** mirando o
+A4 eu primeiro pedi *"mais magra, mas a cintura continua larga em relação ao
+quadril"* — o quadril não se mexeu (−0,18 pp) e a cintura desabou; virou pera
+magra e **reprovou**. Reescrito como subtração pura, o mesmo alvo saiu na hora
+(quadril −2,06 pp, `cintura/quadril` 0,667 → 0,731). Mesma célula, mesmo gerador:
+**pedir a razão falha, apertar o denominador funciona.**
+
+### 🔴 Intensificador NÃO é inerte no lever de âncora — custou o `b11h_d1`
+
+A §2.1 do `LICOES.md` mediu que adjetivo de intensidade não move corpo. **Aquilo
+vale para descritor de CATEGORIA.** No lever de âncora ele move, e muito: trocar
+*"com MAIS VOLUME — alguns quilos acima"* por *"CONSIDERAVELMENTE MAIS PESADA…
+bastante acima do peso"* (mais *"barriga MUITO maior"*, *"a cintura some por
+completo"*) levou o passo de **+6,0 para +20,9**. O alvo era 38–41 e veio **54,8**.
+
+**Doutrina:** ao repetir um lever medido, repetir o TEXTO. Mudar âncora e
+redação juntos invalida a régua e não se sabe qual dos dois moveu.
+
+### 🔴 O corte WHR ≤ 0,72 da §5 é INALCANÇÁVEL na linha não-atlética
+
+Cinco violões, cinco âncoras, três levers: **0,716 · 0,731 · 0,743 · 0,748 ·
+0,756**. Não correlaciona com tamanho (o menor WHR saiu do menor quadril).
+
+A causa é anatômica: `waist_navel` fica em 0,600 da altura e, num corpo sem
+tônus, ali passa a barriga mole — que sobe junto com o quadril. Dos 8 corpos
+femininos com WHR ≤ 0,72 na coleção, **6 são `d3`**: barriga chata no umbigo vem
+com definição neste gerador. **O critério pede duas coisas incompatíveis.**
+
+✅ **A régua que SEPARA de verdade é a cintura mínima:** o `b07h_d2` (passista)
+mede **WHRmin 0,484** contra 0,638 da âncora — recorde da coleção, batendo até a
+atleta de wellness (0,524). **Proposta: para `d1`/`d2` usar `WHRmin ≤ 0,58`**, ou
+afrouxar o corte do umbigo para ≤ 0,76. Decisão do Rogério, não aplicada.
+
+### ✅ Categoria do mundo real move FORMA, não só tamanho
+
+*"PASSISTA DE ESCOLA DE SAMBA do Rio, julgada pelo gingado, nunca por músculo"* —
+§2.2b aplicada a um corpo não-atlético. Foi o **único** tiro da sessão em que
+cintura e quadril andaram em direções opostas na folha (cintura −0,92 pp, quadril
++2,69 pp); nos quatro anteriores os dois subiam juntos. Resultado: os dois
+recordes de forma da coleção feminina.
+
+### ⚠️ Conversa suja arrasta o prompt anterior
+
+O mesmo texto, gerado em duas conversas: na antiga (que ainda tinha o prompt de
+crescer-o-tronco) o quadril **subiu** +1,75 pp e a razão ficou parada em 1,074;
+na nova, o quadril **caiu** −2,10 pp e a razão foi a 1,182. **Folha de forma se
+gera em conversa limpa.**
+
+### 📐 Régua de folha: o critério se declara ANTES de olhar
+
+Toda folha desta sessão foi julgada por um número dito antes da geração
+(*"`ombro/quadril` ≥ 1,13"*, *"`cintura/quadril` não pode cair de 0,728"*). Duas
+reprovaram por ele e **nenhuma virou crédito perdido**: a folha do D3 recusada
+virou o `b09h_d1` (C3) sem gerar imagem nova. Custo real da onda: **12 corpos,
+~260 créditos**, contra os 220 orçados para 11.
+
+### 🔴 Duas malhas reprovaram no `process.py` — e é o dobro da taxa anterior
+
+`zen_f_b09i_d3` (furo/watertight, 470k triângulos crus) e `zen_f_b09i_d1`
+(**2 ilhas**). As duas passaram na segunda geração, sem tocar na folha. Ambas
+estão em `qa/reprovados/`. Com a de 15/09 são **3 malhas reprovadas em 12
+corpos** no Meshy 7, contra ~1 em 76 no Meshy 6.

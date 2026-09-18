@@ -883,6 +883,50 @@ o número de cima estava errado. "N tentativas falharam" prova que *aquelas N
 formulações* falharam — e **uma amostra que derruba um limite não derruba o
 fenômeno.** O buraco existia; só não ia até 54.
 
+### 2.5c ✅ O vão `f d1` 34,1 → 42,6 CAIU em 17/09 — a §2.5b estava errada
+
+A §2.5b marcou aquele vão como **saturado** ("os dois geradores falham"). Ele foi
+preenchido com **`zen_f_b12h_d1`, IMC 39,7**, no primeiro tiro que usou o lever
+certo. O que faltava não era gerador nem palavra: era **âncora + cláusula de
+tronco com o texto neutro**, partindo do `b09h_d1` (33,9).
+
+**Lição sobre a própria lição:** "saturado" quer dizer *"as tentativas feitas
+falharam"*, não *"é impossível"*. Antes de carimbar um vão como morto, conferir
+se todos os levers conhecidos foram tentados naquela faixa — aqui só se tinha
+tentado descritor de categoria.
+
+### 2.7 🔴 RÉGUA DE PASSO NÃO ATRAVESSA FAIXA DE TAMANHO — as três caíram na 3ª amostra
+
+Em 17/09 as três réguas de passo que o projeto tinha quebraram do mesmo jeito:
+
+| lever | amostras | 3ª |
+|---|---|---|
+| volume-para-baixo | +6,1 · +6,2 | **+8,4** |
+| tronco, texto neutro | +6,0 · +5,8 | **+9,3** |
+| subtrativo | −3,5 · −3,2 | **−5,3** |
+
+**A causa é aritmética, não do gerador:** IMC vai com massa, massa vai com o cubo
+da escala linear. O mesmo pedido visual ("quadril bem mais estreito") vale mais
+pontos de IMC num corpo grande do que num pequeno. Duas amostras concordam quando
+as duas âncoras são vizinhas — e foi exatamente isso que deu a falsa confiança.
+
+**Consequência de método:** a DIREÇÃO de um lever é reproduzível e a MAGNITUDE
+não é. **Mirar célula de FORMA funciona (razões são adimensionais); mirar IMC
+exato não funciona.** É a §5c do `CLAUDE.md` — régua de um método não calibra
+outro — aplicada dentro do mesmo método, em outra faixa.
+
+### 2.8 🔴 INTENSIFICADOR não é inerte no lever de ÂNCORA (a §2.1 só vale para CATEGORIA)
+
+A §2.1 mediu que adjetivo de intensidade não move corpo. **Isso foi medido em
+descritor de categoria.** No lever de âncora ele move muito: trocar *"com MAIS
+VOLUME — alguns quilos acima"* por *"CONSIDERAVELMENTE MAIS PESADA… bastante
+acima do peso"* (mais *"barriga MUITO maior"*) levou o passo de **+6,0 para
++20,9**. Alvo 38–41, resultado **54,8** (`zen_f_b11h_d1`).
+
+**Doutrina: ao repetir um lever medido, repetir o TEXTO LITERAL.** Mudar âncora e
+redação na mesma folha invalida a régua — não se sabe qual dos dois moveu, e foi
+assim que se perdeu um corpo de mira.
+
 ### 2.6 ❌ A folha 2D NÃO prevê IMC — quatro preditores, quatro mortes
 
 **Esta seção é um registro de erro, não uma receita. Não reconstruir nada do que

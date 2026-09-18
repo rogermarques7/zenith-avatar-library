@@ -1,8 +1,92 @@
 ﻿# state.md — o presente
 
-Última atualização: **15/09/2026, sessão 32**
+Última atualização: **17/09/2026, sessão 33**
 
-> ## 🆕 SESSÃO 32 — A PRODUÇÃO REABRIU, E O EIXO NOVO É **FORMA**
+> ## 🆕 SESSÃO 33 — A 1ª ONDA FEMININA FECHOU: **17 de 17 células, 81 → 93**
+>
+> Doze corpos novos em dois dias, todos femininos, todos 8/8 no `process.py`.
+> **Todas as formas que a coleção não tinha agora existem** — retângulo de 21,5 a
+> 39,7, maçã até WHR 0,994, triângulo invertido não-atleta (que era zero), e a
+> ampulheta `d3` que faltava.
+>
+> | célula | corpo | IMC | o que fechou |
+> |---|---|---:|---|
+> | B2 | `zen_f_b05i_d2` | 22,8 | violão magra |
+> | B2 | `zen_f_b05h_d2` | 26,7 | violão média |
+> | — | `zen_f_b07h_d2` | 28,5 | **passista: WHRmin 0,484 e SHR 0,721, os dois recordes** |
+> | D1 | `zen_f_b07j_d1` | 24,4 | 1º triângulo invertido NÃO-ATLETA da coleção |
+> | E1 | `zen_f_b06i_d3` | 24,4 | **matou o buraco da Aura** (ver abaixo) |
+> | C3 | `zen_f_b09h_d1` | 33,9 | 1ª maçã obesa · WHR 0,957 |
+> | — | `zen_f_b11h_d1` | 54,8 | **errou o alvo** (intensificador) — ficou como forma nova |
+> | C4 | `zen_f_b12h_d1` | 39,7 | **WHR 0,994**, o extremo da maçã |
+> | — | `zen_f_b09i_d3` | 38,5 | partiu o maior buraco `high` (32,4 → 45,1) |
+> | A4 | `zen_f_b03h_d1` | 21,5 | retângulo magro · SHR 1,052 |
+> | — | `zen_f_b09i_d1` | 33,7 | tentativa do D3 que não alcançou (SHR 0,966) |
+> | D3 | `zen_f_b09j_d1` | 28,4 | **SHR 1,118 · WHR 1,047**, a última célula |
+>
+> ### ✅ O CASO DA AURA MORREU — era defeito visível no app
+>
+> A persona do app está em IMC 25,6 e o `library.json` não tinha nenhum corpo
+> **definido** entre 22,3 e 27,7 (`coverage_gaps`, prioridade `high`). A tela de
+> Objetivo dela mostrava um corpo de **56,7 kg**, 11 kg mais leve. O `b06i_d3`
+> (24,4) caiu no meio e **o buraco saiu da lista**.
+>
+> ### 🔴 AS RÉGUAS DE PASSO CAEM TODAS NA TERCEIRA AMOSTRA
+>
+> O `state.md` da sessão 32 declarava a cláusula de volume-para-baixo como régua
+> de mira (+6,1, duas amostras). **Ela deu +8,4 na terceira**, e a cláusula de
+> tronco fez o mesmo (+6,0 · +5,8 · **+9,3**), e o lever subtrativo também
+> (−3,5 · −3,2 · **−5,3**).
+>
+> **A causa é aritmética: o passo escala com o tamanho da âncora.** Direção de
+> lever é confiável; magnitude não é. **Mirar célula de forma funciona; mirar IMC
+> exato, não.** Detalhe inteiro em `docs/COBERTURA_FORMAS.md` §10.
+>
+> ### ✅ O LEVER QUE MAIS RENDEU: SUBTRAIR, NUNCA PEDIR A RAZÃO
+>
+> *"Encolha quadril, glúteo e coxa; não mexa em nada do tronco"* — três usos, três
+> acertos de forma (SHR 1,009→1,097 · 0,984→1,052 · 0,966→1,118). **Ele nunca fala
+> em ombro nem em cintura.** O contraexemplo saiu no mesmo dia, 5 minutos antes:
+> pedir *"a cintura continua larga em relação ao quadril"* devolveu uma pera magra
+> e reprovou. §2.4d de novo — **apertar o denominador vence, pedir a razão não.**
+>
+> ### 🔴 O CORTE `WHR ≤ 0,72` DA §5 É INALCANÇÁVEL EM CORPO NÃO-ATLÉTICO
+>
+> Cinco violões, cinco pousos: **0,716 · 0,731 · 0,743 · 0,748 · 0,756**, sem
+> correlação com tamanho. A faixa do umbigo pega a barriga mole; dos 8 femininos
+> com WHR ≤ 0,72 na coleção, **6 são `d3`**. ⏸️ **Decisão pendente dele:** trocar o
+> critério da linha `d1`/`d2` para **`WHRmin ≤ 0,58`** (o `b07h_d2` mede 0,484) ou
+> afrouxar para ≤ 0,76. Não mexi no arquivo.
+>
+> ### ⚠️ MESHY 7: 3 MALHAS REPROVADAS EM 12 CORPOS
+>
+> `b09i_d3` (furo) e `b09i_d1` (**2 ilhas**), as duas resolvidas regerando sem
+> tocar na folha. Com a de 15/09 são 3 em 12, contra ~1 em 76 no Meshy 6. Todas
+> em `qa/reprovados/`. **Orçar ~20% de créditos a mais por regeração.**
+>
+> ### ⏭️ ONDE A PRÓXIMA SESSÃO COMEÇA
+>
+> 🔴 **São 17 corpos sem peça e sem morph** — os 5 da sessão 32 mais os 12 desta.
+> O `morph_map.json` e o `shorts_map.json` seguem com **76**, e a conta confere:
+> 93 − 76 = 17. Todos femininos:
+>
+> ```
+> b03h_d1  b05h_d1  b05h_d2  b05i_d2  b06i_d3  b07h_d1  b07h_d2  b07i_d1
+> b07j_d1  b08_d2   b08h_d2  b09h_d1  b09i_d1  b09i_d3  b09j_d1  b11h_d1  b12h_d1
+> ```
+>
+> A lista se refaz com `set(library.json) − set(config/morph_map.json)`.
+>
+> **Nada pode ir para o app até isso fechar.** A fase é automática e a ordem é a
+> de sempre: `shorts.py --fit/--apply` → `morph.py --fit/--apply` → índice →
+> bancos de casos → Storage. Ele já separou: primeiro a criação, depois peça e
+> morph.
+>
+> Buracos `high` que sobraram: `f d3` 32,4→38,5 · `f d1` 34,1→39,7 ·
+> **`m d1` 27,8→33,3 e `m d3` 27,4→32,4** — os masculinos nunca foram tocados, e a
+> 2ª onda (12 corpos de forma) segue inteira na frente.
+
+> ## SESSÃO 32 — A PRODUÇÃO REABRIU, E O EIXO NOVO É **FORMA**
 >
 > Assinatura da Meshy renovada (~1.120 créditos). Pauta: o handoff do app
 > (`zenith/claude/handoff_biblioteca_corpos_faltando.md`) conta buracos no eixo
