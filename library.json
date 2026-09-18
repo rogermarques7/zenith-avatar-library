@@ -1,6 +1,6 @@
 {
   "schema_version": 4,
-  "generated_at": "2026-09-18T00:08:03Z",
+  "generated_at": "2026-09-18T06:19:24Z",
   "cdn_base": "https://nhloypjtpgyndmjtcpcf.supabase.co/storage/v1/object/public/avatars/",
   "reference_height_m": 1.75,
   "selection": {
@@ -51,14 +51,14 @@
         "calf": 5.9
       },
       "m": {
-        "neck": 5.0,
-        "shoulder": 12.4,
-        "chest": 10.8,
-        "waist_navel": 17.5,
-        "hip": 11.5,
-        "biceps": 6.4,
+        "neck": 4.9,
+        "shoulder": 12.5,
+        "chest": 10.7,
+        "waist_navel": 17.7,
+        "hip": 11.6,
+        "biceps": 6.3,
         "forearm": 4.7,
-        "thigh": 6.9,
+        "thigh": 7.0,
         "calf": 5.5
       }
     },
@@ -261,18 +261,6 @@
       "bmi_from": 34.1,
       "bmi_to": 39.7,
       "bmi_step": 5.6,
-      "priority": "high"
-    },
-    {
-      "sex": "m",
-      "definition": "d1",
-      "between": [
-        "zen_m_b05_d1",
-        "zen_m_b05k_d1"
-      ],
-      "bmi_from": 27.8,
-      "bmi_to": 33.3,
-      "bmi_step": 5.5,
       "priority": "high"
     },
     {
@@ -2357,6 +2345,36 @@
       "unreliable_columns": [
         "chest"
       ],
+      "approved": true
+    },
+    {
+      "id": "zen_m_b09h_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 31.3,
+      "measured_mass_kg": 95.9,
+      "label": "muito cheio",
+      "waist_to_height": 0.637,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b09h_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 42.7,
+        "shoulder": 106.2,
+        "chest": 99.3,
+        "waist_navel": 111.5,
+        "waist_min": 97.1,
+        "hip": 119.4,
+        "forearm": 28.9,
+        "biceps": 31.6,
+        "wrist": 23.3,
+        "thigh": 71.4,
+        "calf": 44.2
+      },
+      "unreliable_columns": [],
       "approved": true
     },
     {

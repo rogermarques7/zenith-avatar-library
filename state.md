@@ -2,7 +2,7 @@
 
 Última atualização: **17/09/2026, sessão 33**
 
-> ## 🆕 SESSÃO 33 — A 1ª ONDA FEMININA FECHOU: **17 de 17 células, 81 → 93**
+> ## 🆕 SESSÃO 33 — A 1ª ONDA FEMININA FECHOU E A 2ª COMEÇOU: **81 → 94**
 >
 > Doze corpos novos em dois dias, todos femininos, todos 8/8 no `process.py`.
 > **Todas as formas que a coleção não tinha agora existem** — retângulo de 21,5 a
@@ -23,6 +23,25 @@
 > | A4 | `zen_f_b03h_d1` | 21,5 | retângulo magro · SHR 1,052 |
 > | — | `zen_f_b09i_d1` | 33,7 | tentativa do D3 que não alcançou (SHR 0,966) |
 > | D3 | `zen_f_b09j_d1` | 28,4 | **SHR 1,118 · WHR 1,047**, a última célula |
+>
+> ### ✅ E A 2ª ONDA ABRIU COM O PRIMEIRO HOMEM-PERA DA BIBLIOTECA
+>
+> `zen_m_b09h_d1` — **IMC 31,3 · SHR 0,889**, fechando a célula **M-A3**. O menor
+> `ombro/quadril` masculino era **0,972**, e só existia em IMC 38,9; na faixa de
+> usuário comum o mínimo era 1,073. **Homem de ombro estreito e quadril largo não
+> existia.**
+>
+> **O lever foi o ESPELHO do subtrativo** — *"encolha ombros, costas, peito e
+> braços; não mexa em nada do quadril para baixo"*. Ombro **−19,2 cm** e quadril
+> **+2,5** contra a âncora `b05j_d1`. Previ 0,92–1,00 e veio 0,889. **Quatro usos
+> do lever subtrativo, quatro acertos** — é o único do projeto com esse placar.
+>
+> 🔴 **A folha da âncora `zen_m_b05j_d1_sheet.png` está CORROMPIDA** — os três
+> sinais de vazamento juntos: figura em `y=0`, alturas divergindo **4,39%** e
+> `cintura/ombro` **1,119** (impossível). O avatar dele está certo (foi medido no
+> 3D), mas **qualquer folha nova que o use como referência dá delta inválido**.
+> Foi o que aconteceu aqui: o julgamento teve que ser feito contra três outras
+> folhas masculinas sãs.
 >
 > ### ✅ O CASO DA AURA MORREU — era defeito visível no app
 >
@@ -76,13 +95,14 @@
 >
 > ### ⏭️ ONDE A PRÓXIMA SESSÃO COMEÇA
 >
-> 🔴 **São 17 corpos sem peça e sem morph** — os 5 da sessão 32 mais os 12 desta.
-> O `morph_map.json` e o `shorts_map.json` seguem com **76**, e a conta confere:
-> 93 − 76 = 17. Todos femininos:
+> 🔴 **São 18 corpos sem peça e sem morph** — os 5 da sessão 32 mais os 13
+> desta. O `morph_map.json` e o `shorts_map.json` seguem com **76**, e a conta
+> confere: 94 − 76 = 18. Dezessete femininos e um masculino:
 >
 > ```
 > b03h_d1  b05h_d1  b05h_d2  b05i_d2  b06i_d3  b07h_d1  b07h_d2  b07i_d1
 > b07j_d1  b08_d2   b08h_d2  b09h_d1  b09i_d1  b09i_d3  b09j_d1  b11h_d1  b12h_d1
+> zen_m_b09h_d1
 > ```
 >
 > A lista se refaz com `set(library.json) − set(config/morph_map.json)`.

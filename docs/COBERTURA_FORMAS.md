@@ -161,7 +161,7 @@ trocar de forma.
 
 | # | forma | alvo IMC | estado |
 |---|---|---|---|
-| M-A1..A4 | **Pera / triângulo** (ombro estreito, quadril largo) | 22 · 26 · 30 · 34 | 🔴 zero hoje |
+| M-A1..A4 | **Pera / triângulo** (ombro estreito, quadril largo) | 22 · 26 · 30 · 34 | ✅ **M-A3: `zen_m_b09h_d1` 31,3 · SHR 0,889** (17/09) · faltam 22 · 26 · 34 |
 | M-B1..B3 | **Maçã / oval** abaixo de 33 | 26 · 29 · 32 | 🔴 só existe ≥ 33,3 |
 | M-C1..C3 | **Ampulheta** acima de 24 | 27 · 30 · 33 | 🔴 só existe ≤ 23,8 |
 | M-D1..D2 | **V com gordura** (`d1`/`d2`) | 28 · 33 | 🔴 V só existe em `d3` |
@@ -468,3 +468,28 @@ virou o `b09h_d1` (C3) sem gerar imagem nova. Custo real da onda: **12 corpos,
 (**2 ilhas**). As duas passaram na segunda geração, sem tocar na folha. Ambas
 estão em `qa/reprovados/`. Com a de 15/09 são **3 malhas reprovadas em 12
 corpos** no Meshy 7, contra ~1 em 76 no Meshy 6.
+
+### ✅ O ESPELHO DO LEVER SUBTRATIVO ABRIU A 2ª ONDA (17/09)
+
+*"Encolha ombros, costas, peito e braços; não mexa em nada do quadril para
+baixo."* Primeiro uso, e fechou o **M-A3** de primeira: `zen_m_b09h_d1`, IMC 31,3,
+**SHR 0,889** — ombro **−19,2 cm** e quadril **+2,5** contra a âncora `b05j_d1`
+(1,073). Previsto 0,92–1,00.
+
+**Com ele o lever subtrativo está em 4 de 4**, nas duas direções:
+
+| âncora → corpo | o que encolheu | SHR |
+|---|---|---|
+| `b07i_d1` → `b07j_d1` | embaixo | 1,009 → 1,097 |
+| `b05h_d1` → `b03h_d1` | embaixo | 0,984 → 1,052 |
+| `b09i_d1` → `b09j_d1` | embaixo | 0,966 → 1,118 |
+| `b05j_d1` → `b09h_d1` | **em cima** | 1,073 → **0,889** |
+
+**É o único lever do projeto que nunca falhou** — e o motivo é a §2.4d: ele mexe
+no denominador e **nunca nomeia a razão que quer mover.**
+
+🔴 **A folha `zen_m_b05j_d1_sheet.png` está corrompida** e não serve de referência
+para `sheet_qa`: figura em `y=0`, alturas divergindo **4,39%**, `cintura/ombro`
+**1,119** — os três sinais de vazamento juntos. O avatar dele está correto (medido
+no 3D). **Antes de usar folha antiga como âncora de medição, rodar o `sheet_qa`
+nela sozinha.**
