@@ -79,8 +79,13 @@
 >
 > **Nada pode ir para o app até isso fechar.** A fase é automática e a ordem é a
 > de sempre: `shorts.py --fit/--apply` → `morph.py --fit/--apply` → índice →
-> bancos de casos → Storage. Ele já separou: primeiro a criação, depois peça e
-> morph.
+> bancos de casos → Storage.
+>
+> 🔴 **DECISÃO DELE, 17/09 — peça e morph só depois que TODOS os avatares que
+> faltam estiverem criados.** Não rodar `shorts.py` nem `morph.py` em lote
+> parcial: enquanto a 2ª onda masculina (12 corpos de forma) e os vãos `high`
+> não fecharem, a produção continua sendo a única frente. Isso evita rodar a
+> fase automática duas vezes e evita versão de GLB gasta à toa.
 >
 > Buracos `high` que sobraram: `f d3` 32,4→38,5 · `f d1` 34,1→39,7 ·
 > **`m d1` 27,8→33,3 e `m d3` 27,4→32,4** — os masculinos nunca foram tocados, e a
