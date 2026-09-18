@@ -64,6 +64,16 @@
 > tocar na folha. Com a de 15/09 são 3 em 12, contra ~1 em 76 no Meshy 6. Todas
 > em `qa/reprovados/`. **Orçar ~20% de créditos a mais por regeração.**
 >
+> ### 📌 TAREFA NOVA PARA O APP — cintura mínima feminina (decidida em 17/09)
+>
+> Campo **opcional, só para mulheres**. Resolve a seleção cega para forma (dois
+> corpos a 0,221 de distância com **7,5 cm** de cintura natural de diferença) **e**
+> a fórmula Navy, errada para mulher desde 21/08. **A instrução não pode ser "a
+> parte mais fina"** — é extremo, e extremo acha junção (as costelas). Vai entre a
+> última costela e o osso do quadril, com a técnica da dobra lateral, guia
+> ilustrado e trava de razão **0,648–0,928**. Spec inteira em
+> `docs/INTEGRACAO_ZENITH.md`, no fim. Não bloqueia avatar nenhum.
+>
 > ### ⏭️ ONDE A PRÓXIMA SESSÃO COMEÇA
 >
 > 🔴 **São 17 corpos sem peça e sem morph** — os 5 da sessão 32 mais os 12 desta.

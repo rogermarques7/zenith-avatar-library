@@ -11,7 +11,7 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 
 | quando a tarefa for… | ler ANTES de agir | tamanho |
 |---|---|---:|
-| **QUALQUER COISA que toque o app Zenith** — medida, seleção, objetivo, contrato | `docs/INTEGRACAO_ZENITH.md` | **8,4k** |
+| **QUALQUER COISA que toque o app Zenith** — medida, seleção, objetivo, contrato | `docs/INTEGRACAO_ZENITH.md` | **10,8k** |
 | **montar prompt de folha** | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 5,2k / 2,4k |
 | decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,5k |
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |

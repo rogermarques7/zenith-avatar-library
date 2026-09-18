@@ -692,3 +692,58 @@ não do morph: `LICOES.md` §7.19.
 - **O `library.json` não carrega o morph** — o mapa é um arquivo separado. Se o
   app preferir um arquivo só, é o `build_index.py` que passa a lê-lo.
 - **Nada persiste o avatar escolhido nem a influence aplicada** (§7.8).
+
+---
+
+## 📌 PENDENTE NO APP — o campo de CINTURA MÍNIMA feminina (decidido em 17/09)
+
+**Só para mulheres. Opcional. Resolve dois defeitos de uma vez.**
+
+**Defeito 1 — a seleção é cega para FORMA.** A cintura do umbigo não distingue
+ampulheta de reta. Medido na coleção: `zen_f_b04_d2` e `zen_f_b06h_d3` ficam a
+**0,221** de distância (o app os vê como o mesmo corpo) e têm **7,5 cm** de
+diferença na cintura natural.
+
+**Defeito 2 — a fórmula Navy está errada para mulher desde 21/08.** O protocolo
+quer o umbigo no homem e a mínima na mulher; o app coleta o umbigo nos dois.
+
+**Por que só feminino** (medido nos 93, faixa de usuário):
+
+| | mediana `umbigo − mínima` | razão `mínima/umbigo` |
+|---|---:|---|
+| feminino (40) | **14,9 cm** | 0,847 · faixa **0,648 a 0,928** |
+| masculino (27) | 2,8 cm | 0,967 · faixa 0,896 a 0,995 |
+
+No homem é quase redundante; na mulher carrega informação de verdade.
+
+### 🔴 A instrução NUNCA pode ser "a parte mais fina"
+
+É a doutrina do `CLAUDE.md`: **medida de fita é LANDMARK, não extremo.** Extremo
+procurado acha junção — o peito fugiu para a axila (+8 cm), o ombro desceu para o
+tórax, a panturrilha mediu o joelho em 50 de 76. Do lado humano o modo de falha é
+a fita subir para **debaixo das costelas**, que em mulher magra é mesmo o menor
+perímetro do tronco.
+
+**As quatro peças, e elas vão juntas:**
+
+1. **Instrução limitada por osso:** *"Passe a fita entre a última costela e o
+   osso do quadril"* (é a definição ISAK, e os dois ossos ela acha com a mão).
+2. **Técnica da dobra, que dispensa julgamento:** *"Incline o tronco para o lado
+   — a dobra que aparece é a linha da cintura."*
+3. **Guia ilustrado**, o 11º da coleção feminina (`assets/medidas/f/`). Mesmo
+   caminho dos 10 que existem: prompt + referência, e **conferir onde o anel caiu
+   com `qa/probe/sondas/anel_guia.py` antes de aprovar** — a régua de altura passa
+   com o enquadramento errado (`regua-de-altura-nao-ve-tracado`).
+4. **Trava de plausibilidade:** razão fora de **0,648–0,928** → pedir para
+   refazer. O índice já publica `plausible_range_cm` por coluna; é mais uma
+   entrada. ⚠️ **Ela pega o erro comum** (medir no mesmo ponto do umbigo, razão
+   ~1,0) **e não pega uma fita nas costelas** que caia dentro da faixa — para esse
+   quem protege é o desenho e a instrução.
+
+**Do lado da biblioteca não falta nada:** `waist_min` já é medido nos 93 avatares
+e já foi a coluna de seleção antes de 21/08. Quem preencher ganha escolha mais
+fiel à silhueta; quem pular fica exatamente como está hoje.
+
+⚠️ **A alternativa descartada foi mostrar 4 silhuetas para ela escolher.** Seria
+mais barata e resolveria o avatar, **mas não resolve a gordura corporal**, que
+precisa do centímetro. Por isso fita, e não desenho.
