@@ -1,8 +1,105 @@
 ﻿# state.md — o presente
 
-Última atualização: **17/09/2026, sessão 33**
+Última atualização: **19/09/2026, sessão 34**
 
-> ## 🆕 SESSÃO 33 — A 1ª ONDA FEMININA FECHOU E A 2ª COMEÇOU: **81 → 94**
+> ## 🆕 SESSÃO 34 — A 2ª ONDA MASCULINA: **94 → 98**, e 3 das 4 células de pera
+>
+> Quatro corpos novos, todos masculinos, todos 8/8. **A linha pera masculina não
+> existia e hoje tem quatro pontos**; a maçã masculina, que só existia a partir
+> de 33,3, ganhou o primeiro corpo na faixa de usuário comum.
+>
+> | célula | corpo | IMC | SHR | WHR | o que fechou |
+> |---|---|---:|---:|---:|---|
+> | — | `zen_m_b07h_d1` | 32,3 | **0,824** | 0,914 | o pera mais extremo da coleção · **matou o vão `high` `m d1` 27,8→33,3** |
+> | M-A1 | `zen_m_b07i_d1` | 20,0 | 1,008 | 0,832 | 1º homem magro de ombro estreito (o menor SHR abaixo de IMC 24 era 1,157) |
+> | M-A2 | `zen_m_b07j_d1` | **26,3** | 0,943 | 0,915 | pera no meio da faixa de usuário — alvo era 26 |
+> | M-B1 | `zen_m_b07k_d1` | 27,7 | 1,176 | **1,014** | **1ª maçã masculina abaixo de IMC 33** |
+>
+> ### 🔴 O LEVER-ESPELHO NÃO TEM PASSO DE IMC — E O SINAL TAMBÉM NÃO
+>
+> *"Encolha ombros, costas, peito e braços"*, quatro usos: **−2,7 · +4,5 · −4,4 ·
+> −0,7**. Não é só a magnitude que não se prevê (§10); é que a mesma frase na
+> mesma direção **sobe ou desce o IMC conforme a âncora**. Em `b05_d1` (27,8) ele
+> acrescentou quadril +15,2 e cintura +14,5 enquanto encolhia o ombro; em
+> `b04_d1` (24,4) encolheu tudo. **A forma, essa sim, caiu nas quatro** (SHR
+> 1,073→0,889 · 1,108→0,824 · 1,186→1,008 · 1,113→0,943).
+>
+> ### 🔴 A CONVERSÃO FOLHA → 3D É POR GERADOR, e eu quase gastei crédito por isso
+>
+> O `cintura/quadril` da folha vira `waist_navel/hip` no 3D com um offset que eu
+> vinha tirando das âncoras — todas **Meshy 6**:
+>
+> | amostras | offset médio |
+> |---|---:|
+> | 4 âncoras (Meshy 6) | **+0,097** |
+> | 4 corpos desta sessão (Meshy 7) | **+0,165** |
+>
+> Com o número errado eu recomendei mandar para a Meshy uma folha que pousaria
+> **em cima da própria âncora**. Régua nova: **em Meshy 7 somar ~+0,165 ao
+> `cintura/quadril` da folha** para prever o WHR. Para o SHR o offset é ~**−0,02
+> com espalhamento ±0,045** (4 amostras) — ou seja a folha prevê forma dentro de
+> ±0,05, não melhor.
+>
+> ### 🔴 AMPULHETA MASCULINA ACIMA DE IMC 24 É CRITÉRIO IMPOSSÍVEL, não buraco
+>
+> Seis folhas, dois geradores, dois levers (encolher o meio · categoria do mundo
+> real): `cintura/quadril` travou entre **0,695 e 0,744**, com a âncora em 0,725.
+> Somado o offset de Meshy 7, o pouso é ~**0,86** contra o corte de **≤ 0,80**.
+> Dos 11 homens da coleção com WHR ≤ 0,80, **9 são `d3`** e os outros dois têm
+> IMC < 21 — a mesma anatomia que derrubou o violão feminino em 17/09: no umbigo
+> quem manda é a barriga mole.
+>
+> ⚠️ **Isso NÃO toca o método Navy nem o `waist_navel`** — ele foi cobrado nesta
+> sessão e a resposta é: o corte `WHR ≤ 0,80` vive só na tabela do
+> `COBERTURA_FORMAS.md`, não existe em código, não vai para o app. **As células
+> M-C1/C2/C3 ficam puladas**; a decisão sobre trocar o critério (usar `WHRmin`
+> ou afrouxar o corte) continua dele e não bloqueia produção.
+>
+> ### ✅ CATEGORIA DO MUNDO REAL MOVE O OMBRO — o que o pedido direto não move
+>
+> *"NADADOR MASTER de piscina, 45 anos…"* não mexeu na cintura (era o alvo), mas
+> levou o ombro **+1,2 pp** nas duas gerações, em dois geradores. É a §2.2b de
+> novo: categoria move o que pedido direto não move — só nem sempre o eixo que
+> se queria.
+>
+> ### ⚠️ MESHY 7: a taxa de reprovação DOBROU, e 3 são a mesma casca
+>
+> **3 reprovações em 5 gerações** nesta sessão (`b07h` 2 ilhas · `b07k` 2 ilhas ·
+> `b10h_d2` non-manifold), contra 3 em 12 na sessão 33. Acumulado: **6 em 17
+> (~35%)**. Em três delas a ilha extra é **o short saindo como casca separada**,
+> 17–20 mil faces na altura do quadril — assinatura nova, não existia no Meshy 6.
+> Todas em `qa/reprovados/`. **Orçar ~35% de créditos a mais.**
+>
+> ✅ **Contra-amostra da melhoria de imagem:** o `b07k_d1` foi regerado com o
+> botão **LIGADO** e fechou 8/8 (simetria 0,31/3,90 mm). Em 15/09 uma amostra com
+> ele ligado deu 38,4 mm e reprovou. São duas amostras com resultados opostos:
+> **manter desligado por padrão** (custo zero) e **usar ligado como 2ª tentativa
+> quando a malha reprovar por ilha ou furo** — foi o que funcionou.
+>
+> ✅ Confirmado por ele no site: **Meshy 6 não tem Multi-View**, como o §8 já dizia.
+>
+> ### ⏭️ ONDE A PRÓXIMA SESSÃO COMEÇA
+>
+> 🔴 **O `zen_m_b10h_d2` está no meio do caminho: folha e refs prontos, malha
+> reprovada.** Célula **M-D1 (V com gordura)**, que tem zero corpos — o V
+> masculino só existe em `d3`. A folha mede `ombro/quadril` **1,277** (critério
+> era ≥ 1,30; aprovada com ressalva porque mesmo o pouso ruim, SHR ~1,22, é 0,11
+> acima de tudo que existe em `d1`/`d2` naquele peso). **É só regerar na Meshy**
+> com `00_input/references/m/zen_m_b10h_d2/` — se reprovar de novo, ligar a
+> melhoria de imagem.
+>
+> Depois dele, o que sobra da 2ª onda: **M-A4** (pera em 34) · **M-B2/B3** (maçã
+> em 29 e 32 — hoje 27,7 e depois só 33,3) · **M-D2** (V com gordura em 33).
+> As M-C estão puladas por critério.
+>
+> 🔴 **Agora são 22 corpos sem peça e sem morph** (98 − 76). A regra dele de 17/09
+> não mudou: **peça e morph só depois que todos os avatares existirem.** Nada vai
+> para o app até lá.
+>
+> Buracos `high` que sobraram: `f d3` 32,4→38,5 · `f d1` 34,1→39,7 ·
+> `m d3` 27,4→32,4.
+
+> ## SESSÃO 33 — A 1ª ONDA FEMININA FECHOU E A 2ª COMEÇOU: **81 → 94**
 >
 > Doze corpos novos em dois dias, todos femininos, todos 8/8 no `process.py`.
 > **Todas as formas que a coleção não tinha agora existem** — retângulo de 21,5 a

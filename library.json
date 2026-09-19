@@ -1,6 +1,6 @@
 {
   "schema_version": 4,
-  "generated_at": "2026-09-18T06:19:24Z",
+  "generated_at": "2026-09-19T18:45:20Z",
   "cdn_base": "https://nhloypjtpgyndmjtcpcf.supabase.co/storage/v1/object/public/avatars/",
   "reference_height_m": 1.75,
   "selection": {
@@ -51,15 +51,15 @@
         "calf": 5.9
       },
       "m": {
-        "neck": 4.9,
-        "shoulder": 12.5,
-        "chest": 10.7,
-        "waist_navel": 17.7,
-        "hip": 11.6,
-        "biceps": 6.3,
-        "forearm": 4.7,
-        "thigh": 7.0,
-        "calf": 5.5
+        "neck": 5.0,
+        "shoulder": 13.4,
+        "chest": 10.6,
+        "waist_navel": 17.3,
+        "hip": 11.4,
+        "biceps": 6.0,
+        "forearm": 4.5,
+        "thigh": 7.1,
+        "calf": 5.3
       }
     },
     "z_cap": 1.5,
@@ -104,11 +104,11 @@
       },
       "m": {
         "neck": [
-          34.7,
+          34.5,
           74.0
         ],
         "shoulder": [
-          103.0,
+          95.8,
           200.2
         ],
         "chest": [
@@ -2194,6 +2194,36 @@
       "approved": true
     },
     {
+      "id": "zen_m_b07i_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 20.0,
+      "measured_mass_kg": 61.1,
+      "label": "magro",
+      "waist_to_height": 0.451,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b07i_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 34.5,
+        "shoulder": 95.8,
+        "chest": 82.2,
+        "waist_navel": 79.0,
+        "waist_min": 75.3,
+        "hip": 95.0,
+        "forearm": 24.0,
+        "biceps": 25.8,
+        "wrist": 18.7,
+        "thigh": 56.1,
+        "calf": 35.5
+      },
+      "unreliable_columns": [],
+      "approved": true
+    },
+    {
       "id": "zen_m_b03_d1",
       "sex": "m",
       "definition": "d1",
@@ -2284,6 +2314,38 @@
       "approved": true
     },
     {
+      "id": "zen_m_b07j_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 26.3,
+      "measured_mass_kg": 80.5,
+      "label": "cheio",
+      "waist_to_height": 0.575,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b07j_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 36.7,
+        "shoulder": 103.8,
+        "chest": 94.5,
+        "waist_navel": 100.7,
+        "waist_min": 90.6,
+        "hip": 110.1,
+        "forearm": 26.7,
+        "biceps": 29.6,
+        "wrist": 23.0,
+        "thigh": 64.7,
+        "calf": 39.5
+      },
+      "unreliable_columns": [
+        "chest"
+      ],
+      "approved": true
+    },
+    {
       "id": "zen_m_b05m_d1",
       "sex": "m",
       "definition": "d1",
@@ -2309,6 +2371,38 @@
         "wrist": 21.9,
         "thigh": 62.6,
         "calf": 37.1
+      },
+      "unreliable_columns": [
+        "chest"
+      ],
+      "approved": true
+    },
+    {
+      "id": "zen_m_b07k_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 27.7,
+      "measured_mass_kg": 84.8,
+      "label": "cheio",
+      "waist_to_height": 0.591,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b07k_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 38.5,
+        "shoulder": 120.1,
+        "chest": 106.8,
+        "waist_navel": 103.5,
+        "waist_min": 98.6,
+        "hip": 102.1,
+        "forearm": 29.4,
+        "biceps": 32.2,
+        "wrist": 20.8,
+        "thigh": 60.6,
+        "calf": 37.6
       },
       "unreliable_columns": [
         "chest"
@@ -2375,6 +2469,38 @@
         "calf": 44.2
       },
       "unreliable_columns": [],
+      "approved": true
+    },
+    {
+      "id": "zen_m_b07h_d1",
+      "sex": "m",
+      "definition": "d1",
+      "measured_bmi": 32.3,
+      "measured_mass_kg": 99.0,
+      "label": "muito cheio",
+      "waist_to_height": 0.634,
+      "body_shape": "medium",
+      "version": 1,
+      "assets": {
+        "glb": "zen_m_b07h_d1_v1.glb",
+        "turntable": null
+      },
+      "circumferences_cm": {
+        "neck": 38.6,
+        "shoulder": 100.1,
+        "chest": 100.0,
+        "waist_navel": 111.0,
+        "waist_min": 99.0,
+        "hip": 121.5,
+        "forearm": 27.9,
+        "biceps": 30.0,
+        "wrist": 25.4,
+        "thigh": 76.4,
+        "calf": 43.7
+      },
+      "unreliable_columns": [
+        "chest"
+      ],
       "approved": true
     },
     {

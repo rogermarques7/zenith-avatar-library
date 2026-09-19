@@ -161,10 +161,14 @@ trocar de forma.
 
 | # | forma | alvo IMC | estado |
 |---|---|---|---|
-| M-A1..A4 | **Pera / triângulo** (ombro estreito, quadril largo) | 22 · 26 · 30 · 34 | ✅ **M-A3: `zen_m_b09h_d1` 31,3 · SHR 0,889** (17/09) · faltam 22 · 26 · 34 |
-| M-B1..B3 | **Maçã / oval** abaixo de 33 | 26 · 29 · 32 | 🔴 só existe ≥ 33,3 |
-| M-C1..C3 | **Ampulheta** acima de 24 | 27 · 30 · 33 | 🔴 só existe ≤ 23,8 |
-| M-D1..D2 | **V com gordura** (`d1`/`d2`) | 28 · 33 | 🔴 V só existe em `d3` |
+| M-A1 | **Pera / triângulo** | 22 | ✅ **`zen_m_b07i_d1` 20,0 · SHR 1,008** (18/09) |
+| M-A2 | Pera / triângulo | 26 | ✅ **`zen_m_b07j_d1` 26,3 · SHR 0,943** (18/09) |
+| M-A3 | Pera / triângulo | 30 | ✅ `zen_m_b09h_d1` 31,3 · SHR 0,889 (17/09) |
+| M-A4 | Pera / triângulo | 34 | ⚠️ na prática encostado no `zen_m_b07h_d1` 32,3 · **SHR 0,824** |
+| M-B1 | **Maçã / oval** abaixo de 33 | 26 | ✅ **`zen_m_b07k_d1` 27,7 · WHR 1,014** (19/09) |
+| M-B2..B3 | Maçã / oval | 29 · 32 | 🔴 entre 27,7 e 33,3 não há nada |
+| M-C1..C3 | **Ampulheta** acima de 24 | 27 · 30 · 33 | ⛔ **PULADAS — critério inalcançável, ver §11** |
+| M-D1..D2 | **V com gordura** (`d1`/`d2`) | 28 · 33 | 🟡 folha e refs do `zen_m_b10h_d2` prontos (`ombro/quadril` 1,277); malha reprovada, falta regerar |
 
 ### O tamanho do trabalho — **atualizado em 15/09**
 
@@ -493,3 +497,90 @@ para `sheet_qa`: figura em `y=0`, alturas divergindo **4,39%**, `cintura/ombro`
 **1,119** — os três sinais de vazamento juntos. O avatar dele está correto (medido
 no 3D). **Antes de usar folha antiga como âncora de medição, rodar o `sheet_qa`
 nela sozinha.**
+
+---
+
+## 11. A sessão de 18–19/09 — 4 corpos, e a régua da folha ganhou escala
+
+**A coleção foi de 94 para 98.** Três células fechadas (M-A1, M-A2, M-B1) e o
+vão `high` `m d1` 27,8→33,3 morto pelo `b07h_d1`.
+
+### 🔴 A conversão folha → 3D é POR GERADOR — e quase custou 20 créditos
+
+O `cintura/quadril` medido pelo `sheet_qa` vira `waist_navel/hip` no `metrics.py`
+com um **offset positivo** (a folha é largura frontal; o 3D é perímetro, e a
+barriga é funda). O offset **não é o mesmo nos dois geradores de malha**:
+
+| amostras | offset |
+|---|---|
+| 4 âncoras do Meshy 6 (`b05_d1` · `b04_d1` · `b05m_d1` · `b05_d2`) | +0,118 · +0,106 · +0,075 · +0,088 → **média +0,097** |
+| 4 corpos desta sessão, Meshy 7 (`b07h` · `b07i` · `b07j` · `b07k`) | +0,205 · +0,135 · +0,186 · +0,136 → **média +0,165** |
+
+**Usar +0,165 para prever WHR de folha nova.** Com o número velho eu recomendei
+mandar para a Meshy uma folha do M-C1 que pousaria **em cima da própria âncora**
+— 20 créditos para reproduzir um corpo que já existia. É a §8 de novo: o Meshy 7
+lê o mesmo desenho maior, e o efeito não é uniforme entre colunas.
+
+Para o SHR o offset é quase nulo e **ruidoso**: −0,040 · +0,029 · +0,005 · −0,058
+(média −0,016, espalhamento ±0,045). **A folha prevê forma dentro de ±0,05.**
+
+### ⛔ Ampulheta masculina acima de IMC 24 é critério impossível
+
+Seis folhas, dois geradores, **dois levers diferentes** (encolher o meio com as
+pontas congeladas · categoria do mundo real "nadador master"), todas na mesma
+âncora `b05_d2` (0,725):
+
+```
+0,695 · 0,719 · 0,723 · 0,739 · 0,744        (a âncora mede 0,725)
+```
+
+Somado o offset de Meshy 7, o melhor pouso previsto é **~0,86** contra o corte
+`WHR ≤ 0,80`. **Dos 11 homens da coleção com WHR ≤ 0,80, 9 são `d3`** e os dois
+restantes têm IMC < 21. É a mesma anatomia do violão feminino (§10): a fita do
+umbigo pega a barriga mole, e barriga chata no umbigo vem com definição.
+
+⚠️ **Isto é limiar de PLANEJAMENTO, não medida do app.** O corte vive só nesta
+tabela — não está no `library.json`, não está no `select.py`, não muda o método
+Navy nem a coluna `waist_navel`, que estão fechados desde 21/08. **As M-C ficam
+puladas**; trocar o critério (`WHRmin ≤ …` ou afrouxar o umbigo) é decisão do
+Rogério e não bloqueia produção — a mesma decisão cobre o violão feminino.
+
+### 🔴 O lever-espelho não tem passo de IMC — nem sinal
+
+*"Encolha ombros, costas, peito e braços; não mexa em nada do quadril para
+baixo"*, quatro usos: **−2,7 · +4,5 · −4,4 · −0,7**. Em `b05_d1` ele encolheu o
+ombro 17,7 cm **e acrescentou** quadril +15,2 e cintura +14,5; em `b04_d1`
+encolheu o corpo inteiro. **A forma caiu nas quatro** (SHR 1,073→0,889 ·
+1,108→0,824 · 1,186→1,008 · 1,113→0,943) — é a §10 confirmada num lever novo:
+direção sim, magnitude não.
+
+### ✅ Categoria do mundo real move o OMBRO
+
+*"NADADOR MASTER de piscina, 45 anos, que nada há vinte anos e nunca fez
+academia"* não moveu a cintura (o alvo), mas levou o ombro **+1,23 pp** no
+ChatGPT e **+1,05 pp** no Gemini, contra ±0,3 pp dos pedidos diretos. §2.2b de
+novo, com a ressalva: **move, mas não necessariamente o eixo que se pediu.**
+
+### ⚠️ Meshy 7: a taxa de reprovação dobrou, e 3 são a mesma casca
+
+**3 reprovações em 5 gerações** (`b07h_d1` e `b07k_d1` com 2 ilhas, `b10h_d2`
+non-manifold), contra 3 em 12 na sessão 33 — acumulado **6 em 17 (~35%)**. Em
+três delas a ilha extra é **o short saindo como casca separada** (17–20 mil
+faces, 10–21 cm, na altura do quadril): assinatura que não existia no Meshy 6.
+Regerar sem tocar na folha resolveu nas duas primeiras.
+
+✅ **Melhoria de imagem: contra-amostra.** O `b07k_d1` foi regerado com o botão
+**ligado** e fechou 8/8 (simetria 0,31/3,90 mm). Contra a amostra de 15/09 (38,4
+mm, reprovada), são duas amostras opostas: **desligado por padrão, ligado como 2ª
+tentativa quando reprovar por ilha ou furo.**
+
+### 📐 Quando aprovar uma folha que perdeu o critério por pouco
+
+Aconteceu três vezes nesta sessão, e a regra que emergiu **não é o tamanho do
+miss, é o que o cenário ruim entrega**:
+
+| folha | miss | decisão | por quê |
+|---|---|---|---|
+| `b07k_d1` 0,878 (corte 0,88) | 0,002 | ✅ aprovada | previsão 1,00 contra corte 0,98: folga fora da faixa de erro |
+| M-C1 0,695 (corte 0,68) | 0,015 | ❌ reprovada | pouso provável reproduzia a **própria âncora** |
+| `b10h_d2` 1,277 (corte 1,30) | 0,023 | ✅ aprovada | mesmo no pior caso (1,22) é 0,11 acima de tudo que existe em `d1`/`d2` naquele peso |

@@ -15,7 +15,7 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 | **montar prompt de folha** | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 5,2k / 2,4k |
 | decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,5k |
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |
-| **decidir QUAL avatar produzir** — o que falta é FORMA (retângulo, maçã, violão), não só IMC · **e os ajustes da Meshy 7** | `docs/COBERTURA_FORMAS.md` | **6,2k** |
+| **decidir QUAL avatar produzir** — o que falta é FORMA (retângulo, maçã, violão), não só IMC · **e os ajustes da Meshy 7** | `docs/COBERTURA_FORMAS.md` | **8,1k** |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
 | **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
 | **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/FILA_PECAS.md` | 3,9k |
