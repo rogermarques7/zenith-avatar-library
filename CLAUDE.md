@@ -1,4 +1,4 @@
-# Zenith Avatar Library
+﻿# Zenith Avatar Library
 
 Projeto de **produção de assets**, não de software de produto. Entra especificação de arquétipo, sai avatar 3D otimizado + índice consumido pelo app Zenith.
 
@@ -15,30 +15,30 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 | **montar prompt de folha** | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 5,2k / 2,4k |
 | decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,5k |
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |
-| **decidir QUAL avatar produzir** — o que falta é FORMA (retângulo, maçã, violão), não só IMC · **e os ajustes da Meshy 7** | `docs/COBERTURA_FORMAS.md` | **8,1k** |
+| **decidir QUAL avatar produzir** — o que falta é FORMA (retângulo, maçã, violão), não só IMC · **e os ajustes da Meshy 7** | `docs/COBERTURA_FORMAS.md` | **8,6k** |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
 | **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
 | **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/FILA_PECAS.md` | 3,9k |
 | investigar a coxa (RESOLVIDA em 14/08 por offset — ler antes de reabrir) | `docs/PROBLEMA_COXA.md` | 3,7k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **37,4k** |
-| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-08.md` (11,5k) · `diario-2026-07.md` (**grep**) | 61,3k |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **39,2k** |
+| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-09.md` (4,0k) · `diario-2026-08.md` (11,2k) · `diario-2026-07.md` (**grep**) | 65,3k |
 | o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
 
-> Leitura padrão: `CLAUDE.md` **8,3k** + `state.md` **21,3k** = **29,6k** antes de
+> Leitura padrão: `CLAUDE.md` **8,9k** + `state.md` **21,0k** = **29,9k** antes de
 > qualquer trabalho. O `LICOES.md` seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
-> 26,3k → 28,6k → 29,9k → 31,2k → 32,3k → **37,5k**, com a §4.5f, a §4.5g, a
-> §7.22b e a §7.25b da sessão 30).
+> 26,3k → 28,6k → 29,9k → 31,2k → 32,3k → 37,5k → **39,2k**, com a §1.12, a §3.7
+> e a 5ª confirmação da §2.6 na sessão 35).
 >
-> ✅ **O corte do `state.md` FUNCIONOU na sessão 30, e é o primeiro que funciona.**
-> Ele vinha de 9,4k → 10,0k → 12,6k → 14,0k → 14,9k → 17,9k; desceram os blocos
-> narrativos das sessões 26, 27 e 29 para o diário e ele fechou em **16,5k** —
-> cortou 4,7k contra 3,7k de escrita nova. Empatou por pouco: a sessão seguiu
-> depois do corte e acrescentou o lote de subida, o achatamento e a coxa. É essa a conta: *o corte tem que
-> ser maior que o que se pretende acrescentar, ou não é corte.* **Enxugar não
-> vence escrita nova** — as cinco tentativas anteriores provaram isso.
+> ✅ **O corte do `state.md` funcionou duas vezes seguidas** — sessões 30 e 35.
+> Ele vinha de 9,4k → … → 17,9k → 23,3k; na sessão 35 desceram os blocos
+> narrativos das sessões **32, 33 e 34** para o `diario-2026-09.md` (4,1k de
+> corte) e ele fechou em **21,0k** mesmo com a sessão nova escrita por cima.
+> É essa a conta: *o corte tem que ser maior que o que se pretende acrescentar,
+> ou não é corte.* **Enxugar não vence escrita nova** — as cinco tentativas
+> anteriores provaram isso.
 >
 > Próximos candidatos a descer, quando a frente deles fechar: o bloco de morph
-> da sessão 25 e o do material de 31/07.
+> da sessão 25, o do material de 31/07 e a sessão 31 (os corpos reais).
 >
 > **Toda a coluna foi remedida na sessão 18** com um divisor único de 3,6
 > chars/token, calibrado contra os números que já estavam certos (`prompt_m.md`
@@ -120,6 +120,8 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
 2. `process.py` — Blender headless: normaliza, decima, aplica material Zenith, valida
 3. `measure.py` — mede a **folha 2D** (barriga/ombros em % da altura): régua rápida para julgar folha antes da Meshy
 4. `qa_render.py` — renders de QA (`--raw --torso` para inspecionar o cru antes de processar)
+
+    🔴 **`qa/probe/sondas/probe_superficie.py` é PASSO OBRIGATÓRIO antes do `process.py`.** As 8 validações olham contagem, altura, piso, centro, borda, ilha, simetria e material — **nenhuma olha a superfície**, e duas malhas passariam 8/8 com defeito grave: uma sem o short na frente (fatal, a regra 3b lê a peça da malha) e outra sem os mamilos. A sonda renderiza peito, faixa, virilha e mãos com **luz rasante**, que é o único ângulo em que relevo aparece — e **morre** se não achar EEVEE em vez de cair para Workbench, porque degradar em silêncio foi exatamente o que produziu um veredito errado. Processar antes de olhar já custou um id ocupado e um desfazer manual. `LICOES.md` §1.12
 5. `metrics.py` — mede o **master 3D**: circunferências em cm e IMC real por volume da malha. É a régua de verdade, e a base da classificação. **São 11 colunas, e `shoulder` entrou em 01/08** para fechar o contrato com o app em 9 de 9.
 
     ⚠️ **Medida de fita é LANDMARK, não extremo.** `chest` (0,720) e `shoulder` (0,795) são fração fixa **de propósito** — os dois foram testados como "máximo numa banda" e os dois falharam: o peito foge para a **axila** (+8 cm) e o ombro desce para o **tórax**. Máximo ao longo do eixo vertical sempre acha uma junção, porque é lá que dois volumes se somam. **Não reabrir** — `LICOES.md` §1.8b.
@@ -180,7 +182,9 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     🔴 **Veredito de PINTURA não se dá no render do `--fit`** — ele é clay com luz chapada, e tecido sem pintar tem quase o tom do corpo. Uma listra branca passou por 37 avatares e por uma régua verde assim; quem a viu foi o Rogério, no testador. Usar `qa/probe/sondas/render_dist.py`, que renderiza o GLB entregue com o HDR. §4.5c.
 
     ⚠️ **Régua verde não é avatar certo.** A régua da folha compara a **mediana do quarto frontal**: ela mede o *pico*, não a *forma*. Deu ±0,002 nos 37 com o traçado caindo cedo demais para os lados — o defeito que ele viu. §1.5 num eixo novo.
-12. `sheet_qa.py` — mede a folha **ainda em Downloads**, antes de ela entrar no repositório: alinhamento das 3 vistas, espaçamento, **largura do tronco na frente** (ombro/cintura/quadril/coxa, com o braço fora da conta), **profundidade no perfil** (barriga/glúteo/coxa) e extensão do tecido. Aceita uma 2ª folha como referência e imprime o delta. O `measure.py` só roda depois do `crop.py`, e não se grava folha que pode reprovar. **Passo padrão antes de aprovar qualquer folha, dos dois geradores.**
+12. `sheet_qa.py` — mede a folha **ainda em Downloads**, antes de ela entrar no repositório:
+
+    🆕 **O CICLO DE CORREÇÃO (ideia dele, 19/09) é o jeito padrão de consertar folha.** Em vez de re-rolar a folha inteira quando um eixo erra, pedir o conserto **na mesma conversa do gerador**, com a imagem à vista. Entregou 3 dos 5 corpos da sessão 35. As regras são cinco e todas medidas — **uma instrução por passada, local e numa região contígua · declarar o que NÃO pode mudar · magnitude não se controla · ele corrige EIXO e não MIRA (medir a geração 1 ANTES de corrigir) · duas razões que dividem o denominador não se ajustam separadas.** `LICOES.md` §3.7 alinhamento das 3 vistas, espaçamento, **largura do tronco na frente** (ombro/cintura/quadril/coxa, com o braço fora da conta), **profundidade no perfil** (barriga/glúteo/coxa) e extensão do tecido. Aceita uma 2ª folha como referência e imprime o delta. O `measure.py` só roda depois do `crop.py`, e não se grava folha que pode reprovar. **Passo padrão antes de aprovar qualquer folha, dos dois geradores.**
 
     ⚠️ **O critério é a ASSINATURA DE VAZAMENTO, não o gerador — este parágrafo já ensinou o contrário e estava errado.** Até 30/07 ele dizia "em folha do Gemini ele não mede nada", e o `LICOES.md` §1.1 já tinha derrubado isso: **o gerador nunca foi a variável.** A folha do `zen_f_b06_d3` é do **ChatGPT** e vazou (5,05% de variação, `cintura/ombro 1,245`), enquanto a folha do Gemini medida em 30/07 leu **sã** — 0,14% de variação, 0 px nos pés, `cintura/ombro 0,554` — e a leitura dela decidiu uma escolha entre duas folhas. Pela redação antiga eu teria jogado fora uma medida válida.
 
@@ -252,6 +256,19 @@ O que é estrutural e não muda de sessão para sessão:
 **A meta é COBERTURA do eixo de IMC, não contagem.** O número 32 nunca foi meta.
 Para saber quais vãos existem hoje, **rodar `build_index.py`, que imprime** —
 contar à mão já deu errado.
+
+✅ **A PRODUÇÃO DE AVATARES ACABOU em 22/09 (sessão 35), com 103 corpos.** Nenhuma
+célula de forma em aberto nos dois sexos; os dois vãos `high` masculinos
+fechados. O que sobra está **parado por decisão dele**, não por falta de trabalho:
+dois vãos `high` femininos (recomendado deixar — cabem no morph) e as M-C
+parkadas para tentar com o ciclo de correção. **Não reabrir produção sem ele
+pedir.**
+
+🔴 **A frente agora é a fase automática, e é UMA POR SESSÃO — ele escolhe qual.**
+São **27 corpos sem peça e sem morph** (103 − 76), e nada vai para o app até
+zerar: corpo sem entrada no `morph_map.json` aparece e não responde às medidas.
+**Ordem dele, 22/09: atacar morph OU pintura de peça, nunca as duas na mesma
+sessão — e perguntar a ele qual, na abertura da conversa.**
 
 **⏸️ A frente do SHORT está PARADA por decisão do Rogério (28/07)**, até as duas
 bibliotecas existirem. O motivo é custo relativo, e é medido. **Não reabrir sem

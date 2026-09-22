@@ -530,6 +530,48 @@ encostou na borda em 2 setores de 11; e o contraste de curvatura devolveu
 > antes de acreditar em qualquer pico: conferir se ele encostou na borda, que é
 > exatamente o que o `at_band_edge` do `metrics.py` já faz.
 
+### 1.12 🔴 Nenhuma régua do projeto olha SUPERFÍCIE — e o veredito visual precisa de luz rasante
+
+Sessão 35 (22/09/2026). **Duas malhas reprovadas por defeito que passaria 8/8 no
+`process.py`:**
+
+| avatar | defeito | gravidade |
+|---|---|---|
+| `zen_m_b05n_d1` (1ª tentativa) | **short ausente na FRENTE** — só existia atrás, a barriga descia até a virilha nua | **fatal**: a regra 3b lê a peça da malha pelo vinco; sem tecido não há o que detectar |
+| `zen_m_b06k_d3` | **mamilos ausentes** nos dois peitorais + costura rasgada sob o peitoral | cosmético, mas a folha os tinha desenhados |
+
+As 8 validações olham contagem, altura, piso, centro, borda, ilha, simetria e
+material. **Nenhuma pergunta se a superfície está certa.** E os números do cru
+não separam os dois casos: o reprovado e o bom mediram 5.347 contra 7.868 ilhas,
+0 contra 0 non-manifold, 1,50 contra 1,53 mm de simetria média. São gêmeos na
+planilha.
+
+🔴 **E o veredito visual só vale com LUZ EM ÂNGULO.** No primeiro caso eu olhei o
+render, **achei o short faltando, parei de procurar e não vi os mamilos** — o
+Rogério viu. Quando refiz com EEVEE e luz rasante, o defeito saltava. Meu render
+tinha caído em *Workbench* (luz chapada) porque o nome da engine estava errado e
+um `try/except` engoliu o erro.
+
+**Duas coisas, e as duas são a mesma:**
+1. Julgar relevo em render de luz chapada é julgar no escuro — é a §4.5c
+   ("veredito de pintura não se dá no render do `--fit`") num eixo novo.
+2. **Degradar em silêncio é pior que falhar.** O `try/except` que "salvou" a
+   execução produziu um veredito errado com aparência de veredito.
+
+✅ **`qa/probe/sondas/probe_superficie.py`** — closes com luz rasante em peito,
+faixa, virilha e mãos. **Passo obrigatório ANTES do `process.py`**, e ele
+**morre** se não achar EEVEE, em vez de cair para Workbench. Processar antes de
+olhar já custou um id ocupado e um desfazer manual (master, dist e entrada do
+`library_metrics.json`).
+
+⚠️ **Causa do defeito: desconhecida.** Testei a hipótese óbvia — folhas do ciclo
+de correção desenhariam o mamilo com pouco contraste e a Meshy não reconstruiria
+o que quase não existe em tom — e **os números não sustentam**: as duas folhas
+que perderam mediram 98/93 e 103/102 de contraste local, *entre* as duas que
+mantiveram (89/87 e 115/112). Ressalva honesta: a métrica procura a mancha mais
+escura da faixa do peito e não garanti que ela trava no mamilo. Refuta menos do
+que parece, mas também não confirma.
+
 ---
 
 ## 2. Mirar um IMC — o que funciona e o que não funciona
@@ -969,6 +1011,30 @@ Quem diz o número é o `metrics.py`, depois da Meshy (§5.5). **Registrar a
 previsão continua valendo**, porque é ela que revela o erro — mas é palpite
 declarado e não deve gastar tempo de cálculo.
 
+> ### 🔴 5ª confirmação, sessão 35 — e desta vez a régua era de SEÇÃO, não de IMC
+>
+> Tentei de novo, com roupa nova: em vez de prever IMC, medir a **razão de seção
+> transversal** (largura × profundidade) contra a âncora e aplicar um fator de
+> amplificação calibrado. O fator mediu **2,3×** num avatar e **3,6×** no
+> seguinte, da mesma linhagem e do mesmo gerador. Numa terceira linhagem, entre
+> duas folhas independentes, mediu **1,0×**.
+>
+> | avatar | IMC previsto | IMC real | erro |
+> |---|---:|---:|---:|
+> | `zen_m_b06k_d3` | ~30 | 26,8 | **−3,2** |
+> | `zen_m_b06m_d3` | ~31 | 28,6 | **−2,4** |
+> | `zen_f_b09j_d3` | ~36 | 37,4 | **+1,4** |
+>
+> Sem sinal consistente, sem magnitude consistente. O `b09j_d3` custou o crédito
+> por causa disso: pousou a 1,1 da própria âncora, **com a forma idêntica na
+> terceira casa decimal**, quando eu tinha previsto 2,5 abaixo.
+>
+> ✅ **E o contraste com a FORMA é o achado útil:** nas mesmas três folhas os
+> offsets de `WHR` e `SHR` acertaram dentro de ±0,05, como a §11 do
+> `COBERTURA_FORMAS` já dizia. **A folha prevê forma e não prevê tamanho.**
+> Declarar faixa larga, mandar para a Meshy, medir — e não apresentar estimativa
+> de IMC com aparência de conta.
+
 ---
 
 ## 3. Produção de folhas
@@ -1090,9 +1156,50 @@ fundo escuro (RGB ~139 em vez de ~200), porque a área cinza vazia domina a
 imagem. O `crop.py` também barra, mas o `sheet_qa` responde sem escrever nada no
 repositório.
 
----
+### 3.7 🆕 O CICLO DE CORREÇÃO — pedir conserto localizado na mesma conversa
 
-## 4. Malha e material
+Ideia do Rogério, 19/09/2026: em vez de re-rolar a folha inteira quando um eixo
+erra, **mandar a imagem gerada de volta no mesmo chat e pedir a correção**. É a
+maior mudança de método do ano — entregou 3 dos 5 corpos da sessão 35, depois de
+eu ter queimado quatro folhas re-rolando o dado e perdendo, a cada vez, os eixos
+que já estavam certos.
+
+**As cinco regras, e cada uma tem número atrás:**
+
+**1. Uma instrução por passada, local e nomeada numa região CONTÍGUA.** Na
+passada com duas instruções, a local (ombro) foi executada e a difusa ("o corpo
+inteiro mais estreito") rendeu **−0,33 pp**; na passada seguinte, nomeada em
+"quadril, glúteos e coxas", o movimento foi **−1,61 pp** e arrastou glúteo e coxa
+junto. Coxa e panturrilha, separadas por um joelho, não são região contígua.
+
+**2. Declarar o que NÃO pode mudar.** Escrito, congela: *"o quadril e as coxas
+não mudam"* segurou quadril em −0,38 pp e coxa em −0,13. Nas passadas em que não
+declarei, o vazamento para os vizinhos comeu metade do movimento (região nomeada
++1,32 pp, vizinhas +0,64 a +0,79).
+
+**3. Magnitude não se controla — direção e região, sim.** Quatro previsões de
+passo, quatro erros: previ +1,5 pp e vieram **+6,11**. É a mesma assinatura da
+§2.4/§10 (direção sim, magnitude não) num lever novo.
+
+**4. Ele corrige EIXO, não MIRA.** Se a geração 1 nasceu no corpo errado, é folha
+nova — o ciclo refina o corpo errado com precisão. Por isso **medir a geração 1
+antes de corrigir** virou passo obrigatório. Na `f d3`, a geração 1 nasceu com
+`ombro/quadril` 1,005 contra alvo 1,17–1,23 e foi descartada sem correção.
+
+**5. Duas razões que dividem o denominador não se ajustam separadas.** `WHR` e
+`SHR` têm o quadril embaixo: tirar 1,60 pp de quadril empurrou as duas para cima
+ao mesmo tempo, sem que nenhuma tivesse sido citada, e estourou os dois gates.
+**Corrigir pelo numerador** (ombro, cintura) quando se quer mover uma só.
+
+✅ **Funciona com folha antiga anexada em conversa nova** — o acervo inteiro vira
+ponto de partida, não só folha nascida no chat.
+
+🔴 **E o erro de processo que eu cometi com ele:** na `f d3` pedi uma correção de
+ombro para satisfazer um gate que **eu mesmo tinha inventado**, quando a geração
+já cumpria o objetivo da célula (partir o vão de IMC). A correção acertou o gate
+e estourou o tamanho — troquei um corpo que caía dentro do buraco por um que caía
+fora. **Otimizar a régua em vez do alvo.** Antes de pedir correção, perguntar:
+*isto falha o objetivo, ou só falha o meu limiar?*
 
 ### 4.1 Não calibrar densidade de malha com material que esconde geometria
 

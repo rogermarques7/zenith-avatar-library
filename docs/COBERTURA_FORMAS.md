@@ -166,9 +166,22 @@ trocar de forma.
 | M-A3 | Pera / triângulo | 30 | ✅ `zen_m_b09h_d1` 31,3 · SHR 0,889 (17/09) |
 | M-A4 | Pera / triângulo | 34 | ⚠️ na prática encostado no `zen_m_b07h_d1` 32,3 · **SHR 0,824** |
 | M-B1 | **Maçã / oval** abaixo de 33 | 26 | ✅ **`zen_m_b07k_d1` 27,7 · WHR 1,014** (19/09) |
-| M-B2..B3 | Maçã / oval | 29 · 32 | 🔴 entre 27,7 e 33,3 não há nada |
-| M-C1..C3 | **Ampulheta** acima de 24 | 27 · 30 · 33 | ⛔ **PULADAS — critério inalcançável, ver §11** |
-| M-D1..D2 | **V com gordura** (`d1`/`d2`) | 28 · 33 | 🟡 folha e refs do `zen_m_b10h_d2` prontos (`ombro/quadril` 1,277); malha reprovada, falta regerar |
+| M-B2 | Maçã / oval | 29 | ✅ **`zen_m_b05n_d1` 28,9 · WHR 1,029** (20/09) |
+| M-B3 | Maçã / oval | 32 | ⛔ **redundante** — com o `b05n_d1` em 28,9 sobra 28,9→33,3, que é morph |
+| M-C1..C3 | **Ampulheta** acima de 24 | 27 · 30 · 33 | ⏸️ **PARKADAS** para tentar com o ciclo de correção — ver §11, que mudou |
+| M-D1 | **V com gordura** (`d1`/`d2`) | 28 | ✅ **`zen_m_b10h_d2` 30,7 · SHR 1,309 · WHR 0,942** (19/09) |
+| M-D2 | V com gordura | 33 | ⛔ **aposentada** — o que faltava eram 2,3 de IMC sobre a forma do `b10h_d1`, e isso é morph, não crédito |
+
+> ### ✅ A 2ª onda masculina FECHOU em 20/09 (sessão 35)
+>
+> **`zen_m_b10h_d2` é o único V não-atlético da coleção** — os outros cinco V
+> masculinos são `d3` com WHR entre 0,76 e 0,82; este tem 0,942. E o
+> **`zen_m_b05n_d1`** entrou no vão de maçã 27,7 → 33,3, que estava vazio.
+>
+> Os dois vãos `high` masculinos também morreram: `m d1` 27,8→33,3 pelo
+> `b07h_d1`, e **`m d3` 27,4→32,4 pelo `zen_m_b06m_d3`** (28,6 · SHR 1,243 ·
+> WHR 0,813), este último produzido inteiramente pelo ciclo de correção
+> (`LICOES.md` §3.7).
 
 ### O tamanho do trabalho — **atualizado em 15/09**
 
@@ -541,9 +554,41 @@ umbigo pega a barriga mole, e barriga chata no umbigo vem com definição.
 
 ⚠️ **Isto é limiar de PLANEJAMENTO, não medida do app.** O corte vive só nesta
 tabela — não está no `library.json`, não está no `select.py`, não muda o método
-Navy nem a coluna `waist_navel`, que estão fechados desde 21/08. **As M-C ficam
-puladas**; trocar o critério (`WHRmin ≤ …` ou afrouxar o umbigo) é decisão do
-Rogério e não bloqueia produção — a mesma decisão cobre o violão feminino.
+Navy nem a coluna `waist_navel`, que estão fechados desde 21/08. Nenhum usuário é
+afetado por estas células estarem puladas.
+
+> ### 🔁 REVISTO EM 22/09 (sessão 35) — "impossível" era forte demais
+>
+> **A M-C1 já está praticamente ocupada, e o ocupante é a folha-mãe.** Ordenando
+> os homens `d1`/`d2` entre IMC 26 e 34 por cintura:
+>
+> ```
+> zen_m_b05_d2    IMC 26,8   WHR 0,813   SHR 1,153   <-- a folha-mae
+> zen_m_b05h_d1   IMC 26,2   WHR 0,880   SHR 1,113
+> zen_m_b05m_d1   IMC 27,0   WHR 0,893   SHR 1,113
+> ...
+> zen_m_b05k_d1   IMC 33,3   WHR 0,994   SHR 1,102
+> ```
+>
+> O `b05_d2` tem SHR dentro da faixa e erra o corte de WHR por **0,013**. As seis
+> folhas de 19/09 estavam mirando um lugar que já tinha dono — e pousariam em
+> ~0,86, *pior* que o corpo que já está lá. Era literalmente a âncora delas.
+>
+> **A M-C2 e a M-C3 brigam com um gradiente medido:** dentro de `d1`/`d2` o WHR
+> sobe junto com o IMC (0,813 aos 26,8 · 0,934 aos 31,3 · 0,994 aos 33,3). A
+> cintura enche mais rápido que o quadril.
+>
+> ❌ **A saída de emergência que este parágrafo deixava em aberto foi TESTADA e
+> não abre:** com `WHRmin ≤ 0,80` em vez do umbigo, entre IMC 24 e 34 só existem
+> `b06i_d3`, `b06_d3`, `b06m_d3` e `b06j_d3` — quatro corpos, os quatro `d3`.
+> Trocar a régua não faz aparecer não-atleta de cintura fina.
+>
+> ⏸️ **Decisão do Rogério, 22/09: PARKADAS para tentar com o ciclo de correção**
+> (`LICOES.md` §3.7), que ainda não existia quando as seis folhas foram feitas.
+> **E se for tentar, mirar o nome certo:** o alvo honesto não é "ampulheta" e sim
+> **"a cintura mais estreita já feita em `d1`/`d2` acima de IMC 30"** — o recorde
+> ali hoje é 0,934, e uma folha pousando em ~0,86 seria ponto novo de verdade.
+> Muda a célula e o critério de aprovação, não a anatomia.
 
 ### 🔴 O lever-espelho não tem passo de IMC — nem sinal
 
