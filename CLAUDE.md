@@ -18,16 +18,19 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 | **decidir QUAL avatar produzir** — o que falta é FORMA (retângulo, maçã, violão), não só IMC · **e os ajustes da Meshy 7** | `docs/COBERTURA_FORMAS.md` | **8,6k** |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
 | **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
-| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/FILA_PECAS.md` | 3,9k |
+| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/REVISAO_ROUPA_2026-09-23.md` **primeiro** (4,7k), depois `docs/FILA_PECAS.md` | 6,5k |
 | investigar a coxa (RESOLVIDA em 14/08 por offset — ler antes de reabrir) | `docs/PROBLEMA_COXA.md` | 3,7k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **39,2k** |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **48,0k** |
 | entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-09.md` (4,0k) · `diario-2026-08.md` (11,2k) · `diario-2026-07.md` (**grep**) | 65,3k |
 | o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
 
-> Leitura padrão: `CLAUDE.md` **8,9k** + `state.md` **21,0k** = **29,9k** antes de
-> qualquer trabalho. O `LICOES.md` seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
-> 26,3k → 28,6k → 29,9k → 31,2k → 32,3k → 37,5k → **39,2k**, com a §1.12, a §3.7
-> e a 5ª confirmação da §2.6 na sessão 35).
+> Leitura padrão: `CLAUDE.md` **9,9k** + `state.md` **26,0k** = **35,9k** antes de
+> qualquer trabalho. 🔴 O `state.md` subiu de novo (21,0k → 23,7k → **26,0k** com a
+> sessão 37) — **o corte virou dívida vencida**: descer os blocos narrativos das
+> sessões 30 e 31 para o diário é a primeira coisa da próxima sessão. O `LICOES.md`
+> seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
+> 26,3k → 28,6k → 29,9k → 31,2k → 32,3k → 37,5k → 39,2k → 42,1k → **48,0k**, com as
+> §4.5j a §4.5o na sessão 37).
 >
 > ✅ **O corte do `state.md` funcionou duas vezes seguidas** — sessões 30 e 35.
 > Ele vinha de 9,4k → … → 17,9k → 23,3k; na sessão 35 desceram os blocos
@@ -149,7 +152,7 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
 8. `zenith_material.py` — **não é executável**: é a fonte única do material (cor/metallic/roughness), importada pelo `process.py` e pelo `restyle.py`
 9. `make_env.py` — gera o ambiente de iluminação (`03_dist/env/zenith_env.hdr`). A identidade Zenith mora aqui
 10. `restyle.py` — reaplica o material nos 39 `03_dist/glb/` **lendo os masters, sem re-decimar e sem tocar em `02_master/`**. É o jeito de mexer em cor sem refazer QA. `--preview {id}` renderiza 4 vistas com o ambiente em `qa/look/{id}/`
-11. `shorts.py` — segmenta e pinta as peças, **um avatar por vez**, lendo o vinco da malha: short no masculino, **short + faixa** no feminino desde 01/08. `--fit` propõe e renderiza QA · `--report` confere contra a série · `--check` roda só as travas · `--apply` grava em `03_dist/glb/`
+11. `shorts.py` — segmenta e pinta as peças, **um avatar por vez**, lendo o vinco da malha: short no masculino, **short + faixa** no feminino desde 01/08. `--fit` propõe e renderiza QA · `--report` confere contra a série · `--check` roda só as travas · **`--preview` pinta em `qa/preview/` sem gastar versão** · `--apply` grava em `03_dist/glb/`
 
     ✅ **A borda de CIMA da faixa é MODELADA, não procurada (11/08).** Ela nunca foi medível — de 4 a 9 dos 9 setores da frente não têm aro. Hoje o topo frontal vem do `faixa_topo_frente_zh` no mapa, que é **régua externa por avatar** (o `faixa_ref.py` lê a folha), e o traçado é platô na frente inteira + descida nos lados. Erro: **±0,002 em 37 de 37**. A válvula `faixa_topo_reto` morreu. `LICOES.md` §4.5c.
 
@@ -171,6 +174,21 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     curva, senão sobra um V no centro da frente vindo da rampa do avental.
     `LICOES.md` §4.5f.
 
+    🔴 **Defeito perto da silhueta lateral só conta com LENTE LONGA (22/09).** A
+    "aba preta" que a fila chamava de franja **não existe**: com 300 mm a 6 m a
+    faixa é barra limpa de ponta a ponta. Era o braço, mais perto da câmera,
+    projetando o mesmo corte horizontal mais baixo. O enquadramento apertado que
+    faz uma tira de 1 cm aparecer é o mesmo que faz a perspectiva dominar num
+    corpo largo. Consertar o fantasma custou uma versão em 37 femininas.
+    `LICOES.md` §4.5h.
+
+    ⚠️ **Fatia sem corte de braço não mascara nada** — esse defeito era real,
+    embora invisível, e hoje o buraco **interior** da curva é preenchido pela
+    própria parábola (fora do intervalo medido nada é inventado). Quem o achou
+    foi a `faixa_tres_cores.py`, que pinta a máscara de **vermelho**: banco de
+    duas cores mostra o resultado e esconde a causa, e as duas causas possíveis
+    pedem consertos opostos.
+
     ⚠️ **A máscara do braço na faixa é o VÃO DE AR, não a profundidade (15/08).**
     `PROF_FRAC` responde *"esta coluna já é tronco?"* e num corpo com busto a
     barra de 60% fica alta demais — o corte caía 4,2 cm DENTRO do tronco e comia
@@ -180,6 +198,36 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     mas preserva degrau, e o que sobrava era borda serrilhada. `LICOES.md` §4.5g.
 
     🔴 **Veredito de PINTURA não se dá no render do `--fit`** — ele é clay com luz chapada, e tecido sem pintar tem quase o tom do corpo. Uma listra branca passou por 37 avatares e por uma régua verde assim; quem a viu foi o Rogério, no testador. Usar `qa/probe/sondas/render_dist.py`, que renderiza o GLB entregue com o HDR. §4.5c.
+
+    🔴 **A BAINHA NÃO É UM ANEL RETO, e a tinta é um plano (23–24/09).** O
+    docstring do `w_fit` afirma o contrário desde a sessão 4 — e aquilo foi medido
+    num **único** corpo de IMC 147,7, em que a coxa é cilindro. No resto do acervo
+    a bainha modelada fica **acima** da tinta, de 0,5 cm a quase 7 cm. Provado por
+    imagem e **validado no olho dele**: clay sem pintura, luz rasante, câmera
+    ortográfica nivelada (`bainha_rasante.py` → `bainha_pixel.py` →
+    `bainha_mosaico.py`). Viés contra a folha: **−0,0061 da altura, 81 negativos
+    de 103, pior nos d3**.
+
+    ⚠️ **CINCO detectores morreram e NENHUM GLB de bainha foi gravado.** O
+    último (anel fechado) morreu porque **a virilha também é um anel fechado** —
+    a prega inguinal e o sulco glúteo são as duas metades dela, e ela é mais
+    funda que a barra. No `zen_f_b01_d1` barra e virilha distam **6 mm**: nenhuma
+    janela de altura separa. ➡️ **A saída decidida por ele é ler o contorno da
+    barra na FOLHA, vista de costas** (lá é divisa de cor, sem vinco de pele), com
+    a altura amarrada no clay da frente. `LICOES.md` §4.5j, §4.5n e §4.5o.
+
+    🔴 **O ciclo é OLHA → APLICA, e `--preview` é o que torna isso possível.** Ele
+    pinta igual ao `--apply` e grava em `qa/preview/`, que não é URL de CDN;
+    `qa/probe/sondas/previa_peca.py` renderiza por cima com alumínio + HDR **no
+    mesmo enquadramento do `revisao_peca.py`**. Ciclo caro não fica devagar, fica
+    cego — a etapa que dói é a que se pula. Em 24/09 a prévia reprovou um lote que
+    teria custado **73 versões de GLB**. `LICOES.md` §4.5m.
+
+    ⚠️ **O `perfil_frontal()` do `shorts_ref.py` media a FAIXA DO PEITO nas
+    femininas** — a maior corrida escura de uma coluna de tronco não é o short
+    desde 01/08. Hoje ele exige `banda=`, vinda da vista de costas. E o
+    `escrever()` passou a **alisar** (`w_waist_liso`): a folha entrega o caminho,
+    não o acabamento. `LICOES.md` §4.5k.
 
     ⚠️ **Régua verde não é avatar certo.** A régua da folha compara a **mediana do quarto frontal**: ela mede o *pico*, não a *forma*. Deu ±0,002 nos 37 com o traçado caindo cedo demais para os lados — o defeito que ele viu. §1.5 num eixo novo.
 12. `sheet_qa.py` — mede a folha **ainda em Downloads**, antes de ela entrar no repositório:
@@ -264,11 +312,14 @@ dois vãos `high` femininos (recomendado deixar — cabem no morph) e as M-C
 parkadas para tentar com o ciclo de correção. **Não reabrir produção sem ele
 pedir.**
 
-🔴 **A frente agora é a fase automática, e é UMA POR SESSÃO — ele escolhe qual.**
-São **27 corpos sem peça e sem morph** (103 − 76), e nada vai para o app até
-zerar: corpo sem entrada no `morph_map.json` aparece e não responde às medidas.
-**Ordem dele, 22/09: atacar morph OU pintura de peça, nunca as duas na mesma
-sessão — e perguntar a ele qual, na abertura da conversa.**
+✅ **A PEÇA ACABOU em 22/09 (sessão 36): 103 de 103 vestidos.** O `shorts_map`
+tem entrada para todo mundo, e o `probe_material_dist` cobra material **e** peça
+nos 103.
+
+🔴 **A frente que sobra é o MORPH: 27 corpos sem shape key** (103 − 76). Nada vai
+para o app até zerar — corpo sem entrada no `morph_map.json` aparece e **não
+responde às medidas do usuário**. A ordem de 22/09 (uma frente por sessão, ele
+escolhe) continua valendo, mas hoje só existe uma frente automática em aberto.
 
 **⏸️ A frente do SHORT está PARADA por decisão do Rogério (28/07)**, até as duas
 bibliotecas existirem. O motivo é custo relativo, e é medido. **Não reabrir sem

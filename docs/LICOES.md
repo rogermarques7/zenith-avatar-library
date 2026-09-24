@@ -1880,6 +1880,541 @@ fato** e 14 saem bit a bit idênticos. O magro `b01_d1` — o que a primeira ver
 do `w_arm_wide` quebrou em 11/08 — não muda um vértice (114 → 114), que era a
 regressão a vigiar.
 
+#### 4.5h Fatia sem corte não é fatia sem braço — e o banco de duas cores não podia ver isso (22/09)
+
+A fila viva chamava o resto de *"franja de ~1 triângulo, visível só em ângulo
+rasante"*. No GLB entregue, com material e HDR, é uma **aba preta** na quina da
+faixa, em todas as femininas pesadas. A descrição errada durou cinco semanas
+porque ninguém tinha olhado o defeito no arquivo que o usuário baixa.
+
+##### 🔴 Duas hipóteses minhas, as duas mortas por medida
+
+1. **"É o `ARM_COL_OUT`."** O comentário dele descreve exatamente o defeito
+   (*"com 2 colunas a faixa INVADE o braço — língueta preta saindo pela quina"*),
+   e isso é atraente demais para não conferir. Conferido: ele só é aplicado
+   dentro do `_arm_cut_prof`, que é o **plano B**. O vão decide a maioria das
+   fatias, e nelas o `ARM_COL_OUT` nem entra. *Comentário que descreve o sintoma
+   não prova a causa.*
+2. **"É a parábola saindo mais lateral que a medida crua."** Essa tem mecanismo
+   e tem número: no `b12_d1`, zh 0,745, o cru dá 0,152 e o alisado 0,249 — 10 cm
+   de face interna de braço fora da máscara. Escrevi a PASSADA 4 para ela (a
+   normal decide na tira em que as duas discordam, porque o flanco do tronco
+   olha para fora e a face interna do braço olha para o tronco). **Medida no
+   banco: 2 vértices no `b12_d1` e 20 no `b11_d2`.** A tira existe em 4 fatias de
+   21, e a aba cobre a faixa inteira — não podia ser ela.
+
+A PASSADA 4 **ficou** porque é correção real e sem regressão (0 vértices no magro
+`b01_d1`), mas ela não é o conserto. Registrar isso importa: o conserto certo
+apareceu depois, e quem lê o diff vê as duas mudanças juntas.
+
+##### ✅ A causa apareceu quando a máscara virou VERMELHO
+
+`faixa_tres_cores.py`: preto é roupa pintada, **vermelho é a máscara do braço**,
+cinza é corpo. A máscara cobria o braço em 20 das 21 fatias e faltava **uma**
+(`b12_d1` zh 0,765 à direita; `b11_d2` zh 0,725 à direita) — e a cunha preta
+estava exatamente naquela altura.
+
+**Fatia sem corte não mascara NADA**, então a faixa sai pintada de ponta a ponta
+ali, braço incluso. Uma fatia de 0,9 cm já aparece de costas.
+
+🔴 **A lição de método é sobre o BANCO, não sobre o braço.** O banco de duas
+cores (`faixa_braco_mapa.py`, `faixa_normal_mapa.py`) mostra o RESULTADO e
+esconde a CAUSA: preto sobrando pode ser máscara que não alcançou o braço **ou**
+máscara que não existe naquela fatia, e as duas pedem consertos opostos — mexer
+no limiar, ou preencher o buraco. Foi por isso que eu persegui a hipótese 2: com
+duas cores, a foto era compatível com ela. **Quando um banco de ensaio admite
+duas causas com a mesma imagem, ele não é banco de ensaio — é Rorschach.** A
+terceira cor custou 40 linhas e matou a dúvida na primeira foto.
+
+##### ✅ O conserto, e o que a ressalva antiga realmente proibia
+
+Preencher o buraco **interior** da curva de corte pela própria parábola. O
+comentário de 15/08 dizia *"preencher os `None` por extrapolação inventaria braço
+onde a varredura não viu nenhum"* — e ele continua certo para o que diz:
+**fora** do intervalo entre a primeira e a última fatia com corte, nada é
+inventado. **Dentro** dele é interpolação entre duas vizinhas que mediram, que é
+uma afirmação muito mais fraca: entre duas fatias que acharam o braço, a fatia do
+meio tem braço.
+
+*Ressalva escrita para o caso A costuma ser lida como proibição do caso B.* A de
+15/08 me impediu, por cinco semanas, de fazer a coisa certa — e ela nem falava
+disso.
+
+##### 🔴 E AÍ O DEFEITO QUE ABRIU TUDO ISSO NÃO EXISTIA — ERA PERSPECTIVA
+
+O conserto foi aplicado, o GLB entregue foi renderizado de novo e o A/B recortado
+na mesma câmera deu **imagem igual**. A aba preta continuava lá.
+
+Ela não é tinta no braço. Com **lente de 300 mm a 6 m** — perspectiva
+praticamente eliminada — a faixa é uma **barra horizontal limpa de ponta a
+ponta**, com as duas bordas retas. O que a lente de 85 mm a 2,6 m produzia era o
+braço, que está **mais perto da câmera**, projetando o mesmo corte horizontal
+mais baixo e mais grosso do que o mesmo corte no tronco; e a silhueta do braço
+recortando a faixa por cima disso. A "aba" é a faixa **no tronco**, vista por
+trás do braço.
+
+⚠️ **A régua que eu escolhi tinha o defeito que eu estava procurando.** O
+`render_dist.py` nasceu justamente para o veredito de pintura — e está certo para
+isso —, mas o enquadramento apertado que torna uma tira de 1 cm visível é o mesmo
+que torna a perspectiva dominante num corpo largo. *Perguntar o que a imagem não
+mede vale também para a imagem que eu mesmo criei para medir.*
+
+**Regra prática que sai daqui:** num corpo largo, defeito que aparece perto da
+silhueta lateral só conta como defeito depois de reproduzir com lente longa. Se
+some, era paralaxe.
+
+##### O saldo honesto
+
+- O buraco na curva era **real** e está consertado: a máscara passou de 611 para
+  620 vértices no `b12_d1` e de 541 para 554 no `b11_d2`, e nenhuma fatia da banda
+  fica mais sem corte. Isso é correção de verdade.
+- **E é invisível no entregue.** Custou uma versão de GLB em 37 femininas (short
+  + morph por cima, regra 9), por uma melhora que ninguém vê.
+- O defeito visível que motivou tudo **não era defeito**.
+
+Registrar o saldo assim é o ponto: o mesmo diff, contado só pela primeira metade,
+viraria "conserto de peça entregue" na próxima sessão — e alguém repetiria o
+gasto atrás do mesmo fantasma.
+
+#### 4.5i O defeito que a varredura realmente achou: o cós MERGULHA na frente (22/09)
+
+Enquanto eu perseguia o fantasma da quina, a varredura do acervo inteiro no GLB
+entregue achou um defeito **grande, real e visível de frente**: em seis avatares
+o cós desce em V até a virilha e o short vira **cavada de biquíni**, com tecido
+modelado aparecendo sem pintura acima do preto.
+
+**Os seis são todos da leva nova** — `zen_f_b05h_d2` `zen_f_b05i_d2`
+`zen_f_b08_d2` `zen_f_b07h_d1` `zen_m_b10i_d2` `zen_m_b07i_d1`.
+
+##### A régua que separa: a queda contra o ANEL, não a amplitude da curva
+
+Amplitude alta de `waist_zh` sozinha não acusa nada — nos corpos pesados ela é a
+barriga caindo, e é o comportamento certo (`cos_avental`). O que separa é a
+**queda contra o anel que a própria malha mediu**:
+
+```
+queda = waist_ring_zh - min(waist_zh)      (só em quem NÃO tem cos_avental)
+
+mediana do acervo    0.029
+teto da série sã     0.046
+os seis              0.075 .. 0.108
+```
+
+O `zen_m_b12_d1` também dá 0.168 e **não entra na lista**: nele a queda é a
+barriga de verdade (IMC 147,7), o mesmo "não se move" que o `FILA_PECAS` já
+registra. A régua é a queda **mais** a ausência de avental **mais** o corpo não
+ser extremo.
+
+##### O conserto, e por que ele é escalar
+
+Cós **escalar na altura do anel medido** — a correção manual barata que o
+`shorts.py` já previa (*"para consertar um avatar basta escrever `waist`:
+0.57"*), com `source: manual`. O número sai da malha (o anel foi achado:
+`waist_ring_found` True nos seis); a folha só **confirma**, e nos seis ela mostra
+cós horizontal logo abaixo do umbigo.
+
+⚠️ **Não mexi na janela do `w_waist_curve`.** A causa é ela achar uma
+concavidade mais forte na virilha do que no cós, nesses corpos; mas o piso da
+janela é global e mexer nele mexe nos 103 de uma vez, para consertar 6. É a
+mesma doutrina do `ARM_COL_OUT`: constante global calibrada em um corpo conserta
+um e quebra outro. Fica registrado como frente própria, com a régua de queda já
+pronta para medir se o conserto global valeria.
+
+🔴 **E a lição de varredura:** o `--report` já marcava `CANTO0.023` no
+`zen_f_b05i_d2` desde o primeiro `--fit`, e eu li aquilo como ruído de trava
+porque ele vinha no meio de uma lista de 52 ids em `conferir:`. **Trava que
+aponta 52 avatares não aponta nenhum.** Quem achou foi a imagem do entregue.
+
+⚠️ **E o conserto acima foi REPROVADO por ele no dia seguinte** — o escalar
+ficou de 2,0 a 7,2 cm ACIMA do que a folha diz, porque o anel da malha não é o
+cós. Ver a §4.5k, que é a continuação direta deste bloco.
+
+#### 4.5j 🔴 A BAINHA NÃO É UM ANEL RETO — e o que provou foi luz rasante no clay (23/09)
+
+Este bloco fecha a pergunta que a §1.10 deixou aberta em 13/08 (*"quem reabrir
+precisa de um SINAL NOVO"*) e explica a queixa mais repetida da revisão do
+Rogério: *"abaixo da barra da perna tem uma faixa preta além do limite da barra
+da perna"*, com ordem explícita de revisão do acervo inteiro.
+
+##### O sinal novo não foi um detector — foi apagar a cor
+
+As quatro hipóteses mortas em 13/08 (lasca, `nz`, vinco diagonal, vinco setor a
+setor) perguntam todas *onde a superfície dobra*, medindo na malha. A quinta
+tentativa desta sessão, **degrau de raio** (a casca de tecido sobre a pele),
+também morreu: a 60k, o raio mediano de uma fatia de 2,6 mm oscila ±0,7 cm entre
+vizinhas e um degrau de tecido de 4 mm não existe nesse ruído.
+
+✅ **O que respondeu em cinco minutos foi uma IMAGEM:** o master renderizado com
+**um material só** (clay claro, sem pintura nenhuma), **luz rasante vinda de
+baixo**, câmera **ortográfica e nivelada** — e a bainha do mapa desenhada como
+linha de 1 px *depois*, no PNG, fora do 3D.
+
+Cada uma dessas quatro escolhas mata um engano específico, e três delas já
+tinham custado uma sessão a este projeto:
+
+1. **Sem pintura.** Com preto contra claro o olho para na divisa de cor. Foi
+   essa confusão que gerou a hipótese do "vinco diagonal" na sessão 4.
+2. **Luz rasante de baixo.** O ressalto da bainha aponta para baixo; luz de cima
+   o apaga. É a §1.12, no lugar em que ela ainda não tinha sido aplicada.
+3. **Ortográfica e nivelada.** Num render ortográfico com a câmera no nível,
+   **todo plano horizontal é uma linha horizontal na imagem** — então qualquer
+   inclinação que se vê é do objeto, não da projeção. É a resposta estrutural à
+   §4.5h: aqui a perspectiva não pode inventar defeito.
+4. **A marca desenhada no PNG, não em 3D.** A primeira versão pôs um toro por
+   altura candidata e ele **tapou exatamente o relevo de 1 mm** que a sonda
+   existia para mostrar. Marca que come o objeto medido não é marca.
+
+##### O que a imagem mostra
+
+No **`zen_f_b06i_d3`** a bainha modelada é **diagonal**: sobe no lado de fora da
+coxa e desce para o lado de dentro, com mais de **5 cm** entre as duas pontas. A
+tinta é um **plano horizontal na ponta mais baixa** — então sobra preto sobre a
+pele em toda a volta, e no lado de fora sobra muito.
+
+No **`zen_m_b09h_d1`** a mesma bainha é quase horizontal, e o excesso é a tira de
+**6 a 9 mm** que a §1.10 já tinha medido no model-viewer em 13/08.
+
+🔴 **E as duas magnitudes batem com as duas frases dele**, escritas sem ver
+nenhuma medida: no `b09h_d1`, *"pequeno defeito na barra da perna"*; no
+`b06i_d3`, **"veja o tanto que ficou pintura pra fora"**.
+
+##### Por que o projeto acreditou no contrário por dois meses
+
+O docstring do `w_fit` afirma, desde a sessão 4, que *"o vinco da bainha é
+praticamente HORIZONTAL — a bainha já é um anel reto"*. Aquilo foi medido no
+**`zen_m_b12_d1`, IMC 147,7** — um corpo em que a coxa é um cilindro e o short
+realmente acaba num anel reto. **Uma amostra, generalizada para 103.** É a §1.5
+no eixo da geometria: a medida estava certa e a conclusão não.
+
+##### A régua externa já sabia, e a TOLERÂNCIA escondeu
+
+O `shorts_ref.py` compara a bainha do 3D com a corrida escura da folha e declara
+`±0.06` de tolerância. Nos 103 **todo mundo passa** — e mesmo assim:
+
+```
+erro da bainha (3d - folha)    média -0.0061   81 negativos de 103
+por sexo   m -0.0062   f -0.0060
+por classe d1 -0.0060   d2 -0.0050   d3 -0.0076   ← a correlação que ELE viu
+por caminho anel_m -0.0076 · anel_f -0.0034 · chute_f -0.0065 · chute_m +0.0017
+```
+
+**−0,0061 da altura é 1,07 cm**, exatamente o tamanho do defeito. A tolerância é
+**dez vezes maior** que o viés, então a régua respondia "dentro" com um defeito
+visível em 81 avatares.
+
+> 🔴 **Régua de passa/não-passa não vê VIÉS.** A pergunta "está dentro da
+> tolerância?" e a pergunta "o erro tem sinal?" são diferentes, e a segunda é
+> quase de graça: bastou contar negativos. Toda régua deste projeto que devolve
+> um erro por avatar deve publicar também **média e contagem de sinal da série**.
+> É a §1.1 numa forma nova — não *"o que esta régua não mede"*, e sim **"o que
+> esta régua mede e eu nunca olhei"**.
+
+##### E a d3 dele é real: −0,0076 contra −0,0050 nas d2
+
+A leitura *"pior nos corpos d3"* era observação a olho, e ficou registrada na
+fila como correlação não medida. **Medida, ela se confirma** — e casa com a
+geometria: corpo definido tem coxa mais cheia e a folha desenha short de cavada
+mais alta, o que aumenta a diagonal.
+
+##### O detector de curva NÃO está pronto — e o modo de falha é exato
+
+Foi construído (`qa/probe/sondas/bainha_curva.py`): rastreamento de cume por
+programação dinâmica circular sobre o mapa concavidade × altura, 24 setores, com
+a curva **projetada de volta no clay** para conferência no olho (§1.7c). No
+`zen_f_b06i_d3` ele **acerta** — o verde assenta em cima do vinco de ponta a
+ponta. Em 103 pernas, não:
+
+- **por cima**, o traçado sobe pelo **vinco inguinal**, que é mais fundo que a
+  bainha. No `zen_m_b09h_d1` ele leu 6,6 cm de amplitude onde a bainha é
+  horizontal. Um teto por setor ancorado na virilha (**geometria**: por dentro,
+  acima da virilha não existe superfície de perna separada) reduz mas não
+  resolve — a prega inguinal mora **abaixo** da virilha também;
+- **por baixo**, em **57 das 206 pernas** o traçado encosta no piso da janela —
+  a §1.8 outra vez;
+- e o λ do DP **não serve à série inteira**: λ=0,12 conserta um e quebra o outro.
+  É literalmente a *TENTATIVA DESCARTADA 2* do `w_waist_curve`, num eixo novo.
+
+⚠️ **Por isso NADA de bainha foi gravado nesta sessão.** Detector que acerta 1
+de 2 aplicado a 103 é a sessão 28 de novo. O que fica pronto para a próxima:
+o mecanismo provado, a sonda de imagem que dá veredito em 40 s, o banco de
+`qa/probe/hem_curva/` com as 206 pernas medidas, e os dois modos de falha
+nomeados.
+
+#### 4.5k ⚠️ O ANEL DA MALHA NÃO É O CÓS — e a régua externa do caminho estava medindo a PEÇA ERRADA (23/09)
+
+O conserto da §4.5i (cós escalar na altura do anel) foi reprovado por ele no dia
+seguinte, com duas frases precisas: *"o cós tá pintando acima de onde deveria e
+pegando parte da barriga que não devia"* (`zen_m_b07i_d1`) e *"o cós tá pintado
+errado logo abaixo do umbigo, ele não tá na mesma direção da linha do cós"*
+(`zen_f_b05i_d2`).
+
+Medido contra a folha, o escalar ficou **acima** em cinco dos seis:
+
+```
+b05h_d2 +0.041 (7,2 cm)   b05i_d2 +0.030   b10i_d2 +0.025
+b07i_d1 +0.022            b08_d2  +0.019   b07h_d1 -0.005
+```
+
+🔴 **A causa não é o anel — é que a régua que teria impedido isso estava
+quebrada, e quebrada desde 01/08.** O `perfil_frontal()` do `shorts_ref.py`
+mede, por coluna da vista frontal, a **maior corrida contígua** de pixel escuro.
+Ele nasceu em 29/07, quando só existiam os 39 masculinos e o único preto da
+folha era o short. Desde que a feminina veste **faixa + short**, a maior corrida
+de uma coluna de tronco é a **FAIXA DO PEITO**.
+
+**E ele não saiu calado: saiu absurdo, e ninguém leu.** O `--tracado` marcava
+ERRO em 21 avatares com erro médio de **−0,10 a −0,23 da altura (17 a 40 cm)** e
+assimetria esquerda/direita de ~0,20 nas femininas. Plausível demais para
+disparar alarme, absurdo demais para ser medida.
+
+> **Número absurdo numa régua que ninguém consome é o mesmo que régua
+> desligada.** A §1.1 pergunta o que a régua não mede; aqui ela media **outra
+> peça**, e a diferença entre "cego" e "medindo errado" é que o segundo *tem
+> saída* — e ela estava no relatório desde sempre.
+
+✅ **Conserto: a banda.** `perfil_frontal(banda=...)`, com a banda vinda da
+vista de **COSTAS**, onde a maior corrida é o short mesmo (a faixa de costas é
+mais baixa e o short cobre o glúteo inteiro). **Uma peça calibra a outra.**
+Depois disso: FORA cai de 21 para 13, a assimetria feminina desaba de ~0,20 para
+0,009–0,029 e os erros ficam do tamanho de defeito de verdade.
+
+##### Cós escalar também se confere
+
+O `--tracado` pulava curva escalar com "não medido" — e foi assim que os seis da
+§4.5i ficaram fora do relatório **no dia em que foram achatados**. Altura
+constante é uma curva de 24 setores iguais; não há caso novo. Hoje ele
+broadcast e confere.
+
+##### 🔴 A folha entrega o CAMINHO, não o ACABAMENTO
+
+Gravado o arco da folha nos 12 e renderizado o GLB entregue, o mergulho sumiu no
+`zen_f_b03h_d1` — e sobrou uma **COROA**: dente de serra de 3,9 cm entre setores
+vizinhos, com a trava `CANTO` em **0.039** contra o corte de 0.018.
+
+A causa é de encanamento: no `w_fit` o alisamento (`w_waist_liso`) é o **último**
+passo de propósito — *"o que vem antes decide ONDE o cós está, e ele decide COMO
+chega lá"*. O `shorts_ref.escrever()` gravava **depois de tudo**, pulando o
+alisamento inteiro. A medida por coluna da folha tem ruído, e 24 setores de
+ruído desenham uma serra.
+
+✅ **`escrever()` passou a chamar o mesmo `w_waist_liso`** (o `shorts.py` só
+importa `bpy` dentro do worker, então é importável do Python do sistema — e tem
+de ser o mesmo código dos dois lados, senão a folha grava uma curva que o
+`--fit` nunca produziria). Maior salto: **0,022 → 0,008**, `CANTO` limpo em 12
+de 12.
+
+⚠️ **O preço, medido e aceito:** o teto de 2 bins do alisamento achata arco
+grande. No `zen_m_b10i_d2` a folha tem arco 0,028 e o 3D entrega 0,003. Nos
+corpos de pannus isso é a §4.5e pelo outro lado, e é por isso que os pesados
+**não entraram** neste lote.
+
+#### 4.5l 🔴 A FOLHA CONCORDA COM A TINTA E AS DUAS DISCORDAM DA MALHA — a régua externa tem um ponto cego estrutural (23/09)
+
+Reproduzida a §2 da revisão dele (*faixa/top vazando*) com **lente de 300 mm a
+6 m**, como a regra da §4.5h manda, o `zen_f_b05h_d2` mostra um defeito grande e
+inequívoco — e **não é o que a fila dizia**.
+
+Não há tinta no braço. O que há é **tecido modelado SEM PINTURA no topo da
+faixa**: uma faixa de **3,6 cm** em toda a volta das costas, e uma **cunha maior
+subindo para a axila** na vista de 3/4. A borda de cima do tecido é uma **curva
+que sobe na direção do braço**; a tinta é uma curva de 24 setores **mais baixa
+que ela em todo lugar**.
+
+##### E a régua externa diz que está tudo certo
+
+O `faixa_ref.py` mede a peça na folha e compara com o mapa. No `zen_f_b05h_d2`:
+`3D − folha` = **−0,004 / −0,000 / −0,001** em base, cós e topo frontal. Três
+zeros — e 3,6 cm de tecido sem tinta no arquivo entregue.
+
+> 🔴 **A folha concorda com a tinta porque a tinta foi ANCORADA na folha. Quem
+> discorda das duas é a MALHA.** A Meshy modelou a peça maior do que o desenho,
+> e nenhuma régua do projeto pergunta *"onde o tecido acaba NA MALHA?"* — a
+> `shorts_ref`/`faixa_ref` perguntam onde ele acaba **na imagem que originou a
+> malha**, que é outra coisa.
+
+É o mesmo achado da §4.5j num segundo lugar, e por isso ele vira regra:
+
+- a régua externa da folha valida a **intenção** (a peça está na altura certa do
+  corpo?) — e para isso ela é excelente e insubstituível;
+- ela **não valida o acabamento** (a tinta cobre o tecido que existe?), porque
+  ela nunca olha a malha;
+- a régua que falta é a **imagem do clay com luz rasante** (§4.5j), que é a
+  única que enxerga onde o tecido modelado realmente termina.
+
+##### E as duas metades da §2 são defeitos OPOSTOS — as duas reproduzidas
+
+A fila dele mistura *"top tá invadindo parte do braço"* / *"tinta escapou e
+pegou no tríceps"* com *"pintura faltando na parte de trás do top"*. **Os dois
+existem, e estão em avatares diferentes:**
+
+- **`zen_f_b05h_d2` — falta tinta.** 3,6 cm de tecido sem pintar no topo, em
+  toda a volta, mais uma cunha maior subindo para a axila.
+- **`zen_f_b09i_d3` — sobra tinta.** Uma mancha preta em zigue-zague **no
+  braço**, separada da faixa por pele, em cima do tríceps. É literalmente a
+  frase dele.
+
+Consertos de sinal contrário na mesma lista — exatamente o que a §4.5h já
+avisava sobre banco de duas cores. **Não tratar a §2 como uma frente só.**
+
+##### 🔴 E a trava de CONEXIDADE é cega justo onde o defeito mora
+
+O `shorts.py` exige que **cada peça seja uma região conexa**, e o docstring dela
+diz que isso *"pega exatamente a falha que dá medo: máscara de braço errada"*.
+No `zen_f_b09i_d3` ela passa limpa — `islands=2`, `por_peca=[1, 1]` — **com a
+mancha preta no braço bem visível no entregue**.
+
+O motivo está no próprio docstring da trava, escrito como ressalva e nunca
+medido: *"não há garantia num corpo obeso em que o braço encosta no tronco e a
+malha funde os dois"*. Num corpo assim o preto que vazou para o braço continua
+**topologicamente ligado** à faixa pela axila fundida, então é uma ilha só.
+
+> **A ressalva de um docstring é uma hipótese sem régua.** Esta estava escrita
+> desde 01/08, e o caso que ela previa aconteceu e passou. Conexidade não separa
+> "tronco" de "braço" onde a malha não separa — e é justamente nos corpos
+> pesados e musculosos que ela não separa.
+
+A trava que falta não é topológica: é **geométrica** — área pintada do lado de
+fora da curva de corte braço/tronco (`_arm_cut_vao`), contada em faces. A curva
+já existe e já é calculada em toda pintura; ninguém a usou como régua depois.
+
+⚠️ **Nada da faixa foi tocado nesta sessão** — o diagnóstico chegou no fim da
+noite e mexer em `FAIXA_ALTURA_ZH` mexe nas 55 femininas de uma vez. O material
+para reabrir está em `qa/revisao/_faixa/{id}/` (300 mm, 4 vistas, GLB entregue).
+
+#### 4.5m 🔴 MEDIR os 103 não é OLHAR os 103 — e o ciclo tem que ser OLHA→APLICA (23/09)
+
+Entreguei o lote da madrugada dizendo *"mecanismo da bainha provado"*. Estava
+provado — em **três** avatares. Ao lado, uma medida feita nos 103. As duas
+frases juntas leem como "varri o acervo", e eu não varri.
+
+O Rogério revisou no testador e disse, sem ver nenhuma medida:
+
+> *"vc realmente fez uma varredura em todos os corpos pra verificar esse defeito
+> persistente? o problema é que parece que vc não tá enxergando os corpos, tá
+> tentando corrigir no escuro."*
+
+E a lista dele confirmou: dos 12 que eu tinha consertado, **cinco voltaram
+reprovados**, e a maioria por *"falta tinta no short"* — que é o mesmo defeito
+que eu tinha acabado de descrever na §4.5l, e que eu não apliquei ao cós.
+
+##### Os dois erros, e eles são de PROCESSO, não de método
+
+**1. Estatística sobre a série não é varredura.** Uma média sobre 103 prova que
+o defeito existe e diz o tamanho típico; **não diz em quais corpos, nem com que
+cara.** Enquanto o veredito for visual — e neste projeto ele sempre é —
+varredura tem que terminar numa **imagem de todos**, não num número sobre todos.
+E olhar 103 PNGs em sequência também não serve: defeito de borda é uma
+diferença, e diferença se vê lado a lado. Daí `bainha_mosaico.py`, 6 por folha.
+
+**2. O ciclo era APLICA → OLHA.** Cada volta custava uma versão de GLB (regra 8)
+mais `morph --apply` por cima (regra 9). Sendo caro, o julgamento visual foi
+empurrado para depois da entrega — eu decidia por medida e conferia por imagem
+no fim, quando voltar atrás já tinha preço. **Um ciclo caro não fica devagar:
+ele fica cego**, porque a etapa que dói é a que se pula.
+
+✅ **`shorts.py --preview`** pinta exatamente como o `--apply` (mesma malha,
+mesmo corte, mesmos materiais, mesmo export Draco) e grava em `qa/preview/`,
+que não é URL de CDN. O `previa_peca.py` renderiza por cima com alumínio + HDR
+**no mesmo enquadramento do `revisao_peca.py`** — previa com outro corte não
+antecipa veredito nenhum (§1.10). Custo por tentativa: zero versão, zero morph.
+
+##### ⚠️ E o Blender por MCP foi oferecido e RECUSADO — de novo
+
+Ele ofereceu abrir o Blender para eu inspecionar por MCP. A resposta continua a
+da §1.10: *"ele dá outra vista do mesmo renderizador que já tinha falhado"*. O
+gargalo nunca foi ter uma janela 3D — foi **quantos corpos eu olho** e **em que
+ponto do ciclo eu olho**. Uma janela interativa não conserta nenhum dos dois, e
+custa a ilusão de que conserta.
+
+#### 4.5n 🔴 A VIRILHA TAMBÉM É UM ANEL FECHADO — cinco detectores de bainha, e o quinto morreu por um raciocínio que parecia sólido (24/09)
+
+Continuação direta da §4.5j. O mecanismo estava provado e o Rogério tinha
+validado a medida da vista frontal no olho (*"as linhas azuis estão nos locais
+corretos"*). Faltava virar detector. **Não virou**, e as cinco mortes juntas
+formam uma lição maior que qualquer uma delas.
+
+| # | tentativa | por que morreu |
+|---|---|---|
+| 1 | degrau de RAIO na malha | a 60k o raio mediano oscila ±0,7 cm entre fatias; o tecido tem 4 mm |
+| 2 | cume por DP na malha, janela na virilha | sobe pelo vinco inguinal; um λ não serve à série |
+| 3 | teto por setor ancorado na virilha | a prega inguinal mora **abaixo** da virilha também |
+| 4 | escalar por perna, no pixel da vista frontal | **reprovado por ele em 3 de 4** — ver §4.5m |
+| 5 | anel fechado, frente + costas emendadas | **a virilha também fecha** — abaixo |
+
+##### A tentativa 5, que é a que vale registrar
+
+O raciocínio era este, e ele usa doutrina do próprio projeto:
+
+> A barra **dá a volta** na perna. A prega inguinal só existe na frente e o sulco
+> glúteo só existe atrás — nenhum dos dois fecha. Então rastrear o cume no anel
+> inteiro faz o vinco falso pagar um salto na emenda de ±90° e perder para a
+> barra. É o `w_ring_map` (*"anel fechado é o que o detector sabe achar"*) no
+> pixel em vez de na malha.
+
+**Está errado, e o erro é anatômico:** a prega inguinal e o sulco glúteo **são
+as duas metades do mesmo anel** — a junção perna/tronco, que é exatamente o que
+o `w_limbs` chama de virilha. Ela fecha a volta perfeitamente, é mais funda que
+a barra, e ganha o DP. Medido:
+
+```
+                 hem no mapa   virilha    anel detectado
+zen_m_b09h_d1       0.4188     +6,9 cm       +7,1 cm   ← é a virilha
+zen_f_b01_d1        0.4646     +3,6 cm       +3,4 cm   ← é a virilha
+```
+
+E a saída óbvia — pôr teto abaixo da virilha — **não existe**: no `zen_f_b01_d1`
+a barra real está a +3,0 cm e a virilha a +3,6 cm. **6 mm.** Nenhuma janela de
+altura separa os dois nesse corpo.
+
+> 🔴 **Topologia só separa se as duas coisas tiverem topologias diferentes — e
+> aqui elas não têm.** Eu usei um critério verdadeiro do projeto num lugar em que
+> a premissa dele não vale, e a frase *"anel fechado é o que o detector sabe
+> achar"* soou como garantia. Antes de reaproveitar um critério, perguntar o que
+> ele separa **neste** problema, não o que ele separou no problema de origem.
+
+##### O padrão comum às cinco, e a saída que ele escolheu
+
+Todas as cinco procuram o vinco **na geometria**, e em toda elas existe um vinco
+de PELE mais forte que o de TECIDO a poucos centímetros. Não é um detector ruim
+cinco vezes: é a pergunta errada cinco vezes.
+
+✅ **A saída escolhida por ele em 24/09 é mudar de fonte: ler a barra na FOLHA
+de referência, na vista de costas, pelo CONTORNO da divisa de cor.** Ali o short
+é preto sobre cinza claro e **não existe vinco de pele nenhum** — a confusão que
+matou as cinco simplesmente não acontece.
+
+⚠️ **E a ressalva que o cós desta mesma sessão cobrou (§4.5k):** a folha é o
+desenho, e a Meshy modela a peça maior que ele. Então a folha entra como **forma
+do contorno** e a **altura** fica amarrada no clay da frente, que é onde o
+tecido de verdade está. Uma calibra a outra; nenhuma sozinha.
+
+#### 4.5o ⚠️ Duas panes do instrumento, e as duas produziam número plausível (24/09)
+
+Achadas antes de virar conserto, e por isso baratas. As duas valem como padrão:
+
+**1. A luz rasante não girava com a câmera.** A lâmpada ficava fixa em (−3, −3),
+então a vista de COSTAS era renderizada em contraluz e o relevo — que é o único
+dado da sonda — não existia ali. Medido: força do vinco **3,5 na frente contra
+1,2 atrás** no `zen_m_b09h_d1`; com a luz acompanhando o ângulo, **4,5**.
+
+> **Luz rasante que não acompanha o ponto de vista não é luz rasante, é
+> contraluz.** E ela não falha: devolve um traçado, com número.
+
+**2. A silhueta não serve para achar o eixo da perna neste enquadramento.** Numa
+projeção ortográfica as bordas da perna são exatamente `cx ± R`, então a
+silhueta daria os dois números de graça. Só que a 0,22 da altura **a coxa de um
+corpo largo sai do quadro** — no `zen_m_b09h_d1` a corrida da perna começa na
+coluna 0. Sem a borda externa, `cx` e `R` saem errados **sem avisar**.
+
+Hoje a seção vem da malha (`secao_peca.py`), com **semi-eixos a e b**, não com um
+raio: o `w_field` mede o azimute do cós em volta da ORIGEM, e a seção do tronco é
+uma elipse deslocada — com raio único o azimute erra justamente nos setores de
+lado, que são os que separam frente de costas.
+
+⚠️ E isso não fere a independência da régua: da malha vem só a **geometria da
+seção**; a **altura do vinco**, que é o que vai corrigir o detector, continua
+saindo da imagem.
+
 ---
 
 ## 5. Biblioteca e classificação

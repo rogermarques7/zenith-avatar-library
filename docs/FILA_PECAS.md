@@ -4,9 +4,73 @@
 dele, ele fica aqui. Não varrer os outros avatares procurando defeito — o que
 não está nesta lista não está na fila (regra §6.1, *um por vez é um por vez*).
 
+> # 🔴 A FILA VIVA DE HOJE ESTÁ EM OUTRO ARQUIVO
+>
+> **`docs/REVISAO_ROUPA_2026-09-23.md`** — ele navegou os 103 no testador em
+> 23/09 e ditou defeito por defeito: **20 dos 27 novos** com pelo menos um, em
+> quatro classes. A maior é **tinta além do limite da barra da perna**, e sobre
+> ela ele deu ordem explícita de **revisão completa do acervo, novos e antigos,
+> em sessão dedicada**. Abrir aquele arquivo antes de qualquer conserto de peça.
+>
+> O que está abaixo neste arquivo é o histórico das rodadas anteriores.
+
+## 🔴 SESSÃO 37 (23–24/09) — O CÓS FOI APLICADO E REPROVADO; A BAINHA NÃO FOI TOCADA
+
+Modo automático pedido por ele: *"atue automaticamente pra corrigir as peças de
+roupas nessa sessão, até amanhã"*. **A frente continua ABERTA.**
+
+### ⚠️ 1. O CÓS — 12 regravados, e a maioria voltou reprovada
+
+Ancorei o arco da frente na FOLHA e alisei com `w_waist_liso`. Contra a folha os
+números fecharam (o `zen_f_b03h_d1` foi de −0,063 para −0,001). **No testador:**
+
+```
+m: b07k_d1 (cós + barra) · b07j_d1 (cós, "faixa branca no cinto")
+   b06_d3 (falta tinta na barra) · b05n_d1 (recorte abaixo da barriga errado)
+f: b03h_d1, b05h_d2, b07h_d1, b07i_d1  (todos "falta tinta no short")
+   b07j_d1 (tinta no tríceps) · b09j_d1 (tinta na barriga)
+```
+
+🔴 **A folha é MENOR que o tecido que a Meshy modelou** — e eu tinha acabado de
+escrever isso sobre a faixa (`LICOES.md` §4.5l) sem aplicar ao cós. As três
+bordas (cós, bainha, topo da faixa) são o mesmo defeito.
+
+**Os 12 que foram regravados** (só `waist_zh`, nenhuma bainha tocada):
+
+```
+f: b03h_d1 b05h_d1 b05h_d2 b05i_d2 b07h_d1 b08_d2 b09i_d1 b09j_d1
+m: b07i_d1 b07j_d1 b07k_d1 b10i_d2
+```
+
+### 🔬 2. A BAINHA — mecanismo provado, detector não resolvido, ZERO GLB tocado
+
+✅ Provado por imagem e **validado no olho dele**: a bainha modelada está acima
+da tinta em praticamente todo o acervo, de 0,5 cm a quase 7 cm.
+
+```
+vinco − tinta   mediana +0,0107 da altura = 1,9 cm
+vinco − folha   mediana +0,0058           = 1,0 cm
+```
+
+🔴 **Cinco tentativas de detector, cinco mortes.** A quinta (anel fechado)
+morreu porque **a virilha também é um anel fechado** — a prega inguinal e o
+sulco glúteo são as duas metades dela. `LICOES.md` §4.5n.
+
+### ➡️ 3. O QUE A PRÓXIMA SESSÃO FAZ — decisão dele
+
+> **Ler a barra na FOLHA, vista de COSTAS, pelo CONTORNO da divisa de cor.**
+> Ali não existe vinco de pele para confundir. A altura fica amarrada no clay da
+> frente, que é onde o tecido de verdade está.
+
+⚠️ **EXCEÇÃO REGISTRADA EM 22/09: ele pediu a varredura.** *"aproveita e dá uma
+revisada nos antigos pois alguns possuem defeitos ainda"*, com 10 h de trabalho
+sozinho. A regra continua valendo por padrão — **varrer só quando ele mandar
+varrer**, e o instrumento dessa vez foi o `revisao_peca.py --mosaico`, que
+renderiza o GLB entregue e põe 6 por imagem.
+
 ➡️ **Começar pelo fim do arquivo**: a seção *"Ordem combinada, e o que sobrou"*
-tem a tabela das seis frentes e os três itens que continuam abertos. O resto é
-o histórico de cada rodada, com o placar medido.
+tem a tabela das frentes e os itens que continuam abertos. O resto é o histórico
+de cada rodada, com o placar medido.
 
 **Ele manda a fila por PRINT do testador**, não por lista de texto — e os prints
 vêm com o cursor do mouse em cima do defeito. Quando a descrição não vem junto,
@@ -131,7 +195,7 @@ sido apontados.
 
 ---
 
-## Ordem combinada, e o que sobrou (atualizado em 15/08)
+## Ordem combinada, e o que sobrou (atualizado em 22/09)
 
 | # | frente | sessão | estado |
 |---|---|---|---|
@@ -141,6 +205,122 @@ sido apontados.
 | 4 | cós-avental feminino | 29 | ✅ fechada na 30 |
 | 5 | quina do cós — a poligonal | 30 · 15/08 | ✅ fechada, 7 avatares |
 | 6 | quina da faixa — máscara do braço | 30 · 15/08 | ✅ fechada, 23 avatares |
+| 7 | **vestir os 27 corpos novos** | 36 · 22/09 | ✅ fechada, 27 avatares |
+| 8 | **o buraco na curva do braço** — a cunha preta na quina | 36 · 22/09 | ✅ fechada, 37 femininos |
+
+## 🆕 SESSÃO 36 (22/09) — OS 27 NOVOS VESTIDOS, E A CUNHA DA QUINA
+
+Modo automático pedido por ele: *"atue automaticamente no conserto das roupas…
+aproveita e dá uma revisada nos antigos pois alguns possuem defeitos ainda"*.
+Duas frentes numa: **vestir** o que nunca teve peça e **revisar** o acervo.
+
+### 1. Os 27 que não tinham roupa nenhuma
+
+18 femininos e 9 masculinos, todos ainda em `_v1.glb`. O `--fit` correu limpo nos
+27, mas a **régua externa achou um defeito que o detector não acusa**: em 7
+femininos a bainha do 3D erra de −0,027 a −0,070 contra a corrida escura da folha
+(`faixa_ref.py`), enquanto os outros 11 erram no máximo 0,013.
+
+🔴 **É o modo de falha do `_set_virilha.py` de novo**: o `w_limbs` acha a fusão
+das COXAS e chama de virilha, e a virilha ancora as duas janelas. Desta vez ele
+foi **procurado** em vez de tropeçado — a separação entre os dois grupos é
+inequívoca e a régua da folha é quem a faz.
+
+Corrigidos pela mesma regra de sempre (pico mais forte do anel do TRONCO entre
+0,33 e 0,55, mais 0,0045 — **do anel, nunca da folha**, senão a folha deixa de
+conferir). Erro máximo contra a folha depois: **0,0085**, abaixo dos 0,013 da
+primeira leva. Tabela no docstring do `_set_virilha.py`.
+
+Resultado: `b08_d2` −0,070 → **+0,001** · `b08h_d2` −0,051 → **+0,003** ·
+`b09i_d3` −0,057 → **−0,002** · `b11h_d1` −0,060 → **+0,007** · `b12h_d1` −0,027
+→ **−0,001** · `b05i_d2` e `b07h_d2` idem.
+
+O `faixa_topo_frente_zh` da folha foi gravado nos **55** femininos (37 + 18).
+
+### 2. A cunha preta na quina da faixa — e por que a fila a chamava de franja
+
+A fila viva dizia *"sobra ~1 triângulo de franja… visível só em ângulo rasante"*.
+No GLB entregue, com material e HDR, ela é **maior que isso**: uma aba preta na
+quina da faixa, visível de costas e de 3/4 em **todas as femininas pesadas**
+(`b12_d1`, `b11_d1`, `b11_d2`, `b10_d1`, `b09_d2`, `b05_d1`).
+
+🔴 **Duas hipóteses minhas morreram antes da certa, e as duas por medida:**
+
+1. *"É o `ARM_COL_OUT`, que empurra o corte 1 coluna para fora."* Não: ele só
+   entra no `_arm_cut_prof`, o plano B. O `vão` decide a maioria das fatias.
+2. *"É a parábola saindo mais lateral que a medida crua."* Medido: a tira entre
+   as duas existe em **4 fatias de 21** no `b12_d1`, e a aba cobre a faixa
+   inteira. A PASSADA 4 (normal) que nasceu dessa hipótese mexe em **2 vértices**.
+
+✅ **A causa apareceu quando a máscara foi PINTADA DE VERMELHO** — sonda nova
+`faixa_tres_cores.py`. Preto é roupa, vermelho é máscara de braço, cinza é corpo:
+a máscara cobria o braço em 20 das 21 fatias e **faltava exatamente uma**
+(`b12_d1` zh 0,765 à direita; `b11_d2` zh 0,725 à direita). E fatia sem corte não
+é "fatia sem braço": é fatia que **não mascara nada**, então a faixa sai pintada
+de ponta a ponta ali, braço incluso.
+
+O banco de duas cores não podia achar isso: ele mostra o resultado e esconde a
+causa — preto sobrando pode ser máscara que não alcançou ou máscara que não
+existe, e as duas pedem consertos opostos.
+
+✅ **Conserto: preencher o BURACO INTERIOR da curva pela própria parábola.** A
+ressalva antiga (*"preencher os `None` inventaria braço"*) continua valendo para
+o que ela diz de verdade — **não se extrapola**: fora do intervalo entre a
+primeira e a última fatia com corte, nada é inventado. Dentro dele é
+**interpolação entre duas vizinhas que mediram**, que é afirmação muito mais
+fraca, e a parábola já é a forma dessa fronteira.
+
+🔴 **E O DEFEITO VISÍVEL NÃO EXISTIA — ERA PERSPECTIVA.** Aplicado o conserto, o
+A/B recortado na mesma câmera deu **imagem igual**. Com **lente de 300 mm a 6 m**
+a faixa é uma barra horizontal limpa de ponta a ponta: a aba era o **braço**,
+mais perto da câmera, projetando o mesmo corte horizontal mais baixo e mais
+grosso, com a silhueta dele recortando a faixa por cima. A tinta está no tronco,
+e sempre esteve.
+
+**Saldo honesto desta frente:** o buraco na curva era real e está consertado
+(máscara 611 → 620 no `b12_d1`, 541 → 554 no `b11_d2`, nenhuma fatia sem corte),
+**e é invisível no entregue** — custou uma versão de GLB em 37 femininas. O
+defeito que motivou a investigação não era defeito. `LICOES.md` §4.5h.
+
+⚠️ **Regra nova para esta fila:** num corpo largo, defeito perto da silhueta
+lateral só entra na fila depois de reproduzir com **lente longa**. O
+enquadramento apertado que faz uma tira de 1 cm aparecer é o mesmo que faz a
+perspectiva dominar.
+
+### 3. 🔴 O DEFEITO QUE A VARREDURA REALMENTE ACHOU — o cós MERGULHA na frente
+
+Visível de frente, grande, e em **seis avatares da leva nova**: o cós desce em V
+até a virilha e o short vira **cavada de biquíni**, com tecido modelado sem
+pintura acima do preto.
+
+`zen_f_b05h_d2` · `zen_f_b05i_d2` · `zen_f_b08_d2` · `zen_f_b07h_d1` ·
+`zen_m_b10i_d2` · `zen_m_b07i_d1`
+
+**A régua que separa é a queda contra o ANEL medido**, não a amplitude da curva
+(amplitude alta em corpo pesado é a barriga caindo, e é o certo):
+
+| | queda `waist_ring_zh − min(waist_zh)` |
+|---|---:|
+| mediana do acervo | 0,029 |
+| teto da série sã | 0,046 |
+| **os seis** | **0,075 a 0,108** |
+
+O `zen_m_b12_d1` dá 0,168 e **não entra**: nele a queda é a barriga de verdade.
+
+✅ **Consertado:** cós **escalar na altura do anel que a malha mediu**, com
+`source: manual` — a correção barata que o `shorts.py` já previa. A folha
+confirma cós horizontal logo abaixo do umbigo nos seis. Conferido no GLB
+entregue: `b05i_d2` e `b07h_d1` saíram com short de verdade.
+
+⚠️ **A janela do `w_waist_curve` NÃO foi mexida.** A causa é ela achar
+concavidade mais forte na virilha que no cós nesses corpos, mas o piso da janela
+é global: mexer nele mexe nos 103 para consertar 6. Frente própria, com a régua
+de queda já pronta. `LICOES.md` §4.5i.
+
+🔴 **E a trava já apontava.** O `--report` marcava `CANTO0.023` no `b05i_d2`
+desde o primeiro `--fit`, no meio de uma lista de **52 ids** em `conferir:`.
+Trava que aponta 52 avatares não aponta nenhum — quem achou foi a imagem do
+entregue.
 
 ### 🔴 A FILA VIVA — três itens, todos esperando decisão dele
 
@@ -153,10 +333,13 @@ sido apontados.
    ⚠️ **6 dos 14 estavam `source: manual`** — o que é manual neles é a BAINHA, e
    um `--refit` a teria descartado. Para esses o alisamento vai por
    `cos_liso_mapa.py --escrever`, que só toca o `waist_zh`.
-2. **A franja de ~1 triângulo** na quina onde a faixa encontra a face interna do
-   braço, visível só em ângulo rasante de costas. A máscara de braço é aplicada
-   por FACE; as bordas por altura passam pelo corte exato do `w_cut_boundary`.
-   Levar a máscara para o mesmo corte é frente própria, não tentada.
+2. ✅ ~~A franja de ~1 triângulo na quina onde a faixa encontra a face interna do
+   braço~~ **atacada em 22/09 e ela não era franja: era uma fatia sem corte.**
+   Ver a sessão 36 acima. Sobra a cunha da região fundida, que é escolha e não
+   detecção. A ideia antiga registrada aqui — *"a máscara é aplicada por FACE
+   enquanto as bordas por altura passam pelo corte exato"* — **continua de pé e
+   continua não tentada**; ela deixou de ser a explicação do defeito visível,
+   mas segue sendo o caminho para a borda ficar exata como a do cós.
 3. **A BAINHA continua sem conserto.** Atacada em 13/08 e **revertida inteira** a
    pedido dele; o que sobrou é o registro dos erros no `LICOES.md` §1.10 e §1.11,
    **inclusive as quatro hipóteses testadas e mortas**. Ler antes de reabrir —

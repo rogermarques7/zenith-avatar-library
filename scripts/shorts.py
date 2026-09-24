@@ -346,6 +346,31 @@ ARM_COL_OUT = 1.0
 # de ensaio poder fotografar o antes. Ver a PASSADA 2 do w_arm_wide.
 ARM_AJUSTE_GRAU = 2
 
+# --- O PRECO DO ALISAMENTO, E COMO PAGAR SO ELE (22/09) ----------------------
+# A parabola da PASSADA 2 tira a escada, e para isso ela ATRAVESSA as fatias em
+# que a medida crua destoa. Onde ela sai mais LATERAL que o cru, a tira entre os
+# dois e braco e nao esta mascarada: vira uma bandeira preta na face interna do
+# braco. Medido no zen_f_b12_d1, zh 0.745 - cru 0.152 contra alisado 0.249, ou
+# seja 10 cm de braco pintados; e o defeito que aparece em TODAS as femininas
+# pesadas (b12_d1, b11_d1, b11_d2, b10_d1, b09_d2, b05_d1), de costas e de 3/4.
+#
+# Nao da para simplesmente obedecer ao cru: ele e exatamente o "disparo" que a
+# mediana existe para matar (o vao acha buraco de decimacao DENTRO do tronco e
+# devolve 0.129 onde as vizinhas dao 0.22), e obedecer devolveria a mordida de
+# 15/08. Os dois numeros sao posicao, e posicao nao decide entre eles.
+#
+# O que decide e PARA ONDE A SUPERFICIE OLHA. Na tira em disputa so existem duas
+# coisas: o flanco do tronco, que aponta para FORA, e a face interna do braco,
+# que aponta para o TRONCO. Normal e local e binaria - a mesma familia do vao de
+# ar (topologia, nao magnitude) que resolveu a 4.5g.
+#
+# ⚠️ Roda SO na tira (cru, alisado], ou seja so onde as duas reguas discordam.
+# Onde elas concordam - a maioria das fatias - nao muda um vertice, e por isso a
+# mudanca nao pode reabrir a mordida no tronco: o tronco nunca esta nessa tira
+# olhando para dentro.
+# 0 desliga, para o banco de ensaio fotografar o antes.
+ARM_NX_MIN = 0.35
+
 # A ordem das pecas no w_field(partes=True): 0 short, 1 faixa. So a faixa pode
 # sair legitimamente partida em duas (braco tapando o lado do torax).
 FAIXA_PECA = 1
@@ -859,6 +884,8 @@ def driver_main():
                     help="detecta a regiao, grava a proposta no mapa e renderiza QA")
     ap.add_argument("--apply", action="store_true",
                     help="regrava 03_dist/glb/ com corpo + short")
+    ap.add_argument("--preview", action="store_true",
+                    help="pinta e renderiza o ENTREGUE sem gravar em 03_dist/")
     ap.add_argument("--render", action="store_true",
                     help="so o render de QA, a partir do que ja esta no mapa")
     ap.add_argument("--check", action="store_true",
@@ -882,9 +909,11 @@ def driver_main():
         print("folha de contato: {}".format(os.path.relpath(out, root) if out else "nada a montar"))
         return 0
 
-    modes = [m for m in ("fit", "apply", "render", "check") if getattr(args, m)]
+    modes = [m for m in ("fit", "apply", "preview", "render", "check")
+             if getattr(args, m)]
     if len(modes) != 1:
-        _die("Escolha exatamente um de --fit / --apply / --render / --check.")
+        _die("Escolha exatamente um de --fit / --apply / --preview / "
+             "--render / --check.")
     mode = modes[0]
 
     if args.all and not args.id:
@@ -915,7 +944,7 @@ def driver_main():
             mode_i = "render"
         else:
             mode_i = mode
-        if mode_i in ("apply", "render", "check") and not entry:
+        if mode_i in ("apply", "preview", "render", "check") and not entry:
             print("[SKIP] {}: sem entrada no mapa - rode --fit antes".format(aid))
             failures.append(aid)
             continue
@@ -1247,7 +1276,7 @@ def _arm_cut_prof(perfil, fundo, col_w):
     return None
 
 
-def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh, diag=None):
+def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh, diag=None, nor=None):
     """O braco na ALTURA DA FAIXA, que a mascara topologica nao alcanca.
 
     O w_limbs devolve o braco ate onde ele FUNDE no tronco. Em corpo magro a
@@ -1407,9 +1436,29 @@ def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh, diag=None):
             zz = np.array([ks[i] * passo for i in idx], dtype=np.float64)
             vv = np.array([s[i] for i in idx], dtype=np.float64)
             grau = ARM_AJUSTE_GRAU if len(idx) >= 6 else 1
-            aj = np.polyval(np.polyfit(zz - zz.mean(), vv, grau), zz - zz.mean())
+            coef = np.polyfit(zz - zz.mean(), vv, grau)
+            aj = np.polyval(coef, zz - zz.mean())
             for i, v in zip(idx, aj):
                 s[i] = float(v)
+
+            # --- e os BURACOS INTERIORES, que sao outra coisa (22/09) --------
+            # Fatia sem corte nao e "fatia sem braco": e fatia que nao mascara
+            # NADA, e a faixa sai pintada de ponta a ponta ali, braco incluso.
+            # Uma fatia so ja aparece - medido no zen_f_b12_d1 (zh 0.765 a
+            # direita) e no zen_f_b11_d2 (zh 0.725 a direita), os dois com UM
+            # buraco cada e uma cunha preta na quina da faixa exatamente naquela
+            # altura (qa/probe/sondas/faixa_tres_cores.py).
+            #
+            # ⚠️ A ressalva acima continua valendo para o que ela realmente diz:
+            # nao se EXTRAPOLA. Fora do intervalo [primeira, ultima] fatia com
+            # corte nada e inventado - la a varredura nunca viu braco, e marcar
+            # seria inventa-lo. Aqui e INTERPOLACAO entre duas vizinhas que
+            # mediram, que e uma afirmacao muito mais fraca: entre duas fatias
+            # que acharam o braco, a fatia do meio tem braco. A propria parabola
+            # ja e a forma dessa fronteira; so falta avalia-la no buraco.
+            for i in range(idx[0] + 1, idx[-1]):
+                if s[i] is None:
+                    s[i] = float(np.polyval(coef, ks[i] * passo - zz.mean()))
         suave[sinal] = s
 
     # PASSADA 3 - marca com o corte alisado.
@@ -1427,6 +1476,30 @@ def w_arm_wide(np, co, H, is_arm, lo_zh, hi_zh, diag=None):
                 continue
             xl = x[lado] * sinal
             out[fatia[lado[xl > corte]]] = True
+
+    # PASSADA 4 - na tira em que o cru e o alisado DISCORDAM, quem decide e a
+    # normal. Ver o bloco do ARM_NX_MIN: a parabola atravessa a fatia que
+    # destoa, e o que ela deixa para tras e face interna de braco pintada de
+    # preto. Aqui nao se escolhe entre as duas posicoes - pergunta-se, vertice a
+    # vertice, se aquela superficie olha para o tronco ou para fora dele.
+    if nor is not None and ARM_NX_MIN > 0:
+        for i, k in enumerate(ks):
+            fatia = fatias[k]
+            if not len(fatia):
+                continue
+            x = co[fatia, 0] - cx
+            for sinal in (-1.0, 1.0):
+                teto = suave[sinal][i]
+                cru = cortes[sinal][i]
+                if teto is None or cru is None or cru >= teto:
+                    continue
+                lado = np.where(np.sign(x) == sinal)[0]
+                if not len(lado):
+                    continue
+                xl = x[lado] * sinal
+                nx = nor[fatia[lado], 0] * sinal
+                dentro = (xl > cru) & (xl <= teto) & (nx < -ARM_NX_MIN)
+                out[fatia[lado[dentro]]] = True
 
     if diag is not None:
         diag["passo"] = passo
@@ -2074,16 +2147,37 @@ def w_fit(me, np, co, H, crotch, leg_id, is_arm, crotch_override=None,
 
     Com sinal fraco, o argmax dentro da janela encontra ruido de decimacao, nao
     tecido. O resultado foi uma borda cheia de farpas verticais - visivelmente
-    pior que a reta. Ou seja: a premissa estava errada. Nao havia serpenteio
-    para seguir; a reta JA era a representacao fiel.
+    pior que a reta.
 
-    O que o Rogerio viu como "pulando" nao era a divisa de cor - era a sombra
-    do degrau de tecido logo acima dela, que e geometria da malha e continua
-    la faca-se o que se fizer com a pintura.
+    🔴🔴 ESTA CONCLUSAO ESTA ERRADA E FOI DERRUBADA EM 23/09 (sessao 37) 🔴🔴
 
-    Licao: antes de fazer a borda perseguir um vinco, medir se o vinco tem
-    sinal - e medir num render SEM LUZ, porque com luz nao se distingue sombra
-    de divisa."""
+    O que continua valendo e a parte do METODO: o sinal de curvatura e fraco, e
+    perseguir o vinco por argmax dentro de janela produz farpa. Isso se confirmou
+    de novo.
+
+    O que NAO vale e a frase "a bainha ja e um anel reto". Ela foi medida no
+    `zen_m_b12_d1`, IMC 147,7 - um corpo em que a coxa e um cilindro e o short
+    de fato acaba num anel reto - e generalizada para a colecao inteira. No
+    `zen_f_b06i_d3` a bainha modelada e DIAGONAL, com mais de 5 cm entre a ponta
+    de fora da coxa e a de dentro, e isso e visivel a olho nu no clay com luz
+    rasante (qa/probe/sondas/bainha_rasante.py). A tinta, que e um plano
+    horizontal na ponta mais baixa, sobra preta sobre a pele em toda a volta -
+    e e a queixa que o Rogerio repetiu em 16 avatares em 23/09.
+
+    A regua externa concorda: o vies da bainha contra a folha e -0.0061 da
+    altura (1,07 cm) com 81 negativos de 103, e pior nos `d3` (-0.0076) que nos
+    `d2` (-0.0050). Rodar `python scripts/shorts_ref.py` - o bloco VIES DA SERIE
+    no fim da tabela imprime isso.
+
+    ⚠️ O conserto NAO esta feito: um detector de curva foi construido
+    (qa/probe/sondas/bainha_curva.py, cume por programacao dinamica) e acerta 1
+    de 2 - nos avatares de sinal fraco ele sobe pelo vinco INGUINAL. Nada de
+    bainha foi gravado. Ler LICOES.md 4.5j antes de reabrir.
+
+    Licao que sobrevive inteira: antes de fazer a borda perseguir um vinco,
+    medir se o vinco tem sinal - e medir num render SEM LUZ (ou com luz
+    RASANTE), porque com luz chapada nao se distingue sombra de divisa. E a
+    licao nova: conclusao tirada de UM corpo nao vale para a colecao."""
     k, _ = w_curvature(me, np)
     kn = np.clip(k / max(float(np.percentile(k, 99.0)), 1e-9), 0.0, 1.0)
     z = co[:, 2]
@@ -2338,7 +2432,8 @@ def worker_main():
     argv = sys.argv[sys.argv.index("--") + 1:]
     ap = argparse.ArgumentParser()
     ap.add_argument("--worker", action="store_true")
-    ap.add_argument("--mode", required=True, choices=["fit", "apply", "render", "check"])
+    ap.add_argument("--mode", required=True,
+                    choices=["fit", "apply", "preview", "render", "check"])
     ap.add_argument("--id", required=True)
     ap.add_argument("--root", required=True)
     a = ap.parse_args(argv)
@@ -2463,7 +2558,13 @@ def worker_main():
         lo = float(np.min(np.atleast_1d(cfg["faixa_lo"]))) / H
         hi = float(np.max(np.atleast_1d(cfg["faixa_hi"]))) / H
         z0h = float(co[:, 2].min()) / H
-        is_paint = is_arm | w_arm_wide(np, co, H, is_arm, lo - z0h, hi - z0h)
+        # A normal entra SO aqui, na pintura - a deteccao nao a ve (PASSADA 4 do
+        # w_arm_wide). E a normal do VERTICE, que e a media das faces do 1-ring:
+        # numa malha de 60k ela ja e suave o bastante para nao produzir pontilhado.
+        nor_p = np.empty(len(me.vertices) * 3, dtype=np.float64)
+        me.vertices.foreach_get("normal", nor_p)
+        is_paint = is_arm | w_arm_wide(np, co, H, is_arm, lo - z0h, hi - z0h,
+                                       nor=nor_p.reshape(-1, 3))
 
     bm = bmesh.new()
     bm.from_mesh(me)
@@ -2714,6 +2815,47 @@ def worker_main():
             "summary": "{}: roupa {:.1%}, ilhas {}, pior peca {:.1%}, +{} costura{}".format(
                 a.id, frac, por_peca, biggest, added,
                 "   << CONFERIR" if suspect else "")}))
+        sys.exit(0)
+
+    if a.mode == "preview":
+        # ---- O ENTREGUE, SEM GASTAR VERSAO (23/09, sessao 37) --------------
+        # O ciclo de conserto de peca era APLICA -> OLHA, e cada volta custava
+        # uma versao de GLB (regra 8) mais um `morph --apply` por cima (regra
+        # 9). O efeito pratico nao e preco: e que eu passei a julgar DEPOIS de
+        # gravar, e a gravar com base em medida em vez de imagem.
+        #
+        # O Rogerio nomeou isso em 23/09, olhando um lote que eu tinha acabado
+        # de entregar: *"parece que vc nao ta enxergando os corpos, ta tentando
+        # corrigir no escuro"*. Estava certo - eu tinha olhado 3 dos 103.
+        #
+        # Este modo faz EXATAMENTE o que o `apply` faz (mesma malha, mesmo
+        # corte, mesmos dois materiais, mesmo export com Draco) e grava em
+        # qa/preview/, que nao e URL de CDN e pode ser sobrescrito a vontade.
+        # O `render_dist.py` por cima dele mostra o arquivo com aluminio e HDR,
+        # que e a unica imagem em que falta de tinta aparece (LICOES.md 4.5c).
+        #
+        # ⚠️ As travas aqui REPORTAM e nao recusam, de proposito: a prevacao
+        # existe para eu VER o que a trava reprovaria, em vez de so ler que ela
+        # reprovou. Quem recusa continua sendo o `--apply`.
+        prev = os.path.join(a.root, "qa", "preview")
+        if not os.path.isdir(prev):
+            os.makedirs(prev)
+        dest = os.path.join(prev, a.id + "_preview.glb")
+        bpy.ops.object.select_all(action="DESELECT")
+        obj.select_set(True)
+        bpy.context.view_layer.objects.active = obj
+        bpy.ops.export_scene.gltf(
+            filepath=dest, export_format="GLB", use_selection=True,
+            export_draco_mesh_compression_enable=True,
+            export_draco_mesh_compression_level=6,
+            export_draco_position_quantization=14,
+            export_draco_normal_quantization=14,
+        )
+        print("RESULT " + json.dumps({
+            "summary": "{}: PREVIA {} tri, short {:.1%}, ilhas {}{}  -> {}".format(
+                a.id, nf, frac, por_peca,
+                "  << CONFERIR" if suspect else "",
+                os.path.relpath(dest, a.root))}))
         sys.exit(0)
 
     if a.mode == "apply":

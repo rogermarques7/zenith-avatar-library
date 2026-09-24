@@ -1,6 +1,6 @@
 {
   "schema_version": 4,
-  "generated_at": "2026-09-22T14:34:26Z",
+  "generated_at": "2026-09-23T06:41:46Z",
   "cdn_base": "https://nhloypjtpgyndmjtcpcf.supabase.co/storage/v1/object/public/avatars/",
   "reference_height_m": 1.75,
   "selection": {
@@ -466,9 +466,9 @@
       "label": "muito magra",
       "waist_to_height": 0.397,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b02_d1_v12.glb",
+        "glb": "zen_f_b02_d1_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -496,9 +496,9 @@
       "label": "muito magra",
       "waist_to_height": 0.401,
       "body_shape": "medium",
-      "version": 13,
+      "version": 15,
       "assets": {
-        "glb": "zen_f_b01_d1_v13.glb",
+        "glb": "zen_f_b01_d1_v15.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -526,9 +526,9 @@
       "label": "muito magra",
       "waist_to_height": 0.407,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b03_d1_v12.glb",
+        "glb": "zen_f_b03_d1_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -556,9 +556,9 @@
       "label": "media",
       "waist_to_height": 0.505,
       "body_shape": "medium",
-      "version": 1,
+      "version": 4,
       "assets": {
-        "glb": "zen_f_b03h_d1_v1.glb",
+        "glb": "zen_f_b03h_d1_v4.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -586,9 +586,9 @@
       "label": "media",
       "waist_to_height": 0.505,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b04_d1_v12.glb",
+        "glb": "zen_f_b04_d1_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -616,9 +616,9 @@
       "label": "media",
       "waist_to_height": 0.51,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b04h_d1_v12.glb",
+        "glb": "zen_f_b04h_d1_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -646,9 +646,9 @@
       "label": "cheia",
       "waist_to_height": 0.563,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_f_b07j_d1_v1.glb",
+        "glb": "zen_f_b07j_d1_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -678,9 +678,9 @@
       "label": "media",
       "waist_to_height": 0.547,
       "body_shape": "medium",
-      "version": 1,
+      "version": 4,
       "assets": {
-        "glb": "zen_f_b05h_d1_v1.glb",
+        "glb": "zen_f_b05h_d1_v4.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -708,9 +708,9 @@
       "label": "cheia",
       "waist_to_height": 0.561,
       "body_shape": "medium",
-      "version": 14,
+      "version": 16,
       "assets": {
-        "glb": "zen_f_b04i_d1_v14.glb",
+        "glb": "zen_f_b04i_d1_v16.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -738,9 +738,9 @@
       "label": "cheia",
       "waist_to_height": 0.574,
       "body_shape": "medium",
-      "version": 1,
+      "version": 5,
       "assets": {
-        "glb": "zen_f_b07h_d1_v1.glb",
+        "glb": "zen_f_b07h_d1_v5.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -770,9 +770,9 @@
       "label": "cheia",
       "waist_to_height": 0.585,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_f_b07i_d1_v1.glb",
+        "glb": "zen_f_b07i_d1_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -800,9 +800,9 @@
       "label": "muito cheia",
       "waist_to_height": 0.644,
       "body_shape": "medium",
-      "version": 1,
+      "version": 4,
       "assets": {
-        "glb": "zen_f_b09j_d1_v1.glb",
+        "glb": "zen_f_b09j_d1_v4.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -833,9 +833,9 @@
       "label": "cheia",
       "waist_to_height": 0.605,
       "body_shape": "medium",
-      "version": 13,
+      "version": 15,
       "assets": {
-        "glb": "zen_f_b07_d1_v13.glb",
+        "glb": "zen_f_b07_d1_v15.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -865,9 +865,9 @@
       "label": "cheia",
       "waist_to_height": 0.598,
       "body_shape": "medium",
-      "version": 18,
+      "version": 20,
       "assets": {
-        "glb": "zen_f_b06_d1_v18.glb",
+        "glb": "zen_f_b06_d1_v20.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -897,9 +897,9 @@
       "label": "muito cheia",
       "waist_to_height": 0.669,
       "body_shape": "medium",
-      "version": 1,
+      "version": 4,
       "assets": {
-        "glb": "zen_f_b09i_d1_v1.glb",
+        "glb": "zen_f_b09i_d1_v4.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -930,9 +930,9 @@
       "label": "muito cheia",
       "waist_to_height": 0.657,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_f_b09h_d1_v1.glb",
+        "glb": "zen_f_b09h_d1_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -962,9 +962,9 @@
       "label": "muito cheia",
       "waist_to_height": 0.648,
       "body_shape": "medium",
-      "version": 13,
+      "version": 15,
       "assets": {
-        "glb": "zen_f_b09_d1_v13.glb",
+        "glb": "zen_f_b09_d1_v15.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -992,9 +992,9 @@
       "label": "extremo",
       "waist_to_height": 0.759,
       "body_shape": "medium",
-      "version": 1,
+      "version": 3,
       "assets": {
-        "glb": "zen_f_b12h_d1_v1.glb",
+        "glb": "zen_f_b12h_d1_v3.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1024,9 +1024,9 @@
       "label": "muito cheia",
       "waist_to_height": 0.715,
       "body_shape": "medium",
-      "version": 22,
+      "version": 24,
       "assets": {
-        "glb": "zen_f_b08_d1_v22.glb",
+        "glb": "zen_f_b08_d1_v24.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1056,9 +1056,9 @@
       "label": "muito cheia",
       "waist_to_height": 0.71,
       "body_shape": "medium",
-      "version": 13,
+      "version": 15,
       "assets": {
-        "glb": "zen_f_b05_d1_v13.glb",
+        "glb": "zen_f_b05_d1_v15.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1090,9 +1090,9 @@
       "label": "extremo",
       "waist_to_height": 0.807,
       "body_shape": "medium",
-      "version": 20,
+      "version": 22,
       "assets": {
-        "glb": "zen_f_b11_d1_v20.glb",
+        "glb": "zen_f_b11_d1_v22.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1123,9 +1123,9 @@
       "label": "extremo",
       "waist_to_height": 0.868,
       "body_shape": "medium",
-      "version": 1,
+      "version": 3,
       "assets": {
-        "glb": "zen_f_b11h_d1_v1.glb",
+        "glb": "zen_f_b11h_d1_v3.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1155,9 +1155,9 @@
       "label": "extremo",
       "waist_to_height": 0.866,
       "body_shape": "medium",
-      "version": 20,
+      "version": 22,
       "assets": {
-        "glb": "zen_f_b10_d1_v20.glb",
+        "glb": "zen_f_b10_d1_v22.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1188,9 +1188,9 @@
       "label": "extremo",
       "waist_to_height": 1.158,
       "body_shape": "medium",
-      "version": 20,
+      "version": 22,
       "assets": {
-        "glb": "zen_f_b12_d1_v20.glb",
+        "glb": "zen_f_b12_d1_v22.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1221,9 +1221,9 @@
       "label": "muito magra",
       "waist_to_height": 0.417,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b01_d2_v12.glb",
+        "glb": "zen_f_b01_d2_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1251,9 +1251,9 @@
       "label": "muito magra",
       "waist_to_height": 0.42,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b02_d2_v12.glb",
+        "glb": "zen_f_b02_d2_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1281,9 +1281,9 @@
       "label": "muito magra",
       "waist_to_height": 0.407,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b03_d2_v12.glb",
+        "glb": "zen_f_b03_d2_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1313,9 +1313,9 @@
       "label": "magra",
       "waist_to_height": 0.451,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b04_d2_v12.glb",
+        "glb": "zen_f_b04_d2_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1343,9 +1343,9 @@
       "label": "magra",
       "waist_to_height": 0.463,
       "body_shape": "medium",
-      "version": 1,
+      "version": 5,
       "assets": {
-        "glb": "zen_f_b05i_d2_v1.glb",
+        "glb": "zen_f_b05i_d2_v5.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1373,9 +1373,9 @@
       "label": "magra",
       "waist_to_height": 0.463,
       "body_shape": "medium",
-      "version": 15,
+      "version": 17,
       "assets": {
-        "glb": "zen_f_b05_d2_v15.glb",
+        "glb": "zen_f_b05_d2_v17.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1403,9 +1403,9 @@
       "label": "media",
       "waist_to_height": 0.521,
       "body_shape": "medium",
-      "version": 1,
+      "version": 5,
       "assets": {
-        "glb": "zen_f_b05h_d2_v1.glb",
+        "glb": "zen_f_b05h_d2_v5.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1433,9 +1433,9 @@
       "label": "media",
       "waist_to_height": 0.526,
       "body_shape": "medium",
-      "version": 13,
+      "version": 15,
       "assets": {
-        "glb": "zen_f_b06_d2_v13.glb",
+        "glb": "zen_f_b06_d2_v15.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1465,9 +1465,9 @@
       "label": "cheia",
       "waist_to_height": 0.551,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_f_b08h_d2_v1.glb",
+        "glb": "zen_f_b08h_d2_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1495,9 +1495,9 @@
       "label": "cheia",
       "waist_to_height": 0.582,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_f_b07h_d2_v1.glb",
+        "glb": "zen_f_b07h_d2_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1525,9 +1525,9 @@
       "label": "cheia",
       "waist_to_height": 0.587,
       "body_shape": "medium",
-      "version": 13,
+      "version": 15,
       "assets": {
-        "glb": "zen_f_b09i_d2_v13.glb",
+        "glb": "zen_f_b09i_d2_v15.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1557,9 +1557,9 @@
       "label": "cheia",
       "waist_to_height": 0.577,
       "body_shape": "medium",
-      "version": 1,
+      "version": 5,
       "assets": {
-        "glb": "zen_f_b08_d2_v1.glb",
+        "glb": "zen_f_b08_d2_v5.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1587,9 +1587,9 @@
       "label": "cheia",
       "waist_to_height": 0.609,
       "body_shape": "medium",
-      "version": 13,
+      "version": 15,
       "assets": {
-        "glb": "zen_f_b09h_d2_v13.glb",
+        "glb": "zen_f_b09h_d2_v15.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1619,9 +1619,9 @@
       "label": "extremo",
       "waist_to_height": 0.803,
       "body_shape": "medium",
-      "version": 17,
+      "version": 19,
       "assets": {
-        "glb": "zen_f_b10_d2_v17.glb",
+        "glb": "zen_f_b10_d2_v19.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1651,9 +1651,9 @@
       "label": "extremo",
       "waist_to_height": 0.845,
       "body_shape": "medium",
-      "version": 17,
+      "version": 19,
       "assets": {
-        "glb": "zen_f_b09_d2_v17.glb",
+        "glb": "zen_f_b09_d2_v19.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1683,9 +1683,9 @@
       "label": "extremo",
       "waist_to_height": 0.855,
       "body_shape": "medium",
-      "version": 20,
+      "version": 22,
       "assets": {
-        "glb": "zen_f_b11_d2_v20.glb",
+        "glb": "zen_f_b11_d2_v22.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1716,9 +1716,9 @@
       "label": "muito magra",
       "waist_to_height": 0.406,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b03_d3_v12.glb",
+        "glb": "zen_f_b03_d3_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1746,9 +1746,9 @@
       "label": "muito magra",
       "waist_to_height": 0.405,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b02_d3_v12.glb",
+        "glb": "zen_f_b02_d3_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1776,9 +1776,9 @@
       "label": "magra",
       "waist_to_height": 0.43,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b05_d3_v12.glb",
+        "glb": "zen_f_b05_d3_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1806,9 +1806,9 @@
       "label": "magra",
       "waist_to_height": 0.445,
       "body_shape": "medium",
-      "version": 12,
+      "version": 14,
       "assets": {
-        "glb": "zen_f_b06_d3_v12.glb",
+        "glb": "zen_f_b06_d3_v14.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1836,9 +1836,9 @@
       "label": "magra",
       "waist_to_height": 0.449,
       "body_shape": "medium",
-      "version": 13,
+      "version": 15,
       "assets": {
-        "glb": "zen_f_b06h_d3_v13.glb",
+        "glb": "zen_f_b06h_d3_v15.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1866,9 +1866,9 @@
       "label": "magra",
       "waist_to_height": 0.477,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_f_b06i_d3_v1.glb",
+        "glb": "zen_f_b06i_d3_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1896,9 +1896,9 @@
       "label": "media",
       "waist_to_height": 0.506,
       "body_shape": "medium",
-      "version": 14,
+      "version": 16,
       "assets": {
-        "glb": "zen_f_b07_d3_v14.glb",
+        "glb": "zen_f_b07_d3_v16.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1926,9 +1926,9 @@
       "label": "magra",
       "waist_to_height": 0.477,
       "body_shape": "medium",
-      "version": 13,
+      "version": 15,
       "assets": {
-        "glb": "zen_f_b08_d3_v13.glb",
+        "glb": "zen_f_b08_d3_v15.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1956,9 +1956,9 @@
       "label": "magra",
       "waist_to_height": 0.47,
       "body_shape": "medium",
-      "version": 14,
+      "version": 16,
       "assets": {
-        "glb": "zen_f_b08h_d3_v14.glb",
+        "glb": "zen_f_b08h_d3_v16.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -1986,9 +1986,9 @@
       "label": "magra",
       "waist_to_height": 0.482,
       "body_shape": "medium",
-      "version": 14,
+      "version": 16,
       "assets": {
-        "glb": "zen_f_b04_d3_v14.glb",
+        "glb": "zen_f_b04_d3_v16.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2016,9 +2016,9 @@
       "label": "media",
       "waist_to_height": 0.517,
       "body_shape": "medium",
-      "version": 14,
+      "version": 16,
       "assets": {
-        "glb": "zen_f_b09h_d3_v14.glb",
+        "glb": "zen_f_b09h_d3_v16.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2046,9 +2046,9 @@
       "label": "media",
       "waist_to_height": 0.506,
       "body_shape": "medium",
-      "version": 14,
+      "version": 16,
       "assets": {
-        "glb": "zen_f_b09_d3_v14.glb",
+        "glb": "zen_f_b09_d3_v16.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2078,9 +2078,9 @@
       "label": "media",
       "waist_to_height": 0.506,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_f_b09j_d3_v1.glb",
+        "glb": "zen_f_b09j_d3_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2110,9 +2110,9 @@
       "label": "magra",
       "waist_to_height": 0.498,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_f_b09i_d3_v1.glb",
+        "glb": "zen_f_b09i_d3_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2142,9 +2142,9 @@
       "label": "cheia",
       "waist_to_height": 0.584,
       "body_shape": "medium",
-      "version": 14,
+      "version": 16,
       "assets": {
-        "glb": "zen_f_b10_d3_v14.glb",
+        "glb": "zen_f_b10_d3_v16.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2234,9 +2234,9 @@
       "label": "magro",
       "waist_to_height": 0.451,
       "body_shape": "medium",
-      "version": 1,
+      "version": 5,
       "assets": {
-        "glb": "zen_m_b07i_d1_v1.glb",
+        "glb": "zen_m_b07i_d1_v5.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2354,9 +2354,9 @@
       "label": "cheio",
       "waist_to_height": 0.575,
       "body_shape": "medium",
-      "version": 1,
+      "version": 4,
       "assets": {
-        "glb": "zen_m_b07j_d1_v1.glb",
+        "glb": "zen_m_b07j_d1_v4.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2418,9 +2418,9 @@
       "label": "cheio",
       "waist_to_height": 0.591,
       "body_shape": "medium",
-      "version": 1,
+      "version": 4,
       "assets": {
-        "glb": "zen_m_b07k_d1_v1.glb",
+        "glb": "zen_m_b07k_d1_v4.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2482,9 +2482,9 @@
       "label": "cheio",
       "waist_to_height": 0.605,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_m_b05n_d1_v1.glb",
+        "glb": "zen_m_b05n_d1_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2515,9 +2515,9 @@
       "label": "muito cheio",
       "waist_to_height": 0.637,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_m_b09h_d1_v1.glb",
+        "glb": "zen_m_b09h_d1_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -2545,9 +2545,9 @@
       "label": "muito cheio",
       "waist_to_height": 0.634,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_m_b07h_d1_v1.glb",
+        "glb": "zen_m_b07h_d1_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -3089,9 +3089,9 @@
       "label": "cheio",
       "waist_to_height": 0.551,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_m_b10h_d2_v1.glb",
+        "glb": "zen_m_b10h_d2_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -3219,9 +3219,9 @@
       "label": "extremo",
       "waist_to_height": 0.886,
       "body_shape": "medium",
-      "version": 1,
+      "version": 5,
       "assets": {
-        "glb": "zen_m_b10i_d2_v1.glb",
+        "glb": "zen_m_b10i_d2_v5.glb",
         "turntable": null
       },
       "circumferences_cm": {
@@ -3543,9 +3543,9 @@
       "label": "magro",
       "waist_to_height": 0.486,
       "body_shape": "medium",
-      "version": 1,
+      "version": 2,
       "assets": {
-        "glb": "zen_m_b06m_d3_v1.glb",
+        "glb": "zen_m_b06m_d3_v2.glb",
         "turntable": null
       },
       "circumferences_cm": {

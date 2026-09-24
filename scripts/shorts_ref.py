@@ -45,6 +45,10 @@ from PIL import Image
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 sys.path.insert(0, os.path.join(ROOT, 'scripts'))
 import zenith_paths as zp                                          # noqa: E402
+# ⚠️ shorts.py so importa bpy DENTRO do worker, entao ele e importavel daqui.
+# E preciso: o alisamento do cos (w_waist_liso) tem de ser o MESMO codigo dos
+# dois lados, senao a folha grava uma curva que o --fit nunca produziria.
+import shorts as S                                                 # noqa: E402
 
 
 def medir(path):
@@ -105,9 +109,36 @@ def medir(path):
 WAIST_AZ_BINS = 24
 
 
-def perfil_frontal(path, nb=WAIST_AZ_BINS):
+def perfil_frontal(path, nb=WAIST_AZ_BINS, banda=None):
     """Topo do short por SETOR DE AZIMUTE na vista FRONTAL, em fracao da altura
     da figura. Devolve lista de nb posicoes, None onde nao da para medir.
+
+    `banda=(lo, hi)` restringe a busca a uma faixa de altura da figura. SEM ELA
+    ESTA FUNCAO NAO SERVE NA COLECAO FEMININA - ver o bloco A FAIXA DO PEITO.
+
+    ---------------------------------------------------------------------
+    🔴 A FAIXA DO PEITO ERA A MAIOR CORRIDA (achado de 23/09, sessao 37)
+    ---------------------------------------------------------------------
+    Esta funcao nasceu em 29/07, quando so existiam os 39 masculinos - e neles
+    o unico preto da folha E o short. Desde 01/08 a feminina veste FAIXA + short
+    e a faixa e uma barra cheia, mais alta que o short em coluna de tronco.
+    "Maior corrida contigua" passou a devolver a FAIXA.
+
+    Nao saiu calado - saiu como numero absurdo que ninguem leu: o `--tracado`
+    marcava ERRO em 21 avatares, com erro medio de -0.10 a -0.23 da altura (17
+    a 40 cm!) e assimetria esquerda/direita de ~0.20 nas femininas. Plausivel
+    demais para alarme, absurdo demais para medida. A §1.1 de novo: a regua nao
+    estava errada por pouco, estava medindo OUTRA PECA.
+
+    ⚠️ E o custo nao foi so a regua cega. A sessao 36 consertou o "cos mergulha
+    na frente" em 6 avatares ancorando no ANEL DA MALHA, porque a regua externa
+    do caminho frontal nao estava disponivel. O anel ficou de 2,0 a 7,2 cm ACIMA
+    do que a folha diz, e foi exatamente isso que o Rogerio reprovou em 23/09:
+    "o cos ta pintando acima de onde deveria e pegando parte da barriga".
+
+    A banda vem da vista de COSTAS (medir()), que nao tem o problema: la a
+    maior corrida e o short mesmo, porque a faixa de costas e mais baixa que a
+    da frente e o short cobre o gluteo inteiro. Uma peca calibra a outra.
 
     ---------------------------------------------------------------------
     PORQUE A VISTA FRONTAL, se o resto do arquivo usa a de costas
@@ -151,6 +182,9 @@ def perfil_frontal(path, nb=WAIST_AZ_BINS):
     with np.errstate(invalid="ignore", divide="ignore"):
         frac = np.where(largura > 0, escuros / np.maximum(largura, 1), 0.0)
     linhas = np.where(frac > 0.55)[0]
+    if banda is not None:
+        zl = (y1 - linhas) / float(Hpx)
+        linhas = linhas[(zl >= banda[0]) & (zl <= banda[1])]
     if linhas.size == 0:
         return None
 
@@ -186,10 +220,27 @@ def perfil_frontal(path, nb=WAIST_AZ_BINS):
         if not (0 <= x < esc.shape[1]):
             out.append(None)
             continue
-        r = maior_corrida(esc[:, x])
+        col = esc[:, x]
+        if banda is not None:
+            # a MESMA banda tem de valer por coluna, nao so na escolha do ymid:
+            # a faixa do peito e uma corrida por coluna tambem, e e ela que
+            # vencia o `argmax`. A folga (0.03 para baixo, 0.02 para cima) deixa
+            # o arco da prega existir sem alcancar o peito.
+            fora = np.ones(col.shape, dtype=bool)
+            zc_col = (y1 - np.arange(col.size)) / float(Hpx)
+            fora[(zc_col >= banda[0] - 0.03) & (zc_col <= banda[1] + 0.02)] = False
+            col = col & ~fora
+        r = maior_corrida(col)
         out.append(round(float((y1 - r[0]) / Hpx), 4)
-                   if r is not None and r[1] >= 0.03 * Hpx else None)
+                   if r is not None and r[1] >= 0.02 * Hpx else None)
     return out
+
+
+def banda_do_short(path_costas):
+    """(lo, hi) da banda do short, medida na vista de COSTAS. E o argumento
+    `banda` de perfil_frontal() - ver o bloco A FAIXA DO PEITO la."""
+    m = medir(path_costas)
+    return None if m is None else (m[1] - 0.02, m[0] + 0.05)
 
 
 def _simetriza(pr, nb=WAIST_AZ_BINS):
@@ -290,9 +341,15 @@ def tracado(smap, bmi, ids):
         e = smap.get(aid)
         if not e or not os.path.isfile(ref):
             continue
-        pr = perfil_frontal(ref)
+        pr = perfil_frontal(ref, banda=banda_do_short(zp.ref_path(ROOT, aid, "back")))
         w = e["waist_zh"]
-        if pr is None or not isinstance(w, (list, tuple)):
+        # ⚠️ Cos ESCALAR tambem se confere. A versao anterior pulava esses com
+        # "nao medido", e em 23/09 isso escondeu justamente os 6 que a sessao 36
+        # tinha acabado de achatar - os mesmos que o Rogerio reprovou depois.
+        # Altura constante e uma curva de 24 setores iguais; nao ha caso novo.
+        if isinstance(w, (int, float)):
+            w = [float(w)] * WAIST_AZ_BINS
+        if pr is None:
             print("{:<15} nao medido".format(aid))
             continue
         pr, asym = _simetriza(pr)
@@ -381,7 +438,8 @@ def escrever(smap, root, aid):
         print("{}: sem entrada de cos no mapa - rode --fit antes".format(aid))
         return 1
 
-    pr, _ = _simetriza(perfil_frontal(ref) or [])
+    banda = banda_do_short(zp.ref_path(ROOT, aid, "back"))
+    pr, _ = _simetriza(perfil_frontal(ref, banda=banda) or [])
     pr = _monotona(pr)
     w = list(e["waist_zh"])
     nb = len(w)
@@ -453,6 +511,24 @@ def escrever(smap, root, aid):
         for t, j in enumerate(js, start=1):
             w[j] = round(a0 + (a1 - a0) * t / float(len(js) + 1), 5)
 
+    # ---- ALISAR, porque a folha entrega o CAMINHO e nao o ACABAMENTO -------
+    # 🔴 Achado de 23/09 (sessao 37): esta funcao gravava o arco CRU. No
+    # `w_fit` o alisamento (`w_waist_liso`) e o ULTIMO passo justamente porque o
+    # que vem antes decide ONDE o cos esta e ele decide COMO chega la - e aqui a
+    # folha entrava depois de tudo, pulando o alisamento inteiro.
+    #
+    # O preco apareceu no GLB entregue: no `zen_f_b03h_d1` o mergulho sumiu e
+    # sobrou uma COROA - dente de serra de 3,9 cm entre setores vizinhos, com a
+    # trava `CANTO` em 0.039 contra o corte de 0.018. A medida da folha tem
+    # ruido de coluna, e 24 setores de ruido desenham uma serra.
+    #
+    # E a §4.5f de novo, de cabeca para baixo: la a curva da MALHA saia
+    # poligonal; aqui e a da FOLHA. Mesmo conserto, mesmo teto de 2 bins.
+    hem = e.get("hem_l_zh")
+    hem = hem[0] if isinstance(hem, list) else float(hem)
+    w = S.w_waist_liso(np, w, hem + 1.0 / S.Z_BINS)
+    w = [round(v, 5) for v in w]
+
     # O cos tem de continuar sendo UMA curva: na divisa entre o trecho vindo da
     # folha e o trecho vindo da malha nao pode haver degrau. Se houver, e sinal
     # de que o deslocamento nao serviu para este avatar - melhor recusar do que
@@ -474,6 +550,57 @@ def escrever(smap, root, aid):
               aid, mudou, desloc, salto))
     return 0
 # assimetria nao tem limiar: entra na comparacao do arco, acima.
+
+
+# quanto de VIES a serie pode ter antes de virar defeito, em fracao da altura.
+# 0.004 = 7 mm = ~1 bin de Z_BINS, que e a resolucao do proprio detector. Abaixo
+# disso nao ha o que corrigir; acima, ha - e a tira preta que o Rogerio viu em
+# 23/09 media 0.0061.
+VIES_MAX = 0.004
+
+
+def _vies(serie):
+    """Media e contagem de SINAL da serie, por coluna e por classe.
+
+    ---------------------------------------------------------------------
+    🔴 POR QUE ISTO E TAO IMPORTANTE QUANTO O VEREDITO POR AVATAR (23/09)
+    ---------------------------------------------------------------------
+    A tolerancia declarada aqui e +-0.06 da altura, e ela pega erro GROSSO -
+    esta escrito no cabecalho e e verdade. O que nao estava escrito e que, por
+    isso mesmo, ela e CEGA PARA VIES: um erro sistematico dez vezes menor que a
+    tolerancia passa em 103 de 103 e mesmo assim e visivel no avatar.
+
+    Foi o que aconteceu com a bainha. Todo mundo "dentro", e somando:
+
+        media -0.0061 da altura (1,07 cm), 81 negativos de 103,
+        pior nos d3 (-0.0076) que nos d2 (-0.0050)
+
+    ou seja, a tinta descia cerca de um centimetro abaixo do tecido em 80
+    avatares, e a correlacao com `d3` que o Rogerio tinha visto A OLHO estava
+    ali, medida, desde sempre. Custou nada achar: bastou contar sinal.
+
+    > Regua de passa/nao-passa nao ve vies. Toda regua que devolve erro por
+    > avatar tem de publicar tambem media e contagem de sinal da serie.
+
+    A quebra por classe (d1/d2/d3) esta aqui de proposito: e ela que transforma
+    "ele acha que e pior nos d3" em hipotese testada. LICOES.md 4.5j."""
+    if len(serie) < 10:
+        return
+    import statistics as _st
+    print()
+    print("VIES DA SERIE (n={}) - a tolerancia acima nao ve isto".format(len(serie)))
+    for nome, i in (("cos   ", 1), ("bainha", 2)):
+        v = [r[i] for r in serie]
+        neg = sum(1 for x in v if x < 0)
+        alerta = " <<< VIES" if abs(_st.mean(v)) > VIES_MAX else ""
+        print("  {}  media {:+.4f}  mediana {:+.4f}  neg {}/{}{}".format(
+            nome, _st.mean(v), _st.median(v), neg, len(v), alerta))
+        por = {}
+        for aid, _dt, _db in serie:
+            por.setdefault(aid.rsplit("_", 1)[-1], []).append(_db if i == 2 else _dt)
+        print("          por classe: " + "  ".join(
+            "{} {:+.4f} (n={})".format(k, _st.mean(por[k]), len(por[k]))
+            for k in sorted(por)))
 
 
 def main():
@@ -513,6 +640,7 @@ def main():
         "id", "imc", "COS  ref / 3d", "BAINHA ref / 3d", "erro"))
     print("-" * 82)
     fora = []
+    serie = []
     for aid in ids:
         ref = zp.ref_path(ROOT, aid, "back")
         if not os.path.isfile(ref):
@@ -536,6 +664,7 @@ def main():
         ruim = abs(d_topo) > 0.06 or abs(d_base) > 0.06
         if ruim:
             fora.append(aid)
+        serie.append((aid, d_topo, d_base))
         print("{:<15} {:>6.1f}  {:>7.3f} /{:>7.3f}  {:>7.3f} /{:>7.3f}  {:>+6.3f} {:>+6.3f} {}".format(
             aid, bmi.get(aid, 0), topo_ref, topo_3d, base_ref, base_3d,
             d_topo, d_base, "<<" if ruim else ""))
@@ -545,6 +674,7 @@ def main():
         print("FORA ({}): {}".format(len(fora), ", ".join(fora)))
     else:
         print("todos dentro da tolerancia")
+    _vies(serie)
     return 0
 
 

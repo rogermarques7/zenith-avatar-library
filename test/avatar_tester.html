@@ -48,6 +48,14 @@
   .quick button, .opt button { background:#20202b; color:var(--text); border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:12px; cursor:pointer; }
   .quick button:hover, .opt button:hover { border-color:var(--accent); }
   .quick button.active { background:var(--accent); border-color:var(--accent); }
+  /* AVATAR NOVO = o que ainda nao tem shape key. Pedido dele em 23/09 para
+     validar a roupa dos 27 que entraram na sessao 36 sem ter de procurar id por
+     id na escada de IMC. O criterio nao e uma lista fixa: e a ausencia no
+     morph_map, entao quando o morph deles for gravado o destaque some sozinho -
+     que e exatamente o que se quer de um marcador de pendencia. */
+  .quick button.novo { background:#3a2a12; border-color:#c8873a; color:#f2c98a; }
+  .quick button.novo:hover { border-color:#f0a63a; }
+  .quick button.novo.active { background:#c8873a; border-color:#f0a63a; color:#1a1a22; }
   .opt { display:flex; gap:8px; margin-top:12px; align-items:center; font-size:12px; color:var(--muted); flex-wrap:wrap; }
   .missing { font-size:12px; color:#f0a; margin-top:8px; min-height:16px; }
   .fallback-note { color:#e0b055; }
@@ -839,10 +847,14 @@ function renderQuick(){
     // O ◈ marca quem tem shape key. Hoje e UM em 76, e sem a marca nao ha como
     // achar o avatar de teste de morph no meio da escada.
     const temMorph = MORPHS && MORPHS[a.id];
-    b.textContent=(temMorph?"◈ ":"")+a.id.replace(/^zen_[mf]_/,"")+" · "+a.measured_bmi.toFixed(1);
+    // Sem morph = entrou depois do ultimo lote de shape key. Hoje sao os 27 da
+    // sessao 36, e e neles que a validacao de ROUPA esta pendente.
+    if(!temMorph) b.classList.add("novo");
+    b.textContent=(temMorph?"◈ ":"● ")+a.id.replace(/^zen_[mf]_/,"")+" · "+a.measured_bmi.toFixed(1);
     b.dataset.id=a.id;
     b.title=`${a.definition} · IMC ${a.measured_bmi} · ${a.label} · cintura/altura ${a.waist_to_height}`
-      + (temMorph ? ` · ${temMorph.morphs.length} shape keys` : "");
+      + (temMorph ? ` · ${temMorph.morphs.length} shape keys`
+                  : " · SEM shape key — roupa a validar");
     b.onclick=()=>setAvatar(a.id);
     quick.appendChild(b);
   }
@@ -854,8 +866,10 @@ function renderQuick(){
       "e os descritores em <code>docs/CHARACTER_BIBLE.md</code> §5. O primeiro passo "+
       "é a folha-mãe <code>f_b05_d2</code>.";
   }
+  const novos = avatares.filter(a=>!(MORPHS && MORPHS[a.id])).length;
   document.getElementById("count").textContent = avatares.length
     ? avatares.length+" avatares "+SEX_LABEL[SEX]+"s · ordenados por IMC medido"
+      + (novos ? "  ·  "+novos+" em laranja = novos, sem shape key" : "")
     : "biblioteca "+SEX_LABEL_A[SEX]+" ainda não produzida";
 }
 

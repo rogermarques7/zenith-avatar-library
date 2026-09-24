@@ -934,6 +934,116 @@
       0.56875
     ]
   },
+  "zen_f_b03h_d1": {
+    "diag": {
+      "arm_verts": 7193,
+      "crotch_zh": 0.4742,
+      "faixa_anel_base": false,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [],
+      "faixa_peaks_topo": [
+        [
+          0.128,
+          0.7229
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7229,
+      "faixa_topo_anel_zh": 0.7229,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4586,
+        4627
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0487
+      ],
+      "waist_peaks_zh": [],
+      "waist_ring_found": false,
+      "waist_ring_zh": 0.5896
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.73125,
+      0.75208,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.75208,
+      0.73125,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292
+    ],
+    "faixa_lo_zh": 0.67292,
+    "faixa_topo_frente_zh": 0.75985,
+    "frac": 0.1762,
+    "hem_center_l": [
+      -0.08202,
+      0.03333
+    ],
+    "hem_center_r": [
+      0.08202,
+      0.0321
+    ],
+    "hem_l_zh": 0.45208,
+    "hem_r_zh": 0.45208,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 1,
+    "source": "manual",
+    "summary": "zen_f_b03h_d1: roupa 17.6% (+1142 costura, -1 lasca)  bainha 0.452..0.452 / 0.452..0.452  cos 0.490..0.576  faixa 0.673..0.673 / 0.723..0.760",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.56606,
+      0.56587,
+      0.56594,
+      0.56602,
+      0.56576,
+      0.56474,
+      0.56263,
+      0.55924,
+      0.5546,
+      0.54897,
+      0.54244,
+      0.53692,
+      0.53692,
+      0.54459,
+      0.55049,
+      0.55597,
+      0.56059,
+      0.56418,
+      0.56663,
+      0.56796,
+      0.56833,
+      0.568,
+      0.56731,
+      0.56657
+    ]
+  },
   "zen_f_b04_d1": {
     "diag": {
       "arm_verts": 6921,
@@ -1591,7 +1701,7 @@
       1
     ],
     "slivers": 4,
-    "source": "auto",
+    "source": "manual",
     "summary": "zen_f_b05_d1: roupa 34.5% (+1558 costura, -4 lasca)  bainha 0.415..0.415 / 0.415..0.415  cos 0.527..0.560  faixa 0.652..0.652 / 0.702..0.748",
     "waist_zh": [
       0.56042,
@@ -1865,6 +1975,342 @@
       0.58542
     ]
   },
+  "zen_f_b05h_d1": {
+    "diag": {
+      "arm_verts": 6496,
+      "crotch_zh": 0.4743,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.089,
+          0.6854
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.03,
+          0.7312
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7354,
+      "faixa_topo_anel_zh": 0.7312,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        5123,
+        5195
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0089
+      ],
+      "waist_peaks_zh": [],
+      "waist_ring_found": false,
+      "waist_ring_zh": 0.5896
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.73958,
+      0.75208,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.75208,
+      0.73958,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125
+    ],
+    "faixa_lo_zh": 0.68542,
+    "faixa_topo_frente_zh": 0.75916,
+    "frac": 0.2212,
+    "hem_center_l": [
+      -0.09281,
+      0.03309
+    ],
+    "hem_center_r": [
+      0.09483,
+      0.03161
+    ],
+    "hem_l_zh": 0.45208,
+    "hem_r_zh": 0.45208,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 3,
+    "source": "manual",
+    "summary": "zen_f_b05h_d1: roupa 22.1% (+1005 costura, -3 lasca)  bainha 0.452..0.452 / 0.452..0.452  cos 0.540..0.574  faixa 0.685..0.685 / 0.731..0.760",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.56294,
+      0.56225,
+      0.56188,
+      0.56178,
+      0.56188,
+      0.56214,
+      0.56249,
+      0.56293,
+      0.56346,
+      0.56408,
+      0.56481,
+      0.56566,
+      0.56661,
+      0.5676,
+      0.56854,
+      0.56931,
+      0.56979,
+      0.56989,
+      0.56956,
+      0.56882,
+      0.56775,
+      0.56647,
+      0.56515,
+      0.56393
+    ]
+  },
+  "zen_f_b05h_d2": {
+    "diag": {
+      "arm_verts": 5696,
+      "crotch_zh": 0.48,
+      "faixa_anel_base": false,
+      "faixa_anel_topo": false,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [],
+      "faixa_peaks_topo": [],
+      "faixa_topo_alvo_zh": 0.7229,
+      "faixa_topo_anel_zh": 0.7229,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        5152,
+        5219
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0597
+      ],
+      "waist_peaks_zh": [
+        [
+          0.015,
+          0.5979
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5979
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.73125,
+      0.75208,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.75208,
+      0.73125,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292
+    ],
+    "faixa_lo_zh": 0.67292,
+    "faixa_topo_frente_zh": 0.76169,
+    "frac": 0.1871,
+    "hem_center_l": [
+      -0.05738,
+      0.05692
+    ],
+    "hem_center_r": [
+      0.05864,
+      0.0542
+    ],
+    "hem_l_zh": 0.46042,
+    "hem_r_zh": 0.46042,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 0,
+    "source": "manual",
+    "summary": "zen_f_b05h_d2: roupa 18.7% (+934 costura, -0 lasca)  bainha 0.460..0.460 / 0.460..0.460  cos 0.490..0.595  faixa 0.673..0.673 / 0.723..0.760",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.57133,
+      0.56687,
+      0.56653,
+      0.56558,
+      0.56482,
+      0.5641,
+      0.56331,
+      0.56239,
+      0.56132,
+      0.56016,
+      0.55867,
+      0.55867,
+      0.55949,
+      0.56615,
+      0.57146,
+      0.57631,
+      0.58029,
+      0.58315,
+      0.58471,
+      0.58489,
+      0.58377,
+      0.58156,
+      0.57853,
+      0.57501
+    ]
+  },
+  "zen_f_b05i_d2": {
+    "crotch_override_zh": 0.4775,
+    "diag": {
+      "arm_verts": 6481,
+      "crotch_zh": 0.4775,
+      "faixa_anel_base": false,
+      "faixa_anel_topo": false,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [],
+      "faixa_peaks_topo": [],
+      "faixa_topo_alvo_zh": 0.7229,
+      "faixa_topo_anel_zh": 0.7229,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4567,
+        4629
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0449
+      ],
+      "waist_peaks_zh": [
+        [
+          0.003,
+          0.5896
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5896
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.73125,
+      0.75208,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.75208,
+      0.73125,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292
+    ],
+    "faixa_lo_zh": 0.67292,
+    "faixa_topo_frente_zh": 0.76169,
+    "frac": 0.1576,
+    "hem_center_l": [
+      -0.13785,
+      -0.01252
+    ],
+    "hem_center_r": [
+      0.1379,
+      -0.01407
+    ],
+    "hem_l_zh": 0.45625,
+    "hem_r_zh": 0.45625,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 345,
+    "source": "manual",
+    "summary": "zen_f_b05i_d2: roupa 15.8% (+1033 costura, -345 lasca)  bainha 0.456..0.456 / 0.456..0.456  cos 0.490..0.596  faixa 0.673..0.673 / 0.723..0.760",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.56682,
+      0.5656,
+      0.5656,
+      0.56661,
+      0.56738,
+      0.56808,
+      0.56863,
+      0.56903,
+      0.56937,
+      0.56978,
+      0.57042,
+      0.57077,
+      0.5738,
+      0.57684,
+      0.57982,
+      0.58259,
+      0.58481,
+      0.58616,
+      0.5864,
+      0.58544,
+      0.58332,
+      0.58021,
+      0.57635,
+      0.57208
+    ]
+  },
   "zen_f_b06_d1": {
     "crotch_override_zh": 0.4566,
     "diag": {
@@ -1956,7 +2402,7 @@
       1
     ],
     "slivers": 552,
-    "source": "auto",
+    "source": "manual",
     "summary": "zen_f_b06_d1: roupa 31.9% (+1330 costura, -552 lasca)  bainha 0.435..0.435 / 0.435..0.435  cos 0.559..0.592  faixa 0.669..0.669 / 0.719..0.756",
     "waist_zh": [
       0.57383,
@@ -2348,6 +2794,129 @@
       0.59215
     ]
   },
+  "zen_f_b06i_d3": {
+    "diag": {
+      "arm_verts": 5325,
+      "crotch_zh": 0.4913,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.08,
+          0.6937
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.089,
+          0.7479
+        ],
+        [
+          0.089,
+          0.7354
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7438,
+      "faixa_topo_anel_zh": 0.7479,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7688,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4700,
+        4725
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.01
+      ],
+      "waist_peaks_zh": [
+        [
+          0.019,
+          0.5938
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5938
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.75208,
+      0.76458,
+      0.76875,
+      0.76875,
+      0.76875,
+      0.76875,
+      0.76875,
+      0.76875,
+      0.76875,
+      0.76875,
+      0.76875,
+      0.76458,
+      0.75208,
+      0.74792,
+      0.74792,
+      0.74792,
+      0.74792,
+      0.74792,
+      0.74792,
+      0.74792,
+      0.74792,
+      0.74792,
+      0.74792,
+      0.74792
+    ],
+    "faixa_lo_zh": 0.69375,
+    "faixa_topo_frente_zh": 0.76994,
+    "frac": 0.3032,
+    "hem_center_l": [
+      -0.08109,
+      0.05532
+    ],
+    "hem_center_r": [
+      0.08252,
+      0.05219
+    ],
+    "hem_l_zh": 0.46875,
+    "hem_r_zh": 0.46875,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 265,
+    "source": "auto",
+    "summary": "zen_f_b06i_d3: roupa 30.3% (+1168 costura, -265 lasca)  bainha 0.469..0.469 / 0.469..0.469  cos 0.585..0.607  faixa 0.694..0.694 / 0.748..0.769",
+    "waist_zh": [
+      0.59732,
+      0.59376,
+      0.59001,
+      0.58542,
+      0.58525,
+      0.58478,
+      0.58507,
+      0.58542,
+      0.58873,
+      0.5918,
+      0.59509,
+      0.59832,
+      0.60121,
+      0.60357,
+      0.60533,
+      0.60649,
+      0.60716,
+      0.60743,
+      0.60738,
+      0.60699,
+      0.6062,
+      0.60489,
+      0.60298,
+      0.60044
+    ]
+  },
   "zen_f_b07_d1": {
     "crotch_override_zh": 0.4649,
     "diag": {
@@ -2435,7 +3004,7 @@
       1
     ],
     "slivers": 0,
-    "source": "auto",
+    "source": "manual",
     "summary": "zen_f_b07_d1: roupa 31.4% (+1272 costura, -0 lasca)  bainha 0.444..0.444 / 0.444..0.444  cos 0.556..0.594  faixa 0.673..0.673 / 0.731..0.760",
     "waist_zh": [
       0.58542,
@@ -2579,6 +3148,482 @@
       0.61042
     ]
   },
+  "zen_f_b07h_d1": {
+    "diag": {
+      "arm_verts": 5128,
+      "crotch_zh": 0.4569,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.143,
+          0.6687
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.097,
+          0.7188
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7188,
+      "faixa_topo_anel_zh": 0.7188,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4724,
+        4812
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.042
+      ],
+      "waist_peaks_zh": [
+        [
+          0.119,
+          0.5479
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5479
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.72708,
+      0.75208,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.75208,
+      0.72708,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875
+    ],
+    "faixa_lo_zh": 0.66875,
+    "faixa_topo_frente_zh": 0.75894,
+    "frac": 0.2938,
+    "hem_center_l": [
+      -0.0902,
+      0.02884
+    ],
+    "hem_center_r": [
+      0.09567,
+      0.03011
+    ],
+    "hem_l_zh": 0.43542,
+    "hem_r_zh": 0.43542,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 11,
+    "source": "manual",
+    "summary": "zen_f_b07h_d1: roupa 29.4% (+1210 costura, -11 lasca)  bainha 0.435..0.435 / 0.435..0.435  cos 0.469..0.552  faixa 0.669..0.669 / 0.719..0.760",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.53397,
+      0.53212,
+      0.53212,
+      0.53212,
+      0.53206,
+      0.53181,
+      0.53117,
+      0.53003,
+      0.52836,
+      0.52633,
+      0.52356,
+      0.52356,
+      0.52365,
+      0.52889,
+      0.53299,
+      0.53678,
+      0.53989,
+      0.54212,
+      0.5433,
+      0.54339,
+      0.54248,
+      0.5408,
+      0.53867,
+      0.53638
+    ]
+  },
+  "zen_f_b07h_d2": {
+    "crotch_override_zh": 0.4855,
+    "diag": {
+      "arm_verts": 5960,
+      "crotch_zh": 0.4855,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": false,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.014,
+          0.6521
+        ],
+        [
+          0.013,
+          0.6896
+        ]
+      ],
+      "faixa_peaks_topo": [],
+      "faixa_topo_alvo_zh": 0.7396,
+      "faixa_topo_anel_zh": 0.7396,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4714,
+        4773
+      ],
+      "waist_liso_dz": [
+        0.008,
+        0.01
+      ],
+      "waist_peaks_zh": [],
+      "waist_ring_found": false,
+      "waist_ring_zh": 0.6021
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.74375,
+      0.75625,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.75625,
+      0.74375,
+      0.73958,
+      0.73958,
+      0.73958,
+      0.73958,
+      0.73958,
+      0.73958,
+      0.73958,
+      0.73958,
+      0.73958,
+      0.73958,
+      0.73958
+    ],
+    "faixa_lo_zh": 0.68958,
+    "faixa_topo_frente_zh": 0.7619,
+    "frac": 0.2175,
+    "hem_center_l": [
+      -0.09956,
+      -0.02637
+    ],
+    "hem_center_r": [
+      0.09035,
+      -0.02541
+    ],
+    "hem_l_zh": 0.46458,
+    "hem_r_zh": 0.46458,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 156,
+    "source": "auto",
+    "summary": "zen_f_b07h_d2: roupa 21.7% (+1050 costura, -156 lasca)  bainha 0.465..0.465 / 0.465..0.465  cos 0.591..0.607  faixa 0.690..0.690 / 0.740..0.760",
+    "waist_zh": [
+      0.60084,
+      0.59853,
+      0.59618,
+      0.59405,
+      0.59238,
+      0.5914,
+      0.59123,
+      0.59192,
+      0.5934,
+      0.59548,
+      0.59791,
+      0.60041,
+      0.60269,
+      0.60456,
+      0.60592,
+      0.60679,
+      0.60724,
+      0.6074,
+      0.60733,
+      0.60707,
+      0.60657,
+      0.60576,
+      0.60454,
+      0.60289
+    ]
+  },
+  "zen_f_b07i_d1": {
+    "diag": {
+      "arm_verts": 5379,
+      "crotch_zh": 0.4713,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.067,
+          0.6896
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.323,
+          0.7271
+        ],
+        [
+          0.018,
+          0.7479
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7396,
+      "faixa_topo_anel_zh": 0.7271,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4513,
+        4607
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0099
+      ],
+      "waist_peaks_zh": [
+        [
+          0.208,
+          0.5604
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5604
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.73542,
+      0.75208,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.75208,
+      0.73542,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708
+    ],
+    "faixa_lo_zh": 0.68958,
+    "faixa_topo_frente_zh": 0.75941,
+    "frac": 0.2494,
+    "hem_center_l": [
+      -0.08439,
+      0.03525
+    ],
+    "hem_center_r": [
+      0.08804,
+      0.0322
+    ],
+    "hem_l_zh": 0.45208,
+    "hem_r_zh": 0.45208,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 54,
+    "source": "auto",
+    "summary": "zen_f_b07i_d1: roupa 24.9% (+1329 costura, -54 lasca)  bainha 0.452..0.452 / 0.452..0.452  cos 0.540..0.565  faixa 0.690..0.690 / 0.727..0.760",
+    "waist_zh": [
+      0.55557,
+      0.55333,
+      0.55104,
+      0.54875,
+      0.54649,
+      0.54427,
+      0.54217,
+      0.53958,
+      0.53958,
+      0.54432,
+      0.54801,
+      0.55152,
+      0.5547,
+      0.55753,
+      0.55998,
+      0.562,
+      0.5635,
+      0.56439,
+      0.5646,
+      0.56416,
+      0.56312,
+      0.56162,
+      0.55979,
+      0.55774
+    ]
+  },
+  "zen_f_b07j_d1": {
+    "diag": {
+      "arm_verts": 5519,
+      "crotch_zh": 0.4744,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.021,
+          0.6854
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.532,
+          0.7229
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7354,
+      "faixa_topo_anel_zh": 0.7229,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7562,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4223,
+        4259
+      ],
+      "waist_liso_dz": [
+        0.0077,
+        0.0062
+      ],
+      "waist_peaks_zh": [
+        [
+          0.078,
+          0.5604
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5604
+    },
+    "escondidas": 4786,
+    "faixa_hi_zh": [
+      0.73125,
+      0.74792,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.74792,
+      0.73125,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292
+    ],
+    "faixa_lo_zh": 0.68542,
+    "faixa_topo_frente_zh": 0.75758,
+    "frac": 0.2323,
+    "hem_center_l": [
+      -0.08057,
+      0.02075
+    ],
+    "hem_center_r": [
+      0.07735,
+      0.01742
+    ],
+    "hem_l_zh": 0.45208,
+    "hem_r_zh": 0.45208,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 1431,
+    "source": "auto",
+    "summary": "zen_f_b07j_d1: roupa 23.2% (+1479 costura, -1431 lasca)  bainha 0.452..0.452 / 0.452..0.452  cos 0.547..0.560  faixa 0.685..0.685 / 0.723..0.756",
+    "waist_zh": [
+      0.5542,
+      0.55227,
+      0.55034,
+      0.54862,
+      0.54732,
+      0.54662,
+      0.54662,
+      0.54732,
+      0.54862,
+      0.55034,
+      0.55227,
+      0.5542,
+      0.55594,
+      0.55738,
+      0.55847,
+      0.55923,
+      0.5597,
+      0.55992,
+      0.55992,
+      0.5597,
+      0.55923,
+      0.55847,
+      0.55738,
+      0.55594
+    ]
+  },
   "zen_f_b08_d1": {
     "cos_avental": true,
     "crotch_override_zh": 0.4149,
@@ -2671,7 +3716,7 @@
       1
     ],
     "slivers": 0,
-    "source": "auto",
+    "source": "manual",
     "summary": "zen_f_b08_d1: roupa 31.2% (+1502 costura, -0 lasca)  bainha 0.394..0.394 / 0.394..0.394  cos 0.535..0.575  faixa 0.656..0.656 / 0.715..0.760",
     "waist_zh": [
       0.56287,
@@ -2698,6 +3743,122 @@
       0.57172,
       0.56939,
       0.56644
+    ]
+  },
+  "zen_f_b08_d2": {
+    "crotch_override_zh": 0.4735,
+    "diag": {
+      "arm_verts": 5172,
+      "crotch_zh": 0.4735,
+      "faixa_anel_base": false,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [],
+      "faixa_peaks_topo": [
+        [
+          0.018,
+          0.7271
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7229,
+      "faixa_topo_anel_zh": 0.7271,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        3753,
+        3771
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0473
+      ],
+      "waist_peaks_zh": [
+        [
+          0.031,
+          0.5854
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5854
+    },
+    "escondidas": 907,
+    "faixa_hi_zh": [
+      0.73542,
+      0.75208,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.75208,
+      0.73542,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708
+    ],
+    "faixa_lo_zh": 0.67292,
+    "faixa_topo_frente_zh": 0.75963,
+    "frac": 0.2722,
+    "hem_center_l": [
+      -0.14787,
+      -0.03415
+    ],
+    "hem_center_r": [
+      0.14754,
+      -0.03395
+    ],
+    "hem_l_zh": 0.45208,
+    "hem_r_zh": 0.45208,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 6,
+    "source": "manual",
+    "summary": "zen_f_b08_d2: roupa 27.2% (+1127 costura, -6 lasca)  bainha 0.452..0.452 / 0.452..0.452  cos 0.510..0.587  faixa 0.673..0.673 / 0.727..0.760",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.57443,
+      0.57333,
+      0.57269,
+      0.57244,
+      0.57245,
+      0.57254,
+      0.57257,
+      0.57249,
+      0.57236,
+      0.5723,
+      0.5725,
+      0.57311,
+      0.57418,
+      0.57567,
+      0.5774,
+      0.57914,
+      0.58063,
+      0.58164,
+      0.58202,
+      0.58172,
+      0.58078,
+      0.57936,
+      0.57765,
+      0.57593
     ]
   },
   "zen_f_b08_d3": {
@@ -2812,6 +3973,126 @@
       0.60208,
       0.59792,
       0.59792
+    ]
+  },
+  "zen_f_b08h_d2": {
+    "crotch_override_zh": 0.4855,
+    "diag": {
+      "arm_verts": 5662,
+      "crotch_zh": 0.4855,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.105,
+          0.6813
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.073,
+          0.7312
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7313,
+      "faixa_topo_anel_zh": 0.7312,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7646,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4208,
+        4235
+      ],
+      "waist_liso_dz": [
+        0.0075,
+        0.0068
+      ],
+      "waist_peaks_zh": [
+        [
+          0.039,
+          0.6021
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.6021
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.73958,
+      0.75625,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.75625,
+      0.73958,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125,
+      0.73125
+    ],
+    "faixa_lo_zh": 0.68125,
+    "faixa_topo_frente_zh": 0.7626,
+    "frac": 0.2364,
+    "hem_center_l": [
+      -0.13869,
+      -0.03443
+    ],
+    "hem_center_r": [
+      0.13799,
+      -0.03178
+    ],
+    "hem_l_zh": 0.46458,
+    "hem_r_zh": 0.46458,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 0,
+    "source": "auto",
+    "summary": "zen_f_b08h_d2: roupa 23.6% (+1254 costura, -0 lasca)  bainha 0.465..0.465 / 0.465..0.465  cos 0.587..0.602  faixa 0.681..0.681 / 0.731..0.765",
+    "waist_zh": [
+      0.59505,
+      0.59295,
+      0.59085,
+      0.58898,
+      0.58755,
+      0.58674,
+      0.58668,
+      0.58738,
+      0.58879,
+      0.59073,
+      0.593,
+      0.59533,
+      0.59749,
+      0.59931,
+      0.60068,
+      0.60159,
+      0.60208,
+      0.6022,
+      0.60204,
+      0.60161,
+      0.60092,
+      0.59994,
+      0.59863,
+      0.59698
     ]
   },
   "zen_f_b08h_d3": {
@@ -3015,7 +4296,7 @@
       1
     ],
     "slivers": 2,
-    "source": "auto",
+    "source": "manual",
     "summary": "zen_f_b09_d1: roupa 25.0% (+1437 costura, -2 lasca)  bainha 0.435..0.435 / 0.435..0.435  cos 0.556..0.581  faixa 0.677..0.677 / 0.727..0.769",
     "waist_zh": [
       0.57708,
@@ -3139,7 +4420,7 @@
       1
     ],
     "slivers": 0,
-    "source": "auto",
+    "source": "manual",
     "summary": "zen_f_b09_d2: roupa 30.0% (+1191 costura, -0 lasca)  bainha 0.435..0.435 / 0.435..0.435  cos 0.560..0.602  faixa 0.677..0.677 / 0.727..0.765",
     "waist_zh": [
       0.5888,
@@ -3286,6 +4567,125 @@
       0.61042,
       0.61042,
       0.61042
+    ]
+  },
+  "zen_f_b09h_d1": {
+    "diag": {
+      "arm_verts": 5380,
+      "crotch_zh": 0.4572,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.023,
+          0.6729
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.04,
+          0.7146
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7229,
+      "faixa_topo_anel_zh": 0.7146,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7562,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4529,
+        4557
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0101
+      ],
+      "waist_peaks_zh": [
+        [
+          0.103,
+          0.5604
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5604
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.72708,
+      0.74375,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.74375,
+      0.72708,
+      0.71458,
+      0.71458,
+      0.71458,
+      0.71458,
+      0.71458,
+      0.71458,
+      0.71458,
+      0.71458,
+      0.71458,
+      0.71458,
+      0.71458
+    ],
+    "faixa_lo_zh": 0.67292,
+    "faixa_topo_frente_zh": 0.75802,
+    "frac": 0.233,
+    "hem_center_l": [
+      -0.07461,
+      0.02985
+    ],
+    "hem_center_r": [
+      0.07656,
+      0.02882
+    ],
+    "hem_l_zh": 0.43542,
+    "hem_r_zh": 0.43542,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 48,
+    "source": "auto",
+    "summary": "zen_f_b09h_d1: roupa 23.3% (+1118 costura, -48 lasca)  bainha 0.435..0.435 / 0.435..0.435  cos 0.531..0.559  faixa 0.673..0.673 / 0.715..0.756",
+    "waist_zh": [
+      0.54825,
+      0.54449,
+      0.54042,
+      0.5363,
+      0.53125,
+      0.53125,
+      0.53125,
+      0.53125,
+      0.53125,
+      0.53727,
+      0.542,
+      0.54644,
+      0.55029,
+      0.55344,
+      0.55586,
+      0.55756,
+      0.55863,
+      0.55916,
+      0.55921,
+      0.55878,
+      0.55786,
+      0.55638,
+      0.55428,
+      0.55155
     ]
   },
   "zen_f_b09h_d2": {
@@ -3513,6 +4913,121 @@
       0.61458
     ]
   },
+  "zen_f_b09i_d1": {
+    "diag": {
+      "arm_verts": 5490,
+      "crotch_zh": 0.4662,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.14,
+          0.6729
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.111,
+          0.7188
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7229,
+      "faixa_topo_anel_zh": 0.7188,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4473,
+        4616
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0259
+      ],
+      "waist_peaks_zh": [],
+      "waist_ring_found": false,
+      "waist_ring_zh": 0.5813
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.72708,
+      0.75208,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.75208,
+      0.72708,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875
+    ],
+    "faixa_lo_zh": 0.67292,
+    "faixa_topo_frente_zh": 0.75894,
+    "frac": 0.2282,
+    "hem_center_l": [
+      -0.08161,
+      0.03041
+    ],
+    "hem_center_r": [
+      0.08625,
+      0.03486
+    ],
+    "hem_l_zh": 0.44375,
+    "hem_r_zh": 0.44375,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 544,
+    "source": "manual",
+    "summary": "zen_f_b09i_d1: roupa 22.8% (+1230 costura, -544 lasca)  bainha 0.444..0.444 / 0.444..0.444  cos 0.485..0.556  faixa 0.673..0.673 / 0.719..0.760",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.54145,
+      0.54035,
+      0.53978,
+      0.5397,
+      0.53997,
+      0.54042,
+      0.54092,
+      0.54142,
+      0.54191,
+      0.54246,
+      0.54318,
+      0.54414,
+      0.54536,
+      0.54677,
+      0.54825,
+      0.54959,
+      0.55059,
+      0.55108,
+      0.55094,
+      0.55015,
+      0.54877,
+      0.54696,
+      0.54496,
+      0.54305
+    ]
+  },
   "zen_f_b09i_d2": {
     "diag": {
       "arm_verts": 5372,
@@ -3633,6 +5148,359 @@
       0.59375
     ]
   },
+  "zen_f_b09i_d3": {
+    "crotch_override_zh": 0.4815,
+    "diag": {
+      "arm_verts": 5216,
+      "crotch_zh": 0.4815,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": false,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.013,
+          0.6604
+        ]
+      ],
+      "faixa_peaks_topo": [],
+      "faixa_topo_alvo_zh": 0.7104,
+      "faixa_topo_anel_zh": 0.7104,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4498,
+        4509
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0099
+      ],
+      "waist_peaks_zh": [
+        [
+          0.172,
+          0.6021
+        ],
+        [
+          0.052,
+          0.5854
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.6021
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.72292,
+      0.74792,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.74792,
+      0.72292,
+      0.71042,
+      0.71042,
+      0.71042,
+      0.71042,
+      0.71042,
+      0.71042,
+      0.71042,
+      0.71042,
+      0.71042,
+      0.71042,
+      0.71042
+    ],
+    "faixa_lo_zh": 0.66042,
+    "faixa_topo_frente_zh": 0.76055,
+    "frac": 0.2199,
+    "hem_center_l": [
+      -0.16069,
+      -0.00598
+    ],
+    "hem_center_r": [
+      0.16147,
+      -0.00641
+    ],
+    "hem_l_zh": 0.46042,
+    "hem_r_zh": 0.46042,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 350,
+    "source": "auto",
+    "summary": "zen_f_b09i_d3: roupa 22.0% (+1148 costura, -350 lasca)  bainha 0.460..0.460 / 0.460..0.460  cos 0.576..0.597  faixa 0.660..0.660 / 0.710..0.760",
+    "waist_zh": [
+      0.58723,
+      0.58408,
+      0.58084,
+      0.57708,
+      0.57638,
+      0.57565,
+      0.57568,
+      0.57646,
+      0.57708,
+      0.58129,
+      0.58479,
+      0.58807,
+      0.59091,
+      0.59321,
+      0.59493,
+      0.59611,
+      0.5968,
+      0.59709,
+      0.59702,
+      0.59658,
+      0.59572,
+      0.59437,
+      0.59249,
+      0.59009
+    ]
+  },
+  "zen_f_b09j_d1": {
+    "diag": {
+      "arm_verts": 5754,
+      "crotch_zh": 0.4769,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.12,
+          0.6771
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.028,
+          0.7271
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7271,
+      "faixa_topo_anel_zh": 0.7271,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4805,
+        4971
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0143
+      ],
+      "waist_peaks_zh": [],
+      "waist_ring_found": false,
+      "waist_ring_zh": 0.5938
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.73542,
+      0.75208,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.75208,
+      0.73542,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708
+    ],
+    "faixa_lo_zh": 0.67708,
+    "faixa_topo_frente_zh": 0.75872,
+    "frac": 0.2475,
+    "hem_center_l": [
+      -0.0828,
+      0.03095
+    ],
+    "hem_center_r": [
+      0.08654,
+      0.03128
+    ],
+    "hem_l_zh": 0.45625,
+    "hem_r_zh": 0.45625,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 543,
+    "source": "manual",
+    "summary": "zen_f_b09j_d1: roupa 24.8% (+1380 costura, -543 lasca)  bainha 0.456..0.456 / 0.456..0.456  cos 0.523..0.555  faixa 0.677..0.677 / 0.727..0.760",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.54872,
+      0.5481,
+      0.54766,
+      0.54739,
+      0.54724,
+      0.54719,
+      0.5472,
+      0.54728,
+      0.54743,
+      0.54768,
+      0.54806,
+      0.54859,
+      0.54927,
+      0.55008,
+      0.55093,
+      0.55172,
+      0.55235,
+      0.55273,
+      0.5528,
+      0.55254,
+      0.55199,
+      0.55123,
+      0.55036,
+      0.54949
+    ]
+  },
+  "zen_f_b09j_d3": {
+    "diag": {
+      "arm_verts": 5670,
+      "crotch_zh": 0.4795,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.146,
+          0.6729
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.22,
+          0.7188
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7229,
+      "faixa_topo_anel_zh": 0.7188,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7604,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        4632,
+        4685
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0089
+      ],
+      "waist_peaks_zh": [
+        [
+          0.039,
+          0.5979
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5979
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.72708,
+      0.75208,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.76042,
+      0.75208,
+      0.72708,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875,
+      0.71875
+    ],
+    "faixa_lo_zh": 0.67292,
+    "faixa_topo_frente_zh": 0.75894,
+    "frac": 0.2777,
+    "hem_center_l": [
+      -0.07585,
+      0.04527
+    ],
+    "hem_center_r": [
+      0.07765,
+      0.03381
+    ],
+    "hem_l_zh": 0.46042,
+    "hem_r_zh": 0.46042,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 20,
+    "source": "auto",
+    "summary": "zen_f_b09j_d3: roupa 27.8% (+1175 costura, -20 lasca)  bainha 0.460..0.460 / 0.460..0.460  cos 0.577..0.601  faixa 0.673..0.673 / 0.719..0.760",
+    "waist_zh": [
+      0.59138,
+      0.58834,
+      0.58499,
+      0.58149,
+      0.57708,
+      0.57708,
+      0.57708,
+      0.57708,
+      0.58072,
+      0.58381,
+      0.58703,
+      0.5902,
+      0.59316,
+      0.59572,
+      0.59777,
+      0.59927,
+      0.60022,
+      0.60066,
+      0.60065,
+      0.6002,
+      0.59932,
+      0.59801,
+      0.59624,
+      0.59403
+    ]
+  },
   "zen_f_b10_d1": {
     "cos_avental": true,
     "crotch_override_zh": 0.4524,
@@ -3729,7 +5597,7 @@
       2
     ],
     "slivers": 274,
-    "source": "auto",
+    "source": "manual",
     "summary": "zen_f_b10_d1: roupa 28.3% (+1300 costura, -274 lasca)  bainha 0.431..0.431 / 0.431..0.431  cos 0.540..0.598  faixa 0.677..0.677 / 0.723..0.769",
     "waist_zh": [
       0.5755,
@@ -3845,7 +5713,7 @@
       1
     ],
     "slivers": 131,
-    "source": "auto",
+    "source": "manual",
     "summary": "zen_f_b10_d2: roupa 23.9% (+1309 costura, -131 lasca)  bainha 0.431..0.431 / 0.431..0.431  cos 0.532..0.595  faixa 0.681..0.681 / 0.727..0.756",
     "waist_zh": [
       0.57068,
@@ -3969,7 +5837,7 @@
       1
     ],
     "slivers": 193,
-    "source": "auto",
+    "source": "manual",
     "summary": "zen_f_b10_d3: roupa 25.1% (+1266 costura, -193 lasca)  bainha 0.440..0.440 / 0.440..0.440  cos 0.565..0.601  faixa 0.673..0.673 / 0.719..0.765",
     "waist_zh": [
       0.58514,
@@ -4220,7 +6088,7 @@
       2
     ],
     "slivers": 3,
-    "source": "auto",
+    "source": "manual",
     "summary": "zen_f_b11_d2: roupa 28.5% (+1295 costura, -3 lasca)  bainha 0.435..0.435 / 0.435..0.435  cos 0.541..0.590  faixa 0.681..0.681 / 0.727..0.760",
     "waist_zh": [
       0.57827,
@@ -4247,6 +6115,131 @@
       0.58786,
       0.58571,
       0.58255
+    ]
+  },
+  "zen_f_b11h_d1": {
+    "cos_avental": true,
+    "crotch_override_zh": 0.4605,
+    "diag": {
+      "arm_verts": 4728,
+      "crotch_zh": 0.4605,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.261,
+          0.6813
+        ],
+        [
+          0.015,
+          0.6354
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.074,
+          0.7271
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7313,
+      "faixa_topo_anel_zh": 0.7271,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7646,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        3397,
+        3421
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0167
+      ],
+      "waist_peaks_zh": [
+        [
+          0.178,
+          0.5646
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5646
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.73542,
+      0.75625,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.76458,
+      0.75625,
+      0.73542,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708,
+      0.72708
+    ],
+    "faixa_lo_zh": 0.68125,
+    "faixa_topo_frente_zh": 0.76535,
+    "frac": 0.2649,
+    "hem_center_l": [
+      -0.16409,
+      0.00868
+    ],
+    "hem_center_r": [
+      0.16346,
+      0.00984
+    ],
+    "hem_l_zh": 0.43958,
+    "hem_r_zh": 0.43958,
+    "islands": 2,
+    "por_peca": [
+      1,
+      1
+    ],
+    "slivers": 230,
+    "source": "auto",
+    "summary": "zen_f_b11h_d1: roupa 26.5% (+1443 costura, -230 lasca)  bainha 0.440..0.440 / 0.440..0.440  cos 0.511..0.563  faixa 0.681..0.681 / 0.727..0.765",
+    "waist_zh": [
+      0.54255,
+      0.53538,
+      0.52745,
+      0.51892,
+      0.51058,
+      0.51058,
+      0.51058,
+      0.51058,
+      0.52042,
+      0.5288,
+      0.53679,
+      0.54391,
+      0.5499,
+      0.55466,
+      0.55819,
+      0.5606,
+      0.56206,
+      0.56269,
+      0.56259,
+      0.56174,
+      0.56006,
+      0.55741,
+      0.55364,
+      0.54868
     ]
   },
   "zen_f_b12_d1": {
@@ -4336,7 +6329,7 @@
       2
     ],
     "slivers": 155,
-    "source": "auto",
+    "source": "manual",
     "summary": "zen_f_b12_d1: roupa 29.5% (+1417 costura, -155 lasca)  bainha 0.385..0.385 / 0.385..0.385  cos 0.508..0.592  faixa 0.677..0.677 / 0.727..0.773",
     "waist_zh": [
       0.56413,
@@ -4363,6 +6356,127 @@
       0.58561,
       0.58036,
       0.57322
+    ]
+  },
+  "zen_f_b12h_d1": {
+    "cos_avental": true,
+    "crotch_override_zh": 0.4605,
+    "diag": {
+      "arm_verts": 5533,
+      "crotch_zh": 0.4605,
+      "faixa_anel_base": true,
+      "faixa_anel_topo": true,
+      "faixa_base_fonte": "anel",
+      "faixa_peaks_base": [
+        [
+          0.062,
+          0.6813
+        ]
+      ],
+      "faixa_peaks_topo": [
+        [
+          0.021,
+          0.7229
+        ]
+      ],
+      "faixa_topo_alvo_zh": 0.7313,
+      "faixa_topo_anel_zh": 0.7229,
+      "faixa_topo_fonte": "folha",
+      "faixa_topo_frente_zh": 0.7562,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        3682,
+        3700
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0129
+      ],
+      "waist_peaks_zh": [
+        [
+          0.237,
+          0.5604
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5604
+    },
+    "escondidas": 0,
+    "faixa_hi_zh": [
+      0.73125,
+      0.74792,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.75625,
+      0.74792,
+      0.73125,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292,
+      0.72292
+    ],
+    "faixa_lo_zh": 0.68125,
+    "faixa_topo_frente_zh": 0.75758,
+    "frac": 0.2104,
+    "hem_center_l": [
+      -0.10384,
+      0.01197
+    ],
+    "hem_center_r": [
+      0.10244,
+      0.01731
+    ],
+    "hem_l_zh": 0.43958,
+    "hem_r_zh": 0.43958,
+    "islands": 3,
+    "por_peca": [
+      1,
+      2
+    ],
+    "slivers": 563,
+    "source": "auto",
+    "summary": "zen_f_b12h_d1: roupa 21.0% (+1273 costura, -563 lasca)  bainha 0.440..0.440 / 0.440..0.440  cos 0.515..0.559  faixa 0.681..0.681 / 0.723..0.756",
+    "waist_zh": [
+      0.54138,
+      0.53564,
+      0.5294,
+      0.52301,
+      0.51508,
+      0.51508,
+      0.51508,
+      0.51508,
+      0.5235,
+      0.53022,
+      0.53667,
+      0.54248,
+      0.54747,
+      0.55152,
+      0.55459,
+      0.55672,
+      0.55803,
+      0.55861,
+      0.55851,
+      0.55774,
+      0.55623,
+      0.55388,
+      0.55062,
+      0.54643
     ]
   },
   "zen_m_b01_d1": {
@@ -5823,6 +7937,95 @@
       0.57708
     ]
   },
+  "zen_m_b05n_d1": {
+    "diag": {
+      "arm_verts": 6745,
+      "crotch_zh": 0.4525,
+      "hem_peaks_zh": [
+        [
+          [
+            0.073,
+            0.4188
+          ]
+        ],
+        [
+          [
+            0.065,
+            0.4188
+          ]
+        ]
+      ],
+      "leg_verts": [
+        5199,
+        5419
+      ],
+      "waist_liso_dz": [
+        0.0042,
+        0.006
+      ],
+      "waist_peaks_zh": [
+        [
+          0.028,
+          0.5479
+        ],
+        [
+          0.018,
+          0.5646
+        ],
+        [
+          0.005,
+          0.5854
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5479
+    },
+    "escondidas": 0,
+    "frac": 0.1863,
+    "hem_center_l": [
+      -0.08929,
+      0.02891
+    ],
+    "hem_center_r": [
+      0.08856,
+      0.02744
+    ],
+    "hem_l_zh": 0.41875,
+    "hem_r_zh": 0.41875,
+    "islands": 1,
+    "por_peca": [
+      1
+    ],
+    "slivers": 0,
+    "source": "auto",
+    "summary": "zen_m_b05n_d1: roupa 18.6% (+733 costura, -0 lasca)  bainha 0.419..0.419 / 0.419..0.419  cos 0.541..0.556",
+    "waist_zh": [
+      0.54688,
+      0.5451,
+      0.54359,
+      0.54243,
+      0.54166,
+      0.54127,
+      0.54129,
+      0.54171,
+      0.54254,
+      0.54376,
+      0.54534,
+      0.54721,
+      0.54924,
+      0.5513,
+      0.5532,
+      0.55478,
+      0.55588,
+      0.55642,
+      0.55634,
+      0.55565,
+      0.55442,
+      0.55278,
+      0.55087,
+      0.54885
+    ]
+  },
   "zen_m_b06_d1": {
     "diag": {
       "arm_verts": 6170,
@@ -6268,6 +8471,87 @@
       0.58125
     ]
   },
+  "zen_m_b06m_d3": {
+    "diag": {
+      "arm_verts": 6530,
+      "crotch_zh": 0.4721,
+      "hem_peaks_zh": [
+        [
+          [
+            0.003,
+            0.4479
+          ]
+        ],
+        [
+          [
+            0.002,
+            0.4479
+          ]
+        ]
+      ],
+      "leg_verts": [
+        4748,
+        4840
+      ],
+      "waist_liso_dz": [
+        0.0077,
+        0.0064
+      ],
+      "waist_peaks_zh": [
+        [
+          0.125,
+          0.5896
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5896
+    },
+    "escondidas": 0,
+    "frac": 0.0909,
+    "hem_center_l": [
+      -0.09776,
+      0.01987
+    ],
+    "hem_center_r": [
+      0.09999,
+      0.01778
+    ],
+    "hem_l_zh": 0.44792,
+    "hem_r_zh": 0.44792,
+    "islands": 1,
+    "por_peca": [
+      1
+    ],
+    "slivers": 0,
+    "source": "auto",
+    "summary": "zen_m_b06m_d3: roupa 9.1% (+565 costura, -0 lasca)  bainha 0.448..0.448 / 0.448..0.448  cos 0.572..0.585",
+    "waist_zh": [
+      0.57898,
+      0.57712,
+      0.57527,
+      0.57364,
+      0.5724,
+      0.57172,
+      0.57168,
+      0.57229,
+      0.57347,
+      0.57507,
+      0.57691,
+      0.57877,
+      0.58051,
+      0.58198,
+      0.58315,
+      0.58398,
+      0.58452,
+      0.58478,
+      0.5848,
+      0.58458,
+      0.58408,
+      0.58328,
+      0.58215,
+      0.5807
+    ]
+  },
   "zen_m_b07_d1": {
     "diag": {
       "arm_verts": 6479,
@@ -6497,6 +8781,326 @@
       0.57708,
       0.57708,
       0.57708
+    ]
+  },
+  "zen_m_b07h_d1": {
+    "diag": {
+      "arm_verts": 6345,
+      "crotch_zh": 0.4456,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        5544,
+        5562
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0092
+      ],
+      "waist_peaks_zh": [
+        [
+          0.083,
+          0.5687
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5687
+    },
+    "escondidas": 0,
+    "frac": 0.1366,
+    "hem_center_l": [
+      -0.10372,
+      0.01951
+    ],
+    "hem_center_r": [
+      0.11079,
+      0.01887
+    ],
+    "hem_l_zh": 0.40625,
+    "hem_r_zh": 0.40625,
+    "islands": 1,
+    "por_peca": [
+      1
+    ],
+    "slivers": 0,
+    "source": "auto",
+    "summary": "zen_m_b07h_d1: roupa 13.7% (+693 costura, -0 lasca)  bainha 0.406..0.406 / 0.406..0.406  cos 0.543..0.569",
+    "waist_zh": [
+      0.55691,
+      0.5534,
+      0.54998,
+      0.5469,
+      0.54375,
+      0.54327,
+      0.54296,
+      0.54347,
+      0.54375,
+      0.54832,
+      0.55218,
+      0.556,
+      0.55957,
+      0.5627,
+      0.56528,
+      0.56723,
+      0.56854,
+      0.5692,
+      0.56924,
+      0.56866,
+      0.56746,
+      0.56563,
+      0.5632,
+      0.56025
+    ]
+  },
+  "zen_m_b07i_d1": {
+    "diag": {
+      "arm_verts": 7275,
+      "crotch_zh": 0.464,
+      "hem_peaks_zh": [
+        [
+          [
+            0.004,
+            0.4313
+          ]
+        ],
+        []
+      ],
+      "leg_verts": [
+        5452,
+        5496
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0494
+      ],
+      "waist_peaks_zh": [
+        [
+          0.048,
+          0.5729
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5729
+    },
+    "escondidas": 0,
+    "frac": 0.1184,
+    "hem_center_l": [
+      -0.08855,
+      0.01544
+    ],
+    "hem_center_r": [
+      0.08739,
+      0.01384
+    ],
+    "hem_l_zh": 0.43125,
+    "hem_r_zh": 0.42708,
+    "islands": 1,
+    "por_peca": [
+      1
+    ],
+    "slivers": 0,
+    "source": "manual",
+    "summary": "zen_m_b07i_d1: roupa 11.8% (+560 costura, -0 lasca)  bainha 0.431..0.431 / 0.427..0.427  cos 0.481..0.573",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.54685,
+      0.54281,
+      0.54281,
+      0.54512,
+      0.54681,
+      0.54831,
+      0.5495,
+      0.5504,
+      0.55111,
+      0.55177,
+      0.55254,
+      0.55295,
+      0.55595,
+      0.55851,
+      0.561,
+      0.56317,
+      0.56475,
+      0.56549,
+      0.56525,
+      0.56396,
+      0.56169,
+      0.55863,
+      0.555,
+      0.55105
+    ]
+  },
+  "zen_m_b07j_d1": {
+    "diag": {
+      "arm_verts": 5744,
+      "crotch_zh": 0.4556,
+      "hem_peaks_zh": [
+        [
+          [
+            0.196,
+            0.4229
+          ]
+        ],
+        [
+          [
+            0.213,
+            0.4188
+          ]
+        ]
+      ],
+      "leg_verts": [
+        5585,
+        5666
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0125
+      ],
+      "waist_peaks_zh": [
+        [
+          0.199,
+          0.5563
+        ],
+        [
+          0.075,
+          0.5729
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5563
+    },
+    "escondidas": 0,
+    "frac": 0.2154,
+    "hem_center_l": [
+      -0.11032,
+      0.02473
+    ],
+    "hem_center_r": [
+      0.10716,
+      0.01763
+    ],
+    "hem_l_zh": 0.42292,
+    "hem_r_zh": 0.41875,
+    "islands": 1,
+    "por_peca": [
+      1
+    ],
+    "slivers": 0,
+    "source": "manual",
+    "summary": "zen_m_b07j_d1: roupa 21.5% (+811 costura, -0 lasca)  bainha 0.423..0.423 / 0.419..0.419  cos 0.531..0.561",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.54932,
+      0.54797,
+      0.54687,
+      0.54604,
+      0.5455,
+      0.54527,
+      0.54536,
+      0.54577,
+      0.54648,
+      0.54746,
+      0.54866,
+      0.55003,
+      0.55151,
+      0.553,
+      0.55442,
+      0.55563,
+      0.55652,
+      0.55698,
+      0.55693,
+      0.55638,
+      0.55538,
+      0.55402,
+      0.55246,
+      0.55085
+    ]
+  },
+  "zen_m_b07k_d1": {
+    "diag": {
+      "arm_verts": 5711,
+      "crotch_zh": 0.4585,
+      "hem_peaks_zh": [
+        [
+          [
+            0.056,
+            0.4271
+          ],
+          [
+            0.037,
+            0.4146
+          ]
+        ],
+        [
+          [
+            0.061,
+            0.4146
+          ]
+        ]
+      ],
+      "leg_verts": [
+        5058,
+        5131
+      ],
+      "waist_liso_dz": [
+        0.0073,
+        0.0059
+      ],
+      "waist_peaks_zh": [
+        [
+          0.102,
+          0.5563
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5563
+    },
+    "escondidas": 3805,
+    "frac": 0.2167,
+    "hem_center_l": [
+      -0.09334,
+      0.01935
+    ],
+    "hem_center_r": [
+      0.09637,
+      0.01705
+    ],
+    "hem_l_zh": 0.42708,
+    "hem_r_zh": 0.41458,
+    "islands": 1,
+    "por_peca": [
+      1
+    ],
+    "slivers": 0,
+    "source": "manual",
+    "summary": "zen_m_b07k_d1: roupa 21.7% (+870 costura, -0 lasca)  bainha 0.427..0.427 / 0.415..0.415  cos 0.531..0.543",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.53905,
+      0.53822,
+      0.5374,
+      0.53665,
+      0.53603,
+      0.53565,
+      0.53555,
+      0.53576,
+      0.53625,
+      0.53696,
+      0.53779,
+      0.53866,
+      0.53951,
+      0.54028,
+      0.54095,
+      0.54148,
+      0.54187,
+      0.54208,
+      0.54211,
+      0.54196,
+      0.54164,
+      0.54116,
+      0.54055,
+      0.53984
     ]
   },
   "zen_m_b08_d1": {
@@ -6902,6 +9506,77 @@
       0.56042
     ]
   },
+  "zen_m_b09h_d1": {
+    "diag": {
+      "arm_verts": 6477,
+      "crotch_zh": 0.4583,
+      "hem_peaks_zh": [
+        [],
+        []
+      ],
+      "leg_verts": [
+        5574,
+        5639
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0068
+      ],
+      "waist_peaks_zh": [
+        [
+          0.019,
+          0.5854
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5854
+    },
+    "escondidas": 0,
+    "frac": 0.1656,
+    "hem_center_l": [
+      -0.11863,
+      0.03306
+    ],
+    "hem_center_r": [
+      0.11946,
+      0.03444
+    ],
+    "hem_l_zh": 0.41875,
+    "hem_r_zh": 0.41875,
+    "islands": 1,
+    "por_peca": [
+      1
+    ],
+    "slivers": 0,
+    "source": "auto",
+    "summary": "zen_m_b09h_d1: roupa 16.6% (+592 costura, -0 lasca)  bainha 0.419..0.419 / 0.419..0.419  cos 0.548..0.583",
+    "waist_zh": [
+      0.56812,
+      0.56359,
+      0.55877,
+      0.5539,
+      0.54792,
+      0.54792,
+      0.54792,
+      0.54792,
+      0.5539,
+      0.55877,
+      0.56359,
+      0.56812,
+      0.57221,
+      0.57573,
+      0.57857,
+      0.58069,
+      0.58209,
+      0.58278,
+      0.58278,
+      0.58209,
+      0.58069,
+      0.57857,
+      0.57573,
+      0.57221
+    ]
+  },
   "zen_m_b10_d1": {
     "cos_avental": true,
     "diag": {
@@ -7058,6 +9733,169 @@
       0.55208,
       0.54539,
       0.53688
+    ]
+  },
+  "zen_m_b10h_d2": {
+    "diag": {
+      "arm_verts": 7417,
+      "crotch_zh": 0.467,
+      "hem_peaks_zh": [
+        [
+          [
+            0.106,
+            0.4229
+          ]
+        ],
+        [
+          [
+            0.076,
+            0.4229
+          ]
+        ]
+      ],
+      "leg_verts": [
+        5352,
+        5451
+      ],
+      "waist_liso_dz": [
+        0.0038,
+        0.0039
+      ],
+      "waist_peaks_zh": [
+        [
+          0.12,
+          0.5729
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5729
+    },
+    "escondidas": 0,
+    "frac": 0.1469,
+    "hem_center_l": [
+      -0.10612,
+      0.0018
+    ],
+    "hem_center_r": [
+      0.10707,
+      0.00089
+    ],
+    "hem_l_zh": 0.42292,
+    "hem_r_zh": 0.42292,
+    "islands": 1,
+    "por_peca": [
+      1
+    ],
+    "slivers": 0,
+    "source": "auto",
+    "summary": "zen_m_b10h_d2: roupa 14.7% (+722 costura, -0 lasca)  bainha 0.423..0.423 / 0.423..0.423  cos 0.563..0.572",
+    "waist_zh": [
+      0.56781,
+      0.56651,
+      0.56527,
+      0.56421,
+      0.56344,
+      0.56303,
+      0.56303,
+      0.56344,
+      0.56421,
+      0.56527,
+      0.56651,
+      0.56781,
+      0.56906,
+      0.57015,
+      0.57105,
+      0.5717,
+      0.57213,
+      0.57233,
+      0.57233,
+      0.57213,
+      0.5717,
+      0.57105,
+      0.57015,
+      0.56906
+    ]
+  },
+  "zen_m_b10i_d2": {
+    "diag": {
+      "arm_verts": 6883,
+      "crotch_zh": 0.4291,
+      "hem_peaks_zh": [
+        [
+          [
+            0.041,
+            0.3979
+          ]
+        ],
+        [
+          [
+            0.056,
+            0.3979
+          ]
+        ]
+      ],
+      "leg_verts": [
+        5153,
+        5239
+      ],
+      "waist_liso_dz": [
+        0.0083,
+        0.0483
+      ],
+      "waist_peaks_zh": [
+        [
+          0.086,
+          0.5437
+        ]
+      ],
+      "waist_ring_found": true,
+      "waist_ring_zh": 0.5437
+    },
+    "escondidas": 0,
+    "frac": 0.1473,
+    "hem_center_l": [
+      -0.12764,
+      0.0222
+    ],
+    "hem_center_r": [
+      0.12658,
+      0.0264
+    ],
+    "hem_l_zh": 0.39792,
+    "hem_r_zh": 0.39792,
+    "islands": 1,
+    "por_peca": [
+      1
+    ],
+    "slivers": 0,
+    "source": "manual",
+    "summary": "zen_m_b10i_d2: roupa 14.7% (+662 costura, -0 lasca)  bainha 0.398..0.398 / 0.398..0.398  cos 0.448..0.546",
+    "waist_front_fonte": "folha",
+    "waist_zh": [
+      0.52389,
+      0.52055,
+      0.51985,
+      0.51902,
+      0.51865,
+      0.51872,
+      0.51921,
+      0.52006,
+      0.52126,
+      0.5228,
+      0.52468,
+      0.52688,
+      0.52932,
+      0.53187,
+      0.53433,
+      0.53646,
+      0.53802,
+      0.53881,
+      0.5387,
+      0.53764,
+      0.53572,
+      0.53311,
+      0.53009,
+      0.52694
     ]
   },
   "zen_m_b11_d1": {

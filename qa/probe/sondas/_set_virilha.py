@@ -44,6 +44,38 @@ NAO corrigidos, de proposito:
   b08h_d3  virilha praticamente identica a proposta (0.4790 x 0.4815). A bainha
            baixa dele e do RECUO, nao da ancora, e o recuo foi corrigido no
            shorts.py (HEM_RECUO_F).
+
+------------------------------------------------------------------------------
+SEGUNDA LEVA - OS 7 FEMININOS NOVOS (22/09)
+------------------------------------------------------------------------------
+Mesmo modo de falha, mesma regra, e desta vez ele foi PROCURADO em vez de
+tropecado: nos 18 femininos que entraram no mapa em 22/09, a bainha do 3D contra
+a corrida escura da folha (faixa_ref.py) separa os dois grupos sem ambiguidade -
+onze erram de -0.013 a +0.006, e sete erram de -0.027 a -0.070. Nos sete, a
+virilha detectada e a fusao das coxas, nao a virilha.
+
+O criterio para entrar nesta lista foi |bainha 3D - bainha folha| >= 0.025, e a
+proposta continua saindo do ANEL DO TRONCO (pico mais forte entre 0.33 e 0.55,
+mais 0.0045), nunca da folha - a folha so CONFERE, senao ela deixa de ser regua
+externa justo onde e mais necessaria (LICOES 1.3).
+
+  id            virilha hoje   pico do anel   proposta   folha+recuo   erro
+  b08_d2            0.4011      0.159@0.469     0.4735      0.470      +0.0035
+  b11h_d1           0.3948      0.131@0.456     0.4605      0.452      +0.0085
+  b09i_d3           0.4269      0.231@0.477     0.4815      0.482      -0.0005
+  b05i_d2           0.4314      0.131@0.473     0.4775      0.480      -0.0025
+  b08h_d2           0.4299      0.117@0.481     0.4855      0.481      +0.0045
+  b07h_d2           0.4538      0.095@0.481     0.4855      0.480      +0.0055
+  b12h_d1           0.4340      0.093@0.456     0.4605      0.460      +0.0005
+
+Os sete tem UM pico so dentro da janela - nenhum caso de segundo pico como o
+b06_d1, e nenhum caso de pico fraco demais como o b10_d3. O erro maximo contra a
+folha (0.0085) fica abaixo dos 0.013 da primeira leva.
+
+⚠️ No b11h_d1 e no b12h_d1 o pico MAIS FORTE do perfil inteiro esta fora da
+janela (0.306@0.681 e 0.237@0.560): e o vinco da faixa e o da cintura. A janela
+0.33-0.55 existe exatamente para isso, e quem a abrisse pegaria roupa no lugar
+de anatomia.
 """
 import json
 import os
@@ -65,6 +97,17 @@ CORRECOES = {
     "zen_f_b11_d2": 0.4565,
     "zen_f_b12_d1": 0.4065,
 }
+
+# Segunda leva (22/09) - ver o bloco no docstring.
+CORRECOES.update({
+    "zen_f_b08_d2": 0.4735,
+    "zen_f_b11h_d1": 0.4605,
+    "zen_f_b09i_d3": 0.4815,
+    "zen_f_b05i_d2": 0.4775,
+    "zen_f_b08h_d2": 0.4855,
+    "zen_f_b07h_d2": 0.4855,
+    "zen_f_b12h_d1": 0.4605,
+})
 
 with open(MAPA, "r", encoding="utf-8") as f:
     m = json.load(f)
