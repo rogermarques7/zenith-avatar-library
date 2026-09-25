@@ -2506,7 +2506,121 @@ de uma rodada:
   `zen_m_b12_d1` (cobertura 0,58) e do `zen_m_b11_d1` (Δ 11,9 cm) e a barra de
   `zen_f_b04_d3`/`zen_f_b10_d3` (Δ 9–11 cm) foram recusados e ficam como estão.
 - A frente do cós debaixo do avental: continua com o `w_cos_avental`.
-- Braço e axila.
+- Braço e axila. (→ §4.5q)
+
+#### 4.5q ✅ O BRAÇO NA ALTURA DA FAIXA: DE QUEM É A SUPERFÍCIE, não ONDE ELA ESTÁ (25/09, sessão 39)
+
+A §2 da revisão dele (tinta no tríceps, abinhas na axila) e a quina lateral
+sem tinta que a sessão 38 deixou de fora eram **o mesmo problema visto dos
+dois lados**: a separação braço/tronco na altura da faixa.
+
+##### 🔴 O que estava errado: um PLANO por fatia não separa um cilindro de um tronco
+
+O `w_arm_wide` corta cada fatia de 0,5% por um plano vertical em x — tudo mais
+lateral que o corte é braço. A sonda de três cores no `zen_f_b09i_d3` mostrou
+na primeira foto: vermelho (máscara) no deltoide, **preto na face da frente e
+de dentro do braço**. Essa face olha para o tronco e fica aquém do plano. A
+pergunta é 2D (um anel de braço ao lado de um anel de tronco) e o corte é 1D;
+nenhum limiar dele conserta. E a máscara era booleana por vértice, então a
+borda saía quantizada por triângulo — o serrilhado das abinhas.
+
+##### ❌ O TUBO foi tentado e refutado — não repetir
+
+Eixo ajustado pelos centros das fatias do braço topológico (abaixo da fusão ele
+É um tubo reto, `braco_tubo_mede.py`), raio por setor angular, estendido acima
+da fusão. Na prévia com lente longa ficou **pior** que o antigo: acima da fusão
+a seção do braço cresce ~30% (no `b09i_d3` a zh 0,72: 19 cm de fundo contra 15
+do tubo) e a frente do braço saía preta. Aumentar o raio conserta a frente e
+come o flanco do tronco pelo lado de dentro. **TAMANHO não é o sinal.**
+
+##### ✅ O sinal: a NORMAL — para onde a superfície olha
+
+A face do braço olha para longe do **eixo do braço**; o flanco do tronco, para
+longe do **eixo do tronco**. Por vértice: `s_tronco − s_braço` (produto da
+normal com cada direção radial). Vale inclusive na região fundida, onde não há
+ar nem vinco. Duas guardas contínuas — longe do eixo é tronco (o peito de frente
+também "olha para longe" do braço), no cone lateral é braço (ali as duas
+direções radiais coincidem) — e Laplaciano pela malha (normal de músculo tem
+calombo). É o `w_arm_dono_field`.
+
+E, sendo **campo com sinal**, a ideia antiga da §4.5h finalmente cabe: o campo
+vai numa camada da malha, o `w_cut_boundary` o interpola no vértice novo e a
+face é classificada pela média dos vértices. A fronteira faixa/braço passou a
+ser **cortada**, como as de altura. O `w_arm_wide` saiu da pintura (fica como
+`ZEN_ARM_MASCARA=largo` para o banco fotografar o antes).
+
+##### ✅ E a quina lateral caiu junto — a trava virou o defeito
+
+As duas travas laterais da borda viva (`corta_axila`: topo não sobe mais que
+0,7 cm acima do antigo; piso da base) existiam porque a máscara do braço não
+separava nada acima da fusão. Com o campo novo, a trava era o que deixava o
+tecido da axila sem tinta (`zen_f_b05h_d2`: +4,5 cm). `borda_viva_grava.py
+--quina` regrava só topo e base da faixa, sem trava lateral.
+
+##### 🔴 A guarda que o obeso quebrou — pego na PRÉVIA, não em régua
+
+Com `ARM_DONO_LONGE = 1,8` o `zen_f_b11h_d1` (IMC 55) ganhou uma aba preta
+nova de um lado só: a frente do braço, acima da fusão, fica a 13 cm do eixo
+(1,8 raio) e a guarda empurrava pele de braço para "tronco". O peito mais
+próximo do braço está a 2,8 raios; 2,5 separa. Todas as travas do
+`shorts.py` passaram limpas nas duas versões.
+
+##### ✅ O braço que só existe como ANTEBRAÇO: o eixo vem da CALOTA
+
+O eixo sai do braço topológico abaixo da fusão. No `zen_f_b12_d1` (IMC 114) a
+fusão está a zh 0,607 — 5 cm **abaixo** da base da faixa — e o que o `w_limbs`
+mediu é o antebraço: o eixo sai inclinado 0,44 para trás (nas outras 54, no
+máximo 0,28) e a prévia pintou os dois braços inteiros. Varrido nas 55
+femininas (`_varre_eixo.py`): é o único caso, e a trava é explícita
+(`ARM_DONO_FUSAO_ABAIXO`).
+
+A primeira saída foi recusar o modelo e voltar ao `w_arm_wide` — a prévia saiu
+idêntica ao entregue, e ele reprovou as abas de sempre. A saída que ficou:
+**na altura da faixa o lado de fora do corpo é sempre braço.** A calota de
+~5 cm mais lateral de cada fatia dá o raio pela corda (R = (c² + d²)/2d) e o
+centro a R da ponta; os centros dão o eixo (`w_arm_calota`). No `b12_d1`: centro
+de x 0,44 a 0,28 entre zh 0,58 e 0,72, raio 6–8 cm, inclinação para trás 0,2.
+O mesmo critério da normal em cima dele limpou as abas nas cinco vistas.
+
+> **Um modelo que se ajusta num pedaço do corpo precisa dizer quando o pedaço
+> não está lá** — e a resposta certa a isso não é recuar para o defeito
+> conhecido, é achar o pedaço que ESTÁ lá. Ilhas, conexidade e frente/costas
+> passaram limpas nas duas versões erradas.
+
+##### 🔴 O veredito dele reprovou 4 de 55 — e nenhum era o que as réguas olham
+
+1. **`zen_f_b07_d3` — lascas serrilhadas nas quinas de trás.** A borda do
+   tecido ali é uma aba de dentes, e a linha de tinta passava **por dentro**
+   dela: metade dos dentes preta, metade clara. Tirar a trava lateral subiu a
+   linha para o meio dos dentes. O conserto foi pôr a tinta **abaixo** dos
+   dentes (costas planas em 0,735): dente cor de corpo some contra a pele;
+   dente preto contra pele vira lasca. *Onde a borda é serrilhada, a tinta não
+   segue a borda — fica aquém dela.* Na minha varredura eu li esse "V" como
+   "tecido real, não é defeito"; era real, e era defeito.
+2. **`zen_f_b09_d2` — tinta na barriga.** O tecido acaba num "V" **embaixo** da
+   barriga (0,526 no centro); o cós lido pela borda viva passava reto a 0,60,
+   logo abaixo do umbigo. O RANSAC de harmônicos achou um meio-termo entre a
+   frente e as costas.
+3. **`zen_f_b11_d1` — o short, e eu errei o lado.** Li uma faixa clara nas
+   costas como "cós sem tinta", achei um anel de arestas vivas a 0,62 (8 cm
+   acima, fora do corredor da borda viva) e subi a tinta até ele. Ele reprovou
+   de novo, e o print dele mostrou o porquê: **uma linha atravessando o preto
+   na altura antiga** — a borda de verdade do tecido — e o sulco da coluna
+   pintado acima dela. O anel de 0,62 era a **dobra de pele** das costas, que
+   a §4.5p já avisava ser aresta viva nos corpos pesados. O defeito real era
+   na FRENTE: a tinta atravessava a parte de baixo da barriga, acima da dobra
+   do avental. A borda viva lida (recusada na sessão 38 por cobertura 0,71)
+   estava certa nos dois lados; gravada espelhada, resolveu.
+4. **`zen_f_b12_d1`** — acima.
+
+> **Aresta viva longe da tinta, num corpo pesado, é dobra até prova em
+> contrário.** O corredor da borda viva não é só ponto cego: é a proteção
+> contra exatamente isso. E a pergunta que eu pulei foi a de sempre: *qual
+> imagem mostra o lado que ele reclamou?* Ele disse "defeito no short"; eu
+> escolhi as costas porque eram o que eu conseguia ver.
+
+O cós do `b09_d2` foi gravado à mão a partir das arestas medidas (`CANTO`
+limpo); o do `b11_d1` é a borda viva da sessão 38, aceita com cobertura 0,71.
 
 ---
 

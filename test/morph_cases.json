@@ -79,43 +79,43 @@
    "zen_m_b12_d1"
   ],
   "glb_versions": {
-   "zen_f_b01_d1": 17,
-   "zen_f_b01_d2": 18,
-   "zen_f_b02_d1": 16,
-   "zen_f_b02_d2": 16,
-   "zen_f_b02_d3": 16,
-   "zen_f_b03_d1": 16,
-   "zen_f_b03_d2": 16,
-   "zen_f_b03_d3": 16,
-   "zen_f_b04_d1": 16,
-   "zen_f_b04_d2": 18,
-   "zen_f_b04_d3": 18,
-   "zen_f_b04h_d1": 16,
-   "zen_f_b04i_d1": 18,
-   "zen_f_b05_d1": 17,
-   "zen_f_b05_d2": 19,
-   "zen_f_b05_d3": 16,
-   "zen_f_b06_d1": 22,
-   "zen_f_b06_d2": 17,
-   "zen_f_b06_d3": 16,
-   "zen_f_b06h_d3": 17,
-   "zen_f_b07_d1": 17,
-   "zen_f_b07_d3": 18,
-   "zen_f_b08_d1": 26,
-   "zen_f_b08_d3": 17,
-   "zen_f_b08h_d3": 18,
-   "zen_f_b09_d1": 17,
-   "zen_f_b09_d2": 21,
-   "zen_f_b09_d3": 18,
-   "zen_f_b09h_d2": 17,
-   "zen_f_b09h_d3": 18,
-   "zen_f_b09i_d2": 17,
-   "zen_f_b10_d1": 24,
-   "zen_f_b10_d2": 21,
-   "zen_f_b10_d3": 20,
-   "zen_f_b11_d1": 24,
-   "zen_f_b11_d2": 24,
-   "zen_f_b12_d1": 24,
+   "zen_f_b01_d1": 19,
+   "zen_f_b01_d2": 20,
+   "zen_f_b02_d1": 18,
+   "zen_f_b02_d2": 18,
+   "zen_f_b02_d3": 18,
+   "zen_f_b03_d1": 18,
+   "zen_f_b03_d2": 18,
+   "zen_f_b03_d3": 18,
+   "zen_f_b04_d1": 18,
+   "zen_f_b04_d2": 20,
+   "zen_f_b04_d3": 20,
+   "zen_f_b04h_d1": 18,
+   "zen_f_b04i_d1": 20,
+   "zen_f_b05_d1": 19,
+   "zen_f_b05_d2": 21,
+   "zen_f_b05_d3": 18,
+   "zen_f_b06_d1": 24,
+   "zen_f_b06_d2": 19,
+   "zen_f_b06_d3": 18,
+   "zen_f_b06h_d3": 19,
+   "zen_f_b07_d1": 19,
+   "zen_f_b07_d3": 22,
+   "zen_f_b08_d1": 28,
+   "zen_f_b08_d3": 19,
+   "zen_f_b08h_d3": 20,
+   "zen_f_b09_d1": 19,
+   "zen_f_b09_d2": 25,
+   "zen_f_b09_d3": 20,
+   "zen_f_b09h_d2": 19,
+   "zen_f_b09h_d3": 20,
+   "zen_f_b09i_d2": 19,
+   "zen_f_b10_d1": 26,
+   "zen_f_b10_d2": 23,
+   "zen_f_b10_d3": 22,
+   "zen_f_b11_d1": 30,
+   "zen_f_b11_d2": 26,
+   "zen_f_b12_d1": 26,
    "zen_m_b01_d1": 10,
    "zen_m_b01_d2": 9,
    "zen_m_b02_d1": 9,
@@ -156,7 +156,7 @@
    "zen_m_b11_d2": 16,
    "zen_m_b12_d1": 12
   },
-  "index_generated_at": "2026-09-25T05:10:38Z"
+  "index_generated_at": "2026-09-25T19:52:37Z"
  },
  "tolerance": {
   "influence": 1e-06
@@ -201,7 +201,8 @@
     "morph_forearm": 0.0,
     "morph_thigh": 0.0,
     "morph_calf": 0.0,
-    "morph_hip_flatten": 0.0
+    "morph_hip_flatten": 0.0,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -243,7 +244,8 @@
     "morph_forearm": -0.514744,
     "morph_thigh": -0.5,
     "morph_calf": -0.815789,
-    "morph_hip_flatten": 0.0
+    "morph_hip_flatten": 0.0,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -255,7 +257,7 @@
     "measures_cm": {
      "neck": 33.24,
      "shoulder": 96.3,
-     "chest": 83.0,
+     "chest": 81.395,
      "waist_navel": 71.80999999999999,
      "hip": 95.83999999999999,
      "biceps": 23.4,
@@ -278,14 +280,15 @@
    "expect_influences": {
     "morph_neck": 0.501639,
     "morph_shoulder": 0.503311,
-    "morph_chest": 0.522293,
+    "morph_chest": 0.25,
     "morph_waist": 0.175,
     "morph_hip": 0.175,
     "morph_biceps": 0.574468,
     "morph_forearm": 0.451807,
     "morph_thigh": 0.503311,
     "morph_calf": 1.0,
-    "morph_hip_flatten": 0.175
+    "morph_hip_flatten": 0.175,
+    "morph_chest_flatten": 0.25
    }
   },
   {
@@ -327,7 +330,8 @@
     "morph_forearm": -0.464939,
     "morph_thigh": -0.25,
     "morph_calf": -0.998333,
-    "morph_hip_flatten": 0.0
+    "morph_hip_flatten": 0.0,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -339,7 +343,7 @@
     "measures_cm": {
      "neck": 48.44,
      "shoulder": 111.3,
-     "chest": 98.0,
+     "chest": 88.37,
      "waist_navel": 80.36,
      "hip": 104.53999999999999,
      "biceps": 33.4,
@@ -362,14 +366,15 @@
    "expect_influences": {
     "morph_neck": 1.0,
     "morph_shoulder": 1.0,
-    "morph_chest": 1.0,
+    "morph_chest": 0.5,
     "morph_waist": 0.35,
     "morph_hip": 0.35,
     "morph_biceps": 1.0,
     "morph_forearm": 1.0,
     "morph_thigh": 1.0,
     "morph_calf": 2.0,
-    "morph_hip_flatten": 0.35
+    "morph_hip_flatten": 0.35,
+    "morph_chest_flatten": 0.5
    }
   },
   {
@@ -411,7 +416,8 @@
     "morph_forearm": -1.0,
     "morph_thigh": -0.5,
     "morph_calf": -2.0,
-    "morph_hip_flatten": 0.0
+    "morph_hip_flatten": 0.0,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -452,7 +458,8 @@
     "morph_forearm": 0.0,
     "morph_thigh": 0.0,
     "morph_calf": 0.0,
-    "morph_hip_flatten": 0.0
+    "morph_hip_flatten": 0.0,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -873,9 +880,9 @@
    "expect_influences": {
     "morph_neck": -0.382934,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.35,
+    "morph_chest": -0.3,
     "morph_waist": -0.556821,
-    "morph_hip": -0.35,
+    "morph_hip": -0.3,
     "morph_biceps": -1.0,
     "morph_forearm": -0.51216,
     "morph_thigh": -0.5,
@@ -938,9 +945,9 @@
     "measures_cm": {
      "neck": 26.2,
      "shoulder": 88.53,
-     "chest": 80.5,
-     "waist_navel": 66.055,
-     "hip": 92.91,
+     "chest": 80.625,
+     "waist_navel": 66.545,
+     "hip": 93.105,
      "biceps": 19.705,
      "forearm": 18.215,
      "thigh": 50.730000000000004,
@@ -961,9 +968,9 @@
    "expect_influences": {
     "morph_neck": -0.498339,
     "morph_shoulder": -0.493127,
-    "morph_chest": -0.175,
-    "morph_waist": -0.349391,
-    "morph_hip": -0.175,
+    "morph_chest": -0.15,
+    "morph_waist": -0.299696,
+    "morph_hip": -0.15,
     "morph_biceps": -0.25,
     "morph_forearm": -0.488487,
     "morph_thigh": -0.25,
@@ -1026,9 +1033,9 @@
     "measures_cm": {
      "neck": 11.2,
      "shoulder": 74.18,
-     "chest": 76.0,
-     "waist_navel": 48.83,
-     "hip": 85.96,
+     "chest": 76.75,
+     "waist_navel": 51.769999999999996,
+     "hip": 87.13,
      "biceps": 17.23,
      "forearm": 10.79,
      "thigh": 43.38,
@@ -1049,9 +1056,9 @@
    "expect_influences": {
     "morph_neck": -1.0,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.35,
-    "morph_waist": -0.7,
-    "morph_hip": -0.35,
+    "morph_chest": -0.3,
+    "morph_waist": -0.6,
+    "morph_hip": -0.3,
     "morph_biceps": -1.0,
     "morph_forearm": -1.0,
     "morph_thigh": -0.5,
@@ -1223,7 +1230,7 @@
      "chest": 85.27,
      "waist_navel": 76.33,
      "hip": 102.2,
-     "biceps": 23.8,
+     "biceps": 24.77,
      "forearm": 23.3,
      "thigh": 49.6,
      "calf": 36.095
@@ -1246,7 +1253,7 @@
     "morph_chest": 0.25,
     "morph_waist": 0.25,
     "morph_hip": 0.501247,
-    "morph_biceps": 0.0,
+    "morph_biceps": 0.25,
     "morph_forearm": 0.462963,
     "morph_thigh": 0.501661,
     "morph_calf": 0.998333,
@@ -1309,7 +1316,7 @@
      "chest": 93.12,
      "waist_navel": 90.48,
      "hip": 122.2,
-     "biceps": 23.8,
+     "biceps": 29.62,
      "forearm": 30.8,
      "thigh": 64.6,
      "calf": 51.07
@@ -1332,7 +1339,7 @@
     "morph_chest": 0.5,
     "morph_waist": 0.5,
     "morph_hip": 1.0,
-    "morph_biceps": 0.0,
+    "morph_biceps": 0.5,
     "morph_forearm": 1.0,
     "morph_thigh": 1.0,
     "morph_calf": 2.0,
@@ -1522,7 +1529,7 @@
     "morph_shoulder": -1.0,
     "morph_chest": 0.0,
     "morph_waist": -0.581195,
-    "morph_hip": -0.936365,
+    "morph_hip": -0.5,
     "morph_biceps": -1.0,
     "morph_forearm": -0.588935,
     "morph_thigh": -0.639175,
@@ -1583,7 +1590,7 @@
      "shoulder": 91.71499999999999,
      "chest": 84.1,
      "waist_navel": 65.995,
-     "hip": 90.325,
+     "hip": 92.31,
      "biceps": 21.7,
      "forearm": 20.065,
      "thigh": 44.575,
@@ -1606,7 +1613,7 @@
     "morph_shoulder": -0.494007,
     "morph_chest": 0.0,
     "morph_waist": -0.49948,
-    "morph_hip": -0.499372,
+    "morph_hip": -0.25,
     "morph_biceps": -1.0,
     "morph_forearm": -0.537651,
     "morph_thigh": -0.497449,
@@ -1667,7 +1674,7 @@
      "shoulder": 77.28999999999999,
      "chest": 84.1,
      "waist_navel": 41.97,
-     "hip": 70.44999999999999,
+     "hip": 82.36,
      "biceps": 21.7,
      "forearm": 12.390000000000002,
      "thigh": 29.950000000000003,
@@ -1690,7 +1697,7 @@
     "morph_shoulder": -1.0,
     "morph_chest": 0.0,
     "morph_waist": -1.0,
-    "morph_hip": -1.0,
+    "morph_hip": -0.5,
     "morph_biceps": -1.0,
     "morph_forearm": -1.0,
     "morph_thigh": -1.0,
@@ -1835,9 +1842,9 @@
    "expect_influences": {
     "morph_neck": -0.518912,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.7,
-    "morph_waist": -0.35,
-    "morph_hip": -0.7,
+    "morph_chest": -0.8,
+    "morph_waist": -0.4,
+    "morph_hip": -0.8,
     "morph_biceps": -0.5,
     "morph_forearm": -0.725634,
     "morph_thigh": -0.625045,
@@ -1855,10 +1862,10 @@
     "measures_cm": {
      "neck": 33.92,
      "shoulder": 99.9,
-     "chest": 88.95,
+     "chest": 88.96,
      "waist_navel": 74.855,
      "hip": 101.49499999999999,
-     "biceps": 21.1,
+     "biceps": 21.955000000000002,
      "forearm": 23.0,
      "thigh": 47.79,
      "calf": 35.394999999999996
@@ -1881,7 +1888,7 @@
     "morph_chest": 0.25,
     "morph_waist": 0.299747,
     "morph_hip": 0.300125,
-    "morph_biceps": -0.5,
+    "morph_biceps": 0.25,
     "morph_forearm": 0.443787,
     "morph_thigh": 0.25,
     "morph_calf": 0.998333,
@@ -1898,12 +1905,12 @@
     "measures_cm": {
      "neck": 29.490000000000002,
      "shoulder": 93.99000000000001,
-     "chest": 85.69,
-     "waist_navel": 69.565,
-     "hip": 96.315,
+     "chest": 85.455,
+     "waist_navel": 69.32,
+     "hip": 95.975,
      "biceps": 21.1,
      "forearm": 20.355,
-     "thigh": 44.254999999999995,
+     "thigh": 43.964999999999996,
      "calf": 29.09
     },
     "columns_used": [
@@ -1921,12 +1928,12 @@
    "expect_influences": {
     "morph_neck": -0.58078,
     "morph_shoulder": -0.494898,
-    "morph_chest": -0.344106,
-    "morph_waist": -0.175,
-    "morph_hip": -0.349874,
+    "morph_chest": -0.388783,
+    "morph_waist": -0.2,
+    "morph_hip": -0.392588,
     "morph_biceps": -0.5,
     "morph_forearm": -0.47314,
-    "morph_thigh": -0.348976,
+    "morph_thigh": -0.398464,
     "morph_calf": -0.856164,
     "morph_waist_flatten": 0.0,
     "morph_chest_flatten": 0.0
@@ -1941,10 +1948,10 @@
     "measures_cm": {
      "neck": 41.019999999999996,
      "shoulder": 114.9,
-     "chest": 96.2,
+     "chest": 96.26,
      "waist_navel": 92.63,
      "hip": 113.47,
-     "biceps": 21.1,
+     "biceps": 26.23,
      "forearm": 30.5,
      "thigh": 55.239999999999995,
      "calf": 50.37
@@ -1967,7 +1974,7 @@
     "morph_chest": 0.5,
     "morph_waist": 0.6,
     "morph_hip": 0.6,
-    "morph_biceps": -0.5,
+    "morph_biceps": 0.5,
     "morph_forearm": 1.0,
     "morph_thigh": 0.5,
     "morph_calf": 2.0,
@@ -1984,12 +1991,12 @@
     "measures_cm": {
      "neck": 14.440000000000001,
      "shoulder": 79.44,
-     "chest": 76.64,
-     "waist_navel": 60.89,
-     "hip": 82.38999999999999,
+     "chest": 75.23,
+     "waist_navel": 59.42,
+     "hip": 80.35,
      "biceps": 21.1,
      "forearm": 14.629999999999999,
-     "thigh": 34.03,
+     "thigh": 32.29,
      "calf": 12.54
     },
     "columns_used": [
@@ -2007,12 +2014,12 @@
    "expect_influences": {
     "morph_neck": -1.0,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.7,
-    "morph_waist": -0.35,
-    "morph_hip": -0.7,
+    "morph_chest": -0.8,
+    "morph_waist": -0.4,
+    "morph_hip": -0.8,
     "morph_biceps": -0.5,
     "morph_forearm": -1.0,
-    "morph_thigh": -0.7,
+    "morph_thigh": -0.8,
     "morph_calf": -2.0,
     "morph_waist_flatten": 0.0,
     "morph_chest_flatten": 0.0
@@ -2156,7 +2163,7 @@
    "expect_influences": {
     "morph_neck": -0.51367,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.25,
+    "morph_chest": -0.5,
     "morph_waist": -0.5,
     "morph_hip": -0.5,
     "morph_biceps": -1.0,
@@ -2176,7 +2183,7 @@
     "measures_cm": {
      "neck": 33.245,
      "shoulder": 99.7,
-     "chest": 86.345,
+     "chest": 86.35000000000001,
      "waist_navel": 73.035,
      "hip": 102.81,
      "biceps": 26.48,
@@ -2199,7 +2206,7 @@
    "expect_influences": {
     "morph_neck": 0.494485,
     "morph_shoulder": 0.501661,
-    "morph_chest": 0.308052,
+    "morph_chest": 0.307836,
     "morph_waist": 0.15,
     "morph_hip": 0.15,
     "morph_biceps": 0.25,
@@ -2207,7 +2214,7 @@
     "morph_thigh": 0.300167,
     "morph_calf": 1.0,
     "morph_waist_flatten": 0.15,
-    "morph_chest_flatten": 0.308052
+    "morph_chest_flatten": 0.307836
    }
   },
   {
@@ -2219,7 +2226,7 @@
     "measures_cm": {
      "neck": 28.89,
      "shoulder": 93.775,
-     "chest": 84.02,
+     "chest": 83.375,
      "waist_navel": 68.875,
      "hip": 99.94500000000001,
      "biceps": 24.615,
@@ -2242,7 +2249,7 @@
    "expect_influences": {
     "morph_neck": -0.581944,
     "morph_shoulder": -0.495763,
-    "morph_chest": -0.125,
+    "morph_chest": -0.25,
     "morph_waist": -0.25,
     "morph_hip": -0.25,
     "morph_biceps": -0.25,
@@ -2262,7 +2269,7 @@
     "measures_cm": {
      "neck": 39.97,
      "shoulder": 114.7,
-     "chest": 94.57000000000001,
+     "chest": 94.6,
      "waist_navel": 81.71,
      "hip": 108.36,
      "biceps": 31.38,
@@ -2305,7 +2312,7 @@
     "measures_cm": {
      "neck": 13.84,
      "shoulder": 79.15,
-     "chest": 80.62,
+     "chest": 76.75,
      "waist_navel": 56.75,
      "hip": 91.17,
      "biceps": 20.189999999999998,
@@ -2328,7 +2335,7 @@
    "expect_influences": {
     "morph_neck": -1.0,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.25,
+    "morph_chest": -0.5,
     "morph_waist": -0.5,
     "morph_hip": -0.5,
     "morph_biceps": -1.0,
@@ -2818,7 +2825,7 @@
     "measures_cm": {
      "neck": 35.14,
      "shoulder": 103.8,
-     "chest": 92.205,
+     "chest": 92.225,
      "waist_navel": 90.49000000000001,
      "hip": 111.295,
      "biceps": 27.8,
@@ -2841,7 +2848,7 @@
    "expect_influences": {
     "morph_neck": 0.501639,
     "morph_shoulder": 0.503311,
-    "morph_chest": 0.364187,
+    "morph_chest": 0.36387,
     "morph_waist": 0.175,
     "morph_hip": 0.25,
     "morph_biceps": 0.521531,
@@ -2849,7 +2856,7 @@
     "morph_thigh": 0.501661,
     "morph_calf": 0.97943,
     "morph_waist_flatten": 0.175,
-    "morph_chest_flatten": 0.364187
+    "morph_chest_flatten": 0.36387
    }
   },
   {
@@ -2861,8 +2868,8 @@
     "measures_cm": {
      "neck": 29.1,
      "shoulder": 97.895,
-     "chest": 88.60499999999999,
-     "waist_navel": 86.86500000000001,
+     "chest": 88.61,
+     "waist_navel": 86.87,
      "hip": 109.3,
      "biceps": 25.8,
      "forearm": 22.78,
@@ -2884,7 +2891,7 @@
    "expect_influences": {
     "morph_neck": -0.498339,
     "morph_shoulder": -0.495734,
-    "morph_chest": -0.296627,
+    "morph_chest": -0.295635,
     "morph_waist": -0.15,
     "morph_hip": 0.0,
     "morph_biceps": 0.0,
@@ -2904,7 +2911,7 @@
     "measures_cm": {
      "neck": 50.34,
      "shoulder": 118.8,
-     "chest": 102.72999999999999,
+     "chest": 102.85,
      "waist_navel": 100.94,
      "hip": 121.27,
      "biceps": 37.8,
@@ -2947,8 +2954,8 @@
     "measures_cm": {
      "neck": 14.100000000000001,
      "shoulder": 83.37,
-     "chest": 81.13,
-     "waist_navel": 79.19000000000001,
+     "chest": 81.16,
+     "waist_navel": 79.22,
      "hip": 109.3,
      "biceps": 25.8,
      "forearm": 15.18,
@@ -3119,8 +3126,8 @@
    "expect_influences": {
     "morph_neck": -0.567462,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.9,
-    "morph_waist": -0.45,
+    "morph_chest": -0.8,
+    "morph_waist": -0.4,
     "morph_hip": -1.0,
     "morph_biceps": -0.417866,
     "morph_forearm": -0.459297,
@@ -3139,7 +3146,7 @@
     "measures_cm": {
      "neck": 35.055,
      "shoulder": 103.5,
-     "chest": 96.085,
+     "chest": 96.10499999999999,
      "waist_navel": 84.835,
      "hip": 109.4,
      "biceps": 29.1,
@@ -3162,7 +3169,7 @@
    "expect_influences": {
     "morph_neck": 0.511745,
     "morph_shoulder": 0.503311,
-    "morph_chest": 0.536491,
+    "morph_chest": 0.536265,
     "morph_waist": 0.502133,
     "morph_hip": 0.503722,
     "morph_biceps": 0.50495,
@@ -3170,7 +3177,7 @@
     "morph_thigh": 0.0,
     "morph_calf": 0.75,
     "morph_waist_flatten": 0.502133,
-    "morph_chest_flatten": 0.536491
+    "morph_chest_flatten": 0.536265
    }
   },
   {
@@ -3182,8 +3189,8 @@
     "measures_cm": {
      "neck": 30.470000000000002,
      "shoulder": 97.62,
-     "chest": 90.78,
-     "waist_navel": 76.83,
+     "chest": 91.02,
+     "waist_navel": 77.07,
      "hip": 101.465,
      "biceps": 25.82,
      "forearm": 22.97,
@@ -3205,8 +3212,8 @@
    "expect_influences": {
     "morph_neck": -0.6247,
     "morph_shoulder": -0.493151,
-    "morph_chest": -0.434457,
-    "morph_waist": -0.225,
+    "morph_chest": -0.390977,
+    "morph_waist": -0.2,
     "morph_hip": -0.498101,
     "morph_biceps": -0.25,
     "morph_forearm": -0.450935,
@@ -3225,7 +3232,7 @@
     "measures_cm": {
      "neck": 42.33,
      "shoulder": 118.5,
-     "chest": 111.00999999999999,
+     "chest": 111.13,
      "waist_navel": 114.00999999999999,
      "hip": 129.4,
      "biceps": 39.1,
@@ -3268,8 +3275,8 @@
     "measures_cm": {
      "neck": 14.82,
      "shoulder": 83.22,
-     "chest": 79.17999999999999,
-     "waist_navel": 65.98,
+     "chest": 80.61999999999999,
+     "waist_navel": 67.42,
      "hip": 81.79,
      "biceps": 19.42,
      "forearm": 13.319999999999999,
@@ -3291,8 +3298,8 @@
    "expect_influences": {
     "morph_neck": -1.0,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.9,
-    "morph_waist": -0.45,
+    "morph_chest": -0.8,
+    "morph_waist": -0.4,
     "morph_hip": -1.0,
     "morph_biceps": -1.0,
     "morph_forearm": -1.0,
@@ -3460,8 +3467,8 @@
     "measures_cm": {
      "neck": 38.7,
      "shoulder": 121.7,
-     "chest": 106.475,
-     "waist_navel": 86.66000000000001,
+     "chest": 106.17999999999999,
+     "waist_navel": 86.38000000000001,
      "hip": 129.1,
      "biceps": 38.2,
      "forearm": 34.0,
@@ -3483,15 +3490,15 @@
    "expect_influences": {
     "morph_neck": 0.451807,
     "morph_shoulder": 0.501661,
-    "morph_chest": 0.415076,
-    "morph_waist": 0.2,
+    "morph_chest": 0.356061,
+    "morph_waist": 0.175,
     "morph_hip": 0.5,
     "morph_biceps": 0.537037,
     "morph_forearm": 0.46875,
     "morph_thigh": 0.25,
     "morph_calf": 1.0,
-    "morph_waist_flatten": 0.2,
-    "morph_chest_flatten": 0.415076
+    "morph_waist_flatten": 0.175,
+    "morph_chest_flatten": 0.356061
    }
   },
   {
@@ -3546,8 +3553,8 @@
     "measures_cm": {
      "neck": 46.2,
      "shoulder": 136.7,
-     "chest": 117.35,
-     "waist_navel": 97.96000000000001,
+     "chest": 115.58,
+     "waist_navel": 96.28,
      "hip": 149.1,
      "biceps": 48.2,
      "forearm": 41.5,
@@ -3569,15 +3576,15 @@
    "expect_influences": {
     "morph_neck": 1.0,
     "morph_shoulder": 1.0,
-    "morph_chest": 0.8,
-    "morph_waist": 0.4,
+    "morph_chest": 0.7,
+    "morph_waist": 0.35,
     "morph_hip": 1.0,
     "morph_biceps": 1.0,
     "morph_forearm": 1.0,
     "morph_thigh": 0.5,
     "morph_calf": 2.0,
-    "morph_waist_flatten": 0.4,
-    "morph_chest_flatten": 0.8
+    "morph_waist_flatten": 0.35,
+    "morph_chest_flatten": 0.7
    }
   },
   {
@@ -4363,7 +4370,7 @@
     "morph_chest": 0.0,
     "morph_waist": 0.0,
     "morph_hip": 0.0,
-    "morph_biceps": 0.0,
+    "morph_biceps": -0.5,
     "morph_forearm": 0.0,
     "morph_thigh": 0.0,
     "morph_calf": 0.0,
@@ -4407,7 +4414,7 @@
     "morph_chest": -0.5,
     "morph_waist": -1.0,
     "morph_hip": -0.5,
-    "morph_biceps": -1.0,
+    "morph_biceps": -0.5,
     "morph_forearm": -0.744182,
     "morph_thigh": -1.0,
     "morph_calf": -1.29993,
@@ -4425,8 +4432,8 @@
     "measures_cm": {
      "neck": 48.705,
      "shoulder": 115.8,
-     "chest": 116.455,
-     "waist_navel": 126.46,
+     "chest": 116.605,
+     "waist_navel": 126.725,
      "hip": 154.65,
      "biceps": 34.7,
      "forearm": 33.855,
@@ -4448,16 +4455,16 @@
    "expect_influences": {
     "morph_neck": 0.403251,
     "morph_shoulder": 0.501661,
-    "morph_chest": 0.225,
-    "morph_waist": 0.225,
+    "morph_chest": 0.25,
+    "morph_waist": 0.25,
     "morph_hip": 0.515355,
-    "morph_biceps": 0.0,
+    "morph_biceps": -0.5,
     "morph_forearm": 0.533654,
     "morph_thigh": 0.503311,
     "morph_calf": 0.996667,
-    "morph_waist_flatten": 0.225,
+    "morph_waist_flatten": 0.25,
     "morph_hip_flatten": 0.515355,
-    "morph_chest_flatten": 0.225
+    "morph_chest_flatten": 0.25
    }
   },
   {
@@ -4472,7 +4479,7 @@
      "chest": 113.83500000000001,
      "waist_navel": 119.97999999999999,
      "hip": 147.87,
-     "biceps": 34.675000000000004,
+     "biceps": 34.705000000000005,
      "forearm": 30.744999999999997,
      "thigh": 77.965,
      "calf": 46.58
@@ -4495,7 +4502,7 @@
     "morph_chest": -0.25,
     "morph_waist": -0.48,
     "morph_hip": -0.25,
-    "morph_biceps": -0.791667,
+    "morph_biceps": -0.5,
     "morph_forearm": -0.449728,
     "morph_thigh": -0.493902,
     "morph_calf": -1.003311,
@@ -4513,8 +4520,8 @@
     "measures_cm": {
      "neck": 61.730000000000004,
      "shoulder": 130.8,
-     "chest": 122.73,
-     "waist_navel": 137.26,
+     "chest": 123.63,
+     "waist_navel": 138.85,
      "hip": 179.89999999999998,
      "biceps": 34.7,
      "forearm": 41.129999999999995,
@@ -4536,16 +4543,16 @@
    "expect_influences": {
     "morph_neck": 1.0,
     "morph_shoulder": 1.0,
-    "morph_chest": 0.45,
-    "morph_waist": 0.45,
+    "morph_chest": 0.5,
+    "morph_waist": 0.5,
     "morph_hip": 1.0,
-    "morph_biceps": 0.0,
+    "morph_biceps": -0.5,
     "morph_forearm": 1.0,
     "morph_thigh": 1.0,
     "morph_calf": 2.0,
-    "morph_waist_flatten": 0.45,
+    "morph_waist_flatten": 0.5,
     "morph_hip_flatten": 1.0,
-    "morph_chest_flatten": 0.45
+    "morph_chest_flatten": 0.5
    }
   },
   {
@@ -4560,7 +4567,7 @@
      "chest": 107.01,
      "waist_navel": 98.38,
      "hip": 139.22,
-     "biceps": 34.550000000000004,
+     "biceps": 34.730000000000004,
      "forearm": 22.47,
      "thigh": 63.79,
      "calf": 31.48
@@ -4583,7 +4590,7 @@
     "morph_chest": -0.5,
     "morph_waist": -1.0,
     "morph_hip": -0.5,
-    "morph_biceps": -1.0,
+    "morph_biceps": 0.0,
     "morph_forearm": -1.0,
     "morph_thigh": -1.0,
     "morph_calf": -2.0,
@@ -4626,7 +4633,7 @@
     "morph_chest": 0.0,
     "morph_waist": 0.0,
     "morph_hip": 0.0,
-    "morph_biceps": 0.0,
+    "morph_biceps": -0.5,
     "morph_forearm": 0.0,
     "morph_thigh": 0.0,
     "morph_calf": 0.0,
@@ -4753,10 +4760,10 @@
     "measures_cm": {
      "neck": 36.675,
      "shoulder": 102.5,
-     "chest": 98.445,
+     "chest": 98.455,
      "waist_navel": 83.86,
      "hip": 109.74000000000001,
-     "biceps": 27.565,
+     "biceps": 26.6,
      "forearm": 26.8,
      "thigh": 55.5,
      "calf": 41.195
@@ -4776,16 +4783,16 @@
    "expect_influences": {
     "morph_neck": 0.516667,
     "morph_shoulder": 0.50495,
-    "morph_chest": 0.543966,
+    "morph_chest": 0.542241,
     "morph_waist": 0.25,
     "morph_hip": 0.25,
-    "morph_biceps": 0.25,
+    "morph_biceps": 0.0,
     "morph_forearm": 0.503311,
     "morph_thigh": 0.0,
     "morph_calf": 0.998333,
     "morph_waist_flatten": 0.25,
     "morph_hip_flatten": 0.25,
-    "morph_chest_flatten": 0.543966
+    "morph_chest_flatten": 0.542241
    }
   },
   {
@@ -4841,10 +4848,10 @@
     "measures_cm": {
      "neck": 47.55,
      "shoulder": 117.5,
-     "chest": 111.67,
+     "chest": 111.72999999999999,
      "waist_navel": 98.16,
      "hip": 122.44,
-     "biceps": 32.39,
+     "biceps": 26.6,
      "forearm": 34.3,
      "thigh": 55.5,
      "calf": 56.17
@@ -4867,7 +4874,7 @@
     "morph_chest": 1.0,
     "morph_waist": 0.5,
     "morph_hip": 0.5,
-    "morph_biceps": 0.5,
+    "morph_biceps": 0.0,
     "morph_forearm": 1.0,
     "morph_thigh": 0.0,
     "morph_calf": 2.0,
@@ -5775,7 +5782,7 @@
      "neck": 30.875,
      "shoulder": 95.74499999999999,
      "chest": 86.435,
-     "waist_navel": 88.395,
+     "waist_navel": 88.4,
      "hip": 116.7,
      "biceps": 29.345000000000002,
      "forearm": 26.919999999999998,
@@ -5798,7 +5805,7 @@
     "morph_neck": -0.595588,
     "morph_shoulder": -0.492241,
     "morph_chest": -0.386811,
-    "morph_waist": -0.395285,
+    "morph_waist": -0.394737,
     "morph_hip": -0.465426,
     "morph_biceps": -0.300314,
     "morph_forearm": -0.413408,
@@ -5863,7 +5870,7 @@
      "neck": 15.75,
      "shoulder": 81.47,
      "chest": 76.61,
-     "waist_navel": 70.37,
+     "waist_navel": 70.4,
      "hip": 99.2,
      "biceps": 24.57,
      "forearm": 19.52,
@@ -6037,8 +6044,8 @@
    "expect_influences": {
     "morph_neck": -0.553658,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.4,
-    "morph_waist": -0.6829,
+    "morph_chest": -0.6,
+    "morph_waist": -0.6,
     "morph_hip": -0.5,
     "morph_biceps": -0.773607,
     "morph_forearm": -0.801928,
@@ -6102,8 +6109,8 @@
     "measures_cm": {
      "neck": 29.174999999999997,
      "shoulder": 105.145,
-     "chest": 90.565,
-     "waist_navel": 74.30000000000001,
+     "chest": 90.01,
+     "waist_navel": 75.19500000000001,
      "hip": 105.01,
      "biceps": 27.125,
      "forearm": 24.330000000000002,
@@ -6125,8 +6132,8 @@
    "expect_influences": {
     "morph_neck": -0.630161,
     "morph_shoulder": -0.497475,
-    "morph_chest": -0.2,
-    "morph_waist": -0.399113,
+    "morph_chest": -0.298587,
+    "morph_waist": -0.299889,
     "morph_hip": -0.25,
     "morph_biceps": -0.340909,
     "morph_forearm": -0.515267,
@@ -6190,8 +6197,8 @@
     "measures_cm": {
      "neck": 13.049999999999997,
      "shoulder": 90.36999999999999,
-     "chest": 84.89,
-     "waist_navel": 56.300000000000004,
+     "chest": 81.56,
+     "waist_navel": 61.67,
      "hip": 95.06,
      "biceps": 20.75,
      "forearm": 17.98,
@@ -6213,8 +6220,8 @@
    "expect_influences": {
     "morph_neck": -1.0,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.4,
-    "morph_waist": -0.8,
+    "morph_chest": -0.6,
+    "morph_waist": -0.6,
     "morph_hip": -0.5,
     "morph_biceps": -1.0,
     "morph_forearm": -1.0,
@@ -6715,7 +6722,7 @@
      "neck": 37.084999999999994,
      "shoulder": 112.1,
      "chest": 98.63,
-     "waist_navel": 111.495,
+     "waist_navel": 111.5,
      "hip": 131.795,
      "biceps": 34.3,
      "forearm": 30.12,
@@ -6738,13 +6745,13 @@
     "morph_neck": 0.464431,
     "morph_shoulder": 0.503311,
     "morph_chest": 0.49031,
-    "morph_waist": 0.459274,
+    "morph_waist": 0.458937,
     "morph_hip": 0.502593,
     "morph_biceps": 0.456621,
     "morph_forearm": 0.536585,
     "morph_thigh": 0.501661,
     "morph_calf": 1.0,
-    "morph_waist_flatten": 0.459274,
+    "morph_waist_flatten": 0.458937,
     "morph_hip_flatten": 0.502593,
     "morph_chest_flatten": 0.49031
    }
@@ -6803,7 +6810,7 @@
      "neck": 48.51,
      "shoulder": 127.1,
      "chest": 111.28,
-     "waist_navel": 139.97,
+     "waist_navel": 140.0,
      "hip": 155.77,
      "biceps": 44.3,
      "forearm": 37.72,
@@ -7021,12 +7028,12 @@
    "expect_influences": {
     "morph_neck": -0.5,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.5,
-    "morph_waist": -0.5,
-    "morph_hip": -0.9,
+    "morph_chest": -0.8,
+    "morph_waist": -0.4,
+    "morph_hip": -0.8,
     "morph_biceps": -1.0,
     "morph_forearm": -0.682443,
-    "morph_thigh": -0.9,
+    "morph_thigh": -0.8,
     "morph_calf": -1.286118,
     "morph_waist_flatten": 0.0,
     "morph_hip_flatten": 0.0,
@@ -7086,12 +7093,12 @@
     "measures_cm": {
      "neck": 34.3,
      "shoulder": 110.275,
-     "chest": 91.75,
-     "waist_navel": 86.085,
-     "hip": 119.135,
+     "chest": 90.89,
+     "waist_navel": 86.565,
+     "hip": 119.53,
      "biceps": 30.305,
      "forearm": 27.91,
-     "thigh": 71.425,
+     "thigh": 71.72,
      "calf": 45.805
     },
     "columns_used": [
@@ -7109,12 +7116,12 @@
    "expect_influences": {
     "morph_neck": -0.25,
     "morph_shoulder": -0.495763,
-    "morph_chest": -0.25,
-    "morph_waist": -0.25,
-    "morph_hip": -0.448992,
+    "morph_chest": -0.398276,
+    "morph_waist": -0.2,
+    "morph_hip": -0.399244,
     "morph_biceps": -0.25,
     "morph_forearm": -0.432065,
-    "morph_thigh": -0.448826,
+    "morph_thigh": -0.399329,
     "morph_calf": -0.998333,
     "morph_waist_flatten": 0.0,
     "morph_hip_flatten": 0.0,
@@ -7174,12 +7181,12 @@
     "measures_cm": {
      "neck": 28.799999999999997,
      "shoulder": 95.65,
-     "chest": 84.5,
-     "waist_navel": 74.01,
-     "hip": 101.31,
+     "chest": 79.34,
+     "waist_navel": 76.89,
+     "hip": 103.68,
      "biceps": 26.330000000000002,
      "forearm": 19.96,
-     "thigh": 58.05,
+     "thigh": 59.81999999999999,
      "calf": 30.83
     },
     "columns_used": [
@@ -7197,12 +7204,12 @@
    "expect_influences": {
     "morph_neck": -0.5,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.5,
-    "morph_waist": -0.5,
-    "morph_hip": -0.9,
+    "morph_chest": -0.8,
+    "morph_waist": -0.4,
+    "morph_hip": -0.8,
     "morph_biceps": -1.0,
     "morph_forearm": -1.0,
-    "morph_thigh": -0.9,
+    "morph_thigh": -0.8,
     "morph_calf": -2.0,
     "morph_waist_flatten": 0.0,
     "morph_hip_flatten": 0.0,
@@ -7408,7 +7415,7 @@
     "measures_cm": {
      "neck": 42.3,
      "shoulder": 115.865,
-     "chest": 120.08,
+     "chest": 120.085,
      "waist_navel": 120.175,
      "hip": 138.0,
      "biceps": 34.455,
@@ -7431,7 +7438,7 @@
    "expect_influences": {
     "morph_neck": -0.498339,
     "morph_shoulder": -0.495777,
-    "morph_chest": -0.496599,
+    "morph_chest": -0.495748,
     "morph_waist": -0.499493,
     "morph_hip": -0.467033,
     "morph_biceps": -0.011842,
@@ -7492,7 +7499,7 @@
     "measures_cm": {
      "neck": 27.299999999999997,
      "shoulder": 101.19,
-     "chest": 105.48,
+     "chest": 105.50999999999999,
      "waist_navel": 95.55,
      "hip": 121.0,
      "biceps": 34.23,
@@ -7705,7 +7712,7 @@
    "expect_influences": {
     "morph_neck": 0.521459,
     "morph_shoulder": 0.501661,
-    "morph_chest": 0.55538,
+    "morph_chest": 0.553968,
     "morph_waist": 0.50266,
     "morph_hip": 0.5,
     "morph_biceps": 0.507389,
@@ -7713,7 +7720,7 @@
     "morph_thigh": 0.501661,
     "morph_calf": 1.0,
     "morph_waist_flatten": 0.50266,
-    "morph_chest_flatten": 0.55538
+    "morph_chest_flatten": 0.553968
    }
   },
   {
@@ -8005,7 +8012,7 @@
     "measures_cm": {
      "neck": 40.25,
      "shoulder": 124.0,
-     "chest": 107.33,
+     "chest": 108.895,
      "waist_navel": 88.215,
      "hip": 124.5,
      "biceps": 35.5,
@@ -8028,7 +8035,7 @@
    "expect_influences": {
     "morph_neck": 0.43,
     "morph_shoulder": 0.503311,
-    "morph_chest": 0.25,
+    "morph_chest": 0.53754,
     "morph_waist": 0.501265,
     "morph_hip": 0.0,
     "morph_biceps": 0.5,
@@ -8037,7 +8044,7 @@
     "morph_calf": 0.5,
     "morph_waist_flatten": 0.501265,
     "morph_hip_flatten": 0.0,
-    "morph_chest_flatten": 0.25
+    "morph_chest_flatten": 0.53754
    }
   },
   {
@@ -8050,7 +8057,7 @@
      "neck": 36.895,
      "shoulder": 118.075,
      "chest": 104.665,
-     "waist_navel": 79.88499999999999,
+     "waist_navel": 79.89,
      "hip": 123.5,
      "biceps": 32.575,
      "forearm": 28.145,
@@ -8093,7 +8100,7 @@
     "measures_cm": {
      "neck": 51.0,
      "shoulder": 139.0,
-     "chest": 113.98,
+     "chest": 123.37,
      "waist_navel": 117.78999999999999,
      "hip": 124.5,
      "biceps": 45.5,
@@ -8116,7 +8123,7 @@
    "expect_influences": {
     "morph_neck": 1.0,
     "morph_shoulder": 1.0,
-    "morph_chest": 0.5,
+    "morph_chest": 1.0,
     "morph_waist": 1.0,
     "morph_hip": 0.0,
     "morph_biceps": 1.0,
@@ -8125,7 +8132,7 @@
     "morph_calf": 1.0,
     "morph_waist_flatten": 1.0,
     "morph_hip_flatten": 0.0,
-    "morph_chest_flatten": 0.5
+    "morph_chest_flatten": 1.0
    }
   },
   {
@@ -8138,7 +8145,7 @@
      "neck": 30.87,
      "shoulder": 103.45,
      "chest": 97.99,
-     "waist_navel": 67.81,
+     "waist_navel": 67.84,
      "hip": 118.5,
      "biceps": 27.95,
      "forearm": 18.87,
@@ -8334,7 +8341,7 @@
      "neck": 38.305,
      "shoulder": 114.2,
      "chest": 104.07,
-     "waist_navel": 115.92,
+     "waist_navel": 115.91000000000001,
      "hip": 138.22,
      "biceps": 34.1,
      "forearm": 33.3,
@@ -8378,7 +8385,7 @@
      "neck": 33.0,
      "shoulder": 108.315,
      "chest": 99.55,
-     "waist_navel": 109.355,
+     "waist_navel": 109.36500000000001,
      "hip": 130.235,
      "biceps": 31.66,
      "forearm": 29.905,
@@ -8400,8 +8407,8 @@
    "expect_influences": {
     "morph_neck": -0.563953,
     "morph_shoulder": -0.494007,
-    "morph_chest": -0.388258,
-    "morph_waist": -0.396569,
+    "morph_chest": -0.389734,
+    "morph_waist": -0.397146,
     "morph_hip": -0.396617,
     "morph_biceps": -0.25,
     "morph_forearm": -0.553066,
@@ -8422,7 +8429,7 @@
      "neck": 49.83,
      "shoulder": 129.2,
      "chest": 116.41999999999999,
-     "waist_navel": 128.52,
+     "waist_navel": 128.46,
      "hip": 162.32,
      "biceps": 44.1,
      "forearm": 40.8,
@@ -8466,7 +8473,7 @@
      "neck": 18.0,
      "shoulder": 93.89,
      "chest": 89.3,
-     "waist_navel": 89.13000000000001,
+     "waist_navel": 89.19,
      "hip": 114.41,
      "biceps": 29.46,
      "forearm": 20.43,
@@ -8662,7 +8669,7 @@
      "neck": 49.585,
      "shoulder": 128.6,
      "chest": 119.67500000000001,
-     "waist_navel": 152.525,
+     "waist_navel": 152.51500000000001,
      "hip": 169.42000000000002,
      "biceps": 39.9,
      "forearm": 35.32,
@@ -8685,13 +8692,13 @@
     "morph_neck": 0.268182,
     "morph_shoulder": 0.503311,
     "morph_chest": 0.413636,
-    "morph_waist": 0.408031,
+    "morph_waist": 0.408579,
     "morph_hip": 0.500994,
     "morph_biceps": 0.528302,
     "morph_forearm": 0.488,
     "morph_thigh": 0.503311,
     "morph_calf": 0.998333,
-    "morph_waist_flatten": 0.408031,
+    "morph_waist_flatten": 0.408579,
     "morph_hip_flatten": 0.500994,
     "morph_chest_flatten": 0.413636
    }
@@ -8706,7 +8713,7 @@
      "neck": 45.7,
      "shoulder": 122.695,
      "chest": 117.4,
-     "waist_navel": 142.50500000000002,
+     "waist_navel": 142.59,
      "hip": 160.65,
      "biceps": 37.01,
      "forearm": 33.385,
@@ -8729,7 +8736,7 @@
     "morph_neck": -0.506579,
     "morph_shoulder": -0.495734,
     "morph_chest": 0.0,
-    "morph_waist": -0.4921,
+    "morph_waist": -0.491509,
     "morph_hip": -0.485751,
     "morph_biceps": -0.20892,
     "morph_forearm": -0.305556,
@@ -8750,7 +8757,7 @@
      "neck": 54.010000000000005,
      "shoulder": 143.6,
      "chest": 131.05,
-     "waist_navel": 176.15,
+     "waist_navel": 176.09,
      "hip": 194.52,
      "biceps": 49.9,
      "forearm": 41.42,
@@ -8794,7 +8801,7 @@
      "neck": 30.700000000000003,
      "shoulder": 108.16999999999999,
      "chest": 117.4,
-     "waist_navel": 116.03000000000002,
+     "waist_navel": 116.54000000000002,
      "hip": 141.9,
      "biceps": 32.56,
      "forearm": 29.810000000000002,
@@ -8987,7 +8994,7 @@
     "measures_cm": {
      "neck": 47.434999999999995,
      "shoulder": 140.8,
-     "chest": 104.2,
+     "chest": 104.20500000000001,
      "waist_navel": 91.245,
      "hip": 119.2,
      "biceps": 43.6,
@@ -9010,7 +9017,7 @@
    "expect_influences": {
     "morph_neck": 0.5625,
     "morph_shoulder": 0.501661,
-    "morph_chest": 0.505988,
+    "morph_chest": 0.506716,
     "morph_waist": 0.25,
     "morph_hip": 0.5,
     "morph_biceps": 0.0,
@@ -9018,7 +9025,7 @@
     "morph_thigh": 0.501661,
     "morph_calf": 1.0,
     "morph_waist_flatten": 0.25,
-    "morph_chest_flatten": 0.505988
+    "morph_chest_flatten": 0.506716
    }
   },
   {
@@ -9073,7 +9080,7 @@
     "measures_cm": {
      "neck": 47.61,
      "shoulder": 155.8,
-     "chest": 120.7,
+     "chest": 120.73,
      "waist_navel": 104.97,
      "hip": 139.2,
      "biceps": 43.6,
@@ -10229,7 +10236,8 @@
     "morph_forearm": 0.0,
     "morph_thigh": 0.0,
     "morph_calf": 0.0,
-    "morph_waist_flatten": 0.0
+    "morph_waist_flatten": 0.0,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -10271,7 +10279,8 @@
     "morph_forearm": -0.980121,
     "morph_thigh": -1.0,
     "morph_calf": -1.552632,
-    "morph_waist_flatten": 0.0
+    "morph_waist_flatten": 0.0,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -10283,10 +10292,10 @@
     "measures_cm": {
      "neck": 49.515,
      "shoulder": 127.5,
-     "chest": 126.95,
-     "waist_navel": 154.305,
+     "chest": 125.5,
+     "waist_navel": 154.3,
      "hip": 167.2,
-     "biceps": 36.52,
+     "biceps": 36.69,
      "forearm": 36.455,
      "thigh": 81.9,
      "calf": 62.0
@@ -10306,14 +10315,15 @@
    "expect_influences": {
     "morph_neck": 0.500828,
     "morph_shoulder": 0.503311,
-    "morph_chest": 0.25,
+    "morph_chest": 0.0,
     "morph_waist": 0.25,
     "morph_hip": 0.513382,
-    "morph_biceps": 0.522388,
+    "morph_biceps": 0.564583,
     "morph_forearm": 0.556723,
     "morph_thigh": 0.503311,
     "morph_calf": 1.0,
-    "morph_waist_flatten": 0.25
+    "morph_waist_flatten": 0.25,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -10325,10 +10335,10 @@
     "measures_cm": {
      "neck": 43.5,
      "shoulder": 121.605,
-     "chest": 122.885,
-     "waist_navel": 146.92,
+     "chest": 122.89,
+     "waist_navel": 146.925,
      "hip": 159.69,
-     "biceps": 34.755,
+     "biceps": 34.76,
      "forearm": 33.975,
      "thigh": 76.02000000000001,
      "calf": 56.0
@@ -10348,14 +10358,15 @@
    "expect_influences": {
     "morph_neck": -0.5,
     "morph_shoulder": -0.494027,
-    "morph_chest": -0.484259,
-    "morph_waist": -0.475104,
+    "morph_chest": -0.483333,
+    "morph_waist": -0.475572,
     "morph_hip": -0.4875,
     "morph_biceps": -1.0,
     "morph_forearm": -0.488014,
     "morph_thigh": -0.494845,
     "morph_calf": -1.0,
-    "morph_waist_flatten": 0.0
+    "morph_waist_flatten": 0.0,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -10367,10 +10378,10 @@
     "measures_cm": {
      "neck": 64.59,
      "shoulder": 142.5,
-     "chest": 134.2,
-     "waist_navel": 168.33,
+     "chest": 125.5,
+     "waist_navel": 168.3,
      "hip": 187.2,
-     "biceps": 46.120000000000005,
+     "biceps": 47.14,
      "forearm": 41.73,
      "thigh": 96.9,
      "calf": 77.0
@@ -10390,14 +10401,15 @@
    "expect_influences": {
     "morph_neck": 1.0,
     "morph_shoulder": 1.0,
-    "morph_chest": 0.5,
+    "morph_chest": 0.0,
     "morph_waist": 0.5,
     "morph_hip": 1.0,
     "morph_biceps": 1.0,
     "morph_forearm": 1.0,
     "morph_thigh": 1.0,
     "morph_calf": 2.0,
-    "morph_waist_flatten": 0.5
+    "morph_waist_flatten": 0.5,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -10409,10 +10421,10 @@
     "measures_cm": {
      "neck": 28.5,
      "shoulder": 107.13,
-     "chest": 109.81,
-     "waist_navel": 124.02,
+     "chest": 109.84,
+     "waist_navel": 124.05,
      "hip": 142.14,
-     "biceps": 35.53,
+     "biceps": 35.56,
      "forearm": 26.849999999999998,
      "thigh": 61.620000000000005,
      "calf": 41.0
@@ -10435,11 +10447,12 @@
     "morph_chest": -1.0,
     "morph_waist": -1.0,
     "morph_hip": -1.0,
-    "morph_biceps": 0.254098,
+    "morph_biceps": 0.269663,
     "morph_forearm": -1.0,
     "morph_thigh": -1.0,
     "morph_calf": -2.0,
-    "morph_waist_flatten": 0.0
+    "morph_waist_flatten": 0.0,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -10480,7 +10493,8 @@
     "morph_forearm": 0.0,
     "morph_thigh": 0.0,
     "morph_calf": 0.0,
-    "morph_waist_flatten": 0.0
+    "morph_waist_flatten": 0.0,
+    "morph_chest_flatten": 0.0
    }
   },
   {
@@ -10579,8 +10593,8 @@
    "expect_influences": {
     "morph_neck": -0.565377,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.9,
-    "morph_waist": -0.9,
+    "morph_chest": -1.0,
+    "morph_waist": -1.0,
     "morph_hip": -1.0,
     "morph_biceps": -1.0,
     "morph_forearm": -1.0,
@@ -10599,10 +10613,10 @@
     "measures_cm": {
      "neck": 46.41,
      "shoulder": 130.6,
-     "chest": 116.655,
-     "waist_navel": 142.575,
+     "chest": 116.975,
+     "waist_navel": 142.85,
      "hip": 160.3,
-     "biceps": 40.7,
+     "biceps": 40.705,
      "forearm": 39.4,
      "thigh": 83.0,
      "calf": 63.1
@@ -10622,15 +10636,15 @@
    "expect_influences": {
     "morph_neck": 0.328431,
     "morph_shoulder": 0.503311,
-    "morph_chest": 0.427579,
-    "morph_waist": 0.2,
+    "morph_chest": 0.491071,
+    "morph_waist": 0.225,
     "morph_hip": 0.513382,
     "morph_biceps": 0.25,
     "morph_forearm": 0.493827,
     "morph_thigh": 0.503311,
     "morph_calf": 1.0,
-    "morph_waist_flatten": 0.2,
-    "morph_chest_flatten": 0.427579
+    "morph_waist_flatten": 0.225,
+    "morph_chest_flatten": 0.491071
    }
   },
   {
@@ -10642,10 +10656,10 @@
     "measures_cm": {
      "neck": 41.4,
      "shoulder": 124.69,
-     "chest": 112.15,
-     "waist_navel": 136.68,
+     "chest": 111.905,
+     "waist_navel": 136.285,
      "hip": 152.675,
-     "biceps": 38.525,
+     "biceps": 38.52,
      "forearm": 36.61,
      "thigh": 77.17,
      "calf": 57.1
@@ -10665,10 +10679,10 @@
    "expect_influences": {
     "morph_neck": -0.479233,
     "morph_shoulder": -0.494898,
-    "morph_chest": -0.435185,
-    "morph_waist": -0.433628,
+    "morph_chest": -0.480556,
+    "morph_waist": -0.477323,
     "morph_hip": -0.489865,
-    "morph_biceps": -0.177393,
+    "morph_biceps": -0.170347,
     "morph_forearm": -0.580986,
     "morph_thigh": -0.494755,
     "morph_calf": -1.0,
@@ -10685,10 +10699,10 @@
     "measures_cm": {
      "neck": 56.459999999999994,
      "shoulder": 145.6,
-     "chest": 127.43,
-     "waist_navel": 152.45,
+     "chest": 129.35,
+     "waist_navel": 154.1,
      "hip": 180.3,
-     "biceps": 46.2,
+     "biceps": 46.230000000000004,
      "forearm": 47.4,
      "thigh": 98.0,
      "calf": 78.1
@@ -10708,15 +10722,15 @@
    "expect_influences": {
     "morph_neck": 1.0,
     "morph_shoulder": 1.0,
-    "morph_chest": 0.8,
-    "morph_waist": 0.4,
+    "morph_chest": 0.9,
+    "morph_waist": 0.45,
     "morph_hip": 1.0,
     "morph_biceps": 0.5,
     "morph_forearm": 1.0,
     "morph_thigh": 1.0,
     "morph_calf": 2.0,
-    "morph_waist_flatten": 0.4,
-    "morph_chest_flatten": 0.8
+    "morph_waist_flatten": 0.45,
+    "morph_chest_flatten": 0.9
    }
   },
   {
@@ -10728,10 +10742,10 @@
     "measures_cm": {
      "neck": 26.4,
      "shoulder": 110.13999999999999,
-     "chest": 100.4,
-     "waist_navel": 117.08,
+     "chest": 98.93,
+     "waist_navel": 114.71,
      "hip": 134.55,
-     "biceps": 33.150000000000006,
+     "biceps": 33.120000000000005,
      "forearm": 30.659999999999997,
      "thigh": 63.019999999999996,
      "calf": 42.1
@@ -10751,8 +10765,8 @@
    "expect_influences": {
     "morph_neck": -1.0,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.9,
-    "morph_waist": -0.9,
+    "morph_chest": -1.0,
+    "morph_waist": -1.0,
     "morph_hip": -1.0,
     "morph_biceps": -1.0,
     "morph_forearm": -1.0,
@@ -10895,7 +10909,7 @@
     "morph_neck": -0.623722,
     "morph_shoulder": -1.0,
     "morph_chest": -0.9,
-    "morph_waist": -0.835588,
+    "morph_waist": -0.836459,
     "morph_hip": -0.5,
     "morph_forearm": -1.0,
     "morph_thigh": -1.0,
@@ -10911,7 +10925,7 @@
     "height_m": 1.75,
     "measures_cm": {
      "neck": 50.26,
-     "shoulder": 151.9,
+     "shoulder": 153.37,
      "chest": 172.005,
      "waist_navel": 103.895,
      "hip": 150.3,
@@ -10932,7 +10946,7 @@
    },
    "expect_influences": {
     "morph_neck": 0.25,
-    "morph_shoulder": 0.0,
+    "morph_shoulder": 0.25,
     "morph_chest": 0.175,
     "morph_waist": 0.175,
     "morph_hip": 0.0,
@@ -10950,9 +10964,9 @@
     "height_m": 1.75,
     "measures_cm": {
      "neck": 46.5,
-     "shoulder": 149.4,
-     "chest": 168.645,
-     "waist_navel": 97.855,
+     "shoulder": 149.38500000000002,
+     "chest": 168.64,
+     "waist_navel": 97.86,
      "hip": 148.57500000000002,
      "forearm": 37.455,
      "thigh": 82.25,
@@ -10971,9 +10985,9 @@
    },
    "expect_influences": {
     "morph_neck": -0.465839,
-    "morph_shoulder": -0.484496,
-    "morph_chest": -0.436111,
-    "morph_waist": -0.449793,
+    "morph_shoulder": -0.479962,
+    "morph_chest": -0.437037,
+    "morph_waist": -0.449275,
     "morph_hip": -0.25,
     "morph_forearm": -0.277961,
     "morph_thigh": -0.498311,
@@ -10989,7 +11003,7 @@
     "height_m": 1.75,
     "measures_cm": {
      "neck": 54.06,
-     "shoulder": 151.9,
+     "shoulder": 160.72,
      "chest": 177.03,
      "waist_navel": 112.37,
      "hip": 150.3,
@@ -11010,7 +11024,7 @@
    },
    "expect_influences": {
     "morph_neck": 0.5,
-    "morph_shoulder": 0.0,
+    "morph_shoulder": 0.5,
     "morph_chest": 0.35,
     "morph_waist": 0.35,
     "morph_hip": 0.0,
@@ -11028,9 +11042,9 @@
     "height_m": 1.75,
     "measures_cm": {
      "neck": 31.5,
-     "shoulder": 136.9,
-     "chest": 156.87,
-     "waist_navel": 76.13,
+     "shoulder": 136.81,
+     "chest": 156.84,
+     "waist_navel": 76.16,
      "hip": 139.95000000000002,
      "forearm": 33.23,
      "thigh": 67.5,
@@ -11156,6 +11170,7 @@
     "morph_forearm": 0.0,
     "morph_thigh": 0.0,
     "morph_calf": 0.0,
+    "morph_waist_flatten": 0.0,
     "morph_hip_flatten": 0.0
    }
   },
@@ -11191,13 +11206,14 @@
    "expect_influences": {
     "morph_neck": -0.621826,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.9,
-    "morph_waist": -0.9,
-    "morph_hip": -1.0,
+    "morph_chest": -1.0,
+    "morph_waist": -0.8,
+    "morph_hip": -0.8,
     "morph_biceps": -0.5,
     "morph_forearm": -1.0,
     "morph_thigh": -1.0,
     "morph_calf": -1.353333,
+    "morph_waist_flatten": 0.0,
     "morph_hip_flatten": 0.0
    }
   },
@@ -11210,11 +11226,11 @@
     "measures_cm": {
      "neck": 50.93,
      "shoulder": 122.8,
-     "chest": 125.4,
-     "waist_navel": 142.69,
+     "chest": 126.0,
+     "waist_navel": 141.2,
      "hip": 166.91000000000003,
-     "biceps": 40.265,
-     "forearm": 38.315,
+     "biceps": 40.67,
+     "forearm": 38.8,
      "thigh": 90.3,
      "calf": 54.305
     },
@@ -11233,13 +11249,14 @@
    "expect_influences": {
     "morph_neck": 0.351964,
     "morph_shoulder": 0.501661,
-    "morph_chest": 0.15,
-    "morph_waist": 0.15,
+    "morph_chest": 0.25,
+    "morph_waist": 0.0,
     "morph_hip": 0.25,
-    "morph_biceps": 0.15,
-    "morph_forearm": 0.295058,
+    "morph_biceps": 0.25,
+    "morph_forearm": 0.436047,
     "morph_thigh": 0.503311,
     "morph_calf": 1.001667,
+    "morph_waist_flatten": 0.0,
     "morph_hip_flatten": 0.25
    }
   },
@@ -11252,9 +11269,9 @@
     "measures_cm": {
      "neck": 45.6,
      "shoulder": 116.85,
-     "chest": 121.805,
-     "waist_navel": 136.73499999999999,
-     "hip": 160.815,
+     "chest": 121.505,
+     "waist_navel": 137.225,
+     "hip": 161.61,
      "biceps": 39.15,
      "forearm": 36.135,
      "thigh": 84.42999999999999,
@@ -11275,13 +11292,14 @@
    "expect_influences": {
     "morph_neck": -0.477707,
     "morph_shoulder": -0.496633,
-    "morph_chest": -0.449167,
-    "morph_waist": -0.450101,
-    "morph_hip": -0.499373,
+    "morph_chest": -0.499167,
+    "morph_waist": -0.399899,
+    "morph_hip": -0.399749,
     "morph_biceps": -0.25,
     "morph_forearm": -0.555344,
     "morph_thigh": -0.494828,
     "morph_calf": -1.0,
+    "morph_waist_flatten": 0.0,
     "morph_hip_flatten": 0.0
    }
   },
@@ -11294,11 +11312,11 @@
     "measures_cm": {
      "neck": 62.58,
      "shoulder": 137.8,
-     "chest": 129.9,
-     "waist_navel": 150.14,
+     "chest": 133.5,
+     "waist_navel": 141.2,
      "hip": 177.46,
-     "biceps": 42.089999999999996,
-     "forearm": 43.39,
+     "biceps": 44.519999999999996,
+     "forearm": 46.3,
      "thigh": 105.3,
      "calf": 69.33
     },
@@ -11317,13 +11335,14 @@
    "expect_influences": {
     "morph_neck": 1.0,
     "morph_shoulder": 1.0,
-    "morph_chest": 0.3,
-    "morph_waist": 0.3,
+    "morph_chest": 0.5,
+    "morph_waist": 0.0,
     "morph_hip": 0.5,
-    "morph_biceps": 0.3,
-    "morph_forearm": 0.6,
+    "morph_biceps": 0.5,
+    "morph_forearm": 1.0,
     "morph_thigh": 1.0,
     "morph_calf": 2.0,
+    "morph_waist_flatten": 0.0,
     "morph_hip_flatten": 0.5
    }
   },
@@ -11336,9 +11355,9 @@
     "measures_cm": {
      "neck": 30.6,
      "shoulder": 102.1,
-     "chest": 108.33,
-     "waist_navel": 114.41,
-     "hip": 140.89000000000001,
+     "chest": 106.53,
+     "waist_navel": 117.35,
+     "hip": 145.66000000000003,
      "biceps": 35.4,
      "forearm": 30.309999999999995,
      "thigh": 70.08,
@@ -11359,13 +11378,14 @@
    "expect_influences": {
     "morph_neck": -1.0,
     "morph_shoulder": -1.0,
-    "morph_chest": -0.9,
-    "morph_waist": -0.9,
-    "morph_hip": -1.0,
+    "morph_chest": -1.0,
+    "morph_waist": -0.8,
+    "morph_hip": -0.8,
     "morph_biceps": -0.5,
     "morph_forearm": -1.0,
     "morph_thigh": -1.0,
     "morph_calf": -2.0,
+    "morph_waist_flatten": 0.0,
     "morph_hip_flatten": 0.0
    }
   },
@@ -11407,6 +11427,7 @@
     "morph_forearm": 0.0,
     "morph_thigh": 0.0,
     "morph_calf": 0.0,
+    "morph_waist_flatten": 0.0,
     "morph_hip_flatten": 0.0
    }
   },
@@ -11526,8 +11547,8 @@
     "measures_cm": {
      "neck": 51.625,
      "shoulder": 140.8,
-     "chest": 123.36,
-     "waist_navel": 151.14,
+     "chest": 123.64500000000001,
+     "waist_navel": 151.415,
      "hip": 170.4,
      "biceps": 41.6,
      "forearm": 42.29,
@@ -11549,15 +11570,15 @@
    "expect_influences": {
     "morph_neck": 0.39126,
     "morph_shoulder": 0.503311,
-    "morph_chest": 0.308017,
-    "morph_waist": 0.15,
+    "morph_chest": 0.368143,
+    "morph_waist": 0.175,
     "morph_hip": 0.512195,
     "morph_biceps": 0.0,
     "morph_forearm": 0.25,
     "morph_thigh": 0.503311,
     "morph_calf": 0.996667,
-    "morph_waist_flatten": 0.15,
-    "morph_chest_flatten": 0.308017
+    "morph_waist_flatten": 0.175,
+    "morph_chest_flatten": 0.368143
    }
   },
   {
@@ -11570,9 +11591,9 @@
      "neck": 46.7,
      "shoulder": 134.88500000000002,
      "chest": 120.12,
-     "waist_navel": 146.51,
+     "waist_navel": 146.515,
      "hip": 162.85,
-     "biceps": 40.005,
+     "biceps": 39.995000000000005,
      "forearm": 39.445,
      "thigh": 87.12,
      "calf": 53.769999999999996
@@ -11593,7 +11614,7 @@
     "morph_neck": -0.506579,
     "morph_shoulder": -0.495748,
     "morph_chest": -0.342308,
-    "morph_waist": -0.341542,
+    "morph_waist": -0.341006,
     "morph_hip": -0.488981,
     "morph_biceps": -0.25,
     "morph_forearm": -0.470812,
@@ -11612,8 +11633,8 @@
     "measures_cm": {
      "neck": 61.25,
      "shoulder": 155.8,
-     "chest": 130.66,
-     "waist_navel": 158.33999999999997,
+     "chest": 132.37,
+     "waist_navel": 159.98999999999998,
      "hip": 190.4,
      "biceps": 41.6,
      "forearm": 47.239999999999995,
@@ -11635,15 +11656,15 @@
    "expect_influences": {
     "morph_neck": 1.0,
     "morph_shoulder": 1.0,
-    "morph_chest": 0.6,
-    "morph_waist": 0.3,
+    "morph_chest": 0.7,
+    "morph_waist": 0.35,
     "morph_hip": 1.0,
     "morph_biceps": 0.0,
     "morph_forearm": 0.5,
     "morph_thigh": 1.0,
     "morph_calf": 2.0,
-    "morph_waist_flatten": 0.3,
-    "morph_chest_flatten": 0.6
+    "morph_waist_flatten": 0.35,
+    "morph_chest_flatten": 0.7
    }
   },
   {
@@ -11656,9 +11677,9 @@
      "neck": 31.700000000000003,
      "shoulder": 120.31,
      "chest": 111.22,
-     "waist_navel": 130.56,
+     "waist_navel": 130.58999999999997,
      "hip": 145.10000000000002,
-     "biceps": 32.03,
+     "biceps": 31.970000000000002,
      "forearm": 30.169999999999998,
      "thigh": 72.72,
      "calf": 38.62

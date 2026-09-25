@@ -18,21 +18,20 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 | **decidir QUAL avatar produzir** — o que falta é FORMA (retângulo, maçã, violão), não só IMC · **e os ajustes da Meshy 7** | `docs/COBERTURA_FORMAS.md` | **8,6k** |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
 | **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
-| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/REVISAO_ROUPA_2026-09-23.md` **primeiro** (4,9k), depois `docs/FILA_PECAS.md` | 6,5k |
+| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/REVISAO_ROUPA_2026-09-23.md` **primeiro** (5,2k), depois `docs/FILA_PECAS.md` | 6,5k |
 | investigar a coxa (RESOLVIDA em 14/08 por offset — ler antes de reabrir) | `docs/PROBLEMA_COXA.md` | 3,7k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **48,6k** |
-| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-09.md` (4,0k) · `diario-2026-08.md` (11,2k) · `diario-2026-07.md` (**grep**) | 65,3k |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **50,5k** |
+| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-09.md` (4,0k) · `diario-2026-08.md` (14,8k) · `diario-2026-07.md` (**grep**) | 65,3k |
 | o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
 
-> Leitura padrão: `CLAUDE.md` **9,8k** + `state.md` **26,6k** = **36,4k** antes de
-> qualquer trabalho. 🔴 O `state.md` subiu de novo (21,0k → 23,7k → **26,0k** com a
-> sessão 37) — **o corte virou dívida vencida**: descer os blocos narrativos das
-> sessões 30 e 31 para o diário é a primeira coisa da próxima sessão. O `LICOES.md`
-> seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
-> 26,3k → 28,6k → 29,9k → 31,2k → 32,3k → 37,5k → 39,2k → 42,1k → 48,0k → **48,6k**, com a
-> §4.5p na sessão 38).
+> Leitura padrão: `CLAUDE.md` **9,9k** + `state.md` **24,6k** = **34,5k** antes de
+> qualquer trabalho. ✅ A dívida foi paga na sessão 39: os blocos das sessões 30
+> e 31 desceram para o `diario-2026-08.md` (3,3k de corte, contra ~0,7k do bloco
+> novo) e o `state.md` saiu de 26,6k para **24,6k**. O `LICOES.md` seguiu subindo
+> (14,9k → 18,3k → 19,9k → 21,1k → 26,3k → 28,6k → 29,9k → 31,2k → 32,3k → 37,5k →
+> 39,2k → 42,1k → 48,0k → 48,6k → **50,5k**, com a §4.5q na sessão 39).
 >
-> ✅ **O corte do `state.md` funcionou duas vezes seguidas** — sessões 30 e 35.
+> ✅ **O corte do `state.md` funcionou três vezes** — sessões 30, 35 e 39.
 > Ele vinha de 9,4k → … → 17,9k → 23,3k; na sessão 35 desceram os blocos
 > narrativos das sessões **32, 33 e 34** para o `diario-2026-09.md` (4,1k de
 > corte) e ele fechou em **21,0k** mesmo com a sessão nova escrita por cima.
@@ -41,7 +40,7 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 > anteriores provaram isso.
 >
 > Próximos candidatos a descer, quando a frente deles fechar: o bloco de morph
-> da sessão 25, o do material de 31/07 e a sessão 31 (os corpos reais).
+> da sessão 25, o do material de 31/07 e os das sessões 35–37 (produção e peça).
 >
 > **Toda a coluna foi remedida na sessão 18** com um divisor único de 3,6
 > chars/token, calibrado contra os números que já estavam certos (`prompt_m.md`
@@ -182,20 +181,19 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     corpo largo. Consertar o fantasma custou uma versão em 37 femininas.
     `LICOES.md` §4.5h.
 
-    ⚠️ **Fatia sem corte de braço não mascara nada** — esse defeito era real,
-    embora invisível, e hoje o buraco **interior** da curva é preenchido pela
-    própria parábola (fora do intervalo medido nada é inventado). Quem o achou
-    foi a `faixa_tres_cores.py`, que pinta a máscara de **vermelho**: banco de
-    duas cores mostra o resultado e esconde a causa, e as duas causas possíveis
-    pedem consertos opostos.
-
-    ⚠️ **A máscara do braço na faixa é o VÃO DE AR, não a profundidade (15/08).**
-    `PROF_FRAC` responde *"esta coluna já é tronco?"* e num corpo com busto a
-    barra de 60% fica alta demais — o corte caía 4,2 cm DENTRO do tronco e comia
-    a quina de baixo da faixa. Acima da fusão existe ar entre braço e tronco em
-    toda fatia da banda; `_arm_cut_vao` corta ali e o critério antigo virou plano
-    B. E o corte é alisado por **parábola em zh** — a mediana de 5 mata o disparo
-    mas preserva degrau, e o que sobrava era borda serrilhada. `LICOES.md` §4.5g.
+    ✅ **O braço na faixa é separado pela NORMAL, e como CAMPO (sessão 39,
+    25/09).** Plano vertical por fatia (`w_arm_wide`) pega o lado de fora do
+    braço e erra a face que olha para o tronco — eram as abas e o tríceps
+    pintado. `w_arm_dono_field` pergunta, por vértice, se a normal olha para
+    longe do eixo do braço ou do eixo do tronco; o campo entra no `w_field` da
+    faixa e é **cortado exato** pelo `w_cut_boundary`. Com isso o topo da faixa
+    segue a borda viva também na quina da axila (`borda_viva_grava.py --quina`).
+    ❌ O tubo de raio fixo foi tentado e refutado — acima da fusão o braço cresce
+    30%. ⚠️ Fusão abaixo da base da faixa (só o `zen_f_b12_d1`) ⇒ o eixo vem da
+    **calota lateral** (`w_arm_calota`). ⚠️ Onde a borda do tecido é serrilhada,
+    a tinta fica **abaixo** dos dentes, não no meio deles. E aresta viva longe
+    da tinta num corpo pesado é **dobra de pele** até prova em contrário —
+    subi o cós do `b11_d1` até uma e ele reprovou. `LICOES.md` §4.5q.
 
     🔴 **Veredito de PINTURA não se dá no render do `--fit`** — ele é clay com luz chapada, e tecido sem pintar tem quase o tom do corpo. Uma listra branca passou por 37 avatares e por uma régua verde assim; quem a viu foi o Rogério, no testador. Usar `qa/probe/sondas/render_dist.py`, que renderiza o GLB entregue com o HDR. §4.5c.
 
@@ -220,8 +218,9 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     borda do tecido é aresta com diedro > 30° na malha; prega de pele é vale
     liso. `qa/probe/sondas/borda_viva.py` lê as 5 bordas e
     `borda_viva_grava.py` grava com política de confiança — aplicado nos 103 e
-    **aprovado por ele** (*"os shorts ficaram excelentes"*). Tops são a próxima frente. Antes de mexer em barra, cós ou faixa: `LICOES.md`
-    §4.5p.
+    **aprovado por ele** (*"os shorts ficaram excelentes"*). Os tops foram
+    refeitos na sessão 39 (ver abaixo). Antes de mexer em barra, cós ou faixa:
+    `LICOES.md` §4.5p e §4.5q.
 
     🔴 **O ciclo é OLHA → APLICA, e `--preview` é o que torna isso possível.** Ele
     pinta igual ao `--apply` e grava em `qa/preview/`, que não é URL de CDN;

@@ -5,6 +5,23 @@ avatares no testador, com os 27 novos destacados em laranja, e ditou defeito por
 defeito. Nada foi consertado na sessão em que esta lista foi levantada — **a
 ordem dele foi documentar, não atacar.**
 
+> ## 🆕 SESSÃO 39 (25/09): §2 (TOPS) REFEITA NAS FEMININAS — ✅ 55/55 APROVADOS
+>
+> Veredito dele: *"o restante está 100%"*; os quatro que reprovou (`b09_d2`,
+> `b11_d1` short; `b12_d1`, `b07_d3` top) foram consertados na mesma sessão e
+> aprovados — *"aprovadíssimo"*. **A pauta de roupa feminina está fechada.**
+>
+>
+> | § | estado |
+> |---|---|
+> | **§2 faixa/braço/tríceps** | ✅ aplicada em 54 de 55: o braço na altura da faixa passou a ser separado por **campo contínuo** (para onde a superfície olha — `w_arm_dono_field`), cortado exato como as bordas de altura. As abas pretas no braço e o tríceps pintado sumiram nos 8 da fila |
+> | **quina lateral de cima** | ✅ o topo da faixa segue a borda viva também nos laterais (`borda_viva_grava.py --quina`) — a trava de +0,7 cm da sessão 38 saiu, porque quem segurava o braço agora é o campo |
+> | **`zen_f_b12_d1`** | ✅ IMC 114: o braço topológico é só antebraço; o eixo passou a vir da calota lateral (`w_arm_calota`) |
+>
+> Varredura: as 54 com lente de 250 mm em 5 azimutes, prévia antes do apply
+> (`qa/probe/sondas/top_vistas.py`, folhas em `qa/revisao/_top/{id}/`). O short
+> não muda uma face (conferido). Método e lições: `LICOES.md` §4.5q.
+
 > ## 🆕 SESSÃO 38 (24–25/09): §1, §3 e §4 REFEITOS NOS 103 PELA BORDA VIVA — ✅ APROVADOS
 >
 > Veredito dele no testador: *"os shorts ficaram excelentes"*. **A §2 (tops) é a

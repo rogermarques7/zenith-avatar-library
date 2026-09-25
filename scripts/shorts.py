@@ -1570,6 +1570,268 @@ def w_mirror_arm(np, co, H, sm):
     return out
 
 
+# --- O BRACO NA ALTURA DA FAIXA: DE QUEM E A SUPERFICIE (sessao 39, 25/09) ---
+# Faixa de altura da fusao para baixo em que o EIXO do braco e ajustado, em
+# fracao de H. E o braco de cima (cotovelo ate perto da axila): abaixo de 0.10
+# ja entra o cotovelo, cujo raio salta; acima de 0.02 a fatia ja pega a dobra da
+# axila e o centroide foge para o tronco. Medido em b01_d1, b05h_d2, b09i_d3 e
+# b12h_d1 (braco_tubo_mede.py): nessa janela o centroide anda em LINHA RETA.
+ARM_TUBO_JANELA = (0.10, 0.02)
+# Quantil do raio por setor. Alto porque o que se quer e a SUPERFICIE do braco,
+# nao o miolo; nao 1.0 porque a borda da janela traz vertice de axila.
+ARM_TUBO_QUANTIL = 0.90
+ARM_TUBO_SETORES = 16
+ARM_TUBO_FOLGA = 0.003
+# Meia-abertura do CONE LATERAL, em graus a partir da direcao "para fora". Do
+# lado de FORA do eixo nao existe tronco, e ali a normal nao decide (as duas
+# direcoes radiais apontam para fora juntas). Mais estreito que o meio-plano de
+# proposito: nos corpos largos o dorsal fica ATRAS do braco com o mesmo x do
+# eixo, e o meio-plano o comeria.
+ARM_TUBO_CONE_GRAUS = 55.0
+# Quem separa braco de faixa na PINTURA: "dono" (campo continuo pela normal,
+# sessao 39) ou "largo" (w_arm_wide, mascara de vertice por fatia - o de 11/08
+# a 25/09). O antigo fica para o banco de ensaio fotografar o antes.
+ARM_MASCARA = os.environ.get("ZEN_ARM_MASCARA", "dono")
+# Escala do campo "dono" (adimensional, -1.5..1.5) para METROS, para ele entrar
+# no minimo com as bordas de altura da faixa. So muda a forma da QUINA onde as
+# duas bordas se encontram, nao onde cada uma passa.
+ARM_DONO_ESCALA = 0.03
+# Folga, em fracao de H, que a FUSAO do braco pode ficar abaixo da BASE da
+# faixa. Abaixo disso o braco medido pela topologia e so o ANTEBRACO e o eixo
+# nao diz nada do braco que encosta na faixa. Varrido nas 55 femininas
+# (_varre_eixo.py): em 54 a fusao fica dentro da banda ou acima dela (a menor
+# folga e zen_f_b11_d1, +0.019); o zen_f_b12_d1 (IMC 114) fica 0.050 abaixo,
+# com o eixo inclinado 0.44 para tras contra no maximo 0.28 nas outras. Com o
+# modelo invalido o avatar volta ao w_arm_wide - melhor o defeito conhecido
+# que um chute.
+ARM_DONO_FUSAO_ABAIXO = 0.01
+
+
+def w_arm_tube(np, co, H, is_arm):
+    """O EIXO e o RAIO do braco de cima, medidos abaixo da fusao.
+
+    Abaixo da fusao o w_limbs mediu o braco pela topologia, e ali ele e um
+    tubo de eixo reto (braco_tubo_mede.py): eixo pelos centros das fatias,
+    raio por setor angular em volta dele. Devolve um modelo por braco achado;
+    quem o usa e o w_arm_dono_field.
+
+    ---------------------------------------------------------------------
+    O TUBO COMO MASCARA FOI TENTADO E REFUTADO (sessao 39) - nao repetir
+    ---------------------------------------------------------------------
+    A primeira versao marcava como braco tudo DENTRO do tubo estendido acima
+    da fusao. Na previa com lente longa ficou PIOR que o w_arm_wide: acima da
+    fusao a secao do braco cresce ~30% (deltoide, dobra da axila - no
+    zen_f_b09i_d3 a zh 0.72 o braco tem 19 cm de fundo contra 15 do tubo), e a
+    face da FRENTE do braco saia preta. Aumentar o raio conserta a frente e
+    come o flanco do tronco pelo lado de dentro, onde o tubo ja encostava. Nao
+    ha raio certo: TAMANHO nao e o sinal. O que o eixo ainda da de bom e a
+    DIRECAO radial do braco - e e so isso que o criterio da normal usa."""
+    z = co[:, 2]
+    z0 = float(z.min())
+    cx = float(np.median(co[:, 0]))
+    cy = float(np.median(co[:, 1]))
+    modelos = []
+    for sinal in (-1.0, 1.0):
+        m = is_arm & (np.sign(co[:, 0] - cx) == sinal)
+        if m.sum() < 200:
+            continue
+        idx = np.where(m)[0]
+        zh = (z[idx] - z0) / H
+        fz = float(zh.max())
+        lo, hi = fz - ARM_TUBO_JANELA[0], fz - ARM_TUBO_JANELA[1]
+        pts = []
+        for k in np.arange(lo, hi + 1e-9, 0.01):
+            s = idx[(zh >= k - 0.004) & (zh < k + 0.004)]
+            if len(s) < 8:
+                continue
+            p = co[s]
+            pts.append(((p[:, 0].min() + p[:, 0].max()) / 2,
+                        (p[:, 1].min() + p[:, 1].max()) / 2,
+                        float(p[:, 2].mean())))
+        if len(pts) < 4:
+            continue
+        pts = np.array(pts)
+        zc = pts[:, 2].mean()
+        kx = np.polyfit(pts[:, 2] - zc, pts[:, 0], 1)
+        ky = np.polyfit(pts[:, 2] - zc, pts[:, 1], 1)
+        p0 = np.array([kx[1], ky[1], zc])
+        ax = np.array([kx[0], ky[0], 1.0])
+        ax /= np.linalg.norm(ax)
+        # e1 = "para fora" (lateral), ortogonal ao eixo; e2 = frente/tras
+        e1 = np.array([sinal, 0.0, 0.0])
+        e1 -= ax * float(e1 @ ax)
+        e1 /= np.linalg.norm(e1)
+        e2 = np.cross(ax, e1)
+
+        sel = idx[(zh >= lo) & (zh <= hi)]
+        d = co[sel] - p0
+        d -= np.outer(d @ ax, ax)
+        phi = np.arctan2(d @ e2, d @ e1)
+        r = np.linalg.norm(d, axis=1)
+        nb = ARM_TUBO_SETORES
+        b = ((phi + np.pi) / (2 * np.pi) * nb).astype(int) % nb
+        R = np.full(nb, np.nan)
+        for j in range(nb):
+            rj = r[b == j]
+            if len(rj) >= 3:
+                R[j] = float(np.quantile(rj, ARM_TUBO_QUANTIL))
+        if np.isnan(R).all():
+            continue
+        # setor vazio herda do vizinho (circular); depois mediana de 3
+        for _ in range(nb):
+            if not np.isnan(R).any():
+                break
+            for j in np.where(np.isnan(R))[0]:
+                viz = [R[(j - 1) % nb], R[(j + 1) % nb]]
+                viz = [v for v in viz if not np.isnan(v)]
+                if viz:
+                    R[j] = float(np.mean(viz))
+        R = np.array([np.median([R[(j - 1) % nb], R[j], R[(j + 1) % nb]])
+                      for j in range(nb)])
+        modelos.append({"sinal": sinal, "p0": p0, "ax": ax, "e1": e1, "e2": e2,
+                        "R": R + ARM_TUBO_FOLGA * H, "fusao_zh": fz,
+                        "centro": (cx, cy)})
+    return modelos
+
+
+# Profundidade da CALOTA lateral, em fracao de H (~5 cm), no eixo pelo lado de
+# fora (w_arm_calota). E a corda a essa profundidade que da o raio.
+ARM_CALOTA_D = 0.029
+
+
+def w_arm_calota(np, co, H, lo_zh, hi_zh):
+    """O eixo do braco pela CALOTA LATERAL, quando o topologico nao serve.
+
+    No zen_f_b12_d1 (IMC 114) a mao funde na coxa e o braco que o w_limbs mede
+    e so o ANTEBRACO: a fusao fica 5 cm abaixo da faixa e o eixo tirado dali
+    inclina 0.44 para tras. Mas na altura da faixa o lado de FORA do corpo e
+    sempre braco - a calota de ~5 cm mais lateral de cada fatia. A corda dela
+    da o raio (R = (c^2 + d^2) / 2d) e o centro fica a R da ponta; os centros
+    das fatias dao o eixo. Medido no b12_d1 (_calota_b12.py): o centro anda de
+    x 0.44 para 0.28 entre zh 0.58 e 0.72, raio 6-8 cm, inclinacao para tras
+    0.2 - o que o braco de um corpo desses faz.
+
+    Mesmo formato do w_arm_tube, para o w_arm_dono_field nao saber a origem."""
+    z = co[:, 2]
+    z0 = float(z.min())
+    zh = (z - z0) / H
+    cx = float(np.median(co[:, 0]))
+    cy = float(np.median(co[:, 1]))
+    d = ARM_CALOTA_D * H
+    modelos = []
+    for sinal in (-1.0, 1.0):
+        lado = np.sign(co[:, 0] - cx) == sinal
+        pts, raios = [], []
+        for k in np.arange(lo_zh, hi_zh + 1e-9, 0.01):
+            f = lado & (zh >= k - 0.004) & (zh < k + 0.004)
+            if f.sum() < 20:
+                continue
+            x = (co[f, 0] - cx) * sinal
+            y = co[f, 1]
+            cap = x > x.max() - d
+            if cap.sum() < 5:
+                continue
+            c = (y[cap].max() - y[cap].min()) / 2
+            R = (c * c + d * d) / (2 * d)
+            pts.append((cx + sinal * (x.max() - R),
+                        (y[cap].max() + y[cap].min()) / 2, float(z[f].mean())))
+            raios.append(R)
+        if len(pts) < 4:
+            continue
+        pts = np.array(pts)
+        zc = pts[:, 2].mean()
+        kx = np.polyfit(pts[:, 2] - zc, pts[:, 0], 1)
+        ky = np.polyfit(pts[:, 2] - zc, pts[:, 1], 1)
+        p0 = np.array([kx[1], ky[1], zc])
+        ax = np.array([kx[0], ky[0], 1.0])
+        ax /= np.linalg.norm(ax)
+        e1 = np.array([sinal, 0.0, 0.0])
+        e1 -= ax * float(e1 @ ax)
+        e1 /= np.linalg.norm(e1)
+        e2 = np.cross(ax, e1)
+        R = float(np.median(raios))
+        modelos.append({"sinal": sinal, "p0": p0, "ax": ax, "e1": e1, "e2": e2,
+                        "R": np.full(ARM_TUBO_SETORES, R), "fusao_zh": lo_zh,
+                        "centro": (cx, cy), "fonte": "calota"})
+    return modelos
+
+
+ARM_DONO_LONGE = 2.5     # alem de LONGE x raio medio do eixo, e tronco
+ARM_DONO_ALISA = 10      # passadas de Laplaciano sobre o campo, pela malha
+
+
+def w_arm_dono_field(np, me, co, nor, H, modelos, alisa=None):
+    """De QUEM e a superficie - braco ou tronco -, por vertice. > 0 tronco.
+
+    ---------------------------------------------------------------------
+    POR QUE (sessao 39, 25/09)
+    ---------------------------------------------------------------------
+    O w_arm_wide corta cada fatia por um PLANO VERTICAL em x: tudo mais lateral
+    que o corte e braco. Isso pega o lado de fora do braco e erra a face da
+    FRENTE e de DENTRO, a que olha para o tronco - ela fica aquem do plano e sai
+    preta. E a "tinta no triceps" e as "abinhas" das pesadas; a sonda de tres
+    cores mostrou exatamente isso no zen_f_b09i_d3 (vermelho no deltoide, preto
+    na face interna). Um plano por fatia nao separa um cilindro inclinado de um
+    tronco - a pergunta e 2D e o corte e 1D, e nenhum limiar dele conserta.
+
+    E a mascara era BOOLEANA POR VERTICE, entao a fronteira braco/faixa saia
+    quantizada por triangulo (o w_cut_boundary pula aresta que toca braco). A
+    ideia antiga da §4.5h - levar a mascara para o corte exato - so e possivel
+    com um campo com sinal. Este e: o worker o grava numa camada da malha, o
+    w_cut_boundary o interpola nos vertices novos e a face e classificada pela
+    media dos seus vertices.
+
+    Adimensional: s_tronco - s_braco, com s = normal . direcao radial a partir
+    do eixo de cada um. A face do braco olha para longe do eixo do braco e o
+    flanco do tronco para longe do eixo do tronco; e isso vale na regiao FUNDIDA
+    tambem, onde nao ha ar nem vinco para achar. Ver w_arm_tube para o eixo.
+
+    Duas guardas geometricas, as duas continuas:
+      - LONGE do eixo (> ARM_DONO_LONGE raios) e tronco: o peito de frente tem
+        normal que tambem "olha para longe" do braco;
+      - no CONE lateral e braco: do lado de fora do eixo nao ha tronco, e ali
+        as duas direcoes radiais quase coincidem (as duas apontam para fora).
+    E alisado pela malha no fim: a normal de musculo tem calombo, e a borda sai
+    serrilhada sem isso (o par robusto/suave da §4.5f, aqui so o suave, porque
+    o sinal nao tem disparo isolado - tem ruido)."""
+    alisa = ARM_DONO_ALISA if alisa is None else alisa
+    n = len(co)
+    cx = float(np.median(co[:, 0]))
+    cy = float(np.median(co[:, 1]))
+    f = np.full(n, 1.0)
+    rt = np.stack([co[:, 0] - cx, co[:, 1] - cy, np.zeros(n)], axis=1)
+    rt /= np.maximum(np.linalg.norm(rt, axis=1), 1e-9)[:, None]
+    s_t = np.einsum("ij,ij->i", nor, rt)
+    cos_c = np.cos(np.radians(ARM_TUBO_CONE_GRAUS))
+    sin_c = np.sin(np.radians(ARM_TUBO_CONE_GRAUS))
+    for md in modelos:
+        lado = (co[:, 0] - cx) * md["sinal"] > 0
+        d = co[lado] - md["p0"]
+        d = d - np.outer(d @ md["ax"], md["ax"])
+        r = np.linalg.norm(d, axis=1)
+        ra = d / np.maximum(r, 1e-9)[:, None]
+        s_a = np.einsum("ij,ij->i", nor[lado], ra)
+        Rm = float(np.mean(md["R"]))
+        g = s_t[lado] - s_a
+        # longe do eixo: puxa para tronco, em rampa de 0.3 raio
+        g = np.maximum(g, (r - ARM_DONO_LONGE * Rm) / (0.3 * Rm))
+        # cone lateral: puxa para braco
+        u = d @ md["e1"]
+        v = d @ md["e2"]
+        d_cone = np.abs(v) * cos_c - u * sin_c
+        g = np.minimum(g, d_cone / (0.3 * Rm))
+        f[lado] = g
+    f = np.clip(f, -1.5, 1.5)
+    if alisa:
+        start, dst = w_adjacency(me, np)
+        deg = np.diff(start)
+        seg = np.repeat(np.arange(n), deg)
+        for _ in range(alisa):
+            soma = np.bincount(seg, weights=f[dst], minlength=n)
+            f = 0.5 * f + 0.5 * soma / np.maximum(deg, 1)
+    return f
+
+
 def w_back_side_mask(np, az_bins):
     """Setores de azimute que NAO sao a frente do corpo.
 
@@ -2387,7 +2649,7 @@ def w_field(np, co, cfg, partes=False):
     return out
 
 
-def w_cut_boundary(bm, np, bmesh, field_of, is_arm_of):
+def w_cut_boundary(bm, np, bmesh, field_of, is_arm_of, lerp=()):
     """Corta a malha EXATAMENTE na linha do short, em vez de aproximar por
     triangulo inteiro.
 
@@ -2401,6 +2663,10 @@ def w_cut_boundary(bm, np, bmesh, field_of, is_arm_of):
     novos vertices sao ligados dentro da face. A borda passa a ser aresta de
     verdade, exatamente onde o campo zera. Custo: algumas centenas de
     triangulos a mais, so na costura.
+
+    `lerp` sao camadas float de vertice que tem de ser INTERPOLADAS no vertice
+    novo (o campo "dono" do braco): o valor e escrito aqui, com o mesmo t do
+    corte, em vez de confiar na interpolacao interna do bmesh.
 
     Devolve o numero de vertices inseridos."""
     bm.verts.ensure_lookup_table()
@@ -2420,10 +2686,13 @@ def w_cut_boundary(bm, np, bmesh, field_of, is_arm_of):
         t = da / (da - db)
         if not (1e-3 < t < 1.0 - 1e-3):
             continue
+        vals = [(ly, a[ly] + t * (b[ly] - a[ly])) for ly in lerp]
         try:
             _ne, nv = bmesh.utils.edge_split(e, a, t)
         except Exception:
             continue
+        for ly, val in vals:
+            nv[ly] = val
         d[nv] = 0.0
         arm[nv] = False
         new_verts.append(nv)
@@ -2543,6 +2812,38 @@ def worker_main():
     tris_master = sum(len(p.vertices) - 2 for p in me.polygons)
     field = w_field(np, co, cfg)
 
+    # O braco na altura da faixa como CAMPO (w_arm_dono_field): entra no minimo
+    # com as bordas de altura SO na faixa, e o short nao ve nada disso - os 39
+    # masculinos e o short feminino saem identicos por construcao.
+    dono = None
+    mascara = ARM_MASCARA
+    if "faixa_lo" in cfg and mascara == "dono":
+        modelos = w_arm_tube(np, co, H, is_arm)
+        base_zh = (float(np.min(np.atleast_1d(cfg["faixa_lo"])))
+                   - float(co[:, 2].min())) / H
+        if (len(modelos) < 2 or
+                min(m["fusao_zh"] for m in modelos)
+                < base_zh - ARM_DONO_FUSAO_ABAIXO):
+            # o braco topologico e so antebraco: o eixo vem da CALOTA lateral
+            # na propria altura da faixa (w_arm_calota)
+            topo_zh = (float(np.max(np.atleast_1d(cfg["faixa_hi"])))
+                       - float(co[:, 2].min())) / H
+            modelos = w_arm_calota(np, co, H,
+                                   min(m["fusao_zh"] for m in modelos)
+                                   if modelos else base_zh - 0.06, topo_zh)
+            if len(modelos) < 2:
+                mascara = "largo"
+    if "faixa_lo" in cfg and mascara == "dono":
+        nor_d = np.empty(n * 3, dtype=np.float64)
+        me.vertices.foreach_get("normal", nor_d)
+        dono = ARM_DONO_ESCALA * w_arm_dono_field(
+            np, me, co, nor_d.reshape(-1, 3), H, modelos)
+        cps = w_field(np, co, cfg, partes=True)
+        cps[FAIXA_PECA] = np.minimum(cps[FAIXA_PECA], dono)
+        field = cps[0]
+        for c in cps[1:]:
+            field = np.maximum(field, c)
+
     # Os DOIS slots tem que existir antes de qualquer face receber
     # material_index=1: o Blender limita o indice ao numero de slots, entao
     # atribuir primeiro e criar o slot depois pinta o short de cor de corpo -
@@ -2566,7 +2867,7 @@ def worker_main():
     # a unica diferenca e QUAL FACE recebe preto. Avatar sem faixa nao chama a
     # funcao, entao os 39 masculinos nao mudam um vertice por construcao.
     is_paint = is_arm
-    if cfg.get("faixa_lo") is not None:
+    if cfg.get("faixa_lo") is not None and mascara == "largo":
         lo = float(np.min(np.atleast_1d(cfg["faixa_lo"]))) / H
         hi = float(np.max(np.atleast_1d(cfg["faixa_hi"]))) / H
         z0h = float(co[:, 2].min()) / H
@@ -2585,8 +2886,14 @@ def worker_main():
     bm.verts.index_update()
     for v in bm.verts:
         v[lay] = 1.0 if is_paint[v.index] else 0.0
+    lay_dono = None
+    if dono is not None:
+        lay_dono = bm.verts.layers.float.new("dono")
+        for v in bm.verts:
+            v[lay_dono] = float(dono[v.index])
 
-    added = w_cut_boundary(bm, np, bmesh, field, is_paint)
+    added = w_cut_boundary(bm, np, bmesh, field, is_paint,
+                           lerp=(lay_dono,) if lay_dono is not None else ())
 
     # Partir uma aresta transforma o triangulo vizinho em QUAD, e connect_verts
     # nem sempre tem o que ligar dentro dele. Sobra malha mista. O exportador
@@ -2603,6 +2910,13 @@ def worker_main():
     cent = np.array([tuple(f.calc_center_median()) for f in bm.faces],
                     dtype=np.float64)
     campos = w_field(np, cent, cfg, partes=True)
+    if lay_dono is not None:
+        # a face herda o "dono" da MEDIA dos seus vertices - depois do corte
+        # ela esta inteira de um lado, entao a media tem o sinal certo
+        dono_f = np.array([sum(v[lay_dono] for v in f.verts) / len(f.verts)
+                           for f in bm.faces], dtype=np.float64)
+        campos[FAIXA_PECA] = np.minimum(campos[FAIXA_PECA], dono_f)
+        bm.verts.layers.float.remove(lay_dono)
     pilha = np.vstack(campos)
     qual = pilha.argmax(axis=0)          # de QUAL peca esta face e
     fld = pilha.max(axis=0)

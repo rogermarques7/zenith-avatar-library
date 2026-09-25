@@ -26,6 +26,20 @@ A POLITICA - cada regra tem o caso que a motivou
    limpa. As outras bordas ja saem alisadas do envelope.
 5. `source: "manual"` + `borda_viva` com o que foi aceito e recusado, para o
    --fit nao apagar e para qualquer um auditar sem reabrir o Blender.
+
+--------------------------------------------------------------------------
+--quina (sessao 39, 25/09): SO a faixa, SEM a trava lateral
+--------------------------------------------------------------------------
+    python qa/probe/sondas/borda_viva_grava.py --quina --simula [ids...]
+    python qa/probe/sondas/borda_viva_grava.py --quina --grava  [ids...]
+
+As duas travas laterais da faixa (corta_axila no topo, o piso da base)
+existiam porque a mascara do braco nao separava nada acima da fusao: subir o
+topo nas quinas pintava o braco. Desde a sessao 39 o braco e separado por
+CAMPO (shorts.w_arm_dono_field), e a trava virou o defeito - o tecido que sobe
+para a axila ficava sem tinta ("quina lateral", zen_f_b05h_d2 +4,5 cm). Aqui
+so faixa_hi e faixa_lo sao regravadas, a partir do mapa ATUAL, e o bloco
+borda_viva ganha `quina: 39`.
 """
 import argparse
 import json
@@ -109,9 +123,11 @@ def canto(w):
     return max(abs(w[(i - 1) % NB] - 2 * w[i] + w[(i + 1) % NB]) for i in range(NB))
 
 
-def decide(aid, e, P):
+def decide(aid, e, P, quina=False):
     out, notas = {}, {}
     for nome, b in P["bordas"].items():
+        if quina and nome not in ("faixa_hi", "faixa_lo"):
+            continue
         if b.get("falhou"):
             notas[nome] = "falhou"
             continue
@@ -129,9 +145,9 @@ def decide(aid, e, P):
             continue
         if nome in ("cos", "faixa_lo", "faixa_hi"):
             nova = simetriza(nova)
-        if nome == "faixa_hi":
+        if nome == "faixa_hi" and not quina:
             nova = corta_axila(nova, atual)
-        if nome == "faixa_lo":
+        if nome == "faixa_lo" and not quina:
             # a BASE tambem: nos setores laterais ela nao desce mais que 0,7 cm
             # abaixo do mapa antigo. No zen_f_b12_d1 a base lida desceu nos lados
             # e a previa saiu com ABAS pretas grandes nas quinas de baixo - o
@@ -170,7 +186,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("ids", nargs="*")
     ap.add_argument("--grava", action="store_true")
+    ap.add_argument("--simula", action="store_true")
+    ap.add_argument("--quina", action="store_true",
+                    help="so faixa_hi/faixa_lo, sem trava lateral (sessao 39)")
     a = ap.parse_args()
+    global BACKUP
+    if a.quina:
+        BACKUP = os.path.join(ROOT, "qa", "probe", "_mapa_antes_s39.json")
     with open(MAPA, encoding="utf-8") as f:
         smap = json.load(f)
     ids = a.ids or sorted(x for x in os.listdir(BASE)
@@ -183,7 +205,9 @@ def main():
         with open(os.path.join(BASE, aid, "proposta.json"), encoding="utf-8") as f:
             P = json.load(f)
         e = smap[aid]
-        novas, notas = decide(aid, e, P)
+        if a.quina and "faixa_hi_zh" not in e:
+            continue
+        novas, notas = decide(aid, e, P, quina=a.quina)
         print("{:<15} {}".format(aid, " | ".join(
             "{} {}".format(k, v) for k, v in notas.items())))
         if a.grava and novas:
@@ -195,8 +219,16 @@ def main():
                 # _hem_flags nao se aplicam, so a faixa v-b (mesma regra do
                 # resgate por anel)
                 e["hem_fonte"] = "borda_viva"
-            e["borda_viva"] = {"sessao": 38, "aceitas": sorted(novas),
-                               "notas": notas}
+            if a.quina:
+                bv = e.setdefault("borda_viva", {"sessao": 38, "aceitas": [],
+                                                 "notas": {}})
+                bv["quina"] = 39
+                bv["aceitas"] = sorted(set(bv.get("aceitas", [])) | set(novas))
+                bv.setdefault("notas", {}).update(
+                    {k: v + " (quina s39)" for k, v in notas.items()})
+            else:
+                e["borda_viva"] = {"sessao": 38, "aceitas": sorted(novas),
+                                   "notas": notas}
             mudou += 1
     if a.grava:
         S.save_map(ROOT, smap)      # mesmo formato do --fit (sort_keys)

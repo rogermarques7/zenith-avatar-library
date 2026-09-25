@@ -85,12 +85,17 @@ cam = bpy.data.objects.new("C", cam_d)
 sc.collection.objects.link(cam)
 sc.camera = cam
 
-for nome, alvo_zh, dist, ang, lente in VISTAS:
+for item in VISTAS:
+    # 6o campo opcional: ELEVACAO em graus (negativo = camera abaixo do alvo,
+    # olhando para cima - o angulo do testador quando ele gira por baixo)
+    nome, alvo_zh, dist, ang, lente = item[:5]
+    el = math.radians(float(item[5])) if len(item) > 5 else 0.0
     cam_d.lens = float(lente)
     z = min(zs) + alt * float(alvo_zh)
     a = math.radians(float(ang))
-    cam.location = (dist * math.sin(a), -dist * math.cos(a), z)
-    cam.rotation_euler = (math.radians(90), 0.0, a)
+    h = dist * math.cos(el)
+    cam.location = (h * math.sin(a), -h * math.cos(a), z + dist * math.sin(el))
+    cam.rotation_euler = (math.radians(90) - el, 0.0, a)
     sc.render.filepath = out if not nome else os.path.join(out, nome + ".png")
     bpy.ops.render.render(write_still=True)
     print("OK", sc.render.filepath)
