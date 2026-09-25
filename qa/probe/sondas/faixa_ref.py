@@ -199,7 +199,7 @@ def main():
         d = "{:>21}".format("-")
         if hi is not None and faixa:
             hi = list(np.atleast_1d(hi))
-            db = e["faixa_lo_zh"] - faixa[1]
+            db = float(np.median(np.atleast_1d(e["faixa_lo_zh"]))) - faixa[1]
             dc = do_3d(hi, "costas") - faixa[0]
             df = (do_3d(hi, "frente") - frente[0]) if frente else float("nan")
             d = "{:+7.3f}{:+7.3f}{:+7.3f}".format(db, dc, df)

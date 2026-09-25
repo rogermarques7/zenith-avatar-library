@@ -18,19 +18,19 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 | **decidir QUAL avatar produzir** — o que falta é FORMA (retângulo, maçã, violão), não só IMC · **e os ajustes da Meshy 7** | `docs/COBERTURA_FORMAS.md` | **8,6k** |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
 | **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
-| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/REVISAO_ROUPA_2026-09-23.md` **primeiro** (4,7k), depois `docs/FILA_PECAS.md` | 6,5k |
+| **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/REVISAO_ROUPA_2026-09-23.md` **primeiro** (4,9k), depois `docs/FILA_PECAS.md` | 6,5k |
 | investigar a coxa (RESOLVIDA em 14/08 por offset — ler antes de reabrir) | `docs/PROBLEMA_COXA.md` | 3,7k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **48,0k** |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **48,6k** |
 | entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-09.md` (4,0k) · `diario-2026-08.md` (11,2k) · `diario-2026-07.md` (**grep**) | 65,3k |
 | o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
 
-> Leitura padrão: `CLAUDE.md` **9,9k** + `state.md` **26,0k** = **35,9k** antes de
+> Leitura padrão: `CLAUDE.md` **9,8k** + `state.md` **26,6k** = **36,4k** antes de
 > qualquer trabalho. 🔴 O `state.md` subiu de novo (21,0k → 23,7k → **26,0k** com a
 > sessão 37) — **o corte virou dívida vencida**: descer os blocos narrativos das
 > sessões 30 e 31 para o diário é a primeira coisa da próxima sessão. O `LICOES.md`
 > seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k →
-> 26,3k → 28,6k → 29,9k → 31,2k → 32,3k → 37,5k → 39,2k → 42,1k → **48,0k**, com as
-> §4.5j a §4.5o na sessão 37).
+> 26,3k → 28,6k → 29,9k → 31,2k → 32,3k → 37,5k → 39,2k → 42,1k → 48,0k → **48,6k**, com a
+> §4.5p na sessão 38).
 >
 > ✅ **O corte do `state.md` funcionou duas vezes seguidas** — sessões 30 e 35.
 > Ele vinha de 9,4k → … → 17,9k → 23,3k; na sessão 35 desceram os blocos
@@ -215,6 +215,13 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     janela de altura separa. ➡️ **A saída decidida por ele é ler o contorno da
     barra na FOLHA, vista de costas** (lá é divisa de cor, sem vinco de pele), com
     a altura amarrada no clay da frente. `LICOES.md` §4.5j, §4.5n e §4.5o.
+
+    ✅ **A BORDA VIVA SUBSTITUIU OS DETECTORES DE VINCO (sessão 38, 25/09).** A
+    borda do tecido é aresta com diedro > 30° na malha; prega de pele é vale
+    liso. `qa/probe/sondas/borda_viva.py` lê as 5 bordas e
+    `borda_viva_grava.py` grava com política de confiança — aplicado nos 103 e
+    **aprovado por ele** (*"os shorts ficaram excelentes"*). Tops são a próxima frente. Antes de mexer em barra, cós ou faixa: `LICOES.md`
+    §4.5p.
 
     🔴 **O ciclo é OLHA → APLICA, e `--preview` é o que torna isso possível.** Ele
     pinta igual ao `--apply` e grava em `qa/preview/`, que não é URL de CDN;

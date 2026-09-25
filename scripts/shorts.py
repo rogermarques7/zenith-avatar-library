@@ -728,7 +728,10 @@ def _faixa_flags(e):
     if hi is None:
         return []
     hi = list(hi) if isinstance(hi, (list, tuple)) else [hi]
-    lo = e["faixa_lo_zh"]
+    # base CURVA desde a sessao 38 (borda viva): as travas de valor usam a
+    # mediana; a TIRA compara setor a setor, que e o que ela quer dizer.
+    lo_l = list(e["faixa_lo_zh"]) if isinstance(e["faixa_lo_zh"], (list, tuple))         else [e["faixa_lo_zh"]]
+    lo = sorted(lo_l)[len(lo_l) // 2]
     diag = e.get("diag", {})
     out = []
 
@@ -761,8 +764,12 @@ def _faixa_flags(e):
         if salto > WAIST_STEP_MAX_ZH:
             out.append("DEGRAU-F{:.3f}".format(salto))
 
-    if min(hi) - lo < FAIXA_MIN_ALTURA_ZH:
-        out.append("TIRA{:.3f}".format(min(hi) - lo))
+    if len(hi) == len(lo_l) and len(hi) > 1:
+        tira = min(h - b for h, b in zip(hi, lo_l))
+    else:
+        tira = min(hi) - max(lo_l)
+    if tira < FAIXA_MIN_ALTURA_ZH:
+        out.append("TIRA{:.3f}".format(tira))
     return out
 
 
@@ -787,8 +794,13 @@ def report(root):
         with open(lib, "r", encoding="utf-8") as f:
             bmi = {a["id"]: a.get("measured_bmi", 0) for a in json.load(f)["avatars"]}
 
+    # Desde a sessao 38 a BAINHA pode ser curva de 24 setores (borda viva,
+    # qa/probe/sondas/borda_viva.py): o corte e um anel INCLINADO. Um numero
+    # que representa a curva e a MEDIANA - o primeiro setor seria um ponto
+    # arbitrario do lado de dentro da coxa.
     def _one(v):
-        return v[0] if isinstance(v, (list, tuple)) else v
+        # (o shorts.py nao importa numpy no topo: ele roda fora do Blender)
+        return sorted(v)[len(v) // 2] if isinstance(v, (list, tuple)) else v
 
     print("{:<15} {:>6}  {:>7} {:>7} {:>8}  {:>7} {:>8}  {:>13}  {}".format(
         "id", "imc", "virilha", "bainha", "v-b", "cos-topo", "topo-v",
@@ -829,7 +841,7 @@ def report(root):
             hi = list(hi) if isinstance(hi, (list, tuple)) else [hi]
             n = len(hi)
             fx = "{:.3f}/{:.3f}/{:.3f}".format(
-                e["faixa_lo_zh"],
+                _one(e["faixa_lo_zh"]),
                 e.get("diag", {}).get("faixa_topo_anel_zh", max(hi)),
                 hi[n // 4])
         print("{:<15} {:>6.1f}  {:>7.3f} {:>7.3f} {:>+8.3f}  {:>7.3f} {:>+8.3f}  {}  {} {}".format(

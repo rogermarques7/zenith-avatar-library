@@ -525,7 +525,7 @@ def escrever(smap, root, aid):
     # E a §4.5f de novo, de cabeca para baixo: la a curva da MALHA saia
     # poligonal; aqui e a da FOLHA. Mesmo conserto, mesmo teto de 2 bins.
     hem = e.get("hem_l_zh")
-    hem = hem[0] if isinstance(hem, list) else float(hem)
+    hem = min(hem) if isinstance(hem, list) else float(hem)   # piso: a mais baixa
     w = S.w_waist_liso(np, w, hem + 1.0 / S.Z_BINS)
     w = [round(v, 5) for v in w]
 
@@ -622,8 +622,9 @@ def main():
         with open(lib, "r", encoding="utf-8") as f:
             bmi = {x["id"]: x.get("measured_bmi", 0) for x in json.load(f)["avatars"]}
 
+    # bainha curva desde a sessao 38 (borda viva): mediana, nao o setor 0
     def _one(v):
-        return v[0] if isinstance(v, (list, tuple)) else v
+        return float(np.median(v)) if isinstance(v, (list, tuple)) else v
 
     ids = [alvo] if alvo else sorted(smap, key=lambda k: bmi.get(k, 0))
 

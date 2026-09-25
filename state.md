@@ -1,6 +1,81 @@
 ﻿# state.md — o presente
 
-Última atualização: **24/09/2026, sessão 37**
+Última atualização: **25/09/2026, sessão 38**
+
+> ## 🔴 ABRIR AQUI — SESSÃO 38 (24–25/09): OS SHORTS FORAM REFEITOS NOS 103 PELA **BORDA VIVA** — ✅ **APROVADOS POR ELE**
+>
+> ✅ **Veredito dele no testador, 25/09:** *"os shorts ficaram excelentes"*.
+> Barra e cós estão fechados.
+>
+> ➡️ **A PRÓXIMA SESSÃO É OS TOPS FEMININOS** — pedido dele. A fila está no
+> `docs/REVISAO_ROUPA_2026-09-23.md` **§2 (faixa/top vazando no braço, axila e
+> tríceps)**, 9 avatares, mais o que ficou de fora aqui (quina lateral de cima
+> da faixa nas pesadas, tríceps do `f_b09i_d3`). O caminho que já está anotado:
+> levar a máscara do braço para o corte exato do `w_cut_boundary` (§4.5h/§4.5l).
+> A borda viva já lê base e topo da faixa; o que falta é a fronteira com o braço.
+>
+> Ele pediu proposta nova (*"liberdade pra propor uma nova abordagem"*), aprovou
+> o passo 1 e saiu por 12 h pedindo que eu validasse sozinho e seguisse
+> corrigindo. **A saída A (ler a barra na folha) NÃO foi feita** — foi trocada
+> por um sinal que estava na malha o tempo todo.
+>
+> ### 1. O sinal: a borda do tecido é ARESTA VIVA, a prega de pele não
+>
+> A Meshy modela a borda do tecido com ângulo diedro > 30°; virilha, sulco
+> glúteo e vinco de músculo são vales lisos. A barra aparece como anel fechado
+> separado da virilha — inclusive nos dois corpos que mataram as tentativas 3
+> e 5. E a tinta de hoje estava sempre no **fundo** do anel inclinado (o
+> quantil baixo do `w_ring_map`), que é o "tinta além da barra" e o "pior nos
+> d3". Tudo em `LICOES.md` §4.5p.
+>
+> ### 2. O que existe agora
+>
+> | arquivo | o que faz |
+> |---|---|
+> | `qa/probe/sondas/borda_viva.py` | lê as 5 bordas (barra E/D, cós, base e topo da faixa) nas arestas vivas; RANSAC por cobertura + envelope externo; clay rasante com azul (proposta) × vermelho (tinta) em 6 vistas |
+> | `qa/probe/sondas/borda_viva_folha.py` | risca as linhas e monta `qa/revisao/_viva/_folha_{id}.png` |
+> | `qa/probe/sondas/borda_viva_grava.py` | passa para o mapa com a política de confiança; `source: manual`, `hem_fonte: borda_viva` e o bloco `borda_viva` com o que foi aceito/recusado |
+>
+> `shorts.py --report`, `shorts_ref.py` e `faixa_ref.py` passaram a aceitar
+> bainha e base da faixa como **curva** (mediana), não só escalar.
+>
+> ### 3. O ciclo: QUATRO rodadas de prévia pintada antes do primeiro `--apply`
+>
+> Cada uma pegou um defeito meu que régua nenhuma acusava — abinhas no braço,
+> faixa inclinada, lascas da barra serrilhada, o **alisamento derrubando o
+> elástico nas costas** (era o elástico branco dos masculinos pesados que já
+> está no entregue), pico do cós na coluna. Consertados todos antes de gravar.
+>
+> ### 4. Estado do disco no fecho
+>
+> - `config/shorts_map.json`: **103 entradas** com a borda viva (`source: manual`,
+>   bloco `borda_viva` por avatar). Backup do antes: `qa/probe/_mapa_antes_s38.json`.
+> - `03_dist/glb/`: **103 com versão nova** (short) e **76 com `morph --apply` por
+>   cima** (regra 9 — repor shape keys, não morph novo).
+> - Réguas: `probe_material_dist` **103/103** · `shorts --check --all` **103/103** ·
+>   `_confere_lote` limpo (uma versão por id, `morph_map` alinhado 76/76) ·
+>   `select --check` **34/34** · `morph_cases --check` **608/608** · índice e os
+>   dois bancos regerados (o de seleção só mudou o carimbo).
+> - **Commitado e enviado (push) em 25/09 por ordem dele. Nada copiado para o app,
+>   nada no Storage** — a subida não foi pedida; a receita continua a do bloco
+>   "OS DOIS REPOSITÓRIOS" (índice, mapas e os dois bancos viajam juntos).
+> - Mosaicos para ele: `qa/revisao/_s38/_ab_*.png` (antes = entregue de 22/09,
+>   depois = o de hoje).
+>
+> ### 5. O que ficou de fora, de propósito
+>
+> - **Quina lateral de cima da faixa** nas pesadas: abinha igual à do entregue.
+>   O tecido sobe ali para a axila e acima da fusão a máscara do braço não separa
+>   nada. Frente própria (máscara do braço no corte exato).
+> - **Tríceps do `f_b09i_d3`**: máscara do braço, mesma frente.
+> - **Cós de `f_b11_d1`, `m_b11_d1`, `m_b11_d2`, `m_b12_d1`**: recusado pela
+>   política (avental grande), ficou como estava.
+>
+> ### 6. ⏸️ ORDEM DELE (25/09): morph dos 27 NOVOS só em sessão dedicada
+>
+> *"não precisa aplicar morph nos novos avatares nessa sessão, isso a gente vai
+> fazer em sessão dedicada apos finalizar as peças de roupas"*. A peça fecha
+> primeiro — veredito dele no testador —, depois uma sessão só de morph.
 
 > ## 🔴 ABRIR AQUI — SESSÃO 37 (23–24/09): O CÓS FOI APLICADO E **REPROVADO**; A BAINHA TEM MECANISMO PROVADO E DETECTOR NÃO RESOLVIDO
 >

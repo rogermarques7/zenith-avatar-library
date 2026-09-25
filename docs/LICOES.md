@@ -2415,6 +2415,99 @@ lado, que são os que separam frente de costas.
 seção**; a **altura do vinco**, que é o que vai corrigir o detector, continua
 saindo da imagem.
 
+#### 4.5p ✅ A BORDA DO TECIDO É ARESTA VIVA — o sinal que as cinco tentativas não usaram (24/09, sessão 38)
+
+As cinco mortes da §4.5n têm uma causa comum: todas perguntavam **onde a
+superfície dobra** (concavidade, degrau de raio, cume no pixel), e em toda dobra
+de tecido existe uma dobra de PELE mais funda a poucos centímetros. A saída A
+(ler a barra na folha) trocava de fonte, mas a folha é o desenho, menor que o
+tecido (§4.5l).
+
+**O sinal novo é de ORDEM diferente:** a Meshy modela a borda do tecido como
+aresta **viva e serrilhada** — ângulo diedro entre as duas faces vizinhas acima
+de 30° —, enquanto prega inguinal, sulco glúteo e vinco de músculo são vales
+**lisos**. Não é mais funda; é mais **cortante**. Medido em 8 masters antes de
+virar código: a barra aparece como **anel fechado em volta da perna, separado
+da virilha**, inclusive no `zen_m_b09h_d1` (onde a tentativa 5 achou a virilha)
+e no `zen_f_b01_d1` (6 mm entre as duas). O mesmo sinal acha o cós e as duas
+bordas da faixa.
+
+🔴 **E ele explicou o defeito dominante inteiro:** em todo corpo testado a tinta
+de hoje estava no **ponto mais baixo** do anel da barra. O `w_ring_map` usa
+quantil baixo — *"o setor mais fraco desta altura ainda está vincado?"* —, e
+num anel **inclinado** a única altura em que todos os setores estão vincados é
+o fundo dele. A tinta horizontal no fundo sobra sobre a pele no resto da volta,
+e mais no lado de fora da coxa: é o "pior nos d3".
+
+##### O detector (`qa/probe/sondas/borda_viva.py`) — cada peça tem o caso que a pediu
+
+1. **RANSAC do 1º harmônico com nota = COBERTURA** de 24 setores. Um anel que dá
+   a volta vence um arco que só existe de um lado, que é o que a virilha e o
+   avental são. O 1º harmônico é um corte inclinado da coxa: 3 números por
+   perna — entre o escalar (1, não segue a diagonal) e os 24 setores livres
+   (escorregavam para a virilha).
+2. **ENVELOPE EXTERNO por setor.** A curva suave supõe as duas linhas da bainha
+   dupla paralelas, e nas costas do `zen_f_b06i_d3` não são — a de cima segue o
+   glúteo. O harmônico só dá o corredor; quem decide é a linha mais externa com
+   apoio (3 pontos em 2 mm), com mediana de 3 + gaussiana (o par da §4.5f).
+3. **Corredor POR AZIMUTE**, não global. Com o global, o topo da faixa do
+   `zen_f_b05i_d2` (frente 0,760, costas 0,723) aceitava 0,79 nas costas e o
+   RANSAC achou uma estrutura a +10,8 cm.
+4. **Arestas a menos de 3 cm do braço fora da faixa** — a dobra da axila é viva.
+5. **Limiar adaptativo** 30 → 12°: o cós do `zen_f_b03h_d1` é aresta mole e só
+   aparece em 14°.
+6. 🔴 **Só aresta DEITADA** (inclinação < 45°). Achado na 3ª rodada de prévia:
+   o cós do `zen_f_b08h_d3` saía com um **pico na coluna** e o do
+   `zen_f_b06h_d3` com um **V na frente**. Vinco vertical — coluna, linha alba,
+   fenda do glúteo — também é aresta viva, e num setor de azimute ele dá pontos
+   em TODAS as alturas: o envelope "de cima" subia por ele como por uma escada.
+   A borda de uma peça é um anel, então as arestas dela são deitadas; o filtro
+   é geometria, não limiar. Mudou 36 dos 103 em mais de 0,5 cm.
+
+##### O gravador (`qa/probe/sondas/borda_viva_grava.py`) — e os três erros meus que a prévia pegou
+
+Política: cobertura ≥ 0,75 e |Δ| ≤ 8 cm ou a borda fica; cós e faixa
+**espelhados** esquerda/direita (o corpo sai simétrico do `process.py`, então
+borda assimétrica é ruído); folga de 3,5 mm para fora (a borda é serrilhada e o
+envelope passa no meio dos dentes — lascas claras nas costas do `zen_f_b07j_d1`);
+avental mantém a frente do mapa com rampa de 60°.
+
+🔴 **Nenhuma dessas regras veio de medida. Vieram da PRÉVIA PINTADA**, cada uma
+de uma rodada:
+
+1. *Abinhas pretas no braço* nas quinas da faixa (7 femininas). O topo lido nas
+   quinas SOBE mesmo para a axila — tirar o teto deixa cunha branca no
+   `b03_d3`/`b04_d3` —, e acima da fusão braço/tronco a máscara do braço não
+   separa mais nada. Saída desta sessão: nos setores laterais o topo não sobe
+   mais que 0,7 cm acima do mapa antigo. **Fica igual ao entregue ali**, sem
+   regressão; a borda exata da quina continua frente aberta.
+2. *Faixa inclinada nas costas* (`b08_d2`, `b08h_d2`) → espelhamento.
+3. 🔴 **O `w_waist_liso` tem teto para SUBIR e não para DESCER.** No
+   `zen_m_b10_d2` a borda viva achou o topo do elástico nas costas (0,571) e o
+   mapa recebeu 0,563 — **exatamente o elástico branco que já estava no
+   entregue**. A emenda do avental fazia quina, a trava `CANTO` pedia
+   alisamento, e a gaussiana, puxada pela frente baixa do avental, derrubava as
+   costas. Hoje o alisamento só entra se a `CANTO` reprovar, e fora do avental
+   ele não desce a curva lida. *Um filtro que protege um lado precisa de trava
+   no outro — a §4.5f escreveu o teto de subida e ninguém perguntou pela
+   descida.*
+
+> **Régua de medida não viu nenhum dos três — nem o pico da coluna do item 6
+> acima.** O relatório de coerência ficou mais limpo (52 → ~31 em `conferir`)
+> nas mesmas rodadas em que a prévia mostrava defeito. Foram **quatro rodadas
+> de prévia pintada** antes do primeiro `--apply`, e cada uma pegou um defeito
+> que teria custado uma versão de GLB em dezenas de avatares. É a §4.5m
+> confirmada no sentido forte: **o ciclo olha → aplica não é cautela, é o
+> instrumento.**
+
+##### O que ela NÃO mede
+
+- Dobra de pele VIVA existe: o avental dos corpos pesados. O cós do
+  `zen_m_b12_d1` (cobertura 0,58) e do `zen_m_b11_d1` (Δ 11,9 cm) e a barra de
+  `zen_f_b04_d3`/`zen_f_b10_d3` (Δ 9–11 cm) foram recusados e ficam como estão.
+- A frente do cós debaixo do avental: continua com o `w_cos_avental`.
+- Braço e axila.
+
 ---
 
 ## 5. Biblioteca e classificação

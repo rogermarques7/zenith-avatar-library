@@ -5,6 +5,21 @@ avatares no testador, com os 27 novos destacados em laranja, e ditou defeito por
 defeito. Nada foi consertado na sessão em que esta lista foi levantada — **a
 ordem dele foi documentar, não atacar.**
 
+> ## 🆕 SESSÃO 38 (24–25/09): §1, §3 e §4 REFEITOS NOS 103 PELA BORDA VIVA — ✅ APROVADOS
+>
+> Veredito dele no testador: *"os shorts ficaram excelentes"*. **A §2 (tops) é a
+> próxima sessão**, por pedido dele.
+>
+> | § | estado |
+> |---|---|
+> | **§1 barra** | ✅ aplicada nos 103, inclusive `f_b04_d3`/`f_b10_d3` (a barra subiu 9–11 cm; licença de 12 cm só com cobertura ≥ 0,85) |
+> | **§3 cós** | ✅ aplicado; o cós ficou como estava em `f_b11_d1`, `m_b11_d1`, `m_b11_d2` e `m_b12_d1` (cobertura ou deslocamento fora da política — avental grande) |
+> | **§4 falta tinta** | ✅ mesmo conserto (a tinta subiu até a borda do tecido); o cós torto do `f_b03h_d1` desapareceu |
+> | **§2 faixa/axila** | ⚠️ **não resolvida.** Base e topo da faixa seguem o tecido na frente e nas costas; nas QUINAS laterais ficaram iguais ao entregue (subir lá mancha o braço). A mancha no tríceps do `f_b09i_d3` continua — é a máscara do braço, frente própria |
+>
+> Método e lições: `LICOES.md` §4.5p. Mosaicos antes/depois:
+> `qa/revisao/_s38/`. Commitado; nada subiu para o app.
+>
 > ## 🔴 O QUE A SESSÃO 37 (23–24/09) FEZ DESTA PAUTA — e o que ele reprovou
 >
 > | § | frente | estado |

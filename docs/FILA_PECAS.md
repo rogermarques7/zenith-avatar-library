@@ -14,6 +14,14 @@ não está nesta lista não está na fila (regra §6.1, *um por vez é um por ve
 >
 > O que está abaixo neste arquivo é o histórico das rodadas anteriores.
 
+## 🆕 SESSÃO 38 (24–25/09) — BARRA, CÓS E FAIXA REFEITOS NOS 103 PELA BORDA VIVA
+
+A saída A da sessão 37 foi substituída: a borda do tecido é **aresta viva** na
+malha (diedro > 30°) e a prega de pele não é. Detector, gravador e as quatro
+rodadas de prévia em `LICOES.md` §4.5p; placar e o que ficou de fora na
+`REVISAO_ROUPA_2026-09-23.md`. ✅ **Aprovado por ele em 25/09** (*"os shorts ficaram
+excelentes"*). **Próxima frente: os tops femininos** — §2 daquele arquivo.
+
 ## 🔴 SESSÃO 37 (23–24/09) — O CÓS FOI APLICADO E REPROVADO; A BAINHA NÃO FOI TOCADA
 
 Modo automático pedido por ele: *"atue automaticamente pra corrigir as peças de
