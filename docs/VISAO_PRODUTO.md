@@ -236,3 +236,77 @@ Os dois bloqueadores de §6 estão resolvidos. O que falta medir, quando for a h
    alvo **e só ela**. É o experimento que decide a viabilidade do §3, e é barato.
 2. **Indexação por medidas** no `build_index.py`, que não depende de nada acima.
 3. Só se o alvo virar provador de roupa: o experimento de **wrap** (§4).
+
+## 9. 🧢 ACESSÓRIOS COSMÉTICOS sobre o avatar — análise e posição (02/10/2026)
+
+> Pergunta dele, sessão 42: cabelo, barba, óculos, relógio, pulseira, colar,
+> tênis, roupa — uma camada SEPARADA do corpo, que continua decidido por
+> medida, IMC e morph. Futuro possível: itens desbloqueáveis, recompensas,
+> marcas parceiras. **Pediu só análise; nada implementado nem planejado.**
+
+### 9.1 O que os 103 GLBs são hoje (medido em 02/10, nos 103)
+
+- 1 cena, **1 nó sem transformação**, 1 malha com **2 primitivas**
+  (`Zenith_Body` e `Zenith_Shorts`); Draco; 8–12 morph targets nas duas.
+- **Sem esqueleto, sem animação, sem textura, sem UV** (só POSITION + NORMAL;
+  a Meshy já entrega sem UV).
+- Normalização exata: pés em Y=0, topo em 1,750 m, centro X 0,0000, centro Z
+  −0,5 a +3,7 cm; frente única nos 103 (conferida pelos pés).
+- **Topologia própria por corpo** — nenhuma correspondência de vértice (§2).
+
+### 9.2 O que isso permite e o que não permite
+
+| pergunta | resposta |
+|---|---|
+| acrescentar objeto sem tocar no corpo | ✅ sim — o nó é único e sem transformação; um objeto ao lado não mexe em malha, material nem morph |
+| um acessório na MESMA posição em todos | ❌ não — a anatomia varia: pulso de 0,50 a 0,60 da estatura (**18 cm**, o ângulo do braço muda), queixo 6 cm, axila 0,61–0,85; cabeças e pés de forma própria; `zen_m_b12_d1` com braço fundido ao tronco |
+| prender em osso | ❌ não há osso — encaixe teria que ser ponto + orientação medidos na malha |
+| acessório seguir o morph | ❌ objeto separado fica parado. **Pulso quase não morfa** (o antebraço começa em zero no pulso e só fica cheio 4,5 cm acima); **cabeça e pés não morfam** (exceto papada dos obesos extremos); **pescoço, nuca (até ~4% H acima do queixo), tronco, coxa e braço morfam** ±6–12 cm |
+| estampa/tatuagem na pele | ❌ sem UV |
+| trocar ou "apagar" a roupa atual | ⚠️ ela é uma PRIMITIVA própria com material próprio — dá para recolorir sem mexer no corpo |
+| no app | ⚠️ a cena do model-viewer é acessada pela mesma porta NÃO OFICIAL do morph (`morph_js_bridge.dart`); acrescentar objeto por ela não foi testado |
+
+### 9.3 O que preservar para não fechar a porta
+
+- a normalização e o nó sem transformação — todo acessório depende disso;
+- a peça como **primitiva separada com material próprio**;
+- versão no nome do arquivo e "o mapa é o produto" — um mapa de pontos de
+  encaixe por avatar caberia no mesmo molde dos mapas de peça e de morph;
+- os landmarks que o `morph.py` já calcula por corpo (pulso, axila, virilha,
+  queixo, eixo do pescoço e dos braços) — **hoje não são publicados**; são a
+  matéria-prima de pontos de encaixe.
+
+### 9.4 Veredito técnico
+
+- 🟢 **Já preparado:** espaço comum exato; arquivo de um nó; morph isolado no
+  corpo; pulso, cabeça e pés quase fora do morph; peça como primitiva separada.
+- 🟡 **Possível, com cuidado:** encaixe por avatar (landmarks existem, não
+  publicados); acessório em região que morfa; a porta não oficial do app; os
+  limites (papada dos obesos, braço fundido).
+- 🔴 **Limitação estrutural:** sem esqueleto, sem UV e topologia diferente por
+  corpo — roupa ou cabelo que **deforme** com o corpo e o morph, um asset
+  servindo nos 103, não é suportado hoje. É o mesmo pré-requisito do provador
+  de roupa (§4: malha-base + rig + UV).
+
+### 9.5 A posição (dele: registrar; minha: recomendação)
+
+**Boa ideia, com uma condição: o acessório nunca compete com o corpo.** O que
+o Zenith tem de único é o avatar SER o corpo medido da pessoa; acessório veste
+esse corpo, não o substitui.
+
+- **Valor:** identificação (todo avatar é careca — cabelo é provavelmente o que
+  mais faria a pessoa dizer "sou eu"); recompensa por constância casa com app de
+  hábito sem tocar na precisão.
+- ⚠️ **Conflito estético a decidir antes de parceria:** o visual Zenith é corpo
+  em alumínio com luz roxa; marca vai querer produto realista e reconhecível.
+- **Custo:** cada item × 103 corpos. Rígido (relógio, boné, óculos) se
+  automatiza com os landmarks; cabelo é ajuste por crânio — o mais desejado e
+  o mais caro. Download/memória no celular (GLB já chega a 1,6 MB).
+
+**Ordem recomendada:**
+1. **Agora não.** Primeiro a 2ª geração no app e mais pessoas reais testadas —
+   a precisão do corpo ainda é o produto.
+2. **Prova barata:** um item rígido onde o morph não toca — **relógio no
+   pulso**. Valida o caminho inteiro (encaixe por avatar, objeto na cena do
+   app, desempenho no device) sem o risco do cabelo.
+3. **Só depois o cabelo**, o primeiro acessório "de verdade".

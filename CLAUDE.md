@@ -17,7 +17,7 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |
 | **decidir QUAL avatar produzir** — o que falta é FORMA (retângulo, maçã, violão), não só IMC · **e os ajustes da Meshy 7** | `docs/COBERTURA_FORMAS.md` | **9,5k** |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
-| **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
+| **falar em API, shape key, provador virtual, licença Meshy, comercializar a biblioteca ou ACESSÓRIOS sobre o avatar** | `docs/VISAO_PRODUTO.md` | **4,9k** |
 | **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/REVISAO_ROUPA_2026-09-23.md` **primeiro** (5,2k), depois `docs/FILA_PECAS.md` | 6,5k |
 | investigar a coxa (RESOLVIDA em 14/08 por offset — ler antes de reabrir) | `docs/PROBLEMA_COXA.md` | 3,7k |
 | **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **56,6k** |
