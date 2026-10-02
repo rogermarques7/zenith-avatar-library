@@ -1,8 +1,287 @@
 ﻿# state.md — o presente
 
-Última atualização: **25/09/2026, sessão 39**
+Última atualização: **02/10/2026, sessão 42**
 
-> ## 🔴 ABRIR AQUI — SESSÃO 39 (25/09): OS TOPS FEMININOS E A QUINA LATERAL — ✅ **55 DE 55 APROVADOS POR ELE**
+> ## 🔴 ABRIR AQUI — VALIDAÇÃO FECHADA (02/10). Próximo passo: a 2ª geração no APP
+>
+> ✅ **Ele validou os 103 no testador** (peça, ombro, bíceps, tronco, pescoço) e
+> as medidas da Joice (`f_b07i_d1`, campo "Cintura mínima" no Feminino). A
+> estratégia por tipo de corpo virou padrão (`LICOES.md` §7.30, receita).
+>
+> ➡️ **O que falta é do lado do app**, numa sessão aberta em `../zenith`:
+> **`docs/PROMPT_APP_2A_GERACAO.md`** — copiar os 4 arquivos, seletor com
+> `weights_by_sex` + `ratio_checks`, dois campos de cintura para mulher, o passo
+> da cintura mínima no guia feminino (umbigo `f/abdomen.png` e logo depois
+> `f/cintura_min.png`), upload dos 103 GLBs antes do build.
+>
+> - Os `.txt` da Joice e da Ana agora separam "Cintura (umbigo)" e "Cintura
+>   mínima" (a do umbigo da Ana é ESTIMADA, 112 — medir quando der).
+> - Testador de volta à ordem por IMC (`ORDEM_POR = "imc"`).
+> - Opinião registrada sobre a Joice: tipo de corpo certo; sobra ombro mais
+>   quadrado que o dela e a barriga baixa um pouco mais projetada.
+> - **Nada commitado** (desde a sessão 40) e nada no Storage.
+> - Pendentes de biblioteca, sem pressa: `f_b05_d2` sem cintura negativa,
+>   `f_b07j_d1` sem coxa, morph de BUSTO (ideia), outros morphs por tipo quando
+>   novas pessoas reais pedirem.
+
+> ## SESSÃO 42 (01/10): PESCOÇO POR TIPO DE CORPO, nos 103 — ✅ **VALIDADO (02/10)**
+>
+> Pedido dele, modo automático: *"proponha uma correção mais precisa e com
+> análise de subida e descida dos morphs ... suba o slider do pescoço ao máximo
+> e compare com pessoas reais pra ver se não cai no vale da estranheza"*.
+> Tudo em `LICOES.md` §7.30. **Nada no Storage, nada commitado.**
+>
+> - **O campo vem da coleção, por tipo.** `scripts/pescoco_campo.py` →
+>   `config/pescoco_campo.json`: inclinação natural do raio contra a fita entre
+>   vizinhos do mesmo tipo (sexo, IMC, definição). Magro engrossa no lado-trás e
+>   não sobe na mandíbula; pesado na papada e na nuca. O cilindro antigo empurrava
+>   2,3 cm de raio por igual (`m_b01_d1`: régua +3,4 cm, anel visível ~+14 — o
+>   "cano"); hoje o anel anda 1,0–1,2× o que a régua lê.
+> - 🔴 **A frente do `morph.py` estava invertida em 30 de 103** (inclusive o
+>   `m_b07k_d1`, o corpo dele): o morph inchava queixo e mandíbula. Frente pelos
+>   PÉS e queixo pela inclinação do perfil, gravados no campo.
+> - **Envelope corrigido depois de OLHAR os 103 no máximo/mínimo**
+>   (`qa/pescoco/_s42/todos_final/`, `teto27/`): entalhe no esterno, quina na
+>   papada, vinco em V no peito dos obesos. Teto de naturalidade 1,3× (27 corpos).
+> - **Régua do vale** (`pescoco_natural.py`, desvio da nuvem dos corpos reais do
+>   mesmo tipo): no MÁXIMO, fora (>3σ) **61 → 15** de 102, mediana 3,4 → 2,1σ; no
+>   MÍNIMO 24 → 11. **Pessoas reais**: pescoço fecha exato nos 3; RMS igual
+>   (Rogério 0,8 · Joice 0,1 · Ana 6,2). Foto × avatar: `logs/morph_s42/_reais.png`.
+> - Faixa do pescoço nos 103: mediana +5,0 → +5,1 / −3,0 → −2,9 cm; sem lado
+>   positivo 4 → 1 (`f_b09j_d1`, risco real no lado do pescoço), sem negativo
+>   6 → 1 (`f_b09_d2`). Os obesos de régua na papada perderam centímetro
+>   (`m_b11_d2` +1,0) — ali a régua do pescoço mede rosto.
+> - Fora do pescoço, só a trava do combinado mexeu (5 linhas, ≤ 1,4 cm;
+>   `logs/morph_s42/_diff_faixas.txt`).
+> - Réguas: lote 103/103 rc=0 (+27 com teto) · `_confere_lote` limpo · seleção
+>   **36/36** · morph **824/824** · material+peça **103/103** · `library.json` só
+>   mudou nome/versão de GLB. 🔙 Backup: `qa/ombro/_backup_pre_s42/`.
+>
+> **Pendentes:** a lista de validação acima → subida para app/Storage; app (duas
+> cinturas femininas + guia da mínima + `weights_by_sex`); morph de BUSTO
+> (ideia); outros morphs por tipo, com o mesmo método, quando os testes pedirem.
+
+> ## SESSÃO 41 (26/09–01/10): BÍCEPS, PESCOÇO, DUAS CINTURAS, ITEM D — aplicado nos 103
+>
+> ### ✅ 01/10 — ITEM D RESOLVIDO (7 de 8): o centro do tronco pulava 8 cm, e a sonda contava dobra invisível
+>
+> - **Centro do tronco** = meio da caixa da fatia + média móvel (`_perfil_tronco`);
+>   era média de vértices e seguia a densidade da malha (furos visíveis na
+>   lombar/flanco). `LICOES.md` §7.28. Lote `logs/morph_s41d/`.
+> - **Sonda de dobra** ignora triângulo que anda < 4 mm (`SONDA_MOV_MIN`), limite
+>   da foto. `LICOES.md` §7.29. Lote `logs/morph_s41e/` (backup `_backup_pre_s41e`).
+> - Saldo contra o estado de antes do centro: cintura **+327 cm** neg / +241 pos,
+>   quadril +153 neg, peito +115/+100. Quadril positivo caiu de +8 para ~+5 em
+>   ~15 corpos porque o ACHATAMENTO do quadril passou a funcionar (forma > cm,
+>   §7.22). Só `f_b05_d2` segue sem cintura negativa (lasca nascida torta, render
+>   limpo; resíduo documentado).
+> - Réguas: 36/36 · 824/824 · `_confere_lote` limpo · material 103/103.
+> - Pessoas reais: Rogério 2,7→**0,8** · Joice 3,5→**0,7** (era 1,9) · Ana
+>   7,0→6,0 (peito −18,6, limite da biblioteca). `logs/morph_s41e/pessoas_reais.txt`.
+>
+> ### ✅ 30/09 — PESCOÇO CILINDRO nos 103 + DUAS CINTURAS no índice/select/testador + comparação com PESSOAS REAIS
+>
+> - **Pescoço:** o morph arrastava o ombro junto (até 7,7 cm na régua do ombro)
+>   e só enchia um ANEL na base. Hoje é cilindro em volta do eixo do pescoço
+>   (`PESCOCO_RAIO` 1,3–3,0 r, `PESCOCO_TOPO` 3,5 cm): ombro vaza 0,1–1,3 cm,
+>   positivo ganhou +74,6 cm de faixa no acervo. Raio 1,25–1,75 fez GOLA e topo
+>   2 cm fez faixa sob o queixo — refutados no render. Lote `logs/morph_s41c/`,
+>   backup `qa/ombro/_backup_pre_s41c/`. `m_b05n_d1` ficou sem pescoço.
+> - **Duas cinturas:** `weights_by_sex` (f: umbigo 2,0 + mínima 1,0) e
+>   `ratio_checks` no índice; `weights` global com `waist_min: 0.0`, então o app
+>   em produção NÃO muda. `select.py` + testador (campo "Cintura mínima" só no
+>   feminino) + 2 casos novos que discriminam. Réguas: 36/36 · JS 24/24 ·
+>   824/824 · material 103/103. **Falta o app (sessão separada).**
+> - **Pessoas reais** (`test/pessoas_reais.json`; Ana Júlia com umbigo
+>   ESTIMADO 112): Rogério → `m_b07k_d1`, RMS 2,7 → **0,7 cm** com morph ·
+>   Joice → `f_b07i_d1`, 3,5 → 1,9 (sobra a cintura +5,4: é um dos 8 corpos sem
+>   lado negativo da cintura, item D) · Ana → `f_b09h_d1`, 7,0 → 6,0 (peito
+>   −18,6 cm, coluna não confiável naquele avatar; limite da biblioteca). Com a
+>   mínima no campo único de hoje a Joice caía em `f_b08_d3` — o defeito dele.
+>
+> ### 🆕 28/09 — DECIDIDO: mulher com DUAS cinturas (umbigo + mínima), as duas obrigatórias e votando
+>
+> Pesos umbigo 2,0 / mínima 1,0, escala 12,8 cm, trava de razão 0,648–0,984.
+> Plano inteiro, simulação e o que muda nos dois repositórios em
+> `INTEGRACAO_ZENITH.md` (bloco "DECIDIDO EM 28/09"). **Nada implementado ainda.**
+>
+> ### 27/09 — o veredito dele reprovou, e o conserto está nos 103
+>
+> *"o morph do biceps ... ta morfando o cotovelo e não o biceps"* (b06h_d3,
+> b07_d3, b08_d3, b09i_d3, f_b04_d3, f_b07_d3) e *"o morph do pescoço entrou no
+> vale da estranheza"* (testando com as medidas dele, m_b05k_d1).
+> - **Bíceps:** o mapa (`ombro_mapa.py --key morph_biceps`) mostrou a faixa só
+>   acima do cotovelo em **todos** os corpos, inclusive o b05h_d2 — defeito de
+>   14/08, não desta sessão. Topo agora em fração do úmero (`BICEPS_TOPO_L`
+>   0,65/0,85, `biceps_eixo.py`), e o corte braço/tronco virou **sempre rampa**
+>   (o booleano de 8 cm invertia 31 triângulos na axila quando a faixa subiu).
+> - **Pescoço:** em −1 vira haste (anel na nuca, vinco na fúrcula). Teto
+>   assimétrico `INFLUENCE_CAP["morph_neck"] = (0.5, 1.0)`: −2,6 cm fica natural.
+>   Subir o piso da máscara foi testado e refutado (piora a nuca).
+> - **Trava:** se a de tronco zeraria um morph, tenta o grupo de todos os campos
+>   que tocam a dobra (m_b06i_d3: cintura +7,6 → 0 virou +5,4).
+> - Lote `logs/morph_s41b/` (1ª rodada falhou inteira por CRLF na lista de ids —
+>   a trava do `zenith_paths` recusou antes de gravar). Réguas: 34/34 · 824/824 ·
+>   `_confere_lote` limpo · material 103/103. Diff contra
+>   `qa/ombro/_backup_pre_s41b/` em `logs/morph_s41b/_diff_faixas.txt`: pescoço
+>   −237 cm de lado negativo (o teto), bíceps +14 no positivo, 2 bíceps perdidos
+>   (m_b10_d1 e m_b11_d2, eram < 1 cm), f_b10_d3 ganhou bíceps.
+>
+> ### 26/09 (histórico da sessão)
+>
+> Modo autônomo ("continue de forma autônoma"), item A da pauta de 26/09.
+> Diagnóstico, as 3 hipóteses mortas e o saldo em `LICOES.md` §7.27.
+>
+> **O que mudou no `scripts/morph.py`** (nada gravado em `03_dist/`, mapa,
+> índice ou bancos):
+> - rampa de cima da faixa do bíceps com mínimo de 3 cm (`BICEPS_RAMPA_MIN`);
+> - corte braço/tronco adaptativo (`Base._corte_braco`), travado pela
+>   circunferência publicada do bíceps — por isso `Base(co, mesh, aid)`;
+> - trava do combinado: **o braço paga primeiro** e imprime ONDE dobra.
+>
+> **Saldo (`--fit` antigo × novo, 54 corpos, `qa/ombro/_lab/s41/cmp/`):**
+> bíceps +67 cm de faixa, antebraço +9,5, ombro +5,7, **tronco intacto**. Os
+> 4 alvos ganham bíceps (`m_b06h_d3`, `m_b07_d3`, `f_b09i_d3`, `m_b08_d3`).
+> Perdas: `f_b04_d3` e `f_b07_d3` perdem o bíceps positivo; `f_b09i_d1` o
+> negativo. Fora: `m_b11_d1` (braço colado) e `f_b10_d3` (landmarks falsos).
+> A/B do bíceps em `qa/revisao/_s41/ab_biceps_*/_folha.png` — limpo nos 5.
+>
+> ### ✅ Aplicado (26/09, liberado por ele): `logs/morph_s41/lote.sh`
+>
+> 53 `--apply` em série + `--remap` no `f_b02_d1`, todos rc=0. Réguas:
+> `_confere_lote` limpo (103/103, uma versão por id) · `probe_material_dist`
+> **103/103** · `select --check` **34/34** (banco regerado: **só o carimbo**)
+> · `morph_cases --check` **824/824** · `library.json` mudou só `glb`/`version`
+> nos 53. `morph_mapa_diff` contra o backup (`logs/morph_s41/_diff_faixas.txt`):
+> 5 ganharam coluna, 0 perderam, 26 mudaram — **só bíceps, antebraço e ombro**;
+> tronco sem nenhuma linha. ⚠️ O `zen_m_b05h_d2` (o corpo dele) está no lote
+> pela rampa: nenhuma faixa mudou mais que 0,3 cm, mas o shape key do bíceps
+> foi regravado. **Nada copiado para o app, nada no Storage.**
+> 🔙 Backup do antes: `qa/ombro/_backup_pre_s41/` (53 GLBs + mapa/índice/bancos).
+>
+> ⏳ O ombro da sessão 40 **continua esperando o olho dele** no testador.
+> Itens C e D da pauta (f_b07j_d1; cintura sem negativo) não foram tocados.
+
+
+> ## 🔴 ABRIR AQUI — SESSÃO 40 (25/09): MORPH NOS 103 E O OMBRO VIROU DELTOIDE — ⏳ **ESPERA O OLHO DELE NO TESTADOR**
+>
+> Pedido dele, modo automático com ele fora: *"aplique os morph targets nos
+> corpos que faltam"* e, como secundária, *"analisasse os morph dos outros
+> corpos, em alguns senti que a localização deles estava um pouco errada
+> principalmente nos dos ombros"*. Liberdade para decidir a abordagem.
+>
+> ### 1. ✅ Os 27 que faltavam — **103 de 103 no `morph_map.json`**
+>
+> `morph.py --apply` nos 27, sem nenhuma trava. Só **3 perderam uma coluna**,
+> todos por triângulo-lasca: `f_b07j_d1` (peito e coxa: vale do decote a x≈0 e
+> períneo), `f_b07h_d2` (quadril: períneo), `f_b09i_d3` (bíceps: ver §3).
+> Distribuição nos 103: **44 com 12 shape keys · 42 com 11 · 11 com 10 · 4 com 9
+> · 2 com 7**.
+>
+> ### 2. 🔴 O OMBRO ESTAVA NO LUGAR ERRADO — e foi refeito nos 103
+>
+> A sonda nova `ombro_mapa.py` (pinta ONDE cada shape key age) mostrou que o
+> `morph_shoulder` era uma **"dragona"**: bloco em Z empurrado só em +X, que
+> escorregava trapézio, alto do peito e costas de lado, com um corte horizontal
+> atravessando o braço inclinado. Em +1 dava **vinco no braço e prateleira no
+> ombro**; no obeso, metade do tronco andava. Os outros 11 shape keys estão na
+> região certa. Hoje o ombro é o **deltoide**: cápsula em volta do eixo do
+> braço, fechada na cabeça do úmero. Detalhe, as tentativas mortas e os
+> números em `LICOES.md` §7.26.
+>
+> **Saldo nos 103** (`morph_mapa_diff.py`, arquivo em
+> `logs/morph_s40_ombro/_diff_faixas.txt`): **2 ganharam ombro** que não tinham
+> (`m_b07_d3`, `m_b08_d3`); 3 ganharam faixa; o lado **negativo** encolhe ~0,5
+> cm na maioria e mais em 6 musculosos/obesos — `f_b09i_d3` e `f_b09j_d1`
+> ficaram **só com o lado positivo**. Nenhum outro morph mudou mais que 1,1 cm.
+>
+> ⚠️ **O pescoço também arrasta o trapézio até o acrômio** — tentei cortar e
+> **reverti**: custava faixa do pescoço em 2 corpos. Se ele ainda vir o ombro
+> "mexendo" ao mudar o pescoço no testador, é isso, e é decisão dele.
+>
+> ### 3. ➡️ PRÓXIMA SESSÃO (decidido por ele em 26/09): bíceps + morphs perdidos
+>
+> **A. Bíceps no braço grosso — 6 corpos**, todos medidos:
+>
+> | corpo | bíceps | causa |
+> |---|---:|---|
+> | `m_b08_d3` | 62,2 | corte de 8 cm (perdeu o antebraço também) |
+> | `m_b11_d1` | 53,5 | corte de 8 cm |
+> | `f_b09i_d3` | 47,6 | corte + junção com o tronco |
+> | `m_b06h_d3` | 45,4 | só a junção (1 triângulo, z/H 0,711) |
+> | `m_b07_d3` | 44,6 | corte de 8 cm (a calibração bate no teto de 6 cm) |
+> | `f_b10_d3` | 43,7 | corte + junção |
+>
+> (`f_b12_d1` e `m_b12_d1` também não têm bíceps, mas é outra causa: braço
+> fundido, a coluna nem é medida — fora do escopo.)
+> **Plano aprovado:** (1) corte braço/tronco FORA do membro — percentil 98 do
+> raio + 6 mm, em rampa, só quando o raio máximo passa de 7,2 cm (os outros 95
+> ficam byte a byte iguais; já testado no `f_b09i_d3`, a cópia está em
+> `qa/ombro/_lab/_morph_lab2_biceps.py.txt`); (2) a JUNÇÃO perto da fusão
+> separada pela NORMAL, como o `w_arm_dono_field` da faixa (§4.5q) — não
+> testado; (3) `--preview` + `ombro_ab2.py` antes de gravar. `LICOES.md` §7.27.
+>
+> **B. ~~Quadril do `f_b07h_d2`~~ — DESCARTADO por ele (26/09):** o conserto
+> (ancorar o amortecimento da linha do meio no `crotch_override_zh`) funciona em
+> `--fit`, mas mexe nos 19 corpos com override. *"é melhor não mexer nele"*.
+> Log em `qa/ombro/_lab/viril_b07h_d2_fit.log`, se um dia voltar.
+>
+> **D. 🆕 Cintura sem lado NEGATIVO em 8 corpos** (achado na análise de
+> cobertura, 26/09 — já era assim antes da sessão 40): `f_b04h_d1`, `f_b05_d2`,
+> `f_b05h_d1`, `f_b07i_d1`, `f_b08_d2`, `f_b09i_d1`, `m_b04_d1`, `m_b07_d3`. Todos
+> na faixa de usuário, e 4 são corpos de forma da 2ª geração. O usuário com
+> cintura mais fina que o corpo escolhido recebe **zero** de correção: é o pior
+> ponto da cobertura (§12 do `COBERTURA_FORMAS.md`). Causa: 1–3 triângulos em
+> −0,5, espalhados; em `f_b08_d2` e `f_b09i_d1` ficam a 7,7–8,5 cm do eixo do
+> braço — a mesma junção do item A. Mesma situação no quadril (11 sem negativo)
+> e no peito (8). Diagnosticar com render (§7.5) antes de propor regra.
+> **Já testado em 26/09 (não repetir):** ❌ alisar o deslocamento em volta do
+> triângulo (`morph_reparo_local.py`) — conserta 4 dos 8 (`f_b07i_d1`,
+> `m_b04_d1`, `f_b04h_d1`, `m_b07_d3`) sem mudar o cm, mas não mexe nos outros 4
+> e cria invertido novo no lado positivo. ❌ "o triângulo já nasce torto"
+> (`morph_tri_base.py`) — só 1 de 10: no `f_b05_d2` a base está a 86° dos
+> vizinhos e o morph o ENDIREITA (12°), e a sonda conta isso como inversão
+> (alarme falso: ela compara com a normal do próprio triângulo, não com a
+> vizinhança). Os outros 9 nascem retos (4–27°) e viram de verdade (100–167°),
+> são pequenos (0,02–0,55× a área mediana) e ficam a z/H 0,56–0,71. Próxima
+> hipótese: prega/dobra de pele onde a superfície fica quase paralela ao
+> empurrão radial — confirmar em render antes de propor campo novo.
+>
+> **C. `f_b07j_d1` (peito e coxa) — sem conserto proposto ainda.** Não tem
+> override de virilha. Coxa: lascas de 2–11 mm² entre as coxas, por trás (z/H
+> 0,41, |x| ≈ 2 cm, onde elas se encostam). Peito: 3 triângulos no centro da
+> frente a z/H 0,756 — provável cruzamento da borda do top com o vale do decote.
+> Investigar com `morph_onde_inverte_campo.py` + render.
+
+> ### 4. Estado do disco e réguas
+>
+> - `scripts/morph.py`: deltoide + `--preview` (GLB em `qa/preview/morph/`, sem
+>   versão). `03_dist/glb/`: **103 com versão nova**.
+> - Réguas: `_confere_lote` limpo · `probe_material_dist` **103/103** ·
+>   `select --check` **34/34** (banco regerado: **só o carimbo mudou**) ·
+>   `morph_cases --check` **824/824** (eram 608; os 27 entraram).
+> - **Nada commitado, nada copiado para o app, nada no Storage** — espera o olho
+>   dele. Se ele aprovar, a receita é a de sempre (bloco "OS DOIS REPOSITÓRIOS").
+> - 🔙 **Para voltar ao ombro antigo:** `qa/ombro/_backup_pos27/` tem os 103 GLBs
+>   e o mapa/índice/bancos logo depois dos 27 (ombro antigo, morph completo).
+>
+> ### 5. Para ele revisar
+>
+> - **No testador**, slider de ombro em +1 e −1, girando: é onde a diferença
+>   aparece. Os mais diferentes do antes: `m_b12_d1`, `f_b12_d1`, `m_b08_d3`.
+> - `qa/revisao/_s40/ombro_localizacao.png` — onde o ombro age, antes × depois,
+>   8 corpos. `qa/revisao/_s40/ab_*/_folha.png` — A/B renderizado.
+> - `qa/morph/{id}/folha.png` — base × máximo × mínimo dos 103, refeitas hoje.
+> - ⚠️ `f_b09j_d1`: entalhe na frente do ombro que **já existe na malha base** e
+>   aprofunda no estado mínimo (peito/pescoço, não o ombro — ele não tem lado
+>   negativo ali). Não é desta sessão; `qa/revisao/_s40/_b09j_d1_min_zoom.png`.
+>
+> 🆕 Sondas: `ombro_mapa.py` (+ `ombro_mapa_folha.py`), `ombro_ab2.py` (+
+> `_folha`), `campo_mapa.py`, `morph_onde_inverte_campo.py`, `morph_mapa_diff.py`.
+> ⚠️ O `morph_render_ab.py` **não serve para A/B entre dois arquivos** (a câmera
+> anda) — usar o `ombro_ab2.py`.
+
+> ## SESSÃO 39 (25/09): OS TOPS FEMININOS E A QUINA LATERAL — ✅ **55 DE 55 APROVADOS POR ELE**
 >
 > ✅ **Veredito dele no testador:** *"o restante está 100%, parabéns"* — só
 > reprovou quatro: `b09_d2` e `b11_d1` (short), `b12_d1` e `b07_d3` (top).
@@ -25,7 +304,7 @@
 > fechada. Commitado e enviado por ordem dele; nada copiado para o app, nada no
 > Storage.
 >
-> ➡️ **A PRÓXIMA SESSÃO É O MORPH DOS 27 NOVOS** — ordem dele.
+> ➡️ ~~A próxima sessão é o morph dos 27 novos~~ ✅ feito na sessão 40.
 >
 > Pedido dele: *"essa sessão vc vai tratar dos tops femininos e da quina
 > lateral"*, em modo automático. Tudo foi julgado em **prévia com lente de
@@ -162,307 +441,6 @@
 > *"não precisa aplicar morph nos novos avatares nessa sessão, isso a gente vai
 > fazer em sessão dedicada apos finalizar as peças de roupas"*. A peça fecha
 > primeiro — veredito dele no testador —, depois uma sessão só de morph.
-
-> ## 🔴 ABRIR AQUI — SESSÃO 37 (23–24/09): O CÓS FOI APLICADO E **REPROVADO**; A BAINHA TEM MECANISMO PROVADO E DETECTOR NÃO RESOLVIDO
->
-> **A frente continua ABERTA.** Nada do que foi aplicado está aprovado, e a
-> decisão dele para a próxima sessão já está tomada — é a **saída A**, no §6
-> deste bloco. Ler o bloco inteiro antes de tocar em peça.
->
-> ### ⚠️ 1. O CÓS — 12 avatares regravados, e ele REPROVOU a maioria
->
-> Foram aplicados 12 (só `waist_zh`; **nenhuma bainha foi tocada**), ancorando o
-> arco da frente na FOLHA e alisando com `w_waist_liso`. Contra a folha os
-> números ficaram ótimos — o `zen_f_b03h_d1`, que ele chamara de *"o defeito mais
-> visível de todos"*, foi de −0,063 para −0,001. **No testador ele reprovou assim
-> mesmo:**
->
-> ```
-> m: b07k_d1 (cós + barra) · b07j_d1 (cós, "faixa branca no cinto")
->    b06_d3 (falta tinta na barra) · b05n_d1 (recorte abaixo da barriga errado)
-> f: b03h_d1, b05h_d2, b07h_d1, b07i_d1  (todos "falta tinta no short")
->    b07j_d1 (tinta no tríceps) · b09j_d1 (tinta na barriga)
-> ```
->
-> 🔴 **A causa é a mesma da bainha, e eu não liguei as duas na hora:** ancorei o
-> cós na FOLHA, e **a folha é MENOR que o tecido que a Meshy modelou**. Eu tinha
-> acabado de escrever exatamente isso sobre a faixa (`LICOES.md` §4.5l) e não
-> apliquei ao cós. No `zen_f_b07h_d1` vê-se a borda alta do tecido atravessando o
-> quadril com o preto bem abaixo dela — e a minha própria tabela marcava −0,023
-> (4,0 cm), o pior resíduo dos 12, que eu registrei como "aceito".
->
-> **As três bordas — cós, bainha e topo da faixa — são o MESMO defeito:** a tinta
-> segue o desenho; o tecido que existe no corpo é maior.
->
-> ### ✅ 2. O INSTRUMENTO QUE MUDOU O CICLO — `shorts.py --preview`
->
-> O ciclo era **aplica → olha**, e cada volta custava uma versão de GLB (regra 8)
-> mais `morph --apply` por cima (regra 9). Sendo caro, o julgamento visual era
-> sempre empurrado para depois da entrega. **Ciclo caro não fica devagar: fica
-> cego, porque a etapa que dói é a que se pula.**
->
-> `--preview` pinta exatamente como o `--apply` (mesma malha, mesmo corte, mesmos
-> materiais, mesmo Draco) e grava em `qa/preview/`, que não é URL de CDN. O
-> `qa/probe/sondas/previa_peca.py` renderiza por cima com alumínio + HDR **no
-> mesmo enquadramento do `revisao_peca.py`** — prévia com outro corte não
-> antecipa veredito nenhum.
->
-> **Pagou-se no mesmo dia:** a prévia do conserto de bainha foi reprovada por ele
-> em 3 de 4. Sem ela, essa descoberta teria custado **73 versões de GLB**.
->
-> ### 🔬 3. A BAINHA — mecanismo PROVADO, detector NÃO resolvido, ZERO GLB tocado
->
-> ✅ **Provado, com imagem e com ele confirmando no olho:** a bainha modelada está
-> **acima** da tinta em praticamente todo o acervo, e a diferença vai de 0,5 cm a
-> quase 7 cm. O instrumento que provou é o clay **sem pintura, luz rasante,
-> câmera ortográfica nivelada**, com a linha do mapa desenhada em 1 px no PNG
-> (`bainha_rasante.py` → `bainha_pixel.py` → `bainha_mosaico.py`).
->
-> ```
-> vinco (azul) − tinta (vermelho)   mediana +0,0107 da altura = 1,9 cm
-> vinco (azul) − folha (verde)      mediana +0,0058           = 1,0 cm
-> viés da folha contra a tinta      −0,0061 · 81 neg de 103 · pior nos d3
-> ```
->
-> 🔴 **Ele validou o azul da vista FRONTAL** em 6 avatares escolhidos do extremo
-> (4,0 cm) ao mínimo (0,6 cm): *"as linhas azuis estão nos locais corretos, pode
-> seguir"*. **Essa medida vale.** O que não fecha é transformá-la em detector do
-> anel inteiro.
->
-> ### 🔴 4. AS CINCO TENTATIVAS DE DETECTOR, E POR QUE CADA UMA MORREU
->
-> | # | tentativa | por que morreu |
-> |---|---|---|
-> | 1 | degrau de RAIO na malha | a 60k o ruído do raio é ±0,7 cm; o tecido tem 4 mm |
-> | 2 | cume por DP na malha, janela na virilha | sobe pelo vinco inguinal; λ não serve à série |
-> | 3 | teto por setor ancorado na virilha | a prega inguinal mora **abaixo** da virilha também |
-> | 4 | escalar por perna, medido no pixel da frente | **ele reprovou 3 de 4**: frente e costas têm alturas diferentes |
-> | 5 | anel fechado (frente + costas emendadas) | **a virilha TAMBÉM é um anel fechado** — ver abaixo |
->
-> 🔴 **A tentativa 5 é a mais importante de registrar, porque o raciocínio parecia
-> sólido e estava errado.** A ideia: a barra dá a volta na perna; a prega inguinal
-> (só na frente) e o sulco glúteo (só atrás) não dão — então rastrear no anel
-> inteiro elimina os falsos. **Mas a prega inguinal e o sulco glúteo são as duas
-> metades do MESMO anel: a virilha.** Ele fecha a volta igualzinho, e é mais
-> forte que a barra. Medido:
->
-> ```
->                  hem no mapa   virilha    anel detectado
-> zen_m_b09h_d1       0.4188     +6,9 cm       +7,1 cm   ← é a virilha
-> zen_f_b01_d1        0.4646     +3,6 cm       +3,4 cm   ← é a virilha
-> ```
->
-> E no `zen_f_b01_d1` a barra real está a **+3,0 cm** e a virilha a **+3,6 cm**:
-> 6 mm de diferença. **Nenhuma janela de altura separa os dois nesse corpo.**
->
-> ### ⚠️ 5. DOIS DEFEITOS NO PRÓPRIO INSTRUMENTO, achados antes de virar conserto
->
-> 1. **A luz rasante não girava com a câmera** — ficava fixa na frente do corpo,
->    então a vista de costas era medida em contraluz. Força do vinco **3,5 na
->    frente contra 1,2 atrás**. Corrigido (`_posiciona_luz`), a força foi a 4,5 e
->    os 103 foram refeitos de costas.
-> 2. **A silhueta não serve para achar o eixo da perna** — no enquadramento de
->    0,22 da altura a coxa de um corpo largo **sai do quadro**, e `cx`/`R` saem
->    errados sem avisar. Hoje vêm da malha (`secao_peca.py`), com **semi-eixos
->    a/b**, porque o `w_field` mede o azimute do cós em volta da ORIGEM e a seção
->    do tronco é uma elipse deslocada.
->
-> ### ➡️ 6. A DECISÃO DELE PARA A PRÓXIMA SESSÃO — **saída A**
->
-> > **Medir a barra na FOLHA de referência, na vista de COSTAS, lendo o CONTORNO
-> > da divisa de cor — e usar o clay da frente para amarrar a altura.**
->
-> O motivo é direto: na folha o short é **preto sobre cinza claro**, uma divisa de
-> cor. **Não existe vinco de pele para confundir** — nem prega inguinal, nem sulco
-> glúteo. Foi esse confundimento que matou as cinco tentativas.
->
-> O `shorts_ref.py` já lê a folha; o que ele nunca leu é o **contorno** da barra,
-> só a altura média da corrida escura (`medir()` devolve `base` como um número).
-> É trabalho de horas, sem render novo.
->
-> ⚠️ **A ressalva que tem de ser respeitada, e ela é a lição desta sessão:** a
-> folha é o DESENHO, e a Meshy reinterpreta proporção — foi por confiar nela que o
-> cós saiu reprovado. Então a folha entra como **forma do contorno**, e a
-> **altura** tem de ser amarrada no que o clay da frente mediu, que é onde o
-> tecido de verdade está. Uma calibra a outra; nenhuma das duas sozinha.
->
-> ### 📦 7. ESTADO DO DISCO NO FECHO
->
-> - `config/shorts_map.json`: **12 entradas mudadas, só em `waist_zh`.** Nenhuma
->   bainha tocada no acervo inteiro.
-> - `03_dist/glb/`: **103 arquivos**, 12 com versão nova (o lote do cós).
-> - **Nada copiado para o app, nada no Storage.**
-> - Backups do mapa: `qa/probe/_mapa_antes_s37.json` (antes do cós) e
->   `qa/probe/_mapa_antes_bainha.json` (= estado atual; a prévia de bainha foi
->   revertida).
-> - Réguas no fecho: `probe_material_dist` **103/103** · `select --check` 34/34 ·
->   `morph_cases --check` 608/608 · `_confere_lote` limpo · `CANTO` limpo nos 12.
-> - 🆕 `shorts_ref.py` imprime **VIES DA SERIE** no fim da tabela (média, mediana,
->   contagem de sinal e quebra por `d1/d2/d3`). Hoje ele acusa `bainha <<< VIES`.
-> - ⚠️ Os clays dos 103 vivem em `qa/revisao/_hem/` e **não vão para o git**
->   (`qa/` é ignorado, só os `.py` entram). Refazer custa ~2 h por passada.
->
-> ### 🧰 8. SONDAS NOVAS DESTA SESSÃO
->
-> | sonda | para quê |
-> |---|---|
-> | `bainha_rasante.py` | clay sem pintura, luz rasante, ortográfica. `--alvo hem/cos`, `--vistas` |
-> | `bainha_pixel.py` | traça o vinco coluna a coluna no clay. `--alvo`, `--vista` |
-> | `bainha_mosaico.py` | folha de contato dos 103, 6 por imagem, com as 3 linhas |
-> | `bainha_anel.py` | junta frente+costas e rastreia o anel — **não resolvido, §4** |
-> | `secao_peca.py` | centro e semi-eixos da seção, por perna e no tronco |
-> | `previa_peca.py` | `--preview` + folha de contato, sem gastar versão |
-> | `bainha_degrau.py` | ❌ hipótese morta (degrau de raio); fica como registro |
-
-> ## 🔴 A VALIDAÇÃO DA ROUPA REPROVOU (22–23/09) — `docs/REVISAO_ROUPA_2026-09-23.md`
->
-> Ele navegou os 103 no testador (com os 27 novos destacados em laranja) e ditou
-> defeito por defeito. **20 dos 27 novos têm pelo menos um defeito**, em quatro
-> classes. O detalhe inteiro — tabela por avatar, versão do GLB que ele julgou,
-> hipóteses e o que NÃO fazer — está naquele arquivo. Aqui só o que decide a
-> pauta:
->
-> 1. **🔴 Tinta além do limite da barra da perna — 16 avatares, e ele mandou
->    revisar o ACERVO INTEIRO**, novos e antigos, em **sessão dedicada**. Disse
->    duas vezes, a segunda como *"agora é definitivo"*. É a próxima frente.
-> 2. **Faixa/top vazando no braço, axila e tríceps** — 9 avatares.
-> 3. **Cós** — 6 avatares, e **cinco deles são os que a sessão 36 deixou com cós
->    ESCALAR manual**. Pode ser o conserto de ontem abrindo defeito hoje; decidir
->    com sonda, não no olho.
-> 4. **Pintura faltando** — o oposto da classe 1, e na mesma lista. O pior da
->    coleção pelo veredito dele é o `zen_f_b03h_d1`, que é **magro** (IMC 21,5).
->
-> ⏸️ **O morph continua sendo a frente seguinte, não esta.** Os 27 novos seguem
-> sem shape key; a roupa deles ainda não passou.
-
-> ## 🆕 SESSÃO 36 — A ROUPA: OS 27 NOVOS VESTIDOS E A CUNHA DA QUINA FECHADA
->
-> Frente escolhida por ele: **peça**. Modo automático, com ele fora por 10 h e
-> liberdade para decidir: *"se tiver alguma escolha pra fazer vc faz e depois
-> justifica"*. Morph não foi tocado como frente — só re-aplicado por cima de cada
-> short, que é a regra 9.
->
-> ### ✅ 1. OS 27 QUE NÃO TINHAM ROUPA — 18 f + 9 m, todos vestidos
->
-> Eram `library.json` 103 contra `shorts_map.json` 76. Hoje o `shorts_map` tem
-> **103 de 103**. Os 9 masculinos e as 18 femininas saíram de `_v1.glb`.
->
-> 🔴 **A régua externa achou defeito que o detector não acusa, em 7 femininos:**
-> a bainha do 3D errava de −0,027 a −0,070 contra a corrida escura da folha,
-> enquanto os outros 11 erravam no máximo 0,013. É o modo de falha do
-> `_set_virilha.py` — o `w_limbs` acha a fusão das COXAS e chama de virilha — e
-> desta vez ele foi **procurado**, não tropeçado.
->
-> Corrigido pela regra de sempre (pico do anel do TRONCO entre 0,33 e 0,55, mais
-> 0,0045 — **do anel, nunca da folha**). Erro máximo depois: **0,0085**. O
-> `b08_d2` foi de −0,070 para **+0,001**. Tabela no docstring do `_set_virilha`.
->
-> O `faixa_topo_frente_zh` da folha foi gravado nos **55** femininos.
->
-> ### ✅ 2. A CUNHA PRETA NA QUINA DA FAIXA — e ela não era "franja de 1 triângulo"
->
-> A fila viva a descrevia assim desde 15/08. No GLB entregue, com material e HDR,
-> é uma **aba preta** visível de costas em todas as femininas pesadas. A descrição
-> errada durou cinco semanas porque ninguém tinha olhado no arquivo entregue.
->
-> **Causa:** uma fatia da banda sem corte braço/tronco. Fatia sem corte não é
-> "fatia sem braço" — é fatia que **não mascara nada**, e ali a faixa sai pintada
-> por cima do braço. Uma fatia de 0,9 cm já aparece.
->
-> **Conserto:** preencher o buraco **interior** da curva pela própria parábola.
-> A ressalva de 15/08 (*"preencher os None inventaria braço"*) proíbe
-> **extrapolação**, e continua valendo — fora do intervalo medido nada é
-> inventado. Dentro dele é interpolação entre duas fatias que mediram.
->
-> 🆕 **Quem achou foi a terceira cor.** `faixa_tres_cores.py` pinta a máscara de
-> **vermelho**: o banco de duas cores mostra o resultado e esconde a causa, e as
-> duas causas possíveis (máscara curta × máscara inexistente) pedem consertos
-> opostos. Duas hipóteses minhas morreram antes, as duas por medida — detalhe e
-> números no `LICOES.md` §4.5h.
->
-> 🔴 **E O DEFEITO VISÍVEL NÃO EXISTIA — ERA PERSPECTIVA.** Com o conserto
-> aplicado, o A/B na mesma câmera deu **imagem igual**. Com **lente de 300 mm a
-> 6 m** a faixa é uma barra horizontal limpa de ponta a ponta: a "aba" era o
-> braço, mais perto da câmera, projetando o mesmo corte horizontal mais baixo e
-> mais grosso, com a silhueta dele recortando a faixa por cima.
->
-> **Saldo honesto:** o buraco na curva era real e está consertado (máscara 611 →
-> 620 no `b12_d1`, 541 → 554 no `b11_d2`, nenhuma fatia sem corte) — **e é
-> invisível no entregue**. Custou uma versão de GLB em 37 femininas. O defeito
-> que motivou tudo não era defeito. `LICOES.md` §4.5h.
->
-> ⚠️ **Regra que sai daqui:** num corpo largo, defeito perto da silhueta lateral
-> só conta depois de reproduzir com **lente longa**. Se some, era paralaxe — e o
-> enquadramento apertado que faz uma tira de 1 cm aparecer é o mesmo que faz a
-> perspectiva dominar.
->
-> ### 🔴 3. O DEFEITO DE VERDADE: O CÓS MERGULHA NA FRENTE EM 6 DA LEVA NOVA
->
-> Enquanto eu perseguia o fantasma da quina, a varredura do acervo achou um
-> defeito **grande e visível de frente**: o cós desce em V até a virilha e o
-> short vira **cavada de biquíni**, com tecido modelado sem pintura acima do
-> preto. `zen_f_b05h_d2` `zen_f_b05i_d2` `zen_f_b08_d2` `zen_f_b07h_d1`
-> `zen_m_b10i_d2` `zen_m_b07i_d1` — **os seis são de hoje**.
->
-> **Régua que separa: a queda contra o ANEL medido** (amplitude alta em corpo
-> pesado é a barriga caindo, e é o certo). Mediana do acervo **0,029**, teto da
-> série sã **0,046**, os seis **0,075 a 0,108**. O `zen_m_b12_d1` dá 0,168 e não
-> entra: nele a queda é barriga de verdade.
->
-> ✅ **Consertado** com cós **escalar na altura do anel medido** e `source:
-> manual`. Conferido no entregue. ⚠️ A janela do `w_waist_curve` não foi mexida —
-> o piso dela é global e mexer nele mexe nos 103 para consertar 6.
-> `LICOES.md` §4.5i.
->
-> ### ✅ 4. E DOIS AVENTAIS QUE FALTAVAM
->
-> Rodei o detector de avental nos 9 masculinos novos e **esqueci as femininas** —
-> lacuna achada na revisão. Medido depois: `zen_f_b11h_d1` (−0,0163 em 9 setores)
-> e `zen_f_b12h_d1` (−0,0200 em 8) pedem descida, acima dos 2,1 cm que a sessão
-> 29 já aplicava. Ligados e regravados em v3.
->
-> ### 🆕 SONDAS NOVAS
->
-> - **`revisao_peca.py`** — folha de contato do GLB entregue com **duas linhas de
->   vistas**, quadril e faixa. O `peca_folha.py` só enquadra o quadril, e foi no
->   topo da faixa que a listra branca passou por 37 avatares na sessão 26.
->   `--mosaico` monta grade de 6 para varrer o acervo.
-> - **`faixa_tres_cores.py`** — a máscara do braço em vermelho. Ver acima.
-> - **`faixa_normal_mapa.py`** — banco da PASSADA 4 (normal).
-> - **`_confere_lote.py`** — contabilidade depois de lote: quem recebeu short
->   novo e ficou **sem shape key**. É o estado que dá medo se um lote parar no
->   meio, e nenhuma régua de material ou de peça o enxerga.
->
-> ### 📏 AS RÉGUAS NO FECHO
->
-> `probe_material_dist` **103/103** (material + peça) · `shorts --check --all`
-> **103/103** · `select --check` **34/34** · `morph_cases --check` **608/608** ·
-> `_confere_lote` limpo (103 GLBs, nenhum id com duas versões, `morph_map`
-> alinhado em 76/76).
->
-> 🔴 **NADA FOI COPIADO PARA O APP E NADA SUBIU PARA O STORAGE** — espera o olho
-> dele, como sempre. As folhas de contato para revisar estão em
-> `qa/revisao/_f_01..10.png` e `_m_01..08.png`, seis avatares por imagem.
->
-> ⚠️ **O banco de casos estava VELHO, e não é desta sessão:** o commitado foi
-> gerado em **21/08 com 76 avatares** enquanto o índice tem 103 desde a sessão 32.
-> Regerado aqui, **13 dos 22 casos de seleção trocam de avatar** — efeito dos 27
-> corpos novos entrando na seleção, não da roupa. Quando ele aprovar a subida,
-> índice, mapas e os dois bancos **viajam juntos**; copiar um sem o outro é o
-> teste vermelho de 16 a 19/08 de novo.
->
-> ### ⏭️ O QUE NÃO FOI FEITO, E POR QUÊ
->
-> - **Os 27 novos continuam sem morph.** É a outra frente, e a ordem dele é uma
->   por sessão. Eles têm peça e material, mas **não respondem às medidas do
->   usuário** — não subir para o app antes disso.
-> - **A borda exata da máscara do braço** (levar a máscara para o mesmo corte do
->   `w_cut_boundary`, como o cós) continua não tentada. Deixou de ser a
->   explicação do defeito visível, mas segue sendo o caminho para a borda ficar
->   exata.
-> - **`zen_m_b12_d1` e `zen_m_b11_d1`** seguem com a fresta de pele abaixo da
->   barriga. Confirmado na revisão desta sessão; é limite de forma, já
->   documentado.
 
 > ## 🆕 SESSÃO 35 — A PRODUÇÃO DE AVATARES **ACABOU**: 98 → 103
 >

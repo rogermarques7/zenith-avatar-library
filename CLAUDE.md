@@ -11,27 +11,29 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 
 | quando a tarefa for… | ler ANTES de agir | tamanho |
 |---|---|---:|
-| **QUALQUER COISA que toque o app Zenith** — medida, seleção, objetivo, contrato | `docs/INTEGRACAO_ZENITH.md` | **10,8k** |
+| **QUALQUER COISA que toque o app Zenith** — medida, seleção, objetivo, contrato | `docs/INTEGRACAO_ZENITH.md` | **11,5k** |
 | **montar prompt de folha** | `docs/blocos/prompt_f.md` ou `prompt_m.md` | 5,2k / 2,4k |
 | decidir *qual* descritor usar, ou mexer no bloco fixo / na roupa | `docs/CHARACTER_BIBLE.md` | 6,5k |
 | mexer em grade, banda, classificação ou schema do `library.json` | `docs/ARCHETYPES.md` | 4,0k |
-| **decidir QUAL avatar produzir** — o que falta é FORMA (retângulo, maçã, violão), não só IMC · **e os ajustes da Meshy 7** | `docs/COBERTURA_FORMAS.md` | **8,6k** |
+| **decidir QUAL avatar produzir** — o que falta é FORMA (retângulo, maçã, violão), não só IMC · **e os ajustes da Meshy 7** | `docs/COBERTURA_FORMAS.md` | **9,5k** |
 | discutir arquitetura, formato de entrega, custo, CDN, plano Meshy | `README.md` | 3,9k |
 | **falar em API, shape key, provador virtual, licença Meshy ou comercializar a biblioteca** | `docs/VISAO_PRODUTO.md` | 3,7k |
 | **consertar peça (top feminino ou short)** — a fila é dele, não se adivinha | `docs/REVISAO_ROUPA_2026-09-23.md` **primeiro** (5,2k), depois `docs/FILA_PECAS.md` | 6,5k |
 | investigar a coxa (RESOLVIDA em 14/08 por offset — ler antes de reabrir) | `docs/PROBLEMA_COXA.md` | 3,7k |
-| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **50,5k** |
-| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-09.md` (4,0k) · `diario-2026-08.md` (14,8k) · `diario-2026-07.md` (**grep**) | 65,3k |
+| **qualquer decisão técnica** — antes de propor método, régua ou hipótese | `docs/LICOES.md` | **56,6k** |
+| entender COMO uma decisão foi tomada, ou reabrir uma | `docs/historico/diario-2026-09.md` (8,5k) · `diario-2026-08.md` (14,8k) · `diario-2026-07.md` (**grep**) | 69,8k |
 | o que foi pedido ao repositório do app (referência, já entregue) | `docs/PROMPT_APP_INTEGRACAO.md` | 2,5k |
+| **subir a 2ª geração para o app** (103 corpos, duas cinturas, guia feminino, Storage) — o próximo passo | `docs/PROMPT_APP_2A_GERACAO.md` | **3,3k** |
 
-> Leitura padrão: `CLAUDE.md` **9,9k** + `state.md` **24,6k** = **34,5k** antes de
-> qualquer trabalho. ✅ A dívida foi paga na sessão 39: os blocos das sessões 30
-> e 31 desceram para o `diario-2026-08.md` (3,3k de corte, contra ~0,7k do bloco
-> novo) e o `state.md` saiu de 26,6k para **24,6k**. O `LICOES.md` seguiu subindo
-> (14,9k → 18,3k → 19,9k → 21,1k → 26,3k → 28,6k → 29,9k → 31,2k → 32,3k → 37,5k →
-> 39,2k → 42,1k → 48,0k → 48,6k → **50,5k**, com a §4.5q na sessão 39).
+> Leitura padrão: `CLAUDE.md` **10,5k** + `state.md` **24,8k** = **35,3k** antes de
+> qualquer trabalho. ✅ Na sessão 40 desceram para o `diario-2026-09.md` os
+> blocos das sessões 36 e 37 e o da validação de 22–23/09 (4,6k de corte, contra
+> ~1,4k do bloco novo): o `state.md` saiu de 24,6k para **22,0k**. O `LICOES.md`
+> seguiu subindo (14,9k → 18,3k → 19,9k → 21,1k → 26,3k → 28,6k → 29,9k → 31,2k →
+> 32,3k → 37,5k → 39,2k → 42,1k → 48,0k → 48,6k → 50,5k → 52,3k → 53,3k → 53,6k → 54,0k → 54,3k → **56,6k**, com as §7.26
+> e §7.27 na sessão 40, o fecho da §7.27 na 41 e a §7.30 na 42).
 >
-> ✅ **O corte do `state.md` funcionou três vezes** — sessões 30, 35 e 39.
+> ✅ **O corte do `state.md` funcionou quatro vezes** — sessões 30, 35, 39 e 40.
 > Ele vinha de 9,4k → … → 17,9k → 23,3k; na sessão 35 desceram os blocos
 > narrativos das sessões **32, 33 e 34** para o `diario-2026-09.md` (4,1k de
 > corte) e ele fechou em **21,0k** mesmo com a sessão nova escrita por cima.
@@ -40,7 +42,8 @@ consulta**: abrir o que a tarefa da vez exige, e abrir INTEIRO quando exigir.
 > anteriores provaram isso.
 >
 > Próximos candidatos a descer, quando a frente deles fechar: o bloco de morph
-> da sessão 25, o do material de 31/07 e os das sessões 35–37 (produção e peça).
+> da sessão 25, o do material de 31/07 e os das sessões 35, 38 e 39 (produção e
+> peça, já fechadas).
 >
 > **Toda a coluna foi remedida na sessão 18** com um divisor único de 3,6
 > chars/token, calibrado contra os números que já estavam certos (`prompt_m.md`
@@ -288,6 +291,35 @@ resumo — se a tarefa toca o assunto, abrir o arquivo.
     fixo — a medição segue pela malha cheia. **75 de 76 têm morph de coxa** (só
     o `zen_m_b06h_d3` não). Teto `COXA_OFFSET_MAX_CM = 22`. `LICOES.md` §7.25b.
 
+    🔴 **O OMBRO é o DELTOIDE desde a sessão 40 (25/09) — régua de faixa não vê
+    LOCALIZAÇÃO.** Era um bloco em Z empurrado só em +X ("dragona"): escorregava
+    trapézio, alto do peito e costas de lado, com corte horizontal atravessando
+    o braço inclinado — no obeso, metade do tronco. As faixas saíam limpas nos
+    76. Hoje é cápsula em volta do eixo do braço, fechada na cabeça do úmero
+    (círculo inscrito no canto do ombro, na silhueta frontal), em múltiplos do
+    raio do braço. Para ver ONDE um shape key age: `qa/probe/sondas/ombro_mapa.py
+    --key all`. A/B entre dois GLBs só com `ombro_ab2.py` — o
+    `morph_render_ab.py` enquadra diferente arquivos de base idêntica.
+    `--preview` grava o GLB em `qa/preview/morph/` sem gastar versão.
+    `LICOES.md` §7.26.
+
+    ✅ **MORPH POR TIPO DE CORPO é a ESTRATÉGIA PADRÃO (validada por ele nos 103
+    em 02/10).** Quando um morph falhar em pessoa real ou no olho dele, o
+    caminho é o do pescoço: campo natural medido na coleção por tipo, envelope
+    só protegendo, naturalidade com teto, régua do vale e os 103 olhados nos
+    extremos. Receita em `LICOES.md` §7.30.
+
+    🔴 **O PESCOÇO É POR TIPO DE CORPO desde a sessão 42 (01/10).** O peso do
+    `morph_neck` vem de `config/pescoco_campo.json`, gravado por
+    `scripts/pescoco_campo.py`: a inclinação natural do raio contra a fita entre
+    os vizinhos do mesmo tipo (magro engrossa no lado-trás e não sobe na
+    mandíbula; pesado na papada e na nuca). Frente (pelos PÉS) e queixo também
+    vêm de lá — o `morph.py` errava a frente em **30 de 103** e inchava o queixo
+    desses. Mudou corpo da coleção → remedir os perfis
+    (`qa/probe/sondas/pescoco_perfil.py --so-base`) e regravar o campo. Régua do
+    vale da estranheza: `qa/probe/sondas/pescoco_natural.py`; olhar os 103 no
+    máximo/mínimo: `qa/probe/sondas/pescoco_tipos.py`. `LICOES.md` §7.30.
+
 **O testador visual é o `testador.cmd` na raiz** — clique duplo, sobe um
 `http.server` na 8765 e abre `test/avatar_tester.html`. **Sempre por http;
 `file://` não serve** (o testador lê o `library.json` por `fetch` e o
@@ -322,10 +354,10 @@ pedir.**
 tem entrada para todo mundo, e o `probe_material_dist` cobra material **e** peça
 nos 103.
 
-🔴 **A frente que sobra é o MORPH: 27 corpos sem shape key** (103 − 76). Nada vai
-para o app até zerar — corpo sem entrada no `morph_map.json` aparece e **não
-responde às medidas do usuário**. A ordem de 22/09 (uma frente por sessão, ele
-escolhe) continua valendo, mas hoje só existe uma frente automática em aberto.
+✅ **O MORPH ACABOU em 25/09 (sessão 40): 103 de 103 no `morph_map.json`**, e o
+ombro foi refeito como deltoide nos 103 na mesma sessão. O que sobra é o olho
+dele no testador e, depois, a subida para o app (receita no `state.md`). A
+ordem de 22/09 (uma frente por sessão, ele escolhe) continua valendo.
 
 **⏸️ A frente do SHORT está PARADA por decisão do Rogério (28/07)**, até as duas
 bibliotecas existirem. O motivo é custo relativo, e é medido. **Não reabrir sem

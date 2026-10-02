@@ -3397,3 +3397,353 @@ landmark errado, e a coluna cai como sempre caiu.
 🔴 **A lição de método, e ela vale além da coxa:** testar SEMPRE nos avatares que
 JÁ PASSAM, não só nos conhecidos como problema. Foi isso que expôs a tentativa 2
 — ela parecia perfeita nos 2 casos que a tentativa 1 tinha quebrado.
+
+### 7.26 🔴 O morph do OMBRO não estava no ombro — e nenhuma régua olha LOCALIZAÇÃO
+
+Queixa dele, 25/09: *"em alguns senti que a localização deles estava um pouco
+errada, principalmente nos dos ombros"*. As réguas do `--fit` estavam limpas nos
+76 (±1,0, linearidade 0,99–1,00, zero normal invertida) — porque elas medem
+**quanto** a coluna anda e **se** a malha dobra. Nenhuma pergunta **onde** o
+deslocamento mora.
+
+🆕 **`qa/probe/sondas/ombro_mapa.py`** — pinta cada vértice pela magnitude do
+shape key em influence 1,0, ortográfica nivelada (frente/costas/lado/cima).
+`--key all` faz os 12. É o instrumento que responde localização; o
+`morph_folha.py` mostra o resultado, não o lugar.
+
+**O que o mapa mostrou** (`zen_m_b05h_d2`, mesma leitura nos outros):
+
+| morph | onde mora | veredito |
+|---|---|---|
+| `morph_shoulder` | bloco em Z (0,745–0,885 H) × \|x\| > 0,055 H, **100% do deslocamento em +X** | ❌ "dragona" |
+| `morph_neck` | pescoço + trapézio até o acrômio (\|x\| até 25 cm) | ⚠️ ver abaixo |
+| os outros 10 | na região certa | ✅ |
+
+A dragona tinha três defeitos, e o terceiro é o que se vê:
+1. **escorregava** o ombro de lado em vez de crescer — frente e costas do
+   deltoide não se moviam (componente Y = 0);
+2. o corte de baixo era **horizontal**, atravessando um braço inclinado a ~23° —
+   o mesmo erro que o bíceps já tinha pago em 14/08 (faixa de Z corta membro
+   inclinado na diagonal);
+3. em +1 isso vira **vinco atravessando o braço** e prateleira no alto do ombro;
+   no obeso (`zen_m_b12_d1`) o bloco era **metade do peito e das costas**.
+
+**O conserto: CÁPSULA em volta do eixo do braço, fechada na cabeça do úmero.**
+Direção = radial da cápsula (perpendicular ao braço abaixo da cabeça, esférica
+acima). O centro saiu na **terceira** tentativa, e as duas primeiras são a lição:
+
+| tentativa | por que morreu |
+|---|---|
+| estender o eixo do braço até sair do corpo | o braço em A-pose inclina ~0,22 também em **profundidade**: a reta sai pelas costas 3 cm abaixo do topo |
+| estender só a vista frontal até a silhueta de cima | o eixo passa **por dentro** do ombro e só sai no trapézio (x 13 cm contra 20 do acrômio) |
+| ✅ **círculo inscrito no canto do ombro** (silhueta frontal: tangente à borda lateral e à de cima) | centro em z/H ~0,79–0,81 e x no deltoide em todos os corpos testados |
+
+🔴 **O Y do centro é o meio da CALOTA, não do corpo — e isso só apareceu no lote
+dos 103, não nos 12 de teste.** A primeira versão tirava o Y do meio da coluna
+inteira do corpo naquele x; num busto volumoso o alto do peito entra na coluna.
+No `zen_f_b09j_d1` o centro caiu na **frente** do ombro (y −0,8 cm contra +4 a +5
+no acervo): a calota escorreu para o peito, a amplitude dobrou (3,8 cm) e o morph
+**morreu inteiro**; o `zen_f_b09_d2` perdeu o lado negativo. Medindo só o que
+está **além** do centro em x (deltoide puro): +5,8 e +5,2, e os corpos que já
+estavam certos mexem ±0,4 cm. O lote foi parado entre dois avatares (47 de 103)
+e reiniciado — código e arquivo tinham que bater. **Doze corpos de teste
+escolhidos por extremo de IMC não pegaram um defeito de FORMA (busto); o
+`morph_mapa_diff.py` rodando durante o lote pegou.**
+
+⚠️ **O raio do braço precisa de trava.** No `zen_m_b12_d1` a "fatia livre"
+abaixo da fusão pega tronco e mediu 19,7 cm — o ombro morria. Travado em
+2,8–7,5 cm, com aviso. E o eixo da cápsula é o `arm_e` já ajustado: ligar o
+centro ao centroide da fusão deu 74° no mesmo corpo.
+
+⚠️ **E um piso relativo ao corpo.** No acervo o raio do braço fica entre 21% e
+35% do raio do anel do ombro (mediana 26%). O `zen_f_b12_d1` (IMC 114, braço
+fundido) mediu 17,8%: calota pequena e alta, e em +1 um **calombo** no alto do
+ombro, visto no A/B. Piso de 20,5% — só ele é alcançado — e o calombo some
+(lado negativo ainda melhora, −3,9 → −4,7 cm).
+
+⚠️ **O gate do bíceps tinha que virar rampa.** `m_ombro × (1 − k·m_biceps)` herda
+o degrau booleano de 8 cm da máscara do bíceps (§7.27): o `zen_m_b08_d3` (bíceps
+62 cm) nunca teve morph de ombro por **um** triângulo a 8,1 cm do eixo. Com o
+gate calculado sobre o braço em rampa (6,5–9,5 cm), zero invertidos e o ombro
+aparece pela primeira vez nele.
+
+⚠️ **A calota estreita foi reprovada no olho** (1,3–2,1 R): na magra
+(`zen_f_b01_d1`) +1 virava uma **bola** sobre o ombro e −1 deixava **degrau** na
+borda de baixo. A larga (1,2–2,9 R, desce até 3,6 R) distribui os mesmos +6 cm.
+
+⚠️ **A mudança do PESCOÇO foi testada e revertida.** Pôr queda radial no
+`morph_neck` (para ele não arrastar o trapézio até o acrômio) custou faixa: o
+`zen_m_b02_d3` perdeu o lado negativo inteiro e o `zen_f_b07_d3` caiu de +2,8
+para +1,4 cm. O pescoço é mínimo de banda travado pelo queixo (§7.16) e a faixa
+dele vem justamente de poder arrastar a base. Fica como estava.
+
+**O saldo nos 103** (`qa/probe/sondas/morph_mapa_diff.py` contra o mapa de
+antes): **2 corpos ganharam ombro** que não tinham (`zen_m_b07_d3`,
+`zen_m_b08_d3`) e 3 ganharam faixa (`f_b10_d3` e `m_b04_d1` de +3 para +6 cm,
+`m_b10_d1` de −3,0 para −5,4). O custo é o lado NEGATIVO: ~0,5 cm a menos na
+maioria (a régua do contorno tem menos por onde encolher quando só o deltoide
+anda), e bem mais em 6 corpos musculosos ou obesos — `zen_f_b09i_d3` e
+`zen_f_b09j_d1` ficaram só com o lado positivo, porque encolher o deltoide
+fecha o sulco fundo da inserção. A dragona não invertia nada porque **translação
+pura nunca inverte triângulo** — ela era "limpa" exatamente por não esculpir.
+Fora do ombro, só a trava do combinado mexeu (≤ 1,1 cm, 5 corpos).
+
+🔴 **O A/B do `morph_render_ab.py` não compara dois arquivos.** A câmera por
+restrição TRACK_TO deu enquadramento diferente para dois GLBs com a base
+idêntica (bounding box conferida igual). Para A/B entre arquivos:
+`ombro_ab2.py`, câmera posta por matriz, os dois na mesma chamada.
+
+### 7.27 O corte braço/tronco era BOOLEANO a 8 cm — e o bíceps morria no braço grosso
+
+Achado no lote dos 27 (sessão 40): o `morph_biceps` do `zen_f_b09i_d3` morreu
+com 9 triângulos invertidos, **todos a 7,8–8,3 cm do eixo do braço** — o
+`d < 0.080` que decide "é braço". No acervo: **7 dos 16 braços mais grossos**
+(raio ≥ 7 cm) não têm morph de bíceps. Num app de musculação, é justo quem treina.
+
+Tentado (cópia em `qa/ombro/_lab/_morph_lab2_biceps.py.txt`, fora do git; não aplicado): corte adaptativo fora do membro
+(percentil 98 do raio + 6 mm) com rampa. Os 9 invertidos do corte sumiram; sobrou
+1 a 3 na **junção braço/tronco perto da fusão**, e alargar a rampa (1,5 → 3,5 cm)
+**não mexeu** neles. Duas hipóteses refutadas → parado para re-diagnóstico
+(memória "hipótese refutada: parar"). O próximo passo é olhar a junção, não
+a rampa.
+
+**Sessão 41 (26/09) — resolvido em `--fit`, com prévia e A/B. ⏳ Apply não
+rodado (bloqueado pelo classificador; espera ele).** Eram **duas** doenças, e a
+"junção" da sessão 40 era uma delas vista de perto:
+
+1. **A rampa de CIMA da faixa do bíceps colapsava.** Ela desce de
+   `t_top + 0,10 vão` a `t_fusao + 0,05 vão`; quando a fusão cola no `arm_top`
+   ela mede **zero** (`m_b06h_d3`, `m_b07_d3`, `m_b08_d3`) ou 0,9 cm
+   (`f_b09i_d3`) — degrau no eixo. `qa/probe/sondas/biceps_rampa.py` mediu os
+   103: os 3 corpos com rampa ≤ 0 são 3 dos 6 sem bíceps. Conserto:
+   `BICEPS_RAMPA_MIN = 3 cm`, **só na borda de cima** (a de baixo só é curta no
+   `m_b11_d1`, que é outro caso, e alargá-la mexeria em mais 32 corpos). Com
+   2 cm o `m_b06h_d3` ficava sem lado positivo.
+2. **O corte de 8 cm ficava DENTRO do braço grosso.** Pele a 8,6–9,3 cm do
+   eixo no `m_b08_d3`. O corte adaptativo da sessão 40 (p98 global) deu
+   **20–28 cm** nos obesos e o `m_b07_d3` passou a ler bíceps *diminuindo* em
+   +1: refutado. `braco_raio_fatias.py` mostrou por quê — colada na fusão a
+   fatia abre para o tronco (11–14 cm), e em ~20 corpos o vão braço/tronco é
+   achado no lugar errado. Conserto: **maior p98 POR FATIA, só nos primeiros
+   85% do caminho pulso→fusão**, com **trava pela régua externa** — razão
+   contra o raio da circunferência PUBLICADA do bíceps: 1,05–1,76 nos sadios,
+   2,8–6,2 nos contaminados; acima de 2,0 o corte fica fixo. ⚠️ Primeira
+   versão da trava comparou **cm com metro** e nunca disparou — o lote de
+   comparação pegou (5 corpos com corte de 15–33 cm).
+
+🔴 **E o efeito colateral que só o lote mostrou: a trava do combinado passou a
+cortar TRONCO para pagar o bíceps** — `f_b04_d3` peito +3,8 → +2,6 e cintura
++4,0 → +2,8; `m_b06m_d3` peito a 45%. A trava agora imprime ONDE dobra
+(`dobra: z/H …`): pele do tronco a 7,8–9,8 cm do eixo do braço, perto da axila.
+❌ **Separar a junção pela NORMAL** (a pergunta do `w_arm_dono_field`, §4.5q)
+foi testado: consertou 2, **matou o bíceps de outros 2** (`m_b08_d3`,
+`f_b09i_d1`) — a troca de dono vira gradiente novo na máscara. Revertido
+(`qa/ombro/_lab/s41/morph_dono_normal_refutado.py.txt`). ✅ **O braço paga
+primeiro:** braço culpado encolhe sozinho até deixar de contribuir, e só o que
+sobra passa pela trava uniforme. Tronco é a coluna que escolhe o avatar (§7.3).
+
+**Saldo, `--fit` antigo × novo nos 54 afetados** (`qa/ombro/_lab/s41/cmp/`):
+bíceps **+29,4 cm** no lado negativo e **+37,8** no positivo, antebraço +9,5,
+ombro +5,7; **peito, cintura, quadril e coxa: zero**. Os 4 alvos ganham bíceps
+(`m_b06h_d3` −4,4..+4,0 · `m_b07_d3` −4,8..+4,0 · `f_b09i_d3` −2,3..+1,8 ·
+`m_b08_d3` −5,2..0, e ganha antebraço e ombro +6,0). Perdas, todas de bíceps:
+`f_b04_d3` +4,0 → 0 e `f_b07_d3` +2,6 → 0 (o braço pagou a dobra), `f_b09i_d1`
+lado negativo −2,5 → 0, e três menores que 1,2 cm. Fora do escopo:
+`m_b11_d1` (braço colado em toda a altura, como o `b12_d1`) e `f_b10_d3`
+(pulso não achado, fusão na altura do queixo — landmarks falsos).
+
+**A lição de método:** o laboratório da sessão 40 testou o corte num corpo só
+e declarou "os outros 95 ficam byte a byte iguais". Rodado nos 6, o mesmo
+corte engolia o tórax em 3. E o efeito que mais importava — tronco pagando
+braço — não aparece em corpo nenhum dos alvos: só no **lote antigo × novo** dos
+afetados. Mudança de campo se julga no conjunto que ela toca, não no corpo que
+motivou.
+
+🔴 **27/09 — ele reprovou no testador, e a régua não tinha como pegar:** *"ta
+morfando o cotovelo e não o bíceps"*. A faixa do bíceps estava **no lugar
+errado desde 14/08, nos 103**: medida ao longo do eixo (`biceps_eixo.py`), ia
+de 0,06 a 0,34–0,50 do úmero a partir do cotovelo, porque o topo era a axila
+projetada num braço inclinado. A régua lê a 0,24–0,31 — dentro da faixa —, então
+calibração, linearidade e inversão saíam limpas. É a §7.26 de novo (régua de
+faixa não vê LOCALIZAÇÃO), e eu tinha o instrumento (`ombro_mapa.py`) e não o
+rodei no bíceps. Conserto: topo em fração do úmero (0,65 platô / 0,85 zero).
+❌ Em raios de braço (3 R) não serviu — 3 R num braço de 7,5 cm são 22 cm.
+Subir o topo expôs o **corte booleano de 8 cm** na axila (31 invertidos no
+b05h_d2, todos em d = 0,080): o corte virou rampa em todos os corpos (§7.11).
+**Lição: mexeu numa máscara, roda o mapa de localização dela antes de mostrar.**
+
+### 7.28 🔴 O CENTRO DO TRONCO PULAVA 8 CM — e era ele o "item D" (sessão 41, 01/10)
+
+8 corpos sem lado negativo da cintura (a Joice real caía num deles e ficava com
++5,4 cm de cintura sem conserto). Duas hipóteses já tinham morrido na sessão 40
+(alisar em volta do triângulo; "o triângulo nasce torto"), e a terceira — "a
+borda da roupa" — explicou só 4 de 11. O render mostrou o defeito: um **furo
+escuro** de poucos milímetros, na lombar da `f_b07i_d1` e no flanco do `m_b04_d1`.
+
+A causa veio de olhar o **vértice**, não o triângulo: dentro de um triângulo de
+5 mm a direção do empurrão girava **15°**. A direção é radial a partir do centro
+do tronco naquela altura, e o centro era a **MÉDIA dos vértices da fatia** — que
+segue a DENSIDADE da malha. No cós e nas bordas da faixa há muito mais vértice:
+o centro pulava **até 8 cm** entre fatias a 1 cm uma da outra, e os furos caíam
+exatamente nos pulos (`f_b07i_d1` 0,585 / pulo em 0,586; `m_b04_d1` 0,563 /
+0,563). Conserto: **meio da caixa da fatia + média móvel de 5 fatias**
+(`_perfil_tronco`). 5 dos 8 ganharam a cintura negativa (−8 a −11 cm), e
+cintura, quadril e peito cresceram nos corpos que já passavam (o `m_b05h_d2`
+foi de −3,0 para −9,9 na cintura). Sobram 3, com causa própria: `f_b05_d2`
+(alarme falso, triângulo nascido torto que o morph endireita) e `f_b08_d2`,
+`f_b09i_d1` (junção braço/tronco).
+
+**A lição de método:** média de vértices não é centro de nada — é centro de onde
+a malha é densa. Toda vez que um campo sai de "média da fatia", a densidade da
+malha vira parâmetro escondido. E de novo: o defeito tinha 1 triângulo por corpo
+e a sonda o tratava como ruído; foi o render ampliado que disse que era furo.
+
+### 7.29 A sonda de dobra conta MOVIMENTO, não só sinal — e o limite veio da foto (01/10)
+
+Depois do centro (§7.28), `f_b08_d2` e `f_b09i_d1` seguiam sem cintura negativa,
+cada um por UM triângulo na borda da máscara que afasta a cintura do braço — e
+que virava andando **0,8–3,2 mm**. O render em −1 saiu limpo nos dois. Os furos
+reais da §7.28 andavam 8–10 mm. Regra nova: `SONDA_MOV_MIN = 4 mm` — triângulo
+que vira andando menos que isso não conta. **Não é a tolerância de contagem
+refutada na §7.23** ("até 2 invertidos"): aquela não transferia entre corpos
+porque contava triângulos; esta mede o tamanho do que se moveria na tela.
+De brinde soltou faixas presas pelo mesmo alarme (peito negativo, coxa positiva),
+conferidas no render.
+
+❌ **`f_b05_d2` ficou de fora, e de propósito.** O triângulo dele anda 8–16 mm,
+mas é lasca que já nasce a 90° dos vizinhos (render limpo). Excluir "lasca
+torta a algum vizinho" cegava a sonda em 1–2% da malha (1.197 triângulos num
+corpo); "torta a todos os vizinhos" pegava 10–34 e não pegava esta. Sem regra
+estreita, fica como resíduo de um corpo — melhor que uma sonda com ponto cego.
+
+### 7.30 🔴 O PESCOÇO POR TIPO DE CORPO — o campo vem da coleção, e a frente estava invertida em 30 de 103 (sessão 42, 01/10)
+
+> ✅ **VALIDADO POR ELE NOS 103 em 02/10:** *"ficaram ótimos, a estratégia de
+> aplicar morphs por tipo de corpo realmente deu certo"*. Virou a ESTRATÉGIA
+> PADRÃO para morph — ele quer replicá-la nos outros conforme testarmos em
+> pessoas reais. Receita no fim desta seção.
+
+Veredito dele, com print do `zen_m_b01_d1` no máximo: *"ficou horrível"* — a
+mandíbula some e a cabeça fica sobre um cano. E a pauta: *"cada tipo necessita
+de uma abordagem diferente ... um corpo gordo e um magro, o pescoço pode afinar
+ou engrossar de formas diferentes"*.
+
+**Como se mediu o que cada tipo faz.** Malhas de corpos diferentes não têm
+vértice em comum, mas um raio horizontal saindo do eixo do pescoço acha a pele
+em qualquer uma: R(altura a partir do queixo, ângulo) vive na mesma grade em
+todos os 103 (`qa/probe/sondas/pescoco_perfil.py`). Regredindo R contra a
+circunferência do pescoço entre vizinhos do mesmo tipo, em mm de raio por cm de
+fita (uniforme = 1,59):
+- magro, médio e musculosa: o volume mora no **lado-trás** (trapézio/ECM,
+  3–4,8), a garganta quase não cresce (~1) e **acima do queixo quase nada**
+  (0,3–1) — a mandíbula continua nítida;
+- pesado: **papada e nuca** (2–4), e o crescimento continua acima do queixo.
+
+**O cilindro fazia o oposto.** Empurrava 2,3 cm de raio POR IGUAL do trapézio ao
+queixo; a régua (mínimo da banda) lê colada na mandíbula, onde a máscara já
+fechava — então lia +3,4 cm enquanto o anel visível andava **~+14 cm**. É o
+"cano", e é a §7.9 de novo: a régua não via o que o morph fazia.
+
+**Conserto:** `scripts/pescoco_campo.py` grava `config/pescoco_campo.json` — por
+avatar, W(h, θ) = inclinação natural dos vizinhos (mesmo sexo, IMC em
+gaussiana-log σ 0,30, outra definição pesa 0,35, ridge para o sexo, 3 passadas
+de alisamento), normalizada no percentil 90 da zona do pescoço. O `morph.py`
+multiplica isso pelo envelope (piso na base, teto no rosto, cilindro no ombro).
+Calibrada pela régua de sempre, a amplitude saiu **igual à natural** no magro
+(`naturalidade` 1,00–1,03) e o anel visível passou a andar 1,0–1,2× o que a régua
+lê em toda a altura. `zen_m_b01_d1` +1: **+5,5 cm** com mandíbula preservada
+(antes +3,4 cm com cano).
+
+🔴 **A FRENTE ESTAVA ERRADA EM 30 DE 103.** O `Base` achava a frente pelo lado
+do rosto mais longe de y=0; no corpo pesado o centro da caixa vai para a frente
+e a nuca fica mais longe que o nariz. Pelos PÉS (o dedo vai mais longe do
+tornozelo que o calcanhar) os 103 olham para −Y, como a normalização manda.
+Nesses 30 — inclusive o `zen_m_b07k_d1`, o corpo do Rogério — o morph do pescoço
+**inchava queixo e mandíbula** e poupava a nuca, e a trava de rosto vigiava a
+nuca. Nenhuma sonda acusou: o defeito estava no landmark que as sondas usam.
+E o queixo por "salto de 25% no raio frontal" não existe no obeso (pescoço em
+cone até o rosto) — caía no fim da varredura. Hoje: onde o perfil frontal sobe
+mais rápido. Os dois vão no campo, e o `morph.py` usa esses.
+
+⚠️ **IMC > 60: a régua do pescoço lê na PAPADA.** Nos 9 corpos mais pesados o
+mínimo da banda está na borda de cima (0,900), acima do queixo. Proteger o rosto
+a partir do queixo deixava a régua parada (`zen_m_b10_d1`: 0 cm, 131 triângulos
+invertidos). Ali o pescoço medido É a papada, e o tipo pesado a cresce junto —
+o rosto protegido começa acima de onde a régua lê (`z_rosto`).
+
+**A régua do vale da estranheza** (`qa/probe/sondas/pescoco_natural.py`): cada
+estado morfado vira 5 descritores de forma (degrau da mandíbula, ângulo do
+queixo, nuca, abertura do trapézio, seção), comparados com o que os corpos da
+coleção do mesmo tipo têm NAQUELA circunferência, em σ dos vizinhos. Nos 10
+corpos de ensaio, no máximo do slider: 8 de 10 melhoraram (`m_b01_d1` nuca
++9,4σ → +3,7σ; `f_b08_d3` +6,0 → −1,6; `f_b09h_d1` +3,7 → −1,2). É ALARME, não
+trava: o `f_b07i_d1` em −0,5 marca +5,5σ no degrau da mandíbula e o render está
+aceitável — o descritor tem σ pequeno. Sonda diz onde olhar (§7.5).
+
+❌ **Testado e refutado:** zerar a frente do teto 0,9% acima do queixo (rampa
+cheia na altura da régua) para baixar a naturalidade do `f_b07i_d1` (1,55):
+foi a 1,52 e o `m_b01_d1` perdeu o +1 pela trava de rosto. A naturalidade alta
+dele vem do denominador (o percentil 90 cai na base do trapézio), não de
+excesso visível — o anel no meio do pescoço anda +7,0 para +6,0 na régua.
+
+**Limite estrutural, para não reabrir:** afinar o que a régua mede sempre
+aumenta o degrau da mandíbula, porque a régua lê colada nela e o rosto é
+travado. Na natureza o pescoço fino vem com mandíbula menor. O teto −0,5 fica.
+
+**OLHAR OS 103 NO MÁXIMO pegou o que a sonda não pegou** (`pescoco_tipos.py`,
+máximo e mínimo do slider em 3/4 e lado, 13 folhas). Quatro defeitos, os três no
+ENVELOPE e na AMPLITUDE, não no campo:
+- **entalhe no esterno** (`m_b07h_d1`, `f_b05_d2`): o piso de trás (cheio a −5,5%
+  H) valia também na frente, e empurrava a pele inclinada do alto do peito. Piso
+  da FRENTE próprio, −8% → −4%. ❌ Com −6% → −4% virou **degrau na clavícula** dos
+  obesos. ❌ Misturar frente/trás pelo `t` (profundidade) levou o piso da frente
+  para o LADO, onde `t` também é 0 — dobrou a encosta do trapézio. A mistura do
+  piso é pelo ÂNGULO (35°→75°).
+- **quina na papada e canto da boca puxado** (`m_b05i_d1`, `m_b08_d1`): nos 18
+  corpos em que a régua lê acima do queixo, a rampa de 1% do teto cortava a
+  papada no meio. Lá a frente esmaece pela papada inteira, do queixo até a régua.
+  Custa faixa (a régua fica dentro da rampa): `m_b08_d1` +2,2 → +1,2 cm,
+  `m_b10_d1` perde o negativo. Visual limpo vale mais que centímetro num corpo
+  em que a régua do pescoço mede o rosto.
+
+- **vinco em V no alto do peito** (`m_b09_d2`, `m_b10_d2`), na segunda olhada nos
+  103: nos corpos em que a régua lê na papada, a calibração empurrava **2–3× o
+  natural** (naturalidade até 3,2). `PESCOCO_NATURAL_MAX = 1,3`: a amplitude não
+  passa de 1,3× a dos vizinhos do tipo por cm; o centímetro cede e a curva
+  continua medida. ❌ 1,6 ainda deixava o V. Atingiu 27 corpos, todos pesados ou
+  de pescoço muito grosso.
+
+> Os quatro passaram em TODAS as réguas numéricas — inclusive a de dobra, porque
+> uma quina não inverte triângulo. Foto decide (§7.5), e foto de 103, não de 10.
+
+#### 🧭 RECEITA para replicar em outro morph (bíceps, cintura, quadril...)
+
+Não é para aplicar de cabeça em todos: é para usar quando um morph falhar em
+pessoa real ou no olho dele. A ordem que funcionou no pescoço:
+
+1. **Medir a coleção, não o avatar.** Um perfil radial independente de topologia
+   em volta do eixo DAQUELE membro/região (raio por altura × ângulo, raio que sai
+   do eixo e acha a pele — `pescoco_perfil.py` é o molde). Descartar raio
+   rasante (pele quase paralela ao raio), que vira ruído.
+2. **Regredir o perfil contra a coluna da fita** entre vizinhos do mesmo tipo
+   (mesmo sexo, IMC em gaussiana-log, definição pesando menos) com ridge para o
+   sexo inteiro e alisamento. Sai, por avatar, ONDE o volume mora por cm — o
+   campo W. Grava em `config/<regiao>_campo.json`; o mapa é o produto.
+3. **Envelope só protege** (piso, teto, vizinho que tem morph próprio, rosto);
+   dentro dele quem manda é W. Landmarks do envelope medidos no corpo (queixo,
+   frente pelos pés) e gravados junto, nunca "o lado mais longe do centro".
+4. **Calibrar pela régua de sempre e imprimir a NATURALIDADE** (amplitude ÷ a dos
+   vizinhos por cm). Perto de 1 = a régua vê o que o morph faz. Muito acima =
+   a régua mede outra coisa ali; pôr TETO (no pescoço, 1,3×).
+5. **Régua do vale** (molde `pescoco_natural.py`): descritores de forma do estado
+   morfado contra a nuvem dos corpos reais do mesmo tipo na mesma medida. Alarme,
+   não trava.
+6. **Olhar os 103 no máximo e no mínimo** (molde `pescoco_tipos.py`) e as pessoas
+   reais ao lado da foto delas. Foi o único passo que pegou entalhe, quina e
+   vinco. Só então `--apply`.
+
+> **A lição de método:** "o mesmo campo em todos, só a amplitude calibrada" é
+> uma hipótese escondida — a de que todo corpo engorda igual. A coleção já
+> respondia que não; bastava uma medida independente de topologia para
+> perguntar. E landmark derivado de "o lado mais longe do centro" depende de
+> onde o centro está: num corpo que mudou de forma, mudou de lado.

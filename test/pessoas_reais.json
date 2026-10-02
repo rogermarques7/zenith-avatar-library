@@ -1,0 +1,43 @@
+{
+  "_sobre": "Medidas de fita de pessoas REAIS, para comparar com o avatar escolhido + morph. Fonte: 'fotos reais joice e rogerio/*/medidas *.txt' (fotos na mesma pasta). Chaves iguais às do app (body_measurements). waist_cm = cintura do UMBIGO; waist_min_cm = cintura MÍNIMA (só mulher, decidido em 28/09).",
+  "pessoas": [
+    {
+      "nome": "Rogério",
+      "sex": "m",
+      "height_cm": 176,
+      "weight_kg": 93.55,
+      "measures": {
+        "neck_cm": 41, "shoulder_cm": 119, "chest_cm": 108, "arm_cm": 37,
+        "forearm_cm": 29, "waist_cm": 106, "hip_cm": 108, "thigh_cm": 63, "calf_cm": 38
+      },
+      "origem": {"waist_cm": "medida no umbigo (21/08)"}
+    },
+    {
+      "nome": "Joice",
+      "sex": "f",
+      "height_cm": 159,
+      "weight_kg": 62.25,
+      "measures": {
+        "neck_cm": 32, "shoulder_cm": 105, "chest_cm": 94, "arm_cm": 28,
+        "forearm_cm": 26, "waist_cm": 88, "waist_min_cm": 77, "hip_cm": 97,
+        "thigh_cm": 60, "calf_cm": 35
+      },
+      "origem": {"waist_cm": "medida no umbigo (21/08)", "waist_min_cm": "informada por ele em 30/09; gravada no medidas joice.txt em 02/10"}
+    },
+    {
+      "nome": "Ana Júlia",
+      "sex": "f",
+      "height_cm": 164,
+      "weight_kg": 84,
+      "measures": {
+        "neck_cm": 38, "shoulder_cm": 115, "chest_cm": 117, "arm_cm": 37,
+        "forearm_cm": 27, "waist_cm": 112, "waist_min_cm": 97, "hip_cm": 118,
+        "thigh_cm": 72, "calf_cm": 39
+      },
+      "origem": {
+        "waist_min_cm": "medida (o .txt diz 'Cintura 97'; é o ponto mínimo que o app ensina à mulher desde 18/09)",
+        "waist_cm": "ESTIMADA em 30/09, não medida: 97 / 0,865. Razão mínima/umbigo dos 3 avatares de forma mais parecida (mínima/quadril ~0,82): 0,848–0,866; a Joice real dá 0,875 e a Ana tem mais barriga. Faixa plausível 110–115 cm."
+      }
+    }
+  ]
+}

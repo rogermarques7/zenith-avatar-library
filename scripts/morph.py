@@ -5,6 +5,7 @@
     python scripts/morph.py zen_m_b05h_d2 --fit     # calibra e sonda, NAO grava
     python scripts/morph.py zen_m_b05h_d2 --apply   # grava o dist v(n+1)
     python scripts/morph.py zen_m_b05h_d2 --remap   # so o mapa, sem gastar versao
+    python scripts/morph.py zen_m_b05h_d2 --preview # GLB em qa/preview/morph/, para olhar antes
 
 --------------------------------------------------------------------------
 POR QUE ELE LE O DIST E NAO O MASTER  (regra 9 do CLAUDE.md)
@@ -210,7 +211,17 @@ SWEEP = [-2.0, -1.5, -1.0, -0.5, 0.5, 1.0, 1.5, 2.0]
 # base contra o trapezio). Sobrava so o lado do crescimento, que renderia +0,2
 # cm - e eu nao renderizei o pescoco em +1,5. Numero sem foto nao fica na
 # tabela, e a regra acima vale tambem para mim.
-INFLUENCE_CAP = {"morph_calf": 2.0}
+#
+# 🔴 O PESCOCO VOLTA COM TETO ASSIMETRICO: -0,5 / +1,0 (sessao 41, 27/09).
+# Reprovado no olho dele no testador: *"o morph do pescoco entrou no vale da
+# estranheza"* (zen_m_b05k_d1, pescoco 48,7 cm pedido em 42). Em -1 (-6 cm) a
+# sonda contava zero invertida e a foto mostrava o pescoco virando HASTE - anel
+# na nuca, vinco na furcula, perfil concavo -, porque so o anel encolhe entre
+# cabeca e trapezio parados. Em -0,5 (-2,6 cm) as tres vistas ficam naturais.
+# Subir o piso da mascara (0,800 e 0,815) foi testado: melhora a frente e PIORA
+# o anel da nuca - refutado. O resto do pedido aparece como sobra.
+# Tupla = (teto do lado negativo, teto do lado positivo).
+INFLUENCE_CAP = {"morph_calf": 2.0, "morph_neck": (0.5, 1.0)}
 INFLUENCE_CAP_PADRAO = 1.0
 
 # A regua sobre a base tem que bater com o library_metrics.json. Acima disto o
@@ -218,6 +229,77 @@ INFLUENCE_CAP_PADRAO = 1.0
 TOL_BASE_CM = 0.6
 
 MAP_PATH = "config/morph_map.json"
+
+# Corte braco/tronco em distancia ao eixo do braco (ver `Base._corte_braco`).
+# Era booleano a 8 cm ate a sessao 41; braco grosso atravessava (LICOES 7.27).
+BRACO_CORTE = 0.080
+BRACO_CORTE_MIN = 0.070  # o corte em rampa nunca comeca antes disto do eixo
+BRACO_FOLGA = 0.006     # a pele tem que ficar a 6 mm do corte, senao ele anda
+BRACO_RAMPA = 0.015
+BRACO_RAZAO_MAX = 2.0   # raio por fatia / raio do biceps publicado: acima disto nao e braco
+BRACO_TRECHO = 0.85     # so o braco LIVRE: os ultimos 15% antes da fusao abrem para o tronco
+BICEPS_TOPO_L = (0.65, 0.85)  # topo da faixa do biceps em fracao do UMERO (cotovelo=0, cabeca=1): plato ate 0,65, zero em 0,85 (sessao 41)
+# 🔴 O PESCOCO E UM CILINDRO, NAO UMA FAIXA DE ALTURA (sessao 41, 30/09).
+# A mascara antiga subia de 0,760 a 0,835 da altura e empurrava TUDO naquela
+# faixa a partir do eixo do pescoco - trapezio, alto do ombro, alto do peito e
+# das costas. A regua do ombro le a 0,795, dentro dela: com o pescoco no
+# extremo o OMBRO andava ate 7,7 cm (m_b07_d3) e 6,9 (m_b05k_d1), somando por
+# cima do morph do ombro no app. E na frente o teto caia 5,5 cm antes do
+# queixo, entao o pescoco so ficava cheio num ANEL na base - o que ele viu:
+# *"o morph pega somente numa parte, precisamos que ele pegue todo o pescoco"*.
+# Agora: cheio ate PESCOCO_RAIO[0] raios do pescoco, zero em [1]; teto com
+# rampa de PESCOCO_TOPO. Medido: ombro vaza 0,1-1,3 cm (era ate 7,7).
+# ❌ Raio 1,25-1,75 zerou o vazamento e fez GOLA na base (degrau em +0,5 e
+# colarinho em -0,5, no render). ❌ Topo de 2 cm deixou faixa sob o queixo.
+# 🔴 Sessao 42 (01/10): o cilindro virou ENVELOPE. Dentro dele o peso e o campo
+# natural do tipo de corpo (config/pescoco_campo.json); cheio por igual, ele
+# fazia o "cano" no maximo (LICOES 7.30). Piso e teto agora contam do QUEIXO.
+PESCOCO_RAIO = (1.3, 3.0)
+# Sessao 42 (01/10): piso e teto passaram a ser medidos a partir do QUEIXO de
+# cada corpo (fracao de H), nao em fracao fixa - o queixo vai de 0,85 a 0,89 da
+# altura na colecao. Piso: cheio a partir de 5,5% abaixo do queixo (a furcula
+# fica em ~4,5%). Teto: na frente zera 0,6% ACIMA do queixo (a garganta sob a
+# mandibula tem que andar, e onde a regua le), na nuca 4% acima; rampa de 1%.
+# ❌ Zerar a frente em 0,9% (rampa cheia na altura da regua) foi testado: a
+# naturalidade do zen_f_b07i_d1 so foi de 1,55 a 1,52 e o zen_m_b01_d1 perdeu o
+# +1 pela trava de rosto. Nao e a rampa que faz a regua responder menos.
+PESCOCO_PISO = (-0.085, -0.055)
+PESCOCO_TETO = (0.006, 0.040)
+PESCOCO_TOPO = 0.010
+# ⚠️ Olhado nos 103 no maximo do slider (sessao 42): com o piso de tras valendo
+# tambem na FRENTE, o morph empurrava a pele inclinada do alto do esterno e
+# abria um ENTALHE ali (zen_m_b07h_d1, zen_f_b05_d2). A frente para na furcula.
+# ❌ Rampa curta (-0,060/-0,040) fez DEGRAU na clavicula dos obesos: 4% de H.
+PESCOCO_PISO_FRENTE = (-0.080, -0.040)
+# ... e nos corpos em que a regua le ACIMA do queixo (18, os obesos e alguns
+# musculosos de pescoco grosso), a rampa de 1% cortava a papada no meio: quina
+# ao longo da mandibula e canto da boca puxado (zen_m_b05i_d1, zen_m_b08_d1). La
+# a frente esmaece por toda a papada, do queixo ate a regua. Nos lados a rampa
+# cresce ate PESCOCO_TOPO_LADO: risco fino no lado do pescoco (zen_f_b09j_d1).
+PESCOCO_TOPO_LADO = 0.016
+PESCOCO_NATURAL_MAX = 1.3   # amplitude <= 1,3x a natural do tipo (ver worker_main); 1,6 ainda deixava o V no zen_m_b09_d2
+SONDA_MOV_MIN = 0.004   # 4 mm: triangulo que vira andando menos que isto nao se ve (foto, sessao 41)
+TRONCO_CENTRO_ALISA = 5   # fatias de 1 cm na media movel do centro do tronco (sessao 41)
+BICEPS_RAMPA_MIN = 0.030   # rampa de cima da faixa do biceps nunca menor que isto (sessao 41)
+
+# ⚠️ O DELTOIDE (25/09, sessao 40). Ate aqui o `morph_shoulder` era um BLOCO
+# em Z (0,745-0,885 da altura) por |x| > 0,055 H, empurrado so em +X: uma
+# "dragona" que escorregava o ombro inteiro de lado - trapezio, alto do peito
+# e costas juntos - com um corte HORIZONTAL atravessando o braco inclinado.
+# No obeso (zen_m_b12_d1) o bloco era metade do peito e das costas. Queixa
+# dele (25/09): "a localizacao ... estava um pouco errada, principalmente nos
+# ombros". Hoje e uma CAPSULA em volta do eixo do braco, fechada na cabeca do
+# umero (ver `Base._ombro_landmarks` e `Base._deltoide`). Os numeros abaixo
+# sao multiplos do RAIO DO BRACO, para a calota escalar com o corpo:
+OMBRO_CABECA_R = 1.1           # raio do circulo inscrito no canto do ombro
+OMBRO_R = (1.2, 2.9)           # queda radial: cheia ate 1,2 R, zero em 2,9 R
+OMBRO_DESCE = (1.2, 3.6)       # desce pelo braco: cheia ate 1,2 R, zero em 3,6 R
+OMBRO_LAT = (-1.0, 0.35)       # face da axila fora (cosseno com "para fora")
+OMBRO_R_BRACO = (0.028, 0.075)  # trava de sanidade do raio (m)
+OMBRO_R_BRACO_PISO = 0.205     # ... e piso relativo ao raio do anel do ombro
+# A calota ESTREITA (1,3-2,1 R) foi testada antes e reprovada no olho: na magra
+# (zen_f_b01_d1) +1 virava uma BOLA sobre o ombro e -1 deixava degrau na borda
+# de baixo. A larga distribui os mesmos +6 cm e as duas coisas somem.
 
 
 # ==========================================================================
@@ -234,11 +316,15 @@ def driver_main():
     ap.add_argument("--remap", action="store_true",
                     help="so reescreve o config/morph_map.json contra o dist "
                          "CORRENTE, sem exportar GLB nem gastar versao")
+    ap.add_argument("--preview", action="store_true",
+                    help="grava o GLB com shape keys em qa/preview/morph/{id}.glb - "
+                         "sem mapa, sem versao, sem aposentar nada")
     args = ap.parse_args()
-    if not (args.fit or args.apply or args.remap):
-        ap.error("escolha --fit (so mede), --apply (grava) ou --remap (so o mapa)")
-    if args.apply and args.remap:
-        ap.error("--apply e --remap sao excludentes")
+    if not (args.fit or args.apply or args.remap or args.preview):
+        ap.error("escolha --fit (so mede), --apply (grava), --remap (so o mapa) "
+                 "ou --preview (GLB em qa/, para olhar antes)")
+    if sum([args.apply, args.remap, args.preview]) > 1:
+        ap.error("--apply, --remap e --preview sao excludentes")
 
     root = mt.repo_root()
     _zp.sex_of(args.avatar_id)                     # estoura em id malformado
@@ -254,6 +340,8 @@ def driver_main():
         cmd.append("--apply")
     if args.remap:
         cmd.append("--remap")
+    if args.preview:
+        cmd.append("--preview")
     sys.exit(subprocess.run(cmd).returncode)
 
 
@@ -270,9 +358,49 @@ def sstep(x, a, b):
     return t * t * (3 - 2 * t)
 
 
+def _rampa_min(a, b, r):
+    """(a, b) alargado para b - a >= r, em volta do meio."""
+    if b - a >= r:
+        return a, b
+    c = 0.5 * (a + b)
+    return c - 0.5 * r, c + 0.5 * r
+
+
 def band(x, lo0, lo1, hi0, hi1):
     """Janela suave: sobe de lo0 a lo1, desce de hi0 a hi1."""
     return sstep(x, lo0, lo1) * (1.0 - sstep(x, hi0, hi1))
+
+
+CAMPO_PESCOCO_PATH = "config/pescoco_campo.json"
+_CAMPO_PESCOCO = {}
+
+
+def _campo_pescoco(aid):
+    """A entrada do avatar no config/pescoco_campo.json (frente, queixo, W).
+    Sem entrada o script PARA: cair num campo generico seria voltar ao
+    cilindro igual para todos, que e o defeito que este arquivo conserta."""
+    if not _CAMPO_PESCOCO:
+        p = os.path.join(mt.repo_root(), CAMPO_PESCOCO_PATH)
+        if not os.path.exists(p):
+            sys.exit("falta {} - rode scripts/pescoco_campo.py".format(CAMPO_PESCOCO_PATH))
+        _CAMPO_PESCOCO.update(json.load(open(p, encoding="utf8")))
+    e = _CAMPO_PESCOCO["avatars"].get(aid)
+    if e is None:
+        sys.exit("{} sem entrada em {} - rode scripts/pescoco_campo.py".format(
+            aid, CAMPO_PESCOCO_PATH))
+    return dict(e, _hq=_CAMPO_PESCOCO["hq"], _theta=_CAMPO_PESCOCO["theta"])
+
+
+def _bilinear(xs, ys, T, x, y):
+    """T[i][j] na grade (xs[i], ys[j]), avaliada em (x, y); fora da grade, a borda."""
+    import numpy as np
+    fx = np.interp(x, xs, np.arange(len(xs)))
+    fy = np.interp(y, ys, np.arange(len(ys)))
+    i0 = np.clip(np.floor(fx).astype(int), 0, len(xs) - 2)
+    j0 = np.clip(np.floor(fy).astype(int), 0, len(ys) - 2)
+    ax, ay = fx - i0, fy - j0
+    return ((1 - ax) * (1 - ay) * T[i0, j0] + ax * (1 - ay) * T[i0 + 1, j0]
+            + (1 - ax) * ay * T[i0, j0 + 1] + ax * ay * T[i0 + 1, j0 + 1])
 
 
 class Base(object):
@@ -281,7 +409,8 @@ class Base(object):
     sao curvas em Z, e por isso o mesmo campo pode ser avaliado na malha real
     (com a costura duplicada) sem recalcular nada."""
 
-    def __init__(self, co, mesh):
+    def __init__(self, co, mesh, aid=None):
+        self.aid = aid
         import numpy as np
         self.co, self.mesh = co, mesh
         self.n = len(co)
@@ -356,7 +485,7 @@ class Base(object):
         d_dir, _, _ = self._dist_eixo(co)
         d_esq, _, _ = self._dist_eixo(co * np.array([-1.0, 1.0, 1.0]))
         E_BRACO = np.minimum(d_dir, d_esq) < 0.085
-        self.tz, self.tc = self._perfil(co, ~E_BRACO, z + 0.30 * H, z + 0.98 * H)
+        self.tz, self.tc = self._perfil_tronco(co, ~E_BRACO, z + 0.30 * H, z + 0.98 * H)
 
         # --- PERFIL DE CADA PERNA, e o VAO entre elas por altura. O vao e o
         # que impede o morph de coxa/quadril de empurrar uma perna contra a
@@ -374,29 +503,240 @@ class Base(object):
         self.gz, self.gv = self._perfil_vao(co)
         self.az, self.av = self._perfil_axila(co)
 
-        # --- PESCOCO: eixo, frente, queixo (LICOES.md 7.5)
-        face = co[(co[:, 2] > z + 0.90 * H) & (co[:, 2] < z + 0.95 * H)]
-        self.frente = 1.0 if abs(face[:, 1].max()) > abs(face[:, 1].min()) else -1.0
+        # --- PESCOCO: eixo, frente, queixo (LICOES.md 7.5 e 7.30)
+        # 🔴 FRENTE e QUEIXO vem do `config/pescoco_campo.json` desde a sessao
+        # 42 (01/10), nao mais daqui. A frente era "o lado do rosto mais longe
+        # de y=0" e ERRAVA EM 30 DE 103 - no corpo pesado o centro da caixa vai
+        # para a frente e a nuca fica mais longe que o nariz. Nesses o morph do
+        # pescoco empurrava o QUEIXO e poupava a nuca, e a trava de rosto olhava
+        # a nuca. E o queixo por "salto de 25%" nao existe no obeso (pescoco em
+        # cone ate o rosto): caia no fim da varredura. Ver scripts/pescoco_campo.py.
         zs = np.arange(z + 0.80 * H, z + 0.92 * H, 0.005)
         cen = np.array([co[np.abs(co[:, 2] - t) < 0.006][:, :2].mean(axis=0) for t in zs])
         self.nx, self.ny = float(cen[:, 0].mean()), float(cen[:, 1].mean())
-        raios = []
-        for t in zs:
-            b = co[np.abs(co[:, 2] - t) < 0.005]
-            fr = b[:, 1] * self.frente > self.ny * self.frente
-            raios.append(float(np.sqrt((b[fr, 0] - self.nx) ** 2
-                                       + (b[fr, 1] - self.ny) ** 2).max()) if fr.any() else 0.0)
-        raios = np.array(raios)
-        i = int(np.argmin(raios))
-        salto = np.where(raios[i:] > raios[i] * 1.25)[0]
-        self.z_queixo = float(zs[i + salto[0]]) if len(salto) else float(zs[-1])
+        cp = _campo_pescoco(aid)
+        self.frente = float(cp["frente"])
+        self.z_queixo = z + float(cp["queixo_h"]) * H
+        self.pesc_W = np.array(cp["W"], float)
+        self.pesc_hq = np.array(cp["_hq"], float)
+        self.pesc_th = np.array(cp["_theta"], float)
+        self.pesc_s_ref = float(cp["s_ref_mm_cm"])
+        # ⚠️ Nos corpos de IMC > 60 a regua do pescoco (minimo da banda) le na
+        # BORDA de cima, 0,900 - acima do queixo, na papada. Proteger o rosto a
+        # partir do queixo deixava a regua parada (zen_m_b10_d1: amplitude no
+        # teto, 0 cm, 131 triangulos invertidos). Ali o pescoco medido E a
+        # papada, e no tipo pesado ela cresce junto (o campo mostra), entao o
+        # rosto protegido comeca acima de onde a regua le.
+        self.z_regua_pesc = float(mt.torso_extreme(
+            mesh, z + mt.NECK_BAND[0] * H, z + mt.NECK_BAND[1] * H, "min")[1])
+        self.z_rosto = max(self.z_queixo, self.z_regua_pesc)
+        # raio do pescoco onde a regua le (minimo da banda) - escala do cilindro
+        rs = []
+        for zz in np.arange(z + mt.NECK_BAND[0] * H, z + mt.NECK_BAND[1] * H, 0.004):
+            bb = co[np.abs(co[:, 2] - zz) < 0.003]
+            rr = np.hypot(bb[:, 0] - self.nx, bb[:, 1] - self.ny)
+            rr = rr[rr < 0.12]
+            if len(rr) > 8:
+                rs.append(float(np.median(rr)))
+        self.r_pescoco = min(rs) if rs else 0.060
 
         self.tris = mesh.tris
         self.nrm0, self.area0 = self.normais(co)
+        self._ombro_landmarks(co)
+        self._corte_braco(co, aid)
         # Piso de area para a sonda de inversao: abaixo dele a normal e ruido
         # numerico, nao dobra de superficie. Sem o piso um unico triangulo
         # lasca condenava a faixa inteira de um morph.
         self.area_min = float(np.median(self.area0)) * 0.02
+
+    # ------------------------------------------------------------- ombro
+    def _ombro_landmarks(self, co):
+        """A CABECA DO UMERO, decidida na malha base (LICOES 7.7).
+
+        O deltoide e uma CALOTA em volta da cabeca do umero. Tres jeitos de
+        achar o centro dela foram testados em 25/09; so o terceiro presta:
+          1. estender o eixo do braco para cima: o braco em A-pose inclina
+             tambem em PROFUNDIDADE (~0,22 em Y), e a reta sai pelas costas
+             do ombro 3 cm abaixo do topo;
+          2. estender so a vista frontal do eixo ate a silhueta de cima: o
+             eixo passa por DENTRO do ombro e so sai no trapezio (x 13 cm no
+             zen_m_b05h_d2, contra 20 do acromio);
+          3. o CIRCULO INSCRITO no canto do ombro, na silhueta frontal -
+             tangente a borda lateral (deltoide) e a de cima (acromio). O
+             centro dele e a cabeca do umero; o Y e o meio do corpo ali.
+        O raio da calota vem do braco livre logo abaixo da fusao, entao ela
+        escala com o corpo - magro, obeso, feminino - sem numero em metro."""
+        import numpy as np
+        z, H = self.zmin, self.H
+        secs = []
+        for f in np.arange(self.fusao_f - 0.045, self.fusao_f - 0.004, 0.005):
+            g = self._gap_braco(co, z + f * H)
+            if not g:
+                continue
+            b = co[np.abs(co[:, 2] - (z + f * H)) < 0.004]
+            a = b[b[:, 0] > g[1] - 0.003]
+            if len(a) >= 8:
+                secs.append(a)
+        if secs:
+            raios = [float(np.median(np.linalg.norm(a[:, :2] - a[:, :2].mean(axis=0), axis=1)))
+                     for a in secs]
+            # a secao horizontal de um cilindro inclinado e uma ELIPSE: o raio
+            # medio dela superestima o raio do braco no eixo maior.
+            self.r_braco = float(np.median(raios)) * (0.5 + 0.5 * abs(self.arm_e[2]))
+        else:
+            self.r_braco = 0.045
+        # ⚠️ Corpo obeso funde o braco cedo e a "fatia livre" pega tronco: o
+        # zen_m_b12_d1 media 19,7 cm de raio e o ombro morria. Trava + aviso.
+        if not (OMBRO_R_BRACO[0] <= self.r_braco <= OMBRO_R_BRACO[1]):
+            print("ombro: raio de braco {:.1f} cm fora de {:.1f}-{:.1f} - travado".format(
+                self.r_braco * 100, OMBRO_R_BRACO[0] * 100, OMBRO_R_BRACO[1] * 100))
+            self.r_braco = float(np.clip(self.r_braco, *OMBRO_R_BRACO))
+        # ⚠️ PISO pelo tamanho do corpo. No acervo o raio do braco fica entre
+        # 21% e 35% do raio do anel do ombro (mediana 26%); o zen_f_b12_d1 (IMC
+        # 114, braco fundido) mediu 17,8% e a calota saiu pequena e ALTA - em
+        # +1 virava um calombo no alto do ombro. O piso so alcanca quem esta
+        # fora da populacao sadia.
+        anel = mt.torso_at(self.mesh, z + mt.SHOULDER_FRAC * H)
+        if anel:
+            piso = OMBRO_R_BRACO_PISO * anel / (2 * np.pi)
+            if self.r_braco < piso:
+                print("ombro: raio de braco {:.1f} cm abaixo do piso {:.1f} ({:.0f}% do anel "
+                      "do ombro) - erguido".format(self.r_braco * 100, piso * 100,
+                                                   OMBRO_R_BRACO_PISO * 100))
+                self.r_braco = float(piso)
+        z_fusao = float((self.arm_c + self.t_fusao * self.arm_e)[2])
+        direita = co[(co[:, 0] > 0.02) & (co[:, 2] < z + 0.90 * H)]
+        Rc = OMBRO_CABECA_R * self.r_braco
+
+        def x_fora(zz):
+            b = direita[np.abs(direita[:, 2] - zz) < 0.004]
+            return float(b[:, 0].max()) if len(b) else None
+
+        def z_topo(xx):
+            b = direita[np.abs(direita[:, 0] - xx) < 0.004]
+            return float(b[:, 2].max()) if len(b) else None
+
+        cx = cz = None
+        for zz in np.arange(z_fusao, z + 0.88 * H, 0.002):
+            xo = x_fora(zz)
+            if xo is None:
+                continue
+            zt = z_topo(xo - Rc)
+            if zt is not None and zt - zz <= Rc:
+                cx, cz = xo - Rc, float(zz)
+                break
+        if cx is None:
+            print("ombro: canto do ombro nao achado - centro no eixo, a 0,80 H")
+            cx, cz = float((self.arm_c + self.t_fusao * self.arm_e)[0]), z + 0.80 * H
+        # O Y e o meio da CALOTA, nao do corpo: so o que esta ALEM do centro em
+        # x (deltoide puro). A coluna inteira naquele x pegava o alto do peito,
+        # e num busto volumoso (zen_f_b09j_d1) o centro caiu na FRENTE do ombro
+        # (y -0,8 contra +4 a +5 no acervo) - a calota escorria para o peito e
+        # o morph morreu.
+        fat = co[(co[:, 0] > cx) & (np.abs(co[:, 2] - cz) < 0.012)]
+        cy = float((fat[:, 1].max() + fat[:, 1].min()) / 2) if len(fat) > 4 else float(self.arm_c[1])
+        self.C_ombro = np.array([cx, cy, cz])
+        print("ombro: r_braco {:.1f} cm | cabeca do umero z/H {:.3f} x {:.1f} y {:+.1f} cm".format(
+            self.r_braco * 100, (cz - z) / H, cx * 100, cy * 100))
+
+    def _corte_braco(self, co, aid=None):
+        """ONDE ACABA O BRACO, em distancia ao eixo - e o corte tem que ficar
+        FORA do membro.
+
+        Ate a sessao 41 era fixo em 8,0 cm (`d < 0.080`, booleano). O braco
+        grosso passa disso: o zen_m_b08_d3 (biceps 62 cm) tem a pele a 8,6-9,3
+        cm do eixo no biceps, e o zen_f_b09i_d3 a 7,7 - 3 mm do corte. Um
+        vertice anda, o vizinho fica, o triangulo entre os dois inverte e o
+        morph do biceps morre justo no corpo de quem treina (LICOES 7.27).
+
+        O raio e o p98 da distancia ao eixo POR FATIA do braco livre, e o
+        corte sai do MAIOR deles. ⚠️ So ate 85% do caminho pulso->fusao: colada
+        na fusao a fatia abre para o tronco (11-14 cm no b08_d3), e o p98
+        global dessa regiao deu 20-28 cm nos obesos - o corte engolia o torax
+        (testado e refutado na sessao 41). Braco que cabe com folga dentro dos
+        8 cm fica BYTE A BYTE igual (`corte_adapt = False`)."""
+        import numpy as np
+        z, H = self.zmin, self.H
+        z_fim = self.z_pulso + BRACO_TRECHO * (z + self.fusao_f * H - self.z_pulso)
+        p98 = []
+        for zz in np.arange(self.z_pulso, z_fim, 0.006):
+            g = self._gap_braco(co, zz)
+            if not g:
+                continue
+            b = co[np.abs(co[:, 2] - zz) < 0.003]
+            a = b[b[:, 0] > g[1] - 0.003]
+            if len(a) >= 6:
+                p98.append(float(np.percentile(self._dist_eixo(a)[0], 98)))
+        self.r_braco_max = max(p98) if p98 else 0.0
+        # 🔴 TRAVA pela regua EXTERNA. Mesmo so no braco livre, em ~20 corpos
+        # alguma fatia pega outra coisa (o vao braco/tronco achado no lugar
+        # errado): 20-50 cm de "raio". Medido nos 103, a razao contra o raio da
+        # circunferencia PUBLICADA do biceps separa limpo - 1,05 a 1,76 nos
+        # sadios, 2,8 a 6,2 nos contaminados. Acima de BRACO_RAZAO_MAX o numero
+        # nao e braco e o corte fica fixo. Sem id (sonda antiga), idem.
+        r_pub = None
+        if aid:
+            p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                             "metrics", "library_metrics.json")
+            with open(p, "r", encoding="utf-8") as f:
+                c = json.load(f)["avatars"].get(aid, {}).get(
+                    "circumferences_cm", {}).get("biceps", {}).get("cm")
+            r_pub = c / 100.0 / (2 * np.pi) if c else None   # cm -> m
+        if r_pub is None or self.r_braco_max > BRACO_RAZAO_MAX * r_pub:
+            if self.r_braco_max + BRACO_FOLGA > BRACO_CORTE:
+                print("braco: raio {:.1f} cm NAO confere com o biceps publicado ({}) - "
+                      "corte fixo".format(self.r_braco_max * 100,
+                                          "{:.1f} cm de raio".format(r_pub * 100)
+                                          if r_pub else "sem medida"))
+            self.r_braco_max = 0.0
+        self.corte_adapt = self.r_braco_max + BRACO_FOLGA > BRACO_CORTE
+        # ⚠️ SEMPRE rampa, nunca booleano (LICOES 7.11). Enquanto a faixa do
+        # biceps parava no meio do braco, o degrau de 8 cm nunca era cruzado;
+        # com o topo subindo ao umero (sessao 41) ela chega a axila, onde o
+        # braco abre para o tronco, e o zen_m_b05h_d2 inverteu 31 triangulos
+        # exatamente em d = 0,080 (mascara 1,00 contra 0,00 a 1 mm).
+        self.corte_lo = max(BRACO_CORTE_MIN, self.r_braco_max + BRACO_FOLGA)
+        self.corte_hi = self.corte_lo + BRACO_RAMPA
+        print("braco: raio max {:.1f} cm ({} fatias) | corte RAMPA {:.1f}-{:.1f} cm{}".format(
+            self.r_braco_max * 100, len(p98), self.corte_lo * 100, self.corte_hi * 100,
+            " (alargado)" if self.corte_adapt else ""))
+
+    def _no_braco(self, d):
+        """peso (0..1) de pertencer ao braco, pela distancia ao eixo."""
+        return 1.0 - sstep(d, self.corte_lo, self.corte_hi)
+
+    def _deltoide(self, P):
+        """(mascara, direcao) do deltoide: CAPSULA em volta do eixo do braco,
+        fechada na cabeca do umero.
+
+        A direcao e a radial da capsula - abaixo da cabeca, perpendicular ao
+        braco (o musculo engorda para fora do osso, nao escorrega de lado);
+        acima dela, esferica (a calota abre). O eixo e o `arm_e` ja ajustado
+        (estavel em ~23 graus no acervo); ligar o centro ao centroide da fusao
+        foi testado e deu 74 graus no obeso. A face que olha para a axila fica
+        fora (`OMBRO_LAT`), senao o vao braco/tronco fecha."""
+        import numpy as np
+        R = self.r_braco
+        m = np.zeros(len(P))
+        dirv = np.zeros((len(P), 3))
+        e = self.arm_e
+        o = np.array([1.0, 0.0, 0.0]) - e[0] * e
+        o /= np.linalg.norm(o)
+        for sg in (+1.0, -1.0):
+            Q = P * np.array([sg, 1.0, 1.0])
+            t = (Q - self.C_ombro) @ e
+            eixo = self.C_ombro + np.minimum(t, 0.0)[:, None] * e
+            v = Q - eixo
+            r = np.maximum(np.linalg.norm(v, axis=1), 1e-6)
+            u = v / r[:, None]
+            w = ((1.0 - sstep(r, OMBRO_R[0] * R, OMBRO_R[1] * R))
+                 * sstep(t, -OMBRO_DESCE[1] * R, -OMBRO_DESCE[0] * R)
+                 * sstep(u @ o, OMBRO_LAT[0], OMBRO_LAT[1])
+                 * sstep(Q[:, 0], 0.03, 0.06))
+            lado = (P[:, 0] * sg) > 0
+            m = np.where(lado, w, m)
+            dirv[lado] = (u * np.array([sg, 1.0, 1.0]))[lado]
+        return m, dirv
 
     # ------------------------------------------------------------------ util
     def _gap_braco(self, co, z, half=0.006):
@@ -427,6 +767,36 @@ class Base(object):
                 ult = co[s, :2].mean(axis=0)
             cent.append(ult)
         return zs, np.array(cent)
+
+    def _perfil_tronco(self, co, sel, z0, z1):
+        """(zs, centros XY) do TRONCO - o meio da caixa da fatia, alisado em Z.
+
+        🔴 Ate a sessao 41 era o `_perfil` (MEDIA dos vertices da fatia), e a
+        media segue a DENSIDADE da malha: no cos do short e nas bordas da faixa
+        ha muito mais vertice, e o centro pulava ate 8 cm para a frente ou para
+        tras entre fatias a 1 cm uma da outra. A direcao radial de cintura,
+        quadril e peito sai daqui, entao dois vizinhos de 5 mm recebiam
+        empurroes a 15 graus um do outro e o triangulo entre eles virava - eram
+        os furos do item D (f_b07i_d1 em z/H 0,585 com o pulo em 0,586;
+        m_b04_d1 em 0,563 com o pulo em 0,563), visiveis no render.
+        O meio da caixa nao depende de quantos vertices ha em cada lado; e o
+        alisamento (media movel de 5 fatias) tira o que sobra de degrau."""
+        import numpy as np
+        zs = np.arange(z0, z1, 0.01)
+        cent, ult = [], np.array([0.0, 0.0])
+        for t in zs:
+            s = sel & (np.abs(co[:, 2] - t) < 0.010)
+            if s.sum() > 6:
+                xy = co[s, :2]
+                ult = (xy.min(axis=0) + xy.max(axis=0)) / 2.0
+            cent.append(ult)
+        cent = np.array(cent)
+        k = TRONCO_CENTRO_ALISA
+        if len(cent) > k:
+            pad = np.pad(cent, ((k // 2, k // 2), (0, 0)), mode="edge")
+            cent = np.stack([np.convolve(pad[:, j], np.ones(k) / k, mode="valid")
+                             for j in range(2)], axis=1)
+        return zs, cent
 
     def _perfil_vao(self, co):
         """(zs, folga entre as duas pernas) por altura. Onde elas se tocam,
@@ -467,15 +837,16 @@ class Base(object):
         gravar o shape key) recebem exatamente o mesmo deslocamento."""
         import numpy as np
         z, H = self.zmin, self.H
-        Z, absx = P[:, 2], np.abs(P[:, 0])
+        Z = P[:, 2]
         n = len(P)
 
         # -------- identidade e direcoes do braco
         d_dir, _, perp_dir = self._dist_eixo(P)
         d_esq, _, perp_esq = self._dist_eixo(P * np.array([-1.0, 1.0, 1.0]))
         d_braco = np.minimum(d_dir, d_esq)
-        br_dir = (P[:, 0] > 0) & (d_dir < 0.080)
-        br_esq = (P[:, 0] < 0) & (d_esq < 0.080)
+        br_dir = (P[:, 0] > 0) & (self._no_braco(d_dir) > 0)
+        br_esq = (P[:, 0] < 0) & (self._no_braco(d_esq) > 0)
+        w_br = np.where(P[:, 0] > 0, self._no_braco(d_dir), self._no_braco(d_esq))
         # t = quanto o vertice andou AO LONGO do eixo do proprio braco (ver
         # t_pulso/t_top/t_fusao na Base). Um so array: cada lado projeta no seu
         # eixo, e o lado oposto fica com valor irrelevante porque as mascaras
@@ -553,10 +924,9 @@ class Base(object):
         dir_neck[:, 1] = r[:, 1] / rn
 
         # ================================================== as mascaras
-        # OMBRO - empurra lateral em X, na banda da medida (0,795). Exclui o
-        # pescoco por |x| e desce suave para nao degrauar o peito.
-        m_ombro = (band(Z, z + 0.745 * H, z + 0.790 * H, z + 0.845 * H, z + 0.885 * H)
-                   * sstep(absx, 0.055 * H, 0.105 * H))
+        # OMBRO - o DELTOIDE, capsula em volta do eixo do braco (25/09; ver
+        # OMBRO_* no topo). A regua le em 0,795, que passa pela calota.
+        m_ombro, dir_ombro = self._deltoide(P)
 
         # BICEPS e ANTEBRACO - so no braco, e as janelas em Z sao as MESMAS em
         # que o metrics.py mede, para calibrar o que a regua le.
@@ -565,7 +935,7 @@ class Base(object):
         # maximo continua onde estava e a medida so anda quando o morph passa
         # por cima dele: media +0,1 cm em influence 0,5 e +4,3 cm em 1,0, ou
         # seja o mapa mentiria em toda a metade de baixo da faixa.
-        no_braco = (br_dir | br_esq).astype(float)
+        no_braco = (br_dir | br_esq).astype(float) * w_br
         # 🔴 O BICEPS E FAIXA NO EIXO DO BRACO, NAO EM ALTURA (14/08, 3a versao;
         # as duas anteriores falharam no testador, com print do Rogerio).
         #
@@ -604,6 +974,30 @@ class Base(object):
         # novo. Corpo obeso funde o braco cedo demais para esta banda ter folga.
         # O valor abaixo e o que esta APLICADO nos 76 e verificado na foto.
         t_hi1 = self.t_fusao + 0.05 * vao_br
+        # ⚠️ RAMPA MINIMA nas duas bordas (sessao 41, LICOES 7.27). Quando a
+        # fusao cola no arm_top, t_hi1 - t_hi0 cai a ZERO (zen_m_b06h_d3,
+        # m_b07_d3, m_b08_d3) e a borda de cima vira degrau no eixo: o
+        # triangulo que o atravessa inverte e o biceps morre inteiro. No
+        # braco curto (zen_m_b11_d1, vao pulso->top de 8 cm) e a de BAIXO que
+        # encolhe. A rampa curta e alargada em volta do proprio meio - quem ja
+        # tem rampa maior nao muda.
+        # 🔴 O TOPO DA FAIXA VEM DO UMERO, NAO DA AXILA (sessao 41, reprovado
+        # no olho dele: "ta morfando o cotovelo e nao o biceps"). O mapa de
+        # localizacao mostrou a mascara numa faixa estreita logo acima do
+        # cotovelo em TODOS os corpos, inclusive no b05h_d2. Medido ao longo do
+        # eixo (`biceps_eixo.py`), em fracao do umero a partir do cotovelo: a
+        # faixa antiga ia de 0,06 a 0,34-0,50 (a fusao, que e a axila projetada
+        # num braco inclinado), e a regua le a 0,24-0,31. A metade de cima do
+        # braco - o ventre do biceps - ficava parada. Agora o plato vai ate
+        # BICEPS_TOPO_L[0] do umero e a rampa morre em [1], onde o deltoide ja
+        # manda (a cabeca do umero e a mesma do deltoide). Nunca abaixo do antigo.
+        # ❌ Em raios de braco (3,0 R / 1,8 R) nao serviu: 3 R num braco de 7,5
+        # cm sao 22 cm, e a faixa continuava no meio do braco.
+        t_cab = float((self.C_ombro - self.arm_c) @ self.arm_e)
+        L_um = t_cab - t_cot
+        t_hi0 = max(t_hi0, t_cot + BICEPS_TOPO_L[0] * L_um)
+        t_hi1 = max(t_hi1, t_cot + BICEPS_TOPO_L[1] * L_um)
+        t_hi0, t_hi1 = _rampa_min(t_hi0, t_hi1, BICEPS_RAMPA_MIN)
         m_biceps = no_braco * band(t_arm, t_lo0, t_lo1, t_hi0, t_hi1)
         # ⚠️ A DESCIDA DO ANTEBRACO MORRE NO COTOVELO, nao no meio do osso.
         # A versao anterior fechava de z_meio-0,010 a z_meio+0,020: 3 cm de
@@ -620,8 +1014,20 @@ class Base(object):
                                       self.z_meio + 0.010, self.arm_top - 0.010)
         # ⚠️ GATE DE PROPRIEDADE (licao v84 do engine): onde o biceps manda, o
         # ombro nao mexe. Sem isso os dois campos se somam no vale da axila,
-        # que e onde a membrana nasceu la.
-        m_ombro = m_ombro * (1 - 0.85 * m_biceps)
+        # que e onde a membrana nasceu la. Era 0,85 com a dragona; o deltoide
+        # cobre de verdade o terco de cima do braco (ele e o musculo que fica
+        # POR CIMA do biceps ali), e com 0,85 a calota era apagada justo onde
+        # a regua do biceps nao le.
+        #
+        # ⚠️ E o gate usa o braco em RAMPA, nao o `no_braco` booleano: a
+        # mascara do biceps tem degrau em 8 cm do eixo, e no braco grosso esse
+        # degrau passava para o ombro - o zen_m_b08_d3 (biceps 62 cm) nunca
+        # teve morph de ombro por UM triangulo a 8,1 cm do eixo. Sem o degrau,
+        # zero invertidos.
+        braco_suave = np.where(P[:, 0] > 0,
+                               1.0 - sstep(d_dir, 0.065, 0.095),
+                               1.0 - sstep(d_esq, 0.065, 0.095))
+        m_ombro = m_ombro * (1 - 0.5 * braco_suave * band(t_arm, t_lo0, t_lo1, t_hi0, t_hi1))
 
         # PEITO e CINTURA - radiais do centro do tronco, FUGINDO DO BRACO por
         # distancia (licao v23/v26: gate por |x| cola no braco em A-pose).
@@ -665,23 +1071,42 @@ class Base(object):
         # dobrava 22 triangulos, TODOS nas costas, exatamente na faixa da
         # transicao. Agora a mistura leva 11 cm e a descida 5,5 cm.
         t = np.clip((P[:, 1] * self.frente - self.ny * self.frente) / -0.11, 0.0, 1.0)
-        # E o teto da FRENTE sobe de 1,2 para 0,5 cm abaixo do queixo. Nao e
-        # folga de esperto: neste avatar o ponto mais estreito do pescoco (onde
-        # a regua le, 0,865) fica a 0,4% do queixo (0,869), entao com 1,2 cm de
-        # recuo a frente ja estava ZERADA no lugar da medida - o morph so
-        # apertava nuca e lados, e era isso que saturava o centimetro.
-        # A trava do rosto continua sendo quem manda parar (LICOES 7.5).
-        teto_frente = self.z_queixo - 0.005
-        teto = teto_frente + ((z + 0.905 * H) - teto_frente) * t
-        m_pescoco = (sstep(Z, z + 0.760 * H, z + 0.835 * H)
-                     * (1 - sstep(Z, teto - 0.055, teto)))
-
-        lateral = np.zeros((n, 3))
-        lateral[:, 0] = np.sign(P[:, 0])
+        # 🔴 O PESO VEM DA COLECAO, POR TIPO DE CORPO (sessao 42, 01/10). O
+        # cilindro de altura cheia empurrava 2,3 cm de raio POR IGUAL no
+        # zen_m_b01_d1 para a regua (minimo logo abaixo do queixo) ler +3,4 cm:
+        # a circunferencia visivel andava ~+14 cm, a mandibula sumia e a cabeca
+        # ficava "sobre um cano" (veredito dele). Hoje W(hq, theta) e a
+        # inclinacao NATURAL do raio contra a circunferencia entre os vizinhos
+        # do mesmo tipo (scripts/pescoco_campo.py): o magro engrossa no
+        # lado-tras e quase nada acima do queixo; o pesado na papada e na nuca.
+        # O envelope abaixo so protege: piso na base do pescoco (abaixo e peito
+        # e trapezio, que tem morph proprio), teto no rosto, cilindro no ombro.
+        hq = (Z - z) / H - (self.z_queixo - z) / H
+        ang = np.degrees(np.arctan2(np.abs(P[:, 0] - self.nx),
+                                    (P[:, 1] - self.ny) * self.frente))
+        W = _bilinear(self.pesc_hq, self.pesc_th, self.pesc_W, hq, ang)
+        teto_f = self.z_rosto + PESCOCO_TETO[0] * H
+        teto_c = max(self.z_queixo + PESCOCO_TETO[1] * H, teto_f + 0.020 * H)
+        teto = teto_f + (teto_c - teto_f) * t
+        # comprimento da rampa: 1% na frente (+ a papada, quando a regua le
+        # acima do queixo), crescendo para os lados e a nuca
+        papada = (self.z_rosto - self.z_queixo) * (1 - t)
+        rampa = (PESCOCO_TOPO + (PESCOCO_TOPO_LADO - PESCOCO_TOPO) * np.clip(2 * t, 0, 1)) * H + papada
+        # o piso da frente vale SO na frente: pelo angulo, nao pelo `t` (que
+        # e 0 tambem no lado - la a encosta do trapezio dobrava, zen_m_b10_d1)
+        lado = sstep(ang, 35.0, 75.0)
+        piso0 = PESCOCO_PISO_FRENTE[0] + (PESCOCO_PISO[0] - PESCOCO_PISO_FRENTE[0]) * lado
+        piso1 = PESCOCO_PISO_FRENTE[1] + (PESCOCO_PISO[1] - PESCOCO_PISO_FRENTE[1]) * lado
+        r_pesc = np.hypot(P[:, 0] - self.nx, P[:, 1] - self.ny)
+        m_pescoco = (sstep(hq, piso0, piso1)
+                     * (1 - sstep(Z, teto - rampa, teto))
+                     * (1 - sstep(r_pesc, PESCOCO_RAIO[0] * self.r_pescoco,
+                                  PESCOCO_RAIO[1] * self.r_pescoco))
+                     * W)
 
         return {
             "morph_neck":     (m_pescoco,   dir_neck),
-            "morph_shoulder": (m_ombro,     lateral),
+            "morph_shoulder": (m_ombro,     dir_ombro),
             "morph_chest":    (m_peito,     dir_trunk),
             "morph_waist":    (m_cintura,   dir_trunk),
             "morph_hip":      (m_quadril,   dir_trunk),
@@ -730,7 +1155,7 @@ class Base(object):
         mesmo. Ela entao acusava 'movimento no rosto' em toda amplitude,
         inclusive nas boas. Trava mal definida e pior que trava nenhuma:
         ensina a ignorar o alarme (LICOES.md 7.5)."""
-        return ((P[:, 2] > self.z_queixo + 0.01)
+        return ((P[:, 2] > self.z_rosto + 0.01)
                 & (P[:, 1] * self.frente > self.ny * self.frente))
 
     # --------------------------------------------------------------- sondas
@@ -739,8 +1164,17 @@ class Base(object):
         maior movimento no rosto cm)."""
         import numpy as np
         nr, area = self.normais(P)
+        # ⚠️ So conta triangulo que ANDOU o bastante para a dobra ser vista
+        # (sessao 41, 01/10). Na cintura do f_b08_d2, f_b09i_d1 e f_b05_d2 a
+        # sonda travava o lado negativo inteiro por UM triangulo que virava com
+        # 0,8-3,2 mm de movimento - e o render em -1 saiu limpo nos tres. Os
+        # furos reais (f_b07i_d1, m_b04_d1) andavam 8-10 mm. Nao e a tolerancia
+        # "ate 2 invertidos" refutada na §7.23: aquela contava TRIANGULOS e o
+        # mesmo numero era visivel num corpo e invisivel no outro; esta mede o
+        # tamanho do movimento, e o limite veio da foto. LICOES 7.29.
+        anda = np.linalg.norm(P - self.co, axis=1)[self.tris].max(axis=1) >= SONDA_MOV_MIN
         toca = (mask[self.tris].max(axis=1) > 0.05) & (area > self.area_min) \
-            & (self.area0 > self.area_min)
+            & (self.area0 > self.area_min) & anda
         inv = int(((nr * self.nrm0).sum(axis=1) < 0)[toca].sum())
         rst = self.rosto(self.co)
         mov = float(np.linalg.norm((P - self.co)[rst], axis=1).max() * 100) if rst.any() else 0.0
@@ -1030,12 +1464,13 @@ def worker_main():
     ap.add_argument("--id", required=True)
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--remap", action="store_true")
+    ap.add_argument("--preview", action="store_true")
     args = ap.parse_args(argv)
 
     root, aid = args.root, args.id
     ver_atual, src = _zp.dist_glb_current(root, aid)
     ob, co_real, co, mesh, sk_existentes = carregar(src)
-    base = Base(co, mesh)
+    base = Base(co, mesh, aid)
     offset_m, offset_bruto_cm = calibrar_offset_coxa(root, aid, base, co)
     base.thigh_offset = offset_m
     if offset_bruto_cm is not None:
@@ -1191,6 +1626,24 @@ def worker_main():
                       b0, tocados))
         print("  influence 1.0 = amplitude {:.4f} m -> {:+.2f} cm (alvo {:+.1f} em {:+.0f})"
               .format(amp, conf_cm, alvo, sg))
+        if key == "morph_neck":
+            # 1,0 = o pescoco anda o que os vizinhos do mesmo tipo andam por
+            # centimetro de fita; muito acima disso o morph esta empurrando a
+            # pele mais do que a regua ve (o "cano" de antes da sessao 42).
+            natural = alvo * base.pesc_s_ref / 1000.0
+            print("  naturalidade: amplitude / (cm x s_ref) = {:.2f}".format(amp / natural))
+            # 🔴 TETO DE NATURALIDADE. Nos 15 corpos em que a regua le na
+            # papada (obesos, musculosos de pescoco muito grosso) a calibracao
+            # chegava a 2-3x o natural e o maximo abria VINCO EM V no alto do
+            # peito (zen_m_b09_d2, zen_m_b10_d2) - nenhuma sonda acusa, so a
+            # foto. Ali a regua do pescoco mede rosto; o centimetro cede, a
+            # curva continua medida e o app sabe o que o morph alcanca.
+            if amp > PESCOCO_NATURAL_MAX * natural:
+                amp = PESCOCO_NATURAL_MAX * natural
+                print("  TETO DE NATURALIDADE: amplitude -> {:.4f} m ({:.1f}x natural)".format(
+                    amp, PESCOCO_NATURAL_MAX))
+                conf = medir(base, co + d * (m * amp)[:, None], col)
+                conf_cm = (conf * 100 - b0) if conf else float("nan")
         print("  {:>10} {:>10} {:>8} {:>10} {:>10} {:>9}"
               .format("influence", "delta cm", "norm.inv", "axila cm", "coxas cm", "rosto cm"))
 
@@ -1212,9 +1665,10 @@ def worker_main():
         # ⚠️ Faixa CONTINUA a partir do zero: se -1.0 quebra, -1.5 nao vale por
         # ter passado. A amplitude util vai ate o PRIMEIRO defeito.
         teto = INFLUENCE_CAP.get(key, INFLUENCE_CAP_PADRAO)
-        hi = min(_ate_o_defeito([s for s in SWEEP if s > 0], limpo), teto)
+        teto_neg, teto_pos = teto if isinstance(teto, tuple) else (teto, teto)
+        hi = min(_ate_o_defeito([s for s in SWEEP if s > 0], limpo), teto_pos)
         lo = max(_ate_o_defeito(sorted([s for s in SWEEP if s < 0], reverse=True), limpo),
-                 -teto)
+                 -teto_neg)
         # LINEARIDADE: o mapa promete "cm_at_full x influence". Se meia
         # influence nao der meio centimetro, o app erra a metade de baixo da
         # faixa sem nada avisar - foi assim que o biceps deu +0,1 cm em 0,5 e
@@ -1331,7 +1785,7 @@ def worker_main():
         _gravar_mapa(root, aid, ver_atual, usaveis, ruim)
         return
 
-    if not args.apply:
+    if not (args.apply or args.preview):
         print("\n--fit: nada gravado. Rode com --apply para gerar o dist.")
         return
 
@@ -1343,6 +1797,12 @@ def worker_main():
         k.slider_min, k.slider_max = -2.0, 2.0
 
     nova, dest = _zp.dist_glb_next(root, aid)
+    # --preview: o MESMO arquivo que o --apply gravaria, fora do CDN (a regra 8
+    # vale para 03_dist/glb/; qa/ nao e URL de ninguem). O ciclo e OLHA ->
+    # APLICA, como no shorts.py (LICOES 4.5m).
+    if args.preview:
+        dest = os.path.join(root, "qa", "preview", "morph", aid + ".glb")
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
     for o in bpy.context.scene.objects:
         o.select_set(o is ob)
     bpy.context.view_layer.objects.active = ob
@@ -1367,6 +1827,10 @@ def worker_main():
         os.remove(dest)
         sys.exit("TRAVA: o arquivo novo nao passou na conferencia - nada foi aposentado.")
 
+    if args.preview:
+        print("\npreview: {} ({:.0f} KB) - mapa e dist intocados".format(
+            dest, os.path.getsize(dest) / 1024))
+        return
     gone = _zp.dist_glb_retire(root, aid, keep=nova)
     print("\ndist  : {} ({:.0f} KB){}"
           .format(dest, os.path.getsize(dest) / 1024,
@@ -1440,6 +1904,53 @@ def _travar_combinado(base, co, resultado, masks, sinal, nome):
                   "{:.2f}".format(vc) if vc is not None else "FECHOU"))
     if inv <= TOL_INV:
         return
+    # ONDE o combinado dobra (sessao 41): a trava corta o grupo culpado por
+    # igual, e sem o lugar nao ha como saber se o culpado e o campo certo.
+    soma = sum(r["delta"] * infl.get(r["key"], 0.0) for r in resultado)
+    nr, area = base.normais(co + soma)
+    virou = np.where(((nr * base.nrm0).sum(axis=1) < 0) & (area > base.area_min)
+                     & (base.area0 > base.area_min))[0]
+    for i in virou[:8]:
+        c = co[base.tris[i]].mean(axis=0)
+        da = min(base._dist_eixo(c[None])[0][0],
+                 base._dist_eixo((c * np.array([-1.0, 1.0, 1.0]))[None])[0][0])
+        quem = [r["key"][6:] for r in resultado
+                if masks[r["key"]][0][base.tris[i]].max() > 0.05 and infl.get(r["key"])]
+        print("    dobra: z/H {:.3f} x {:+.3f} y {:+.3f} | eixo do braco a {:.1f} cm | "
+              "area {:.2f}x mediana | campos: {}".format(
+                  (c[2] - base.zmin) / base.H, c[0], c[1], da * 100,
+                  base.area0[i] / np.median(base.area0), ", ".join(quem)))
+
+    # 🔴 O BRACO PAGA PRIMEIRO (sessao 41). A dobra do combinado perto da
+    # axila e do empurrao do braco entrando no tronco, e a trava uniforme
+    # cortava PEITO e CINTURA junto com o biceps para paga-la (f_b04_d3:
+    # peito +3,8 -> +2,6; m_b06m_d3: peito a 45%). Tronco e a coluna que mais
+    # pesa na selecao; o braco e absorvido pelo morph (LICOES 7.3). Entao o
+    # braco encolhe SOZINHO ate deixar de contribuir para o defeito, e so o que
+    # sobra passa pela trava uniforme abaixo.
+    # ❌ Separar a juncao pela NORMAL (o campo do braco nao empurra pele do
+    # tronco) foi testado antes e refutado: consertou 2 corpos e matou o
+    # biceps de outros 2 - a transicao de dono vira gradiente novo na mascara.
+    mudou = {}
+    bracos = [r["key"] for r in resultado
+              if r["key"] in ("morph_biceps", "morph_forearm") and infl.get(r["key"])
+              and _sondar(_acoplar(dict(infl, **{r["key"]: 0.0})))[0] < inv]
+    if bracos:
+        sem_braco = _sondar(_acoplar(dict(infl, **{k: 0.0 for k in bracos})))[0]
+        if sem_braco < inv:
+            for f in (0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.0):
+                tent = _acoplar({k: (round(v * f, 2) if k in bracos else v)
+                                 for k, v in infl.items()})
+                inv_f = _sondar(tent)[0]
+                if inv_f <= sem_braco:
+                    break
+            print("    TRAVA do combinado: o braco paga primeiro - {:.0%} da faixa em {} "
+                  "-> invertidas {}".format(f, ", ".join(bracos), inv_f))
+            infl, inv = tent, inv_f
+            mudou.update({k: infl[k] for k in bracos})
+    if inv <= TOL_INV:
+        _gravar_trava(base, co, resultado, mudou, sinal, lim)
+        return
 
     # quem, tirado do estado, faz o defeito diminuir
     moveis = [r["key"] for r in resultado if infl.get(r["key"]) and not r.get("couple")]
@@ -1458,13 +1969,40 @@ def _travar_combinado(base, co, resultado, masks, sinal, nome):
         if inv_f <= TOL_INV:
             break
 
+    # ⚠️ ZERAR um morph inteiro por uma lasca e o pior desfecho (sessao 41:
+    # zen_m_b06i_d3 perdeu a cintura positiva, +7,6 -> 0, por UM triangulo de
+    # 0,06x a area mediana na axila). O criterio "quem, tirado sozinho, reduz"
+    # achou so a cintura - peito e biceps tambem empurram ali, e nenhum deles
+    # sozinho resolve. Se chegou a zero, tenta o grupo de TODOS os campos que
+    # tocam as dobras, juntos; fica com ele se resolver sem zerar ninguem.
+    if f == 0.0:
+        soma = sum(r["delta"] * infl.get(r["key"], 0.0) for r in resultado)
+        nr, area = base.normais(co + soma)
+        virou = np.where(((nr * base.nrm0).sum(axis=1) < 0) & (area > base.area_min)
+                         & (base.area0 > base.area_min))[0]
+        tocam = [k for k in moveis
+                 if len(virou) and masks[k][0][base.tris[virou]].max() > 0.05]
+        if tocam and set(tocam) != set(culpados):
+            for g in (0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3):
+                alt = _acoplar({k: (round(v * g, 2) if k in tocam else v)
+                                for k, v in infl.items()})
+                if _sondar(alt)[0] <= TOL_INV:
+                    print("    TRAVA do combinado: zeraria {} - o grupo das dobras resolve "
+                          "a {:.0%}".format(", ".join(culpados), g))
+                    f, tent, culpados, inv_f = g, alt, tocam, 0
+                    break
     print("    TRAVA do combinado: {:.0%} da faixa em {} -> invertidas {}"
           .format(f, ", ".join(culpados), inv_f))
+    mudou.update({k: tent[k] for k in culpados})
+    _gravar_trava(base, co, resultado, mudou, sinal, lim)
 
+
+def _gravar_trava(base, co, resultado, mudou, sinal, lim):
+    """Reescreve a curva e o limite de quem a trava do combinado encolheu."""
     for r in resultado:
-        if r["key"] not in culpados:
+        if r["key"] not in mudou:
             continue
-        novo = tent[r["key"]]
+        novo = mudou[r["key"]]
         b0 = medir(base, co, r["column"]) * 100
         P = co + r["delta"] * novo
         for outro in resultado:                      # a forma anda junto
@@ -1591,14 +2129,37 @@ def _gltf_targets(path):
 
 
 def _gravar_mapa(root, aid, versao, resultado, dropped=()):
+    """Le-modifica-grava do mapa, com TRAVA de arquivo e gravacao atomica.
+
+    ⚠️ Sessao 42 (01/10): o lote passou a rodar em paralelo. Sem trava, dois
+    workers leem o mesmo mapa e o ultimo a gravar apaga a entrada do outro; e
+    se um le no meio da gravacao do outro, o JSON vem truncado - e o fallback
+    antigo (`data = {}`) gravaria um mapa com UM avatar so. Agora JSON ilegivel
+    PARA o script, em vez de recomecar do zero."""
+    import time
     p = os.path.join(root, MAP_PATH)
+    trava = p + ".lock"
+    for _ in range(600):
+        try:
+            fd = os.open(trava, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            os.close(fd)
+            break
+        except FileExistsError:
+            time.sleep(0.5)
+    else:
+        sys.exit("TRAVA: {} preso ha 5 min - apagar so se nenhum morph.py "
+                 "estiver rodando".format(trava))
+    try:
+        _gravar_mapa_travado(p, aid, versao, resultado, dropped)
+    finally:
+        os.remove(trava)
+
+
+def _gravar_mapa_travado(p, aid, versao, resultado, dropped):
     data = {}
     if os.path.isfile(p):
-        try:
-            with open(p, "r", encoding="utf-8") as f:
-                data = json.load(f)
-        except (ValueError, OSError):
-            data = {}
+        with open(p, "r", encoding="utf-8") as f:
+            data = json.load(f)
     data[aid] = {
         "glb_version": versao,
         "dropped_columns": list(dropped),
@@ -1621,8 +2182,10 @@ def _gravar_mapa(root, aid, versao, resultado, dropped=()):
                    for r in resultado],
     }
     os.makedirs(os.path.dirname(p), exist_ok=True)
-    with open(p, "w", encoding="utf-8") as f:
+    tmp = p + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
+    os.replace(tmp, p)
     print("mapa  : {}".format(p))
 
 

@@ -88,11 +88,12 @@ REFERENCE_HEIGHT_M = 1.75
 DEFAULT_CDN = ("https://nhloypjtpgyndmjtcpcf.supabase.co"
                "/storage/v1/object/public/avatars/")
 
-# As 9 colunas que o app coleta e a biblioteca mede. O contrato fechou em 9 de 9
-# em 01/08 (shoulder foi a ultima a entrar). 'wrist' e 'waist_min' ficam de fora
-# da DISTANCIA: o app nao coleta nenhuma das duas.
+# As colunas que o app coleta e a biblioteca mede. O contrato fechou em 9 de 9
+# em 01/08 (shoulder foi a ultima a entrar); em 28/09 entrou a 10a, `waist_min`,
+# que so a MULHER mede e so ela vota (ver SELECT_WEIGHTS_BY_SEX). 'wrist' fica
+# de fora da distancia: o app nao a coleta.
 SELECT_COLUMNS = ["neck", "shoulder", "chest", "waist_navel", "hip",
-                  "biceps", "forearm", "thigh", "calf"]
+                  "biceps", "forearm", "thigh", "calf", "waist_min"]
 
 # De onde cada coluna vem na tabela `body_measurements` do app.
 #
@@ -129,6 +130,10 @@ APP_FIELD_MAP = {
     "neck_cm": "neck", "shoulder_cm": "shoulder", "chest_cm": "chest",
     "waist_cm": "waist_navel", "hip_cm": "hip", "arm_cm": "biceps",
     "forearm_cm": "forearm", "thigh_cm": "thigh", "calf_cm": "calf",
+    # 🆕 28/09: a MULHER mede as duas cinturas, umbigo e minima, e as duas
+    # votam (INTEGRACAO_ZENITH, bloco "DECIDIDO EM 28/09"). O app ja grava
+    # `waist_min_cm` para mulher desde 18/09.
+    "waist_min_cm": "waist_min",
 }
 
 # O TRONCO ESCOLHE O AVATAR; OS MEMBROS SAO ABSORVIDOS PELO MORPH (04/08).
@@ -166,7 +171,28 @@ SELECT_WEIGHTS = {
     "forearm": 0.3,
     "thigh": 0.3,
     "calf": 0.3,
+    # ⚠️ ZERO aqui DE PROPOSITO: este e o mapa que o app de hoje le, e ele usa
+    # `weights[col] ?? 1.0` e pula peso <= 0. Com zero, o app antigo continua
+    # exatamente como estava; quem sabe ler `weights_by_sex` usa o peso novo.
+    "waist_min": 0.0,
 }
+
+# 🆕 PESO POR SEXO (28/09). Na mulher o umbigo sozinho e cego para FORMA e a
+# minima sozinha e sensivel a erro de fita; as duas juntas foram as melhores na
+# simulacao (24 `f d1` leave-one-out, erro de -6 a +6 cm na minima): 1 de 24 em
+# `d3` e |dIMC| 1,0-1,3, contra 9-12 de 24 com a minima digitada no campo do
+# umbigo. No homem a minima e quase redundante (umbigo - minima = 2,8 cm), e ele
+# nao a coleta. Quem le: `select.py`, o testador e o app a partir da versao que
+# implementar as duas cinturas. Quem nao le cai no `weights` acima.
+SELECT_WEIGHTS_BY_SEX = {
+    "m": dict(SELECT_WEIGHTS),
+    "f": dict(SELECT_WEIGHTS, waist_navel=2.0, waist_min=1.0),
+}
+
+# 🆕 TRAVA DE RAZAO (28/09): minima/umbigo fora do que a colecao feminina cobre
+# e fita no lugar errado - a minima sai da conta e volta marcada como suspeita.
+# A faixa e calculada no build, sobre a colecao inteira do sexo.
+RATIO_CHECKS = [{"sex": "f", "num": "waist_min", "den": "waist_navel"}]
 
 # Quantas colunas precisam sobrar (presentes no usuario E nao marcadas no avatar)
 # para a distancia valer. Abaixo disso a comparacao e de ruido e o app deve cair
@@ -506,6 +532,14 @@ def main():
                  if a["circumferences_cm"].get(col) is not None]
             ranges[sex][col] = [round(min(v), 1), round(max(v), 1)] if v else None
 
+    ratio_checks = []
+    for rc in RATIO_CHECKS:
+        r = [a["circumferences_cm"][rc["num"]] / a["circumferences_cm"][rc["den"]]
+             for a in avatars if a["sex"] == rc["sex"]
+             and a["circumferences_cm"].get(rc["num"]) and a["circumferences_cm"].get(rc["den"])]
+        if r:
+            ratio_checks.append(dict(rc, range=[round(min(r), 3), round(max(r), 3)]))
+
     index = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -531,6 +565,10 @@ def main():
             "columns": SELECT_COLUMNS,
             "app_field_map": APP_FIELD_MAP,
             "weights": SELECT_WEIGHTS,
+            "weights_by_sex": SELECT_WEIGHTS_BY_SEX,
+            # Razao entre duas colunas do USUARIO fora da faixa da colecao ->
+            # a coluna `num` nao vota e volta em suspect_columns.
+            "ratio_checks": ratio_checks,
             "scale_cm": scales,
             # Teto por coluna, em desvios-padrao. Ver Z_CAP no topo do arquivo:
             # existe porque a distancia soma QUADRADOS e uma medida errada

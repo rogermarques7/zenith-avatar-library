@@ -55,7 +55,9 @@ def select(index, sex, height_m, weight_kg, measures):
     sel = index["selection"]
     ref_h = index["reference_height_m"]
     field_map = sel["app_field_map"]
-    weights = sel["weights"]
+    # Peso POR SEXO quando o indice publica (28/09): a mulher vota com as duas
+    # cinturas, umbigo 2,0 + minima 1,0. Indice antigo cai no mapa unico.
+    weights = (sel.get("weights_by_sex") or {}).get(sex) or sel["weights"]
     scales = sel["scale_cm"].get(sex, {})
 
     pool = [a for a in index["avatars"] if a["sex"] == sex and a.get("approved")]
@@ -93,6 +95,17 @@ def select(index, sex, height_m, weight_kg, measures):
         f = faixas.get(col)
         if f and (u < f[0] or u > f[1]):
             suspeitas.append(col)
+
+    # (3) RAZAO ENTRE DUAS COLUNAS DO USUARIO (28/09). A cintura minima fora da
+    #     faixa minima/umbigo da colecao e fita no lugar errado - medida no
+    #     mesmo ponto do umbigo, ou nas costelas. Ela sai e volta marcada.
+    for rc in sel.get("ratio_checks") or []:
+        if rc.get("sex") != sex:
+            continue
+        n, d = user.get(rc["num"]), user.get(rc["den"])
+        if n and d and not (rc["range"][0] <= n / d <= rc["range"][1]):
+            if rc["num"] not in suspeitas:
+                suspeitas.append(rc["num"])
 
     z_cap = sel.get("z_cap")
     fora = set(suspeitas)
@@ -383,6 +396,57 @@ def build_cases(index):
                       "measures": envenenado},
             "expect_id": vitima["id"],
         })
+
+        # 🆕 DUAS CINTURAS (28/09) - so onde o indice publica peso por sexo e
+        # trava de razao. Cada caso so entra se DISCRIMINA: se a implementacao
+        # esquecer a regra nova, o resultado muda. Caso que passa com a regra
+        # errada nao prende nada.
+        import copy
+        wbs = (sel.get("weights_by_sex") or {}).get(sex)
+        rcs = [rc for rc in (sel.get("ratio_checks") or []) if rc.get("sex") == sex]
+        if wbs and "waist_min" in inv and wbs.get("waist_min", 0) > 0:
+            sem_ws = copy.deepcopy(index)
+            del sem_ws["selection"]["weights_by_sex"]
+            for a in user_range:
+                m = measures_of(a)
+                if "waist_min_cm" not in m or "waist_cm" not in m:
+                    continue
+                m["waist_cm"] = round(m["waist_cm"] + 6.0, 1)
+                wk = round(a["measured_bmi"] * ref_h * ref_h, 1)
+                r1 = select(index, sex, ref_h, wk, m)
+                r0 = select(sem_ws, sex, ref_h, wk, m)
+                if r1 and r0 and r1["id"] != r0["id"] and not r1["suspect_columns"]:
+                    cases.append({
+                        "name": "duas-cinturas/peso/{}".format(a["id"]),
+                        "why": ("umbigo errado em +6 cm: com as duas cinturas votando "
+                                "(weights_by_sex) a escolha segura; sem o peso por "
+                                "sexo ela cai em {}".format(r0["id"])),
+                        "input": {"sex": sex, "height_cm": ref_h * 100, "weight_kg": wk,
+                                  "measures": m},
+                        "expect_id": None,
+                    })
+                    break
+        if rcs:
+            sem_rc = copy.deepcopy(index)
+            sem_rc["selection"]["ratio_checks"] = []
+            for a in user_range:
+                m = measures_of(a)
+                if "waist_min_cm" not in m or "waist_cm" not in m:
+                    continue
+                m["waist_min_cm"] = m["waist_cm"]          # fita no mesmo ponto do umbigo
+                wk = round(a["measured_bmi"] * ref_h * ref_h, 1)
+                r1 = select(index, sex, ref_h, wk, m)
+                r0 = select(sem_rc, sex, ref_h, wk, m)
+                if r1 and r0 and r1["id"] != r0["id"]:
+                    cases.append({
+                        "name": "duas-cinturas/razao/{}".format(a["id"]),
+                        "why": ("minima = umbigo (razao 1,0, fora da faixa): a minima "
+                                "sai da conta; sem a trava ela cai em {}".format(r0["id"])),
+                        "input": {"sex": sex, "height_cm": ref_h * 100, "weight_kg": wk,
+                                  "measures": m},
+                        "expect_id": None,
+                    })
+                    break
 
         cases.append({
             "name": "fallback/sem-medida/{}".format(sex),

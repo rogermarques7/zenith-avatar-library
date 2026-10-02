@@ -1,7 +1,7 @@
 {
   "generated_from": {
     "schema_version": 4,
-    "generated_at": "2026-09-25T19:52:37Z",
+    "generated_at": "2026-10-01T22:45:13Z",
     "avatars": 103
   },
   "tolerance": {
@@ -25,7 +25,8 @@
           "arm_cm": 20.8,
           "forearm_cm": 21.0,
           "thigh_cm": 50.9,
-          "calf_cm": 30.1
+          "calf_cm": 30.1,
+          "waist_min_cm": 61.7
         }
       },
       "expect_id": "zen_f_b01_d2",
@@ -39,6 +40,7 @@
         "neck",
         "shoulder",
         "thigh",
+        "waist_min",
         "waist_navel"
       ],
       "expect_distance": 0.0
@@ -59,7 +61,8 @@
           "arm_cm": 33.0,
           "forearm_cm": 27.1,
           "thigh_cm": 72.4,
-          "calf_cm": 41.3
+          "calf_cm": 41.3,
+          "waist_min_cm": 86.5
         }
       },
       "expect_id": "zen_f_b07h_d1",
@@ -72,6 +75,7 @@
         "neck",
         "shoulder",
         "thigh",
+        "waist_min",
         "waist_navel"
       ],
       "expect_distance": 0.0
@@ -92,7 +96,8 @@
           "arm_cm": 42.2,
           "forearm_cm": 35.7,
           "thigh_cm": 73.8,
-          "calf_cm": 46.3
+          "calf_cm": 46.3,
+          "waist_min_cm": 110.2
         }
       },
       "expect_id": "zen_f_b12h_d1",
@@ -125,7 +130,8 @@
           "arm_cm": 39.6,
           "forearm_cm": 29.8,
           "thigh_cm": 53.0,
-          "calf_cm": 35.0
+          "calf_cm": 35.0,
+          "waist_min_cm": 97.2
         }
       },
       "expect_id": "zen_f_b09j_d1",
@@ -157,7 +163,8 @@
           "arm_cm": 30.2,
           "forearm_cm": 24.8,
           "thigh_cm": 66.2,
-          "calf_cm": 37.8
+          "calf_cm": 37.8,
+          "waist_min_cm": 79.1
         }
       },
       "expect_id": "zen_f_b07h_d1",
@@ -170,9 +177,10 @@
         "neck",
         "shoulder",
         "thigh",
+        "waist_min",
         "waist_navel"
       ],
-      "expect_distance": 0.0023
+      "expect_distance": 0.0024
     },
     {
       "name": "altura/zen_f_b07h_d1/1.95m",
@@ -190,7 +198,8 @@
           "arm_cm": 36.8,
           "forearm_cm": 30.2,
           "thigh_cm": 80.7,
-          "calf_cm": 46.0
+          "calf_cm": 46.0,
+          "waist_min_cm": 96.4
         }
       },
       "expect_id": "zen_f_b07h_d1",
@@ -203,9 +212,10 @@
         "neck",
         "shoulder",
         "thigh",
+        "waist_min",
         "waist_navel"
       ],
-      "expect_distance": 0.0018
+      "expect_distance": 0.0017
     },
     {
       "name": "parcial/zen_f_b07h_d1",
@@ -245,7 +255,8 @@
           "arm_cm": 39.6,
           "forearm_cm": 29.8,
           "thigh_cm": 53.0,
-          "calf_cm": 35.0
+          "calf_cm": 35.0,
+          "waist_min_cm": 97.2
         }
       },
       "expect_id": "zen_f_b09j_d1",
@@ -277,7 +288,8 @@
           "arm_cm": 33.0,
           "forearm_cm": 16.3,
           "thigh_cm": 72.4,
-          "calf_cm": 41.3
+          "calf_cm": 41.3,
+          "waist_min_cm": 86.5
         }
       },
       "expect_id": "zen_f_b07h_d1",
@@ -285,6 +297,78 @@
       "expect_columns_used": [
         "biceps",
         "calf",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min",
+        "waist_navel"
+      ],
+      "expect_distance": 0.0
+    },
+    {
+      "name": "duas-cinturas/peso/zen_f_b04_d2",
+      "why": "umbigo errado em +6 cm: com as duas cinturas votando (weights_by_sex) a escolha segura; sem o peso por sexo ela cai em zen_f_b05_d2",
+      "input": {
+        "sex": "f",
+        "height_cm": 175.0,
+        "weight_kg": 68.0,
+        "measures": {
+          "neck_cm": 33.6,
+          "shoulder_cm": 100.5,
+          "chest_cm": 93.1,
+          "waist_cm": 85.0,
+          "hip_cm": 105.4,
+          "arm_cm": 27.1,
+          "forearm_cm": 24.9,
+          "thigh_cm": 56.6,
+          "calf_cm": 38.6,
+          "waist_min_cm": 71.3
+        }
+      },
+      "expect_id": "zen_f_b04_d2",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "chest",
+        "forearm",
+        "hip",
+        "neck",
+        "shoulder",
+        "thigh",
+        "waist_min",
+        "waist_navel"
+      ],
+      "expect_distance": 0.1884
+    },
+    {
+      "name": "duas-cinturas/razao/zen_f_b06h_d3",
+      "why": "minima = umbigo (razao 1,0, fora da faixa): a minima sai da conta; sem a trava ela cai em zen_f_b04_d2",
+      "input": {
+        "sex": "f",
+        "height_cm": 175.0,
+        "weight_kg": 68.3,
+        "measures": {
+          "neck_cm": 33.3,
+          "shoulder_cm": 103.8,
+          "chest_cm": 94.4,
+          "waist_cm": 78.5,
+          "hip_cm": 109.2,
+          "arm_cm": 26.7,
+          "forearm_cm": 24.7,
+          "thigh_cm": 61.5,
+          "calf_cm": 39.3,
+          "waist_min_cm": 78.5
+        }
+      },
+      "expect_id": "zen_f_b06h_d3",
+      "expect_rule": "weighted_measure_distance",
+      "expect_columns_used": [
+        "biceps",
+        "calf",
+        "chest",
+        "forearm",
         "hip",
         "neck",
         "shoulder",
@@ -340,7 +424,8 @@
           "arm_cm": 22.7,
           "forearm_cm": 22.6,
           "thigh_cm": 51.5,
-          "calf_cm": 29.4
+          "calf_cm": 29.4,
+          "waist_min_cm": 67.6
         }
       },
       "expect_id": "zen_m_b02_d1",
@@ -374,7 +459,8 @@
           "arm_cm": 37.6,
           "forearm_cm": 32.8,
           "thigh_cm": 56.5,
-          "calf_cm": 41.1
+          "calf_cm": 41.1,
+          "waist_min_cm": 78.9
         }
       },
       "expect_id": "zen_m_b06_d3",
@@ -407,7 +493,8 @@
           "arm_cm": 37.6,
           "forearm_cm": 31.3,
           "thigh_cm": 71.9,
-          "calf_cm": 44.6
+          "calf_cm": 44.6,
+          "waist_min_cm": 116.0
         }
       },
       "expect_id": "zen_m_b07_d1",
@@ -425,25 +512,26 @@
       "expect_distance": 0.0
     },
     {
-      "name": "identidade/zen_m_b05_d2",
+      "name": "identidade/zen_m_b05n_d1",
       "why": "as proprias medidas do avatar tem que devolver ele mesmo",
       "input": {
         "sex": "m",
         "height_cm": 175.0,
-        "weight_kg": 82.1,
+        "weight_kg": 88.5,
         "measures": {
-          "neck_cm": 42.7,
-          "shoulder_cm": 119.6,
-          "chest_cm": 101.2,
-          "waist_cm": 84.3,
-          "hip_cm": 103.7,
-          "arm_cm": 34.7,
-          "forearm_cm": 30.7,
-          "thigh_cm": 63.4,
-          "calf_cm": 39.1
+          "neck_cm": 48.4,
+          "shoulder_cm": 110.4,
+          "chest_cm": 104.6,
+          "waist_cm": 105.8,
+          "hip_cm": 102.8,
+          "arm_cm": 35.1,
+          "forearm_cm": 30.0,
+          "thigh_cm": 59.5,
+          "calf_cm": 40.0,
+          "waist_min_cm": 102.8
         }
       },
-      "expect_id": "zen_m_b05_d2",
+      "expect_id": "zen_m_b05n_d1",
       "expect_rule": "weighted_measure_distance",
       "expect_columns_used": [
         "biceps",
@@ -472,7 +560,8 @@
           "arm_cm": 34.4,
           "forearm_cm": 30.0,
           "thigh_cm": 51.7,
-          "calf_cm": 37.6
+          "calf_cm": 37.6,
+          "waist_min_cm": 72.1
         }
       },
       "expect_id": "zen_m_b06_d3",
@@ -505,7 +594,8 @@
           "arm_cm": 41.9,
           "forearm_cm": 36.5,
           "thigh_cm": 63.0,
-          "calf_cm": 45.8
+          "calf_cm": 45.8,
+          "waist_min_cm": 87.9
         }
       },
       "expect_id": "zen_m_b06_d3",
@@ -545,25 +635,26 @@
       "expect_distance": 0.0
     },
     {
-      "name": "marcada/zen_m_b05_d2/chest",
+      "name": "marcada/zen_m_b05n_d1/chest",
       "why": "a coluna 'chest' esta em unreliable_columns deste avatar, entao envenena-la nao pode mudar a escolha",
       "input": {
         "sex": "m",
         "height_cm": 175.0,
-        "weight_kg": 82.1,
+        "weight_kg": 88.5,
         "measures": {
-          "neck_cm": 42.7,
-          "shoulder_cm": 119.6,
-          "chest_cm": 151.8,
-          "waist_cm": 84.3,
-          "hip_cm": 103.7,
-          "arm_cm": 34.7,
-          "forearm_cm": 30.7,
-          "thigh_cm": 63.4,
-          "calf_cm": 39.1
+          "neck_cm": 48.4,
+          "shoulder_cm": 110.4,
+          "chest_cm": 156.9,
+          "waist_cm": 105.8,
+          "hip_cm": 102.8,
+          "arm_cm": 35.1,
+          "forearm_cm": 30.0,
+          "thigh_cm": 59.5,
+          "calf_cm": 40.0,
+          "waist_min_cm": 102.8
         }
       },
-      "expect_id": "zen_m_b05_d2",
+      "expect_id": "zen_m_b05n_d1",
       "expect_rule": "weighted_measure_distance",
       "expect_columns_used": [
         "biceps",
@@ -592,7 +683,8 @@
           "arm_cm": 37.6,
           "forearm_cm": 19.7,
           "thigh_cm": 56.5,
-          "calf_cm": 41.1
+          "calf_cm": 41.1,
+          "waist_min_cm": 78.9
         }
       },
       "expect_id": "zen_m_b06_d3",

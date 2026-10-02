@@ -6,6 +6,15 @@
 > Este arquivo é o **contrato entre os dois repositórios**. O que está aqui foi
 > lido no código do app, não suposto. Onde houver decisão pendente, está marcada.
 
+## 0. 🔴 PRÓXIMO PASSO (02/10/2026): subir a 2ª GERAÇÃO + as DUAS CINTURAS
+
+Os 103 corpos foram validados por ele no testador. O que o app tem que fazer —
+copiar índice/mapa/casos, `weights_by_sex` + `ratio_checks` no seletor, dois
+campos de cintura para mulher, o passo da cintura mínima no guia feminino e o
+upload dos 103 GLBs — está em **`docs/PROMPT_APP_2A_GERACAO.md`**, em ordem e
+com as linhas do app lidas em 02/10. As seções abaixo são o histórico e o
+fundo do contrato.
+
 ## 1. A ordem de trabalho (decidida pelo Rogério em 31/07 e 01/08)
 
 1. ~~Fechar o short dos masculinos~~ → reaberto por defeito → ✅ **os 39 estão
@@ -695,7 +704,40 @@ não do morph: `LICOES.md` §7.19.
 
 ---
 
-## 📌 PENDENTE NO APP — o campo de CINTURA MÍNIMA feminina (decidido em 17/09)
+## 🔴 DECIDIDO EM 28/09 — MULHER TEM DUAS CINTURAS, AS DUAS OBRIGATÓRIAS E AS DUAS VOTAM
+
+**Substitui o bloco de 17/09 abaixo (mínima opcional) e o veto de 18/09 no app
+("um campo só").** Motivo: no teste dele, uma mulher que não treina caía em
+corpo `d3`. A causa não era o erro de fita, era **coluna**: a mínima comparada
+contra o umbigo dos avatares (15 cm de diferença na mediana feminina).
+
+Simulação (24 avatares `f d1` como usuárias, leave-one-out, erro de −6 a +6 cm na
+mínima):
+
+| regra | caem em `d3` | \|ΔIMC\| |
+|---|---:|---:|
+| mínima no campo do umbigo (testador hoje) | 9–12 de 24 | 3,7–4,1 |
+| mínima não vota (app hoje) | 3 de 24 | 1,4 |
+| **umbigo 2,0 + mínima 1,0** ✅ | **1 de 24** | **1,0–1,3** |
+
+**Decisões dele (28/09):** (1) a cintura "normal" é a do **umbigo**
+(`waist_navel`); (2) a mínima é **obrigatória** para mulher — *"se for opcional
+muitas pessoas gordas vão cair em corpo atlético"*; (3) pesos **2,0 / 1,0**.
+
+**Biblioteca:** peso por sexo no índice (homem segue com umbigo 3,0); `waist_min`
+em `selection.columns` só para `f`, escala **12,8 cm**; trava de razão
+mínima/umbigo fora de **0,648–0,984** → mínima suspeita, não vota; regra nas
+TRÊS implementações + `selection_cases.json` com casos femininos de duas
+cinturas. Morph não muda (a curva da cintura já sai no umbigo).
+
+**App:** dois campos seguidos — **Cintura (umbigo)** e depois **Cintura
+mínima** —, dois guias lado a lado: `abdomen_f.png` (anel 0,603, existe) e um
+novo com o anel em **0,653** (mediana dos 55 femininos, faixa 0,607–0,679),
+conferido com `anel_guia.py`. Instrução por osso, nunca "a parte mais fina".
+Navy feminina usa a mínima (o `body_fat_calculator` já faz). Linhas antigas
+ficam na coluna em que nasceram.
+
+## 📌 (HISTÓRICO) PENDENTE NO APP — o campo de CINTURA MÍNIMA feminina (decidido em 17/09)
 
 **Só para mulheres. Opcional. Resolve dois defeitos de uma vez.**
 

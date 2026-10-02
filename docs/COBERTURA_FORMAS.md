@@ -629,3 +629,64 @@ miss, é o que o cenário ruim entrega**:
 | `b07k_d1` 0,878 (corte 0,88) | 0,002 | ✅ aprovada | previsão 1,00 contra corte 0,98: folga fora da faixa de erro |
 | M-C1 0,695 (corte 0,68) | 0,015 | ❌ reprovada | pouso provável reproduzia a **própria âncora** |
 | `b10h_d2` 1,277 (corte 1,30) | 0,023 | ✅ aprovada | mesmo no pior caso (1,22) é 0,11 acima de tudo que existe em `d1`/`d2` naquele peso |
+
+---
+
+## 12. 📏 A cobertura dos 103 medida pela REGRA DO APP (26/09, sessão 40)
+
+Pedido dele: *"me diz se dá pra cobrir mais tipos de corpos e se ainda faltam
+muitos… analisa também como os corpos avançam de um pro outro"*. Contar célula
+(§3) diz onde não há corpo; não diz se o vizinho + morph já resolve. Duas sondas
+novas respondem com o `select.py` e o `morph_cases.solve` de verdade:
+
+- `qa/probe/sondas/cobertura_sim.py` — **leave-one-out** (tira cada corpo e
+  atende as medidas dele com os outros) e **entre vizinhos** (usuários a
+  25/50/75% do caminho entre pares vizinhos). Erro = a distância da seleção
+  recalculada sobre o resíduo **depois do morph**.
+- `qa/probe/sondas/cobertura_borda.py` — a **borda**: cada corpo com a forma
+  deslocada ~1 desvio-padrão populacional (cintura ±7 cm, ombro ±6 cm).
+
+⚠️ Os usuários são sintéticos, derivados da própria biblioteca; corpo real
+medido continua sendo dois (Rogério e Joice). Serve para achar buraco relativo,
+não para prometer acerto absoluto.
+
+### ✅ Dentro do envelope a coleção está coberta
+
+| | F (41 na faixa 17–40) | M (35) |
+|---|---:|---:|
+| usuários entre vizinhos | 261 | 231 |
+| erro pós-morph mediano | 0,014 | 0,003 |
+| p99 | 0,27 | 0,20 |
+| acima de 0,45 (o critério da Joice) | **0** | **0** |
+
+### 🔴 O pior ponto não é corpo faltando — é MORPH de cintura sem redução
+
+Na borda, **"cintura 7 cm mais fina que o corpo escolhido"** falha em 5 das 8
+faixas femininas e em 2 masculinas, sempre com resíduo de 7,0 cm — correção
+**zero**. Os 7 corpos escolhidos nesses casos têm `morph_waist` sem lado
+negativo. No acervo são **8** (`f_b04h_d1 f_b05_d2 f_b05h_d1 f_b07i_d1 f_b08_d2
+f_b09i_d1 m_b04_d1 m_b07_d3`), mais 11 no quadril e 8 no peito — de 1 a 3
+triângulos em −0,5 derrubando o lado inteiro. **É conserto de código, não
+crédito** (pauta da próxima sessão, `state.md`).
+
+### Os buracos de FORMA que sobram — poucos, e em corpo pesado
+
+| onde | o que existe | o que a simulação diz |
+|---|---|---|
+| **F não-atlética IMC 29–32** | 2 corpos, os dois a mesma pera (WHR 0,83 · SHR 0,86); os outros 3 da faixa são `d3` | violão pesado a IMC ~31 (entre `b07h_d2` e `b08_d2`): **6,8 cm** de peito sobrando — o pior da coleção |
+| **F não-atlética IMC 35–39** | **zero** (34,4 → 39,7); só a `b09j_d3` fisiculturista | a ~36,7: 4,3 cm de cintura — o morph segura, mas no limite |
+| F maçã 28,4 → 33,7 | `b09j_d1` isolada (leave-one-out 0,25) | 4,4 cm de cintura |
+| F V atlética 32,4 → 37,4 | só `d3` | 6,2 cm de quadril — nicho |
+| **M IMC 23–26** | **2 corpos**, 1 não-atlético — a faixa masculina mais comum | a 24: 6,2 cm de cintura entre `b04_d1` e `b05_d3` (e o `b04_d1` é um dos 8 sem redução de cintura) |
+| M pera 20 → 26,3 → 31,3 · maçã 28,9 → 33,3 · retângulo 30,6 → 34,0 | saltos de 4–6 de IMC | resíduo pós-morph 0–4 cm: o morph fecha |
+
+**Leitura:** a 2ª geração fechou o que era buraco de forma na faixa comum
+(20–29). O que sobra está em corpo **pesado e não-atlético** no feminino e na
+faixa **23–26 masculina**, e metade da falha da borda é o morph de cintura, que
+se conserta sem produzir nada.
+
+**Recomendação, se ele quiser produzir:** no máximo **3 corpos** — (1) F violão
+/ pera pesada não-atlética ~IMC 31, (2) F obesidade II não-atlética ~IMC 36–37,
+(3) M não-atlético ~IMC 24 com cintura moderada. **Consertar o morph de cintura
+ANTES**: com ele consertado, o item (3) pode deixar de ser necessário — medir de
+novo com as duas sondas antes de gastar crédito.

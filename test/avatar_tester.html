@@ -56,6 +56,20 @@
   .quick button.novo { background:#3a2a12; border-color:#c8873a; color:#f2c98a; }
   .quick button.novo:hover { border-color:#f0a63a; }
   .quick button.novo.active { background:#c8873a; border-color:#f0a63a; color:#1a1a22; }
+  /* VALIDACAO VISUAL DELE (30/09). Depois das sessoes 40-41 os 103 GLBs foram
+     regravados e nada registrava quem ele ja tinha olhado. Pendente = laranja,
+     validado = verde. A marca e presa a VERSAO do GLB: regravou, volta a
+     pendente sozinho. Mora no localStorage do navegador dele - e conveniencia
+     de revisao, nao dado do produto. */
+  .quick button.pend { background:#3a2a12; border-color:#c8873a; color:#f2c98a; }
+  .quick button.pend:hover { border-color:#f0a63a; }
+  .quick button.pend.active { background:#c8873a; border-color:#f0a63a; color:#1a1a22; }
+  .quick button.ok { background:#12301f; border-color:#3aa86a; color:#9fe0b8; }
+  .quick button.ok.active { background:#3aa86a; border-color:#5fd08f; color:#0f1a14; }
+  .valbar { display:flex; gap:6px; margin:0 0 10px; }
+  .valbar button { flex:1; background:#20202b; color:var(--text); border:1px solid var(--line); border-radius:8px; padding:6px 8px; font-size:12px; cursor:pointer; }
+  .valbar button:hover { border-color:var(--accent); }
+  .valbar button#valBtn.feito { background:#12301f; border-color:#3aa86a; color:#9fe0b8; }
   .opt { display:flex; gap:8px; margin-top:12px; align-items:center; font-size:12px; color:var(--muted); flex-wrap:wrap; }
   .missing { font-size:12px; color:#f0a; margin-top:8px; min-height:16px; }
   .fallback-note { color:#e0b055; }
@@ -223,6 +237,10 @@
 
   <div class="panel listcol">
     <div class="sub" id="count">carregando library.json…</div>
+    <div class="valbar">
+      <button id="valBtn" title="marca o avatar aberto como validado nesta versão do GLB (clique de novo para desmarcar)">✓ validar este</button>
+      <button id="valExp" title="copia a lista de validados para colar na conversa">copiar validados</button>
+    </div>
     <div class="quick" id="quick"></div>
     <div class="empty" id="empty" style="display:none"></div>
   </div>
@@ -359,6 +377,16 @@ function selecionar(sex, alturaM, pesoKg, medidas){
     const f = faixas[col];
     if(f && (u < f[0] || u > f[1])) suspeitas.add(col);
   }
+  //  (3) RAZAO entre duas colunas do usuario (28/09): cintura minima fora da
+  //      faixa minima/umbigo da colecao e fita no lugar errado -> nao vota.
+  for(const rc of (sel.ratio_checks || [])){
+    if(rc.sex !== sex) continue;
+    const n = user[rc.num], dd = user[rc.den];
+    if(n && dd && (n/dd < rc.range[0] || n/dd > rc.range[1])) suspeitas.add(rc.num);
+  }
+  // Peso POR SEXO quando o indice publica (28/09): a mulher vota com as duas
+  // cinturas, umbigo 2,0 + minima 1,0. Indice antigo cai no mapa unico.
+  const pesos = (sel.weights_by_sex || {})[sex] || sel.weights;
   const zcap = sel.z_cap;
 
   let melhor = null;
@@ -371,7 +399,7 @@ function selecionar(sex, alturaM, pesoKg, medidas){
       if(ruins.has(col) || suspeitas.has(col)) continue;
       const av = (a.circumferences_cm||{})[col], s = escalas[col];
       if(av == null || !s) continue;
-      const w = sel.weights[col] != null ? sel.weights[col] : 1;
+      const w = pesos[col] != null ? pesos[col] : 1;
       if(w <= 0) continue;
       let d = (u-av)/s;
       if(zcap) d = Math.max(-zcap, Math.min(zcap, d));
@@ -419,6 +447,7 @@ function srcFor(id){
 function setAvatar(id){
   curId=id;
   document.querySelectorAll("#quick button").forEach(b=>b.classList.toggle("active", b.dataset.id===id));
+  valAtualizarBotao();
   const miss=document.getElementById("missing");
   if(!id){
     // Colecao vazia (hoje, o feminino inteiro). Nao e erro; e producao pendente.
@@ -449,24 +478,35 @@ function setAvatar(id){
 // app_field_map do indice, nunca escrita aqui.
 const CAMPOS = [
   ["neck_cm","Pescoço"], ["shoulder_cm","Ombro"], ["chest_cm","Peitoral"],
-  ["arm_cm","Bíceps"], ["forearm_cm","Antebraço"], ["waist_cm","Cintura"],
+  ["arm_cm","Bíceps"], ["forearm_cm","Antebraço"], ["waist_cm","Cintura (umbigo)"],
+  // 🆕 28/09: so a MULHER mede, logo depois da do umbigo - como no app.
+  ["waist_min_cm","Cintura mínima", "f"],
   ["hip_cm","Glúteo"], ["thigh_cm","Coxa"], ["calf_cm","Panturrilha"],
 ];
+function camposDoSexo(){
+  document.querySelectorAll("#medidas label").forEach(l => {
+    const so = l.dataset.so;
+    l.style.display = (!so || so === SEX) ? "" : "none";
+  });
+}
 
 function montarCampos(){
   const box = document.getElementById("medidas");
   box.innerHTML = "";
-  for(const [campo, rotulo] of CAMPOS){
+  for(const [campo, rotulo, so] of CAMPOS){
     const l = document.createElement("label");
+    if(so) l.dataset.so = so;
     l.innerHTML = `${rotulo}<input type="number" step="0.1" min="0" data-campo="${campo}" placeholder="—">`;
     box.appendChild(l);
   }
+  camposDoSexo();
   box.querySelectorAll("input").forEach(i => i.addEventListener("input", update));
 }
 
 function medidasAtuais(){
   const m = {};
   document.querySelectorAll("#medidas input").forEach(i => {
+    if(i.closest("label").style.display === "none") return;   // campo de outro sexo
     const v = parseFloat(i.value);
     if(!isNaN(v) && v > 0) m[i.dataset.campo] = v;
   });
@@ -833,10 +873,37 @@ document.getElementById("limparMedidas").addEventListener("click", () => {
 // ja valia para carregar os GLBs.
 const quick=document.getElementById("quick");
 
+// ---- validacao visual (ver o CSS .pend/.ok) ----------------------------------
+const VAL_KEY = "zenith_validacao_visual";
+function valLer(){ try { return JSON.parse(localStorage.getItem(VAL_KEY) || "{}"); } catch(e){ return {}; } }
+function valGravar(v){ try { localStorage.setItem(VAL_KEY, JSON.stringify(v)); } catch(e){} }
+function valOk(a){ const v = valLer(); return v[a.id] === a.version; }
+function valAtualizarBotao(){
+  const b = document.getElementById("valBtn"); if(!b) return;
+  const a = LIB && curId ? LIB.avatars.find(x => x.id === curId) : null;
+  const ok = a && valOk(a);
+  b.textContent = ok ? "✓ validado (desmarcar)" : "✓ validar este";
+  b.classList.toggle("feito", !!ok);
+}
+
 // Reconstroi a fileira de botoes para o sexo corrente. Chamado no load e a cada
 // troca da chave ♂/♀.
+// ⚠️ ORDEM TEMPORARIA (02/10, pedido dele para a rodada de validacao): por
+// NUMERO do id (b01, b02 ... b12, e dentro dele h/i/j/k/m e d1/d2/d3), para
+// achar o corpo pelo nome. Depois da validacao VOLTA para "imc" - a escada por
+// measured_bmi e o teste de continuidade do QA (comentario acima).
+const ORDEM_POR = "imc";      // "numero" | "imc" (02/10: "numero" so durante a rodada de validacao)
+function chaveNumero(a){
+  const m = a.id.match(/_b(\d+)([a-z]?)_d(\d)$/);
+  return m ? [parseInt(m[1],10), m[2], parseInt(m[3],10)] : [999, "", 9];
+}
+function porNumero(a,b){
+  const x = chaveNumero(a), y = chaveNumero(b);
+  return x[0]-y[0] || x[1].localeCompare(y[1]) || x[2]-y[2];
+}
 function renderQuick(){
-  const avatares=LIB.avatars.filter(a=>a.sex===SEX).sort((a,b)=>a.measured_bmi-b.measured_bmi);
+  const avatares=LIB.avatars.filter(a=>a.sex===SEX)
+    .sort(ORDEM_POR === "numero" ? porNumero : (a,b)=>a.measured_bmi-b.measured_bmi);
   quick.innerHTML="";
   // A coluna rola por dentro: sem isto, trocar de sexo mantinha o scroll da
   // lista anterior e a nova abria no meio da escada, nao no corpo mais leve.
@@ -850,6 +917,7 @@ function renderQuick(){
     // Sem morph = entrou depois do ultimo lote de shape key. Hoje sao os 27 da
     // sessao 36, e e neles que a validacao de ROUPA esta pendente.
     if(!temMorph) b.classList.add("novo");
+    else b.classList.add(valOk(a) ? "ok" : "pend");
     b.textContent=(temMorph?"◈ ":"● ")+a.id.replace(/^zen_[mf]_/,"")+" · "+a.measured_bmi.toFixed(1);
     b.dataset.id=a.id;
     b.title=`${a.definition} · IMC ${a.measured_bmi} · ${a.label} · cintura/altura ${a.waist_to_height}`
@@ -868,15 +936,42 @@ function renderQuick(){
   }
   const novos = avatares.filter(a=>!(MORPHS && MORPHS[a.id])).length;
   document.getElementById("count").textContent = avatares.length
-    ? avatares.length+" avatares "+SEX_LABEL[SEX]+"s · ordenados por IMC medido"
-      + (novos ? "  ·  "+novos+" em laranja = novos, sem shape key" : "")
+    ? avatares.length+" avatares "+SEX_LABEL[SEX]+"s · ordenados por "
+      + (ORDEM_POR === "numero" ? "número (b01, b02…)" : "IMC medido")
+      + (novos ? "  ·  "+novos+" sem shape key" : "")
+      + "  ·  " + avatares.filter(a => !valOk(a)).length + " em laranja a validar, "
+      + avatares.filter(a => valOk(a)).length + " em verde validados"
     : "biblioteca "+SEX_LABEL_A[SEX]+" ainda não produzida";
 }
+
+document.getElementById("valBtn").addEventListener("click", () => {
+  if(!LIB || !curId) return;
+  const a = LIB.avatars.find(x => x.id === curId); if(!a) return;
+  const v = valLer();
+  if(v[a.id] === a.version) delete v[a.id]; else v[a.id] = a.version;
+  valGravar(v);
+  const scroll = document.querySelector(".listcol").scrollTop;
+  renderQuick();
+  document.querySelector(".listcol").scrollTop = scroll;
+  document.querySelectorAll("#quick button").forEach(b=>b.classList.toggle("active", b.dataset.id===curId));
+  valAtualizarBotao();
+});
+document.getElementById("valExp").addEventListener("click", async () => {
+  if(!LIB) return;
+  const ok = LIB.avatars.filter(valOk).map(a => a.id + " v" + a.version);
+  const pend = LIB.avatars.filter(a => !valOk(a)).map(a => a.id);
+  const txt = `VALIDADOS (${ok.length}):\n${ok.join("\n")}\n\nPENDENTES (${pend.length}):\n${pend.join("\n")}`;
+  const b = document.getElementById("valExp");
+  try { await navigator.clipboard.writeText(txt); b.textContent = "copiado ✓"; }
+  catch(e){ window.prompt("copie a lista:", txt); }
+  setTimeout(() => { b.textContent = "copiar validados"; }, 1800);
+});
 
 document.querySelectorAll("#sexsw button").forEach(b=>b.onclick=()=>{
   if(!LIB) return;
   SEX=b.dataset.sex;
   document.querySelectorAll("#sexsw button").forEach(x=>x.classList.toggle("active", x===b));
+  camposDoSexo();
   renderQuick();
   update();
 });
